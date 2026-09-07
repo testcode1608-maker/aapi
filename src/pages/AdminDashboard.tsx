@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   CheckCircle2,
@@ -133,8 +128,7 @@ interface DashboardResponse {
    CONSTANTS
    ============================================================ */
 
-const API_URL =
-  "http://localhost/aapi-api/auth/admin/dashboard.php";
+const API_URL = "http://localhost/aapi-api/auth/admin/dashboard.php";
 
 const emptyStats: DashboardStats = {
   projects_total: 0,
@@ -178,17 +172,13 @@ const emptyStats: DashboardStats = {
    HELPERS
    ============================================================ */
 
-const formatNumber = (
-  value: number | string | null | undefined,
-): string => {
+const formatNumber = (value: number | string | null | undefined): string => {
   const number = Number(value || 0);
 
   return new Intl.NumberFormat("fr-DZ").format(number);
 };
 
-const formatMoney = (
-  value: number | string | null | undefined,
-): string => {
+const formatMoney = (value: number | string | null | undefined): string => {
   const number = Number(value || 0);
 
   return new Intl.NumberFormat("fr-DZ", {
@@ -196,21 +186,13 @@ const formatMoney = (
   }).format(number);
 };
 
-const percentage = (
-  value: number,
-  total: number,
-): number => {
+const percentage = (value: number, total: number): number => {
   if (!total || total <= 0) return 0;
 
-  return Math.min(
-    100,
-    Math.max(0, (value / total) * 100),
-  );
+  return Math.min(100, Math.max(0, (value / total) * 100));
 };
 
-const getStatusLabel = (
-  status: string | undefined,
-): string => {
+const getStatusLabel = (status: string | undefined): string => {
   switch (status) {
     case "brouillon":
       return "مسودة";
@@ -241,9 +223,7 @@ const getStatusLabel = (
   }
 };
 
-const getStatusClass = (
-  status: string | undefined,
-): string => {
+const getStatusClass = (status: string | undefined): string => {
   switch (status) {
     case "brouillon":
       return "status-draft";
@@ -274,9 +254,7 @@ const getStatusClass = (
   }
 };
 
-const formatDate = (
-  date: string | undefined,
-): string => {
+const formatDate = (date: string | undefined): string => {
   if (!date) return "—";
 
   try {
@@ -290,16 +268,12 @@ const formatDate = (
   }
 };
 
-const getInitials = (
-  user: AdminUser | Investor | null | undefined,
-): string => {
+const getInitials = (user: AdminUser | Investor | null | undefined): string => {
   if (!user) return "A";
 
-  const first =
-    user.prenom?.charAt(0)?.toUpperCase() || "";
+  const first = user.prenom?.charAt(0)?.toUpperCase() || "";
 
-  const last =
-    user.nom?.charAt(0)?.toUpperCase() || "";
+  const last = user.nom?.charAt(0)?.toUpperCase() || "";
 
   return `${first}${last}` || "A";
 };
@@ -309,145 +283,97 @@ const getInitials = (
    ============================================================ */
 
 export default function AdminDashboard() {
-  const [stats, setStats] =
-    useState<DashboardStats>(emptyStats);
+  const [stats, setStats] = useState<DashboardStats>(emptyStats);
 
-  const [projects, setProjects] =
-    useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
-  const [activities, setActivities] =
-    useState<ActivityItem[]>([]);
+  const [activities, setActivities] = useState<ActivityItem[]>([]);
 
-  const [admin, setAdmin] =
-    useState<AdminUser | null>(null);
+  const [admin, setAdmin] = useState<AdminUser | null>(null);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [refreshing, setRefreshing] =
-    useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
-  const [selectedProject, setSelectedProject] =
-    useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const [updatingProject, setUpdatingProject] =
-    useState(false);
+  const [updatingProject, setUpdatingProject] = useState(false);
 
   /* ============================================================
      LOAD DASHBOARD
      ============================================================ */
 
-  const loadDashboard = useCallback(
-    async (
-      showRefresh = false,
-    ) => {
-      try {
-        if (showRefresh) {
-          setRefreshing(true);
-        } else {
-          setLoading(true);
-        }
-
-        setError("");
-
-        const storedUser =
-          localStorage.getItem("aapi_user");
-
-        if (!storedUser) {
-          throw new Error(
-            "Session administrateur introuvable.",
-          );
-        }
-
-        const user =
-          JSON.parse(storedUser) as AdminUser;
-
-        if (!user?.id) {
-          throw new Error(
-            "Utilisateur administrateur invalide.",
-          );
-        }
-
-        if (
-          String(user.role).toLowerCase() !==
-          "admin"
-        ) {
-          throw new Error(
-            "Accès réservé à l'administrateur.",
-          );
-        }
-
-        const response = await fetch(
-          `${API_URL}?user_id=${encodeURIComponent(
-            String(user.id),
-          )}`,
-          {
-            method: "GET",
-            headers: {
-              Accept:
-                "application/json",
-            },
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            `Erreur serveur HTTP ${response.status}`,
-          );
-        }
-
-        const data =
-          (await response.json()) as DashboardResponse;
-
-        if (!data.success) {
-          throw new Error(
-            data.message ||
-              data.error ||
-              "Impossible de charger le tableau de bord.",
-          );
-        }
-
-        setAdmin(
-          data.admin ||
-            user,
-        );
-
-        setStats({
-          ...emptyStats,
-          ...(data.stats || {}),
-        });
-
-        setProjects(
-          data.recent_projects ||
-            data.projects ||
-            [],
-        );
-
-        setActivities(
-          data.activities ||
-            [],
-        );
-      } catch (err) {
-        console.error(
-          "Erreur AdminDashboard:",
-          err,
-        );
-
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Une erreur est survenue.",
-        );
-      } finally {
-        setLoading(false);
-        setRefreshing(false);
+  const loadDashboard = useCallback(async (showRefresh = false) => {
+    try {
+      if (showRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
       }
-    },
-    [],
-  );
+
+      setError("");
+
+      const storedUser = localStorage.getItem("aapi_user");
+
+      if (!storedUser) {
+        throw new Error("Session administrateur introuvable.");
+      }
+
+      const user = JSON.parse(storedUser) as AdminUser;
+
+      if (!user?.id) {
+        throw new Error("Utilisateur administrateur invalide.");
+      }
+
+      if (String(user.role).toLowerCase() !== "admin") {
+        throw new Error("Accès réservé à l'administrateur.");
+      }
+
+      const response = await fetch(
+        `${API_URL}?user_id=${encodeURIComponent(String(user.id))}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Erreur serveur HTTP ${response.status}`);
+      }
+
+      const data = (await response.json()) as DashboardResponse;
+
+      if (!data.success) {
+        throw new Error(
+          data.message ||
+            data.error ||
+            "Impossible de charger le tableau de bord.",
+        );
+      }
+
+      setAdmin(data.admin || user);
+
+      setStats({
+        ...emptyStats,
+        ...(data.stats || {}),
+      });
+
+      setProjects(data.recent_projects || data.projects || []);
+
+      setActivities(data.activities || []);
+    } catch (err) {
+      console.error("Erreur AdminDashboard:", err);
+
+      setError(err instanceof Error ? err.message : "Une erreur est survenue.");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
     void loadDashboard();
@@ -457,84 +383,60 @@ export default function AdminDashboard() {
      UPDATE PROJECT STATUS
      ============================================================ */
 
-  const updateProjectStatus = async (
-    projectId: number,
-    statut: string,
-  ) => {
+  const updateProjectStatus = async (projectId: number, statut: string) => {
     try {
       setUpdatingProject(true);
       setError("");
 
-      const storedUser =
-        localStorage.getItem("aapi_user");
+      const storedUser = localStorage.getItem("aapi_user");
 
       if (!storedUser) {
-        throw new Error(
-          "Session administrateur introuvable.",
-        );
+        throw new Error("Session administrateur introuvable.");
       }
 
-      const user =
-        JSON.parse(storedUser) as AdminUser;
+      const user = JSON.parse(storedUser) as AdminUser;
 
-      const response = await fetch(
-        API_URL,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-            Accept:
-              "application/json",
-          },
-          body: JSON.stringify({
-            user_id: user.id,
-            action:
-              "update_project_status",
-            project_id: projectId,
-            statut,
-          }),
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-      );
+        body: JSON.stringify({
+          user_id: user.id,
+          action: "update_project_status",
+          project_id: projectId,
+          statut,
+        }),
+      });
 
       if (!response.ok) {
-        throw new Error(
-          `Erreur serveur HTTP ${response.status}`,
-        );
+        throw new Error(`Erreur serveur HTTP ${response.status}`);
       }
 
-      const data =
-        (await response.json()) as DashboardResponse;
+      const data = (await response.json()) as DashboardResponse;
 
       if (!data.success) {
         throw new Error(
-          data.message ||
-            data.error ||
-            "Impossible de modifier le statut.",
+          data.message || data.error || "Impossible de modifier le statut.",
         );
       }
 
-      setSelectedProject(
-        (previous) =>
-          previous
-            ? {
-                ...previous,
-                statut,
-              }
-            : null,
+      setSelectedProject((previous) =>
+        previous
+          ? {
+              ...previous,
+              statut,
+            }
+          : null,
       );
 
       await loadDashboard(true);
     } catch (err) {
-      console.error(
-        "Erreur modification projet:",
-        err,
-      );
+      console.error("Erreur modification projet:", err);
 
       setError(
-        err instanceof Error
-          ? err.message
-          : "Erreur lors de la modification.",
+        err instanceof Error ? err.message : "Erreur lors de la modification.",
       );
     } finally {
       setUpdatingProject(false);
@@ -545,70 +447,30 @@ export default function AdminDashboard() {
      CALCULATED VALUES
      ============================================================ */
 
-  const approvedPercentage =
-    useMemo(
-      () =>
-        percentage(
-          stats.projects_approuve,
-          stats.projects_total,
-        ),
-      [
-        stats.projects_approuve,
-        stats.projects_total,
-      ],
-    );
+  const approvedPercentage = useMemo(
+    () => percentage(stats.projects_approuve, stats.projects_total),
+    [stats.projects_approuve, stats.projects_total],
+  );
 
-  const investorsPercentage =
-    useMemo(
-      () =>
-        percentage(
-          stats.investors_total,
-          stats.users_total,
-        ),
-      [
-        stats.investors_total,
-        stats.users_total,
-      ],
-    );
+  const investorsPercentage = useMemo(
+    () => percentage(stats.investors_total, stats.users_total),
+    [stats.investors_total, stats.users_total],
+  );
 
-  const documentsPercentage =
-    useMemo(
-      () =>
-        percentage(
-          stats.documents_valides,
-          stats.documents_total,
-        ),
-      [
-        stats.documents_valides,
-        stats.documents_total,
-      ],
-    );
+  const documentsPercentage = useMemo(
+    () => percentage(stats.documents_valides, stats.documents_total),
+    [stats.documents_valides, stats.documents_total],
+  );
 
-  const investmentsPercentage =
-    useMemo(
-      () =>
-        percentage(
-          stats.investments_acceptee,
-          stats.investments_total,
-        ),
-      [
-        stats.investments_acceptee,
-        stats.investments_total,
-      ],
-    );
+  const investmentsPercentage = useMemo(
+    () => percentage(stats.investments_acceptee, stats.investments_total),
+    [stats.investments_acceptee, stats.investments_total],
+  );
 
-  const requestsPercentage =
-    useMemo(
-      () =>
-        percentage(
-          stats.requests_acceptee,
-          stats.requests_total,
-        ),
-      [
-        stats.requests_acceptee,
-        stats.requests_total,
-      ],
-    );
+  const requestsPercentage = useMemo(
+    () => percentage(stats.requests_acceptee, stats.requests_total),
+    [stats.requests_acceptee, stats.requests_total],
+  );
 
   /* ============================================================
      LOADING
@@ -616,30 +478,18 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div
-        className="admin-dashboard"
-        dir="rtl"
-      >
-        <AdminNavbar
-          currentPage="لوحة التحكم"
-        />
+      <div className="admin-dashboard" dir="rtl">
+        <AdminNavbar currentPage="لوحة التحكم" />
 
         <main className="admin-dashboard-main">
           <div className="admin-loading">
             <div className="admin-loading-spinner">
-              <RefreshCw
-                size={32}
-                className="admin-spin"
-              />
+              <RefreshCw size={32} className="admin-spin" />
             </div>
 
-            <h3>
-              جاري تحميل لوحة التحكم...
-            </h3>
+            <h3>جاري تحميل لوحة التحكم...</h3>
 
-            <p>
-              يرجى الانتظار قليلاً
-            </p>
+            <p>يرجى الانتظار قليلاً</p>
           </div>
         </main>
       </div>
@@ -651,17 +501,12 @@ export default function AdminDashboard() {
      ============================================================ */
 
   return (
-    <div
-      className="admin-dashboard"
-      dir="rtl"
-    >
+    <div className="admin-dashboard" dir="rtl">
       {/* ======================================================
           ADMIN NAVBAR
          ====================================================== */}
 
-      <AdminNavbar
-        currentPage="لوحة التحكم"
-      />
+      <AdminNavbar currentPage="لوحة التحكم" />
 
       {/* ======================================================
           HEADER
@@ -670,47 +515,27 @@ export default function AdminDashboard() {
       <header className="admin-dashboard-header">
         <div className="admin-dashboard-header-content">
           <div className="admin-dashboard-welcome">
-            <div className="admin-dashboard-eyebrow">
-              AAPI ADMINISTRATION
-            </div>
+            <div className="admin-dashboard-eyebrow">AAPI ADMINISTRATION</div>
 
             <h1>
               مرحباً،{" "}
               <strong>
-                {admin
-                  ? `${admin.prenom} ${admin.nom}`
-                  : "Administrateur"}
+                {admin ? `${admin.prenom} ${admin.nom}` : "Administrateur"}
               </strong>
             </h1>
 
-            <p>
-              إليك نظرة شاملة على نشاط المنصة
-              والمشاريع والاستثمارات.
-            </p>
+            <p>إليك نظرة شاملة على نشاط المنصة والمشاريع والاستثمارات.</p>
           </div>
 
           <button
             type="button"
             className="admin-refresh-button"
-            onClick={() =>
-              void loadDashboard(true)
-            }
+            onClick={() => void loadDashboard(true)}
             disabled={refreshing}
           >
-            <RefreshCw
-              size={18}
-              className={
-                refreshing
-                  ? "admin-spin"
-                  : ""
-              }
-            />
+            <RefreshCw size={18} className={refreshing ? "admin-spin" : ""} />
 
-            <span>
-              {refreshing
-                ? "جاري التحديث..."
-                : "تحديث البيانات"}
-            </span>
+            <span>{refreshing ? "جاري التحديث..." : "تحديث البيانات"}</span>
           </button>
         </div>
       </header>
@@ -725,12 +550,7 @@ export default function AdminDashboard() {
 
           <span>{error}</span>
 
-          <button
-            type="button"
-            onClick={() =>
-              void loadDashboard(true)
-            }
-          >
+          <button type="button" onClick={() => void loadDashboard(true)}>
             إعادة المحاولة
           </button>
         </div>
@@ -750,31 +570,18 @@ export default function AdminDashboard() {
 
           <article className="admin-kpi-card">
             <div className="admin-kpi-icon">
-              <FolderKanban
-                size={25}
-              />
+              <FolderKanban size={25} />
             </div>
 
             <div className="admin-kpi-content">
-              <span>
-                إجمالي المشاريع
-              </span>
+              <span>إجمالي المشاريع</span>
 
-              <strong>
-                {formatNumber(
-                  stats.projects_total,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.projects_total)}</strong>
 
-              <small>
-                جميع المشاريع المسجلة
-              </small>
+              <small>جميع المشاريع المسجلة</small>
             </div>
 
-            <ArrowUpRight
-              className="admin-kpi-arrow"
-              size={20}
-            />
+            <ArrowUpRight className="admin-kpi-arrow" size={20} />
           </article>
 
           {/* Investors */}
@@ -785,25 +592,14 @@ export default function AdminDashboard() {
             </div>
 
             <div className="admin-kpi-content">
-              <span>
-                المستثمرون
-              </span>
+              <span>المستثمرون</span>
 
-              <strong>
-                {formatNumber(
-                  stats.investors_total,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.investors_total)}</strong>
 
-              <small>
-                المستثمرون المسجلون
-              </small>
+              <small>المستثمرون المسجلون</small>
             </div>
 
-            <ArrowUpRight
-              className="admin-kpi-arrow"
-              size={20}
-            />
+            <ArrowUpRight className="admin-kpi-arrow" size={20} />
           </article>
 
           {/* Investments */}
@@ -814,124 +610,70 @@ export default function AdminDashboard() {
             </div>
 
             <div className="admin-kpi-content">
-              <span>
-                إجمالي الاستثمارات
-              </span>
+              <span>إجمالي الاستثمارات</span>
 
-              <strong>
-                {formatMoney(
-                  stats.total_investment,
-                )}
-              </strong>
+              <strong>{formatMoney(stats.total_investment)}</strong>
 
-              <small>
-                دج
-              </small>
+              <small>دج</small>
             </div>
 
-            <ArrowUpRight
-              className="admin-kpi-arrow"
-              size={20}
-            />
+            <ArrowUpRight className="admin-kpi-arrow" size={20} />
           </article>
 
           {/* Jobs */}
 
           <article className="admin-kpi-card">
             <div className="admin-kpi-icon">
-              <BriefcaseBusiness
-                size={25}
-              />
+              <BriefcaseBusiness size={25} />
             </div>
 
             <div className="admin-kpi-content">
-              <span>
-                مناصب العمل
-              </span>
+              <span>مناصب العمل</span>
 
-              <strong>
-                {formatNumber(
-                  stats.total_jobs,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.total_jobs)}</strong>
 
-              <small>
-                من المشاريع
-              </small>
+              <small>من المشاريع</small>
             </div>
 
-            <ArrowUpRight
-              className="admin-kpi-arrow"
-              size={20}
-            />
+            <ArrowUpRight className="admin-kpi-arrow" size={20} />
           </article>
 
           {/* Requests */}
 
           <article className="admin-kpi-card">
             <div className="admin-kpi-icon">
-              <ClipboardList
-                size={25}
-              />
+              <ClipboardList size={25} />
             </div>
 
             <div className="admin-kpi-content">
-              <span>
-                الطلبات
-              </span>
+              <span>الطلبات</span>
 
-              <strong>
-                {formatNumber(
-                  stats.requests_total,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.requests_total)}</strong>
 
               <small>
-                {formatNumber(
-                  stats.requests_en_attente,
-                )}{" "}
-                قيد الانتظار
+                {formatNumber(stats.requests_en_attente)} قيد الانتظار
               </small>
             </div>
 
-            <ArrowUpRight
-              className="admin-kpi-arrow"
-              size={20}
-            />
+            <ArrowUpRight className="admin-kpi-arrow" size={20} />
           </article>
 
           {/* Messages */}
 
           <article className="admin-kpi-card">
             <div className="admin-kpi-icon">
-              <MessageSquare
-                size={25}
-              />
+              <MessageSquare size={25} />
             </div>
 
             <div className="admin-kpi-content">
-              <span>
-                الرسائل
-              </span>
+              <span>الرسائل</span>
 
-              <strong>
-                {formatNumber(
-                  stats.messages_total,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.messages_total)}</strong>
 
-              <small>
-                {formatNumber(
-                  stats.messages_unread,
-                )}{" "}
-                غير مقروءة
-              </small>
+              <small>{formatNumber(stats.messages_unread)} غير مقروءة</small>
             </div>
 
-            <ArrowUpRight
-              className="admin-kpi-arrow"
-              size={20}
-            />
+            <ArrowUpRight className="admin-kpi-arrow" size={20} />
           </article>
         </section>
 
@@ -945,91 +687,55 @@ export default function AdminDashboard() {
           <article className="admin-panel">
             <div className="admin-panel-header">
               <div>
-                <span className="admin-panel-label">
-                  المشاريع
-                </span>
+                <span className="admin-panel-label">المشاريع</span>
 
-                <h2>
-                  حالة المشاريع
-                </h2>
+                <h2>حالة المشاريع</h2>
               </div>
 
               <div className="admin-panel-header-icon">
-                <Building2
-                  size={21}
-                />
+                <Building2 size={21} />
               </div>
             </div>
 
             <div className="admin-circular-stats">
               <div
                 className="admin-circular-progress"
-                style={{
-                  "--percentage":
-                    `${approvedPercentage}%`,
-                } as React.CSSProperties}
+                style={
+                  {
+                    "--percentage": `${approvedPercentage}%`,
+                  } as React.CSSProperties
+                }
               >
                 <div className="admin-circular-inner">
-                  <strong>
-                    {Math.round(
-                      approvedPercentage,
-                    )}
-                    %
-                  </strong>
+                  <strong>{Math.round(approvedPercentage)}%</strong>
 
-                  <span>
-                    مقبول
-                  </span>
+                  <span>مقبول</span>
                 </div>
               </div>
 
               <div className="admin-circular-info">
                 <div>
-                  <CheckCircle2
-                    size={17}
-                  />
+                  <CheckCircle2 size={17} />
 
-                  <span>
-                    مشاريع مقبولة
-                  </span>
+                  <span>مشاريع مقبولة</span>
 
-                  <strong>
-                    {formatNumber(
-                      stats.projects_approuve,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.projects_approuve)}</strong>
                 </div>
 
                 <div>
-                  <Clock3
-                    size={17}
-                  />
+                  <Clock3 size={17} />
 
-                  <span>
-                    قيد الدراسة
-                  </span>
+                  <span>قيد الدراسة</span>
 
-                  <strong>
-                    {formatNumber(
-                      stats.projects_en_etude,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.projects_en_etude)}</strong>
                 </div>
 
                 <div>
-                  <TrendingUp
-                    size={17}
-                  />
+                  <TrendingUp size={17} />
 
-                  <span>
-                    قيد الإنجاز
-                  </span>
+                  <span>قيد الإنجاز</span>
 
-                  <strong>
-                    {formatNumber(
-                      stats.projects_en_cours,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.projects_en_cours)}</strong>
                 </div>
               </div>
             </div>
@@ -1040,13 +746,9 @@ export default function AdminDashboard() {
           <article className="admin-panel">
             <div className="admin-panel-header">
               <div>
-                <span className="admin-panel-label">
-                  المستثمرون
-                </span>
+                <span className="admin-panel-label">المستثمرون</span>
 
-                <h2>
-                  المستخدمون
-                </h2>
+                <h2>المستخدمون</h2>
               </div>
 
               <div className="admin-panel-header-icon">
@@ -1057,15 +759,9 @@ export default function AdminDashboard() {
             <div className="admin-progress-list">
               <div className="admin-progress-item">
                 <div className="admin-progress-top">
-                  <span>
-                    المستثمرون
-                  </span>
+                  <span>المستثمرون</span>
 
-                  <strong>
-                    {formatNumber(
-                      stats.investors_total,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.investors_total)}</strong>
                 </div>
 
                 <div className="admin-progress-bar">
@@ -1079,15 +775,9 @@ export default function AdminDashboard() {
 
               <div className="admin-progress-item">
                 <div className="admin-progress-top">
-                  <span>
-                    جميع المستخدمين
-                  </span>
+                  <span>جميع المستخدمين</span>
 
-                  <strong>
-                    {formatNumber(
-                      stats.users_total,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.users_total)}</strong>
                 </div>
 
                 <div className="admin-progress-bar">
@@ -1101,28 +791,15 @@ export default function AdminDashboard() {
 
               <div className="admin-mini-stat-grid">
                 <div>
-                  <small>
-                    قيمة المشاريع
-                  </small>
+                  <small>قيمة المشاريع</small>
 
-                  <strong>
-                    {formatMoney(
-                      stats.projects_value,
-                    )}{" "}
-                    دج
-                  </strong>
+                  <strong>{formatMoney(stats.projects_value)} دج</strong>
                 </div>
 
                 <div>
-                  <small>
-                    مناصب العمل
-                  </small>
+                  <small>مناصب العمل</small>
 
-                  <strong>
-                    {formatNumber(
-                      stats.total_jobs,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.total_jobs)}</strong>
                 </div>
               </div>
             </div>
@@ -1133,13 +810,9 @@ export default function AdminDashboard() {
           <article className="admin-panel">
             <div className="admin-panel-header">
               <div>
-                <span className="admin-panel-label">
-                  الاستثمارات
-                </span>
+                <span className="admin-panel-label">الاستثمارات</span>
 
-                <h2>
-                  متابعة الاستثمارات
-                </h2>
+                <h2>متابعة الاستثمارات</h2>
               </div>
 
               <div className="admin-panel-header-icon">
@@ -1150,15 +823,9 @@ export default function AdminDashboard() {
             <div className="admin-progress-list">
               <div className="admin-progress-item">
                 <div className="admin-progress-top">
-                  <span>
-                    مقبولة
-                  </span>
+                  <span>مقبولة</span>
 
-                  <strong>
-                    {formatNumber(
-                      stats.investments_acceptee,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.investments_acceptee)}</strong>
                 </div>
 
                 <div className="admin-progress-bar">
@@ -1172,15 +839,9 @@ export default function AdminDashboard() {
 
               <div className="admin-progress-item">
                 <div className="admin-progress-top">
-                  <span>
-                    قيد الانتظار
-                  </span>
+                  <span>قيد الانتظار</span>
 
-                  <strong>
-                    {formatNumber(
-                      stats.investments_en_attente,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.investments_en_attente)}</strong>
                 </div>
 
                 <div className="admin-progress-bar">
@@ -1197,28 +858,15 @@ export default function AdminDashboard() {
 
               <div className="admin-mini-stat-grid">
                 <div>
-                  <small>
-                    إجمالي العمليات
-                  </small>
+                  <small>إجمالي العمليات</small>
 
-                  <strong>
-                    {formatNumber(
-                      stats.investments_total,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.investments_total)}</strong>
                 </div>
 
                 <div>
-                  <small>
-                    القيمة الإجمالية
-                  </small>
+                  <small>القيمة الإجمالية</small>
 
-                  <strong>
-                    {formatMoney(
-                      stats.total_investment,
-                    )}{" "}
-                    دج
-                  </strong>
+                  <strong>{formatMoney(stats.total_investment)} دج</strong>
                 </div>
               </div>
             </div>
@@ -1229,34 +877,22 @@ export default function AdminDashboard() {
           <article className="admin-panel">
             <div className="admin-panel-header">
               <div>
-                <span className="admin-panel-label">
-                  الوثائق
-                </span>
+                <span className="admin-panel-label">الوثائق</span>
 
-                <h2>
-                  حالة الوثائق
-                </h2>
+                <h2>حالة الوثائق</h2>
               </div>
 
               <div className="admin-panel-header-icon">
-                <FileCheck2
-                  size={21}
-                />
+                <FileCheck2 size={21} />
               </div>
             </div>
 
             <div className="admin-progress-list">
               <div className="admin-progress-item">
                 <div className="admin-progress-top">
-                  <span>
-                    وثائق صالحة
-                  </span>
+                  <span>وثائق صالحة</span>
 
-                  <strong>
-                    {formatNumber(
-                      stats.documents_valides,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.documents_valides)}</strong>
                 </div>
 
                 <div className="admin-progress-bar">
@@ -1270,15 +906,9 @@ export default function AdminDashboard() {
 
               <div className="admin-progress-item">
                 <div className="admin-progress-top">
-                  <span>
-                    قيد الانتظار
-                  </span>
+                  <span>قيد الانتظار</span>
 
-                  <strong>
-                    {formatNumber(
-                      stats.documents_en_attente,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.documents_en_attente)}</strong>
                 </div>
 
                 <div className="admin-progress-bar">
@@ -1295,27 +925,15 @@ export default function AdminDashboard() {
 
               <div className="admin-mini-stat-grid">
                 <div>
-                  <small>
-                    جميع الوثائق
-                  </small>
+                  <small>جميع الوثائق</small>
 
-                  <strong>
-                    {formatNumber(
-                      stats.documents_total,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.documents_total)}</strong>
                 </div>
 
                 <div>
-                  <small>
-                    مرفوضة
-                  </small>
+                  <small>مرفوضة</small>
 
-                  <strong>
-                    {formatNumber(
-                      stats.documents_rejetes,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(stats.documents_rejetes)}</strong>
                 </div>
               </div>
             </div>
@@ -1329,115 +947,61 @@ export default function AdminDashboard() {
         <section className="admin-panel admin-project-status-panel">
           <div className="admin-panel-header">
             <div>
-              <span className="admin-panel-label">
-                PROJECT PIPELINE
-              </span>
+              <span className="admin-panel-label">PROJECT PIPELINE</span>
 
-              <h2>
-                مراحل المشاريع
-              </h2>
+              <h2>مراحل المشاريع</h2>
             </div>
 
-            <FolderKanban
-              size={22}
-            />
+            <FolderKanban size={22} />
           </div>
 
           <div className="admin-status-grid">
             <div className="admin-status-card status-draft">
-              <span>
-                مسودة
-              </span>
+              <span>مسودة</span>
 
-              <strong>
-                {formatNumber(
-                  stats.projects_brouillon,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.projects_brouillon)}</strong>
             </div>
 
             <div className="admin-status-card status-submitted">
-              <span>
-                مُرسل
-              </span>
+              <span>مُرسل</span>
 
-              <strong>
-                {formatNumber(
-                  stats.projects_soumis,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.projects_soumis)}</strong>
             </div>
 
             <div className="admin-status-card status-review">
-              <span>
-                قيد الدراسة
-              </span>
+              <span>قيد الدراسة</span>
 
-              <strong>
-                {formatNumber(
-                  stats.projects_en_etude,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.projects_en_etude)}</strong>
             </div>
 
             <div className="admin-status-card status-approved">
-              <span>
-                مقبول
-              </span>
+              <span>مقبول</span>
 
-              <strong>
-                {formatNumber(
-                  stats.projects_approuve,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.projects_approuve)}</strong>
             </div>
 
             <div className="admin-status-card status-progress">
-              <span>
-                قيد الإنجاز
-              </span>
+              <span>قيد الإنجاز</span>
 
-              <strong>
-                {formatNumber(
-                  stats.projects_en_cours,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.projects_en_cours)}</strong>
             </div>
 
             <div className="admin-status-card status-completed">
-              <span>
-                منجز
-              </span>
+              <span>منجز</span>
 
-              <strong>
-                {formatNumber(
-                  stats.projects_realise,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.projects_realise)}</strong>
             </div>
 
             <div className="admin-status-card status-rejected">
-              <span>
-                مرفوض
-              </span>
+              <span>مرفوض</span>
 
-              <strong>
-                {formatNumber(
-                  stats.projects_rejete,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.projects_rejete)}</strong>
             </div>
 
             <div className="admin-status-card status-archived">
-              <span>
-                مؤرشف
-              </span>
+              <span>مؤرشف</span>
 
-              <strong>
-                {formatNumber(
-                  stats.projects_archive,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.projects_archive)}</strong>
             </div>
           </div>
         </section>
@@ -1449,109 +1013,58 @@ export default function AdminDashboard() {
         <section className="admin-secondary-grid">
           <article className="admin-secondary-card">
             <div className="admin-secondary-icon">
-              <ClipboardList
-                size={22}
-              />
+              <ClipboardList size={22} />
             </div>
 
             <div>
-              <span>
-                الطلبات المقبولة
-              </span>
+              <span>الطلبات المقبولة</span>
 
-              <strong>
-                {formatNumber(
-                  stats.requests_acceptee,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.requests_acceptee)}</strong>
             </div>
 
-            <small>
-              من أصل{" "}
-              {formatNumber(
-                stats.requests_total,
-              )}
-            </small>
+            <small>من أصل {formatNumber(stats.requests_total)}</small>
           </article>
 
           <article className="admin-secondary-card">
             <div className="admin-secondary-icon">
-              <FileCheck2
-                size={22}
-              />
+              <FileCheck2 size={22} />
             </div>
 
             <div>
-              <span>
-                الوثائق الصالحة
-              </span>
+              <span>الوثائق الصالحة</span>
 
-              <strong>
-                {formatNumber(
-                  stats.documents_valides,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.documents_valides)}</strong>
             </div>
 
-            <small>
-              نسبة{" "}
-              {Math.round(
-                documentsPercentage,
-              )}
-              %
-            </small>
+            <small>نسبة {Math.round(documentsPercentage)}%</small>
           </article>
 
           <article className="admin-secondary-card">
             <div className="admin-secondary-icon">
-              <MessageSquare
-                size={22}
-              />
+              <MessageSquare size={22} />
             </div>
 
             <div>
-              <span>
-                الرسائل غير المقروءة
-              </span>
+              <span>الرسائل غير المقروءة</span>
 
-              <strong>
-                {formatNumber(
-                  stats.messages_unread,
-                )}
-              </strong>
+              <strong>{formatNumber(stats.messages_unread)}</strong>
             </div>
 
-            <small>
-              من أصل{" "}
-              {formatNumber(
-                stats.messages_total,
-              )}
-            </small>
+            <small>من أصل {formatNumber(stats.messages_total)}</small>
           </article>
 
           <article className="admin-secondary-card">
             <div className="admin-secondary-icon">
-              <TrendingUp
-                size={22}
-              />
+              <TrendingUp size={22} />
             </div>
 
             <div>
-              <span>
-                نسبة الطلبات المقبولة
-              </span>
+              <span>نسبة الطلبات المقبولة</span>
 
-              <strong>
-                {Math.round(
-                  requestsPercentage,
-                )}
-                %
-              </strong>
+              <strong>{Math.round(requestsPercentage)}%</strong>
             </div>
 
-            <small>
-              أداء الطلبات
-            </small>
+            <small>أداء الطلبات</small>
           </article>
         </section>
 
@@ -1562,184 +1075,124 @@ export default function AdminDashboard() {
         <section className="admin-panel admin-recent-projects">
           <div className="admin-panel-header">
             <div>
-              <span className="admin-panel-label">
-                RECENT ACTIVITY
-              </span>
+              <span className="admin-panel-label">RECENT ACTIVITY</span>
 
-              <h2>
-                أحدث المشاريع
-              </h2>
+              <h2>أحدث المشاريع</h2>
             </div>
 
             <button
               type="button"
               className="admin-panel-link"
-              onClick={() =>
-                window.location.assign(
-                  "/admin/projects",
-                )
-              }
+              onClick={() => window.location.assign("/admin/projects")}
             >
               عرض الكل
-              <ArrowUpRight
-                size={17}
-              />
+              <ArrowUpRight size={17} />
             </button>
           </div>
 
           {projects.length === 0 ? (
             <div className="admin-empty-state">
-              <FolderKanban
-                size={42}
-              />
+              <FolderKanban size={42} />
 
-              <h3>
-                لا توجد مشاريع
-              </h3>
+              <h3>لا توجد مشاريع</h3>
 
-              <p>
-                لم يتم تسجيل أي مشروع حتى الآن.
-              </p>
+              <p>لم يتم تسجيل أي مشروع حتى الآن.</p>
             </div>
           ) : (
             <div className="admin-project-table-wrapper">
               <table className="admin-project-table">
                 <thead>
                   <tr>
-                    <th>
-                      المشروع
-                    </th>
+                    <th>المشروع</th>
 
-                    <th>
-                      المستثمر
-                    </th>
+                    <th>المستثمر</th>
 
-                    <th>
-                      القطاع
-                    </th>
+                    <th>القطاع</th>
 
-                    <th>
-                      المبلغ
-                    </th>
+                    <th>المبلغ</th>
 
-                    <th>
-                      الحالة
-                    </th>
+                    <th>الحالة</th>
 
-                    <th>
-                      التاريخ
-                    </th>
+                    <th>التاريخ</th>
 
-                    <th>
-                      إجراء
-                    </th>
+                    <th>إجراء</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {projects.map(
-                    (project) => {
-                      const investor =
-                        project.investor ||
-                        project.investisseur;
+                  {projects.map((project) => {
+                    const investor = project.investor || project.investisseur;
 
-                      return (
-                        <tr
-                          key={
-                            project.id
-                          }
-                        >
-                          <td>
-                            <div className="admin-project-name">
-                              <div className="admin-project-avatar">
-                                <Building2
-                                  size={18}
-                                />
-                              </div>
-
-                              <div>
-                                <strong>
-                                  {project.titre ||
-                                    project.nom ||
-                                    "مشروع بدون اسم"}
-                                </strong>
-
-                                <small>
-                                  #{project.id}
-                                </small>
-                              </div>
+                    return (
+                      <tr key={project.id}>
+                        <td>
+                          <div className="admin-project-name">
+                            <div className="admin-project-avatar">
+                              <Building2 size={18} />
                             </div>
-                          </td>
 
-                          <td>
-                            <div className="admin-investor-cell">
-                              <div className="admin-investor-avatar">
-                                {getInitials(
-                                  investor,
-                                )}
-                              </div>
+                            <div>
+                              <strong>
+                                {project.titre ||
+                                  project.nom ||
+                                  "مشروع بدون اسم"}
+                              </strong>
 
-                              <span>
-                                {investor
-                                  ? `${investor.prenom} ${investor.nom}`
-                                  : "غير محدد"}
-                              </span>
+                              <small>#{project.id}</small>
                             </div>
-                          </td>
+                          </div>
+                        </td>
 
-                          <td>
-                            {project.secteur ||
-                              "—"}
-                          </td>
+                        <td>
+                          <div className="admin-investor-cell">
+                            <div className="admin-investor-avatar">
+                              {getInitials(investor)}
+                            </div>
 
-                          <td>
-                            {project.montant ||
-                            project.montant_investissement
-                              ? `${formatMoney(
-                                  project.montant ||
-                                    project.montant_investissement,
-                                )} دج`
-                              : "—"}
-                          </td>
-
-                          <td>
-                            <span
-                              className={`admin-status-badge ${getStatusClass(
-                                project.statut,
-                              )}`}
-                            >
-                              {getStatusLabel(
-                                project.statut,
-                              )}
+                            <span>
+                              {investor
+                                ? `${investor.prenom} ${investor.nom}`
+                                : "غير محدد"}
                             </span>
-                          </td>
+                          </div>
+                        </td>
 
-                          <td>
-                            {formatDate(
-                              project.created_at,
-                            )}
-                          </td>
+                        <td>{project.secteur || "—"}</td>
 
-                          <td>
-                            <button
-                              type="button"
-                              className="admin-view-button"
-                              onClick={() =>
-                                setSelectedProject(
-                                  project,
-                                )
-                              }
-                              title="عرض المشروع"
-                            >
-                              <Eye
-                                size={17}
-                              />
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    },
-                  )}
+                        <td>
+                          {project.montant || project.montant_investissement
+                            ? `${formatMoney(
+                                project.montant ||
+                                  project.montant_investissement,
+                              )} دج`
+                            : "—"}
+                        </td>
+
+                        <td>
+                          <span
+                            className={`admin-status-badge ${getStatusClass(
+                              project.statut,
+                            )}`}
+                          >
+                            {getStatusLabel(project.statut)}
+                          </span>
+                        </td>
+
+                        <td>{formatDate(project.created_at)}</td>
+
+                        <td>
+                          <button
+                            type="button"
+                            className="admin-view-button"
+                            onClick={() => setSelectedProject(project)}
+                            title="عرض المشروع"
+                          >
+                            <Eye size={17} />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -1753,70 +1206,42 @@ export default function AdminDashboard() {
         <section className="admin-panel admin-activities-panel">
           <div className="admin-panel-header">
             <div>
-              <span className="admin-panel-label">
-                ACTIVITY LOG
-              </span>
+              <span className="admin-panel-label">ACTIVITY LOG</span>
 
-              <h2>
-                آخر النشاطات
-              </h2>
+              <h2>آخر النشاطات</h2>
             </div>
 
-            <Activity
-              size={22}
-            />
+            <Activity size={22} />
           </div>
 
           {activities.length === 0 ? (
             <div className="admin-empty-state admin-empty-small">
-              <Activity
-                size={34}
-              />
+              <Activity size={34} />
 
-              <p>
-                لا توجد نشاطات حديثة.
-              </p>
+              <p>لا توجد نشاطات حديثة.</p>
             </div>
           ) : (
             <div className="admin-activities-list">
-              {activities
-                .slice(0, 8)
-                .map(
-                  (
-                    activity,
-                    index,
-                  ) => (
-                    <div
-                      className="admin-activity-item"
-                      key={
-                        activity.id ??
-                        index
-                      }
-                    >
-                      <div className="admin-activity-icon">
-                        <Activity
-                          size={17}
-                        />
-                      </div>
+              {activities.slice(0, 8).map((activity, index) => (
+                <div className="admin-activity-item" key={activity.id ?? index}>
+                  <div className="admin-activity-icon">
+                    <Activity size={17} />
+                  </div>
 
-                      <div className="admin-activity-content">
-                        <strong>
-                          {activity.message ||
-                            activity.description ||
-                            activity.action ||
-                            "نشاط جديد"}
-                        </strong>
+                  <div className="admin-activity-content">
+                    <strong>
+                      {activity.message ||
+                        activity.description ||
+                        activity.action ||
+                        "نشاط جديد"}
+                    </strong>
 
-                        <span>
-                          {formatDate(
-                            activity.created_at ||
-                              activity.date,
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                  ),
-                )}
+                    <span>
+                      {formatDate(activity.created_at || activity.date)}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </section>
@@ -1829,21 +1254,15 @@ export default function AdminDashboard() {
       {selectedProject && (
         <div
           className="admin-modal-overlay"
-          onClick={() =>
-            setSelectedProject(null)
-          }
+          onClick={() => setSelectedProject(null)}
         >
           <div
             className="admin-project-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="admin-modal-header">
               <div>
-                <span>
-                  PROJECT DETAILS
-                </span>
+                <span>PROJECT DETAILS</span>
 
                 <h2>
                   {selectedProject.titre ||
@@ -1855,56 +1274,35 @@ export default function AdminDashboard() {
               <button
                 type="button"
                 className="admin-modal-close"
-                onClick={() =>
-                  setSelectedProject(null)
-                }
+                onClick={() => setSelectedProject(null)}
                 aria-label="إغلاق"
               >
-                <XCircle
-                  size={24}
-                />
+                <XCircle size={24} />
               </button>
             </div>
 
             <div className="admin-modal-body">
               <div className="admin-modal-grid">
                 <div>
-                  <span>
-                    القطاع
-                  </span>
+                  <span>القطاع</span>
 
-                  <strong>
-                    {selectedProject.secteur ||
-                      "—"}
-                  </strong>
+                  <strong>{selectedProject.secteur || "—"}</strong>
                 </div>
 
                 <div>
-                  <span>
-                    الولاية
-                  </span>
+                  <span>الولاية</span>
 
-                  <strong>
-                    {selectedProject.wilaya ||
-                      "—"}
-                  </strong>
+                  <strong>{selectedProject.wilaya || "—"}</strong>
                 </div>
 
                 <div>
-                  <span>
-                    البلدية
-                  </span>
+                  <span>البلدية</span>
 
-                  <strong>
-                    {selectedProject.commune ||
-                      "—"}
-                  </strong>
+                  <strong>{selectedProject.commune || "—"}</strong>
                 </div>
 
                 <div>
-                  <span>
-                    المبلغ
-                  </span>
+                  <span>المبلغ</span>
 
                   <strong>
                     {selectedProject.montant ||
@@ -1918,77 +1316,48 @@ export default function AdminDashboard() {
                 </div>
 
                 <div>
-                  <span>
-                    مناصب العمل
-                  </span>
+                  <span>مناصب العمل</span>
 
-                  <strong>
-                    {formatNumber(
-                      selectedProject.emplois,
-                    )}
-                  </strong>
+                  <strong>{formatNumber(selectedProject.emplois)}</strong>
                 </div>
 
                 <div>
-                  <span>
-                    التاريخ
-                  </span>
+                  <span>التاريخ</span>
 
-                  <strong>
-                    {formatDate(
-                      selectedProject.created_at,
-                    )}
-                  </strong>
+                  <strong>{formatDate(selectedProject.created_at)}</strong>
                 </div>
               </div>
 
               {selectedProject.description && (
                 <div className="admin-modal-description">
-                  <span>
-                    الوصف
-                  </span>
+                  <span>الوصف</span>
 
-                  <p>
-                    {
-                      selectedProject.description
-                    }
-                  </p>
+                  <p>{selectedProject.description}</p>
                 </div>
               )}
 
               <div className="admin-modal-current-status">
-                <span>
-                  الحالة الحالية
-                </span>
+                <span>الحالة الحالية</span>
 
                 <strong
                   className={`admin-status-badge ${getStatusClass(
                     selectedProject.statut,
                   )}`}
                 >
-                  {getStatusLabel(
-                    selectedProject.statut,
-                  )}
+                  {getStatusLabel(selectedProject.statut)}
                 </strong>
               </div>
 
               <div className="admin-modal-actions">
-                <span>
-                  تغيير حالة المشروع
-                </span>
+                <span>تغيير حالة المشروع</span>
 
                 <div className="admin-status-actions">
                   <button
                     type="button"
                     className="status-action-review"
-                    disabled={
-                      updatingProject
-                    }
+                    disabled={updatingProject}
                     onClick={() =>
-                      void updateProjectStatus(
-                        selectedProject.id,
-                        "en_etude",
-                      )
+                      void updateProjectStatus(selectedProject.id, "en_etude")
                     }
                   >
                     قيد الدراسة
@@ -1997,14 +1366,9 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     className="status-action-approved"
-                    disabled={
-                      updatingProject
-                    }
+                    disabled={updatingProject}
                     onClick={() =>
-                      void updateProjectStatus(
-                        selectedProject.id,
-                        "approuve",
-                      )
+                      void updateProjectStatus(selectedProject.id, "approuve")
                     }
                   >
                     قبول
@@ -2013,14 +1377,9 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     className="status-action-progress"
-                    disabled={
-                      updatingProject
-                    }
+                    disabled={updatingProject}
                     onClick={() =>
-                      void updateProjectStatus(
-                        selectedProject.id,
-                        "en_cours",
-                      )
+                      void updateProjectStatus(selectedProject.id, "en_cours")
                     }
                   >
                     قيد الإنجاز
@@ -2029,14 +1388,9 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     className="status-action-completed"
-                    disabled={
-                      updatingProject
-                    }
+                    disabled={updatingProject}
                     onClick={() =>
-                      void updateProjectStatus(
-                        selectedProject.id,
-                        "realise",
-                      )
+                      void updateProjectStatus(selectedProject.id, "realise")
                     }
                   >
                     منجز
@@ -2045,14 +1399,9 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     className="status-action-rejected"
-                    disabled={
-                      updatingProject
-                    }
+                    disabled={updatingProject}
                     onClick={() =>
-                      void updateProjectStatus(
-                        selectedProject.id,
-                        "rejete",
-                      )
+                      void updateProjectStatus(selectedProject.id, "rejete")
                     }
                   >
                     رفض
@@ -2064,9 +1413,7 @@ export default function AdminDashboard() {
             <div className="admin-modal-footer">
               <button
                 type="button"
-                onClick={() =>
-                  setSelectedProject(null)
-                }
+                onClick={() => setSelectedProject(null)}
                 className="admin-modal-cancel"
               >
                 إغلاق
