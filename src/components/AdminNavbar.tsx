@@ -1,25 +1,21 @@
-import { useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
 import {
   NavLink,
   useLocation,
   useNavigate,
 } from "react-router-dom";
 
-import "../styles/AdminNavbar.css";
+/* ============================================================
+   TYPES
+   ============================================================ */
 
 interface AdminNavbarProps {
   currentPage?: string;
-}
-
-interface AdminUser {
-  id?: number;
-  nom?: string;
-  prenom?: string;
-  email?: string;
-  telephone?: string | null;
-  role?: string;
-  statut?: string;
-  photo?: string | null;
 }
 
 interface MenuItem {
@@ -35,227 +31,285 @@ interface MenuSection {
   items: MenuItem[];
 }
 
+interface StoredUser {
+  id?: number;
+  nom?: string;
+  prenom?: string;
+  email?: string;
+  role?: string;
+  photo?: string | null;
+}
+
 /* ============================================================
-   ADMIN NAVBAR
-   لا يستدعي dashboard.php
-   البيانات الأساسية تأتي من localStorage
+   API
+   ============================================================ */
+
+const MESSAGES_API =
+  "http://localhost/aapi-api/auth/admin/messages.php";
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+
+function getStoredUser(): StoredUser | null {
+  try {
+    const raw = localStorage.getItem("aapi_user");
+
+    if (!raw) {
+      return null;
+    }
+
+    const user = JSON.parse(raw);
+
+    if (!user || typeof user !== "object") {
+      return null;
+    }
+
+    return user as StoredUser;
+  } catch (error) {
+    console.error(
+      "Erreur lecture utilisateur:",
+      error
+    );
+
+    return null;
+  }
+}
+
+/* ============================================================
+   COMPONENT
    ============================================================ */
 
 function AdminNavbar({
-  currentPage = "لوحة التحكم",
+  currentPage = "",
 }: AdminNavbarProps) {
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
+  /* ==========================================================
+     STATE
+     ========================================================== */
 
-  const [admin, setAdmin] = useState<AdminUser>({
-    id: undefined,
-    nom: "المدير",
-    prenom: "",
-    email: "",
-    telephone: null,
-    role: "admin",
-    statut: "actif",
-    photo: null,
-  });
+  const [user, setUser] =
+    useState<StoredUser | null>(null);
 
-  /* ============================================================
-     تحميل بيانات المدير من localStorage فقط
-     ============================================================ */
+  const [mobileOpen, setMobileOpen] =
+    useState(false);
+
+  const [profileOpen, setProfileOpen] =
+    useState(false);
+
+  const [messagesOpen, setMessagesOpen] =
+    useState(false);
+
+  const [unreadCount, setUnreadCount] =
+    useState(0);
+
+  /* ==========================================================
+     LOAD USER
+     ========================================================== */
 
   useEffect(() => {
-    let cancelled = false;
+    const currentUser = getStoredUser();
 
-    const loadAdminFromStorage = () => {
-      try {
-        const storedUser = localStorage.getItem("aapi_user");
-
-        if (!storedUser) {
-          return;
-        }
-
-        const user = JSON.parse(storedUser) as AdminUser;
-
-        if (!user || !user.id) {
-          console.warn(
-            "AdminNavbar: بيانات المستخدم غير صالحة."
-          );
-          return;
-        }
-
-        if (
-          String(user.role || "").toLowerCase() !==
-          "admin"
-        ) {
-          console.warn(
-            "AdminNavbar: المستخدم الحالي ليس Admin."
-          );
-          return;
-        }
-
-        if (!cancelled) {
-          setAdmin({
-            ...user,
-            role: "admin",
-          });
-        }
-      } catch (error) {
-        console.error(
-          "AdminNavbar: خطأ في قراءة aapi_user:",
-          error
-        );
-      }
-    };
-
-    loadAdminFromStorage();
-
-    return () => {
-      cancelled = true;
-    };
+    setUser(currentUser);
   }, []);
 
-  /* ============================================================
-     تحديث بيانات المدير إذا تغير localStorage
-     ============================================================ */
+  /* ==========================================================
+     GET ADMIN ID
+     ========================================================== */
 
-  useEffect(() => {
-    const handleStorageChange = () => {
+  const getAdminId = useCallback((): number | null => {
+    const currentUser = getStoredUser();
+
+    if (!currentUser?.id) {
+      return null;
+    }
+
+    if (currentUser.role !== "admin") {
+      return null;
+    }
+
+    return Number(currentUser.id);
+  }, []);
+
+  /* ==========================================================
+     LOAD UNREAD MESSAGES
+     ========================================================== */
+
+  const loadUnreadMessages = useCallback(
+    async () => {
+      const adminId = getAdminId();
+
+      if (!adminId) {
+        setUnreadCount(0);
+        return;
+      }
+
       try {
-        const storedUser =
-          localStorage.getItem("aapi_user");
+        const url =
+          `${MESSAGES_API}?user_id=${adminId}&unread_only=1`;
 
-        if (!storedUser) {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `HTTP ${response.status}`
+          );
+        }
+
+        const data = await response.json();
+
+        if (
+          data &&
+          Array.isArray(data.messages)
+        ) {
+          const count =
+            data.messages.length;
+
+          setUnreadCount(count);
           return;
         }
 
-        const user =
-          JSON.parse(storedUser) as AdminUser;
+        if (
+          data &&
+          typeof data.unread_count ===
+            "number"
+        ) {
+          setUnreadCount(
+            data.unread_count
+          );
+
+          return;
+        }
 
         if (
-          user?.id &&
-          String(user.role || "").toLowerCase() ===
-            "admin"
+          data &&
+          data.stats &&
+          typeof data.stats
+            .messages_non_lus ===
+            "number"
         ) {
-          setAdmin({
-            ...user,
-            role: "admin",
-          });
+          setUnreadCount(
+            data.stats.messages_non_lus
+          );
+
+          return;
         }
+
+        setUnreadCount(0);
       } catch (error) {
-        console.error(
-          "AdminNavbar: خطأ أثناء تحديث المستخدم:",
+        /*
+         * Le backend messages peut ne pas être
+         * encore disponible. On ne bloque pas
+         * la navbar dans ce cas.
+         */
+        console.warn(
+          "Impossible de charger les messages non lus:",
           error
         );
+
+        setUnreadCount(0);
       }
+    },
+    [getAdminId]
+  );
+
+  /* ==========================================================
+     INITIAL LOAD + AUTO REFRESH
+     ========================================================== */
+
+  useEffect(() => {
+    loadUnreadMessages();
+
+    const interval = window.setInterval(
+      () => {
+        loadUnreadMessages();
+      },
+      30000
+    );
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [loadUnreadMessages]);
+
+  /* ==========================================================
+     STORAGE EVENT
+     ========================================================== */
+
+  useEffect(() => {
+    const handleStorage = () => {
+      const currentUser =
+        getStoredUser();
+
+      setUser(currentUser);
+
+      loadUnreadMessages();
     };
 
     window.addEventListener(
       "storage",
-      handleStorageChange
+      handleStorage
     );
 
     return () => {
       window.removeEventListener(
         "storage",
-        handleStorageChange
+        handleStorage
       );
     };
-  }, []);
+  }, [loadUnreadMessages]);
 
-  /* ============================================================
-     إغلاق القائمة بعد تغيير الصفحة
-     ============================================================ */
+  /* ==========================================================
+     ACTIVE MENU
+     ========================================================== */
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
+  const isActive = (
+    page: string
+  ): boolean => {
+    const pathname =
+      location.pathname;
 
-  /* ============================================================
-     منع Scroll عند فتح القائمة في الهاتف
-     ============================================================ */
-
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.classList.add(
-        "admin-menu-open"
-      );
-    } else {
-      document.body.classList.remove(
-        "admin-menu-open"
-      );
-    }
-
-    return () => {
-      document.body.classList.remove(
-        "admin-menu-open"
-      );
-    };
-  }, [mobileOpen]);
-
-  /* ============================================================
-     تسجيل الخروج
-     ============================================================ */
-
-  const handleLogout = () => {
-    localStorage.removeItem("aapi_user");
-    localStorage.removeItem("admin");
-    localStorage.removeItem("token");
-    localStorage.removeItem("authToken");
-
-    sessionStorage.clear();
-
-    setMobileOpen(false);
-
-    navigate("/login", {
-      replace: true,
-    });
-  };
-
-  /* ============================================================
-     الصفحة النشطة
-     ============================================================ */
-
-  const isActive = (page: string) => {
-    const pathname = location.pathname;
-
-    /* لوحة التحكم */
     if (page === "dashboard") {
       return (
         pathname === "/admin" ||
+        pathname === "/admin/" ||
         pathname === "/admin/dashboard"
       );
     }
 
-    /* الصفحة الحالية حسب URL */
+    const expectedPath =
+      `/admin/${page}`;
+
     if (
-      pathname === `/admin/${page}` ||
-      pathname.startsWith(`/admin/${page}/`)
+      pathname === expectedPath ||
+      pathname.startsWith(
+        `${expectedPath}/`
+      )
     ) {
       return true;
     }
 
-    /* الصفحة الحالية حسب currentPage */
-    const normalizedCurrentPage =
-      currentPage
-        .toLowerCase()
-        .trim();
+    if (
+      currentPage &&
+      currentPage.toLowerCase().trim() ===
+        page.toLowerCase().trim()
+    ) {
+      return true;
+    }
 
-    const normalizedPage =
-      page
-        .toLowerCase()
-        .trim();
-
-    return (
-      normalizedCurrentPage ===
-      normalizedPage
-    );
+    return false;
   };
 
-  /* ============================================================
-     القائمة الرئيسية
-     ============================================================ */
+  /* ==========================================================
+     MENU
+     ========================================================== */
 
   const menuSections: MenuSection[] = [
     {
@@ -274,6 +328,19 @@ function AdminNavbar({
           label: "المستخدمون",
           icon: "♙",
           path: "/admin/users",
+        },
+
+        /*
+         * =====================================================
+         * INVESTORS
+         * =====================================================
+         */
+
+        {
+          id: "investors",
+          label: "المستثمرون",
+          icon: "♙",
+          path: "/admin/investors",
         },
 
         {
@@ -327,396 +394,434 @@ function AdminNavbar({
     },
   ];
 
-  /* ============================================================
-     اسم المدير
-     ============================================================ */
+  /* ==========================================================
+     DISPLAY USER
+     ========================================================== */
 
-  const displayName =
-    [
-      admin.prenom,
-      admin.nom,
-    ]
-      .filter(
-        (value) =>
-          Boolean(
-            value &&
-              value.trim()
-          )
-      )
-      .join(" ") ||
-    "المدير";
+  const firstName =
+    user?.prenom || "";
 
-  /* ============================================================
-     الأحرف الأولى
-     ============================================================ */
+  const lastName =
+    user?.nom || "";
 
-  const firstInitial =
-    admin.prenom
-      ?.trim()
-      ?.charAt(0) || "";
-
-  const lastInitial =
-    admin.nom
-      ?.trim()
-      ?.charAt(0) || "م";
+  const fullName =
+    `${firstName} ${lastName}`
+      .trim() || "Administrateur";
 
   const initials =
-    `${firstInitial}${lastInitial}`
-      .toUpperCase();
+    `${firstName.charAt(0)}${lastName.charAt(
+      0
+    )}`.toUpperCase() || "AD";
 
-  /* ============================================================
+  /* ==========================================================
+     NAVIGATION
+     ========================================================== */
+
+  const handleNavigation = (
+    path: string
+  ) => {
+    setMobileOpen(false);
+    setProfileOpen(false);
+    setMessagesOpen(false);
+
+    navigate(path);
+  };
+
+  /* ==========================================================
+     LOGOUT
+     ========================================================== */
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem(
+        "aapi_user"
+      );
+
+      localStorage.removeItem(
+        "aapi_token"
+      );
+
+      localStorage.removeItem(
+        "token"
+      );
+    } catch (error) {
+      console.error(
+        "Erreur déconnexion:",
+        error
+      );
+    }
+
+    setUser(null);
+
+    navigate("/login", {
+      replace: true,
+    });
+  };
+
+  /* ==========================================================
+     CLOSE MOBILE MENU
+     ========================================================== */
+
+  const closeMobileMenu = () => {
+    setMobileOpen(false);
+  };
+
+  /* ==========================================================
+     MARK MESSAGES READ
+     ========================================================== */
+
+  const handleMessagesClick = () => {
+    setMessagesOpen(false);
+    setMobileOpen(false);
+
+    navigate("/admin/messages");
+  };
+
+  /* ==========================================================
      RENDER
-     ============================================================ */
+     ========================================================== */
 
   return (
     <>
       {/* ======================================================
-          NAVBAR
-          ====================================================== */}
+          MOBILE OVERLAY
+         ====================================================== */}
 
-      <header
+      {mobileOpen && (
+        <div
+          className="admin-navbar-overlay"
+          onClick={closeMobileMenu}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* ======================================================
+          NAVBAR
+         ====================================================== */}
+
+      <aside
         className={`admin-navbar ${
           mobileOpen
-            ? "mobile-open"
+            ? "admin-navbar-open"
             : ""
         }`}
         dir="rtl"
       >
-        <div className="admin-navbar-inner">
+        {/* ====================================================
+            BRAND
+           ==================================================== */}
 
-          {/* ==================================================
-              LOGO
-              ================================================== */}
-
-          <div className="admin-navbar-brand">
-
-            <button
-              type="button"
-              className="admin-brand-logo"
-              onClick={() =>
-                navigate(
-                  "/admin/dashboard"
-                )
-              }
-              aria-label="AAPI"
-            >
+        <div className="admin-navbar-brand">
+          <button
+            type="button"
+            className="admin-navbar-brand-button"
+            onClick={() =>
+              handleNavigation(
+                "/admin/dashboard"
+              )
+            }
+            aria-label="لوحة التحكم"
+          >
+            <div className="admin-navbar-logo">
               A
-            </button>
+            </div>
 
-            <div className="admin-brand-text">
-
-              <strong>
-                AAPI
-              </strong>
+            <div className="admin-navbar-brand-text">
+              <strong>AAPI</strong>
 
               <span>
                 الإدارة
               </span>
-
             </div>
+          </button>
 
+          {/* Mobile close */}
+          <button
+            type="button"
+            className="admin-navbar-mobile-close"
+            onClick={closeMobileMenu}
+            aria-label="إغلاق القائمة"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* ====================================================
+            ADMIN PROFILE
+           ==================================================== */}
+
+        <div className="admin-navbar-user">
+          <div className="admin-navbar-user-avatar">
+            {user?.photo ? (
+              <img
+                src={user.photo}
+                alt={fullName}
+              />
+            ) : (
+              initials
+            )}
           </div>
 
-          {/* ==================================================
-              MENU
-              ================================================== */}
+          <div className="admin-navbar-user-info">
+            <strong>
+              {fullName}
+            </strong>
 
-          <nav
-            className={`admin-navbar-menu ${
-              mobileOpen
-                ? "mobile-open"
-                : ""
-            }`}
-            aria-label="قائمة الإدارة"
-          >
+            <span>
+              مدير النظام
+            </span>
+          </div>
+        </div>
 
-            {menuSections.map(
-              (section) => (
-                <div
-                  className="admin-menu-section"
-                  key={section.title}
-                >
+        {/* ====================================================
+            NAVIGATION
+           ==================================================== */}
 
-                  <div className="admin-menu-title">
-                    {section.title}
-                  </div>
+        <nav className="admin-navbar-menu">
+          {menuSections.map(
+            (section) => (
+              <div
+                className="admin-navbar-section"
+                key={section.title}
+              >
+                <div className="admin-navbar-section-title">
+                  {section.title}
+                </div>
 
-                  <div className="admin-menu-items">
+                <div className="admin-navbar-section-items">
+                  {section.items.map(
+                    (item) => {
+                      const active =
+                        isActive(
+                          item.id
+                        );
 
-                    {section.items.map(
-                      (item) => (
+                      return (
                         <NavLink
                           key={item.id}
                           to={item.path}
-                          end={
-                            item.id ===
-                            "dashboard"
-                          }
-                          className={() =>
-                            `admin-nav-link ${
-                              isActive(
-                                item.id
-                              )
-                                ? "active"
-                                : ""
-                            }`
-                          }
-                          aria-current={
-                            isActive(
-                              item.id
-                            )
-                              ? "page"
-                              : undefined
-                          }
+                          className={`admin-nav-link ${
+                            active
+                              ? "active"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            setMobileOpen(
+                              false
+                            );
+                            setProfileOpen(
+                              false
+                            );
+                            setMessagesOpen(
+                              false
+                            );
+                          }}
                         >
-
-                          <span className="admin-nav-icon-wrapper">
-
-                            <span
-                              className="admin-nav-icon"
-                              aria-hidden="true"
-                            >
-                              {item.icon}
-                            </span>
-
-                            {Boolean(
-                              item.badge &&
-                                item.badge > 0
-                            ) && (
-                              <span className="admin-notification-badge">
-                                {item.badge! >
-                                99
-                                  ? "99+"
-                                  : item.badge}
-                              </span>
-                            )}
-
+                          <span className="admin-nav-icon">
+                            {item.icon}
                           </span>
 
                           <span className="admin-nav-label">
                             {item.label}
                           </span>
 
+                          {item.badge !==
+                            undefined &&
+                            item.badge > 0 && (
+                              <span className="admin-nav-badge">
+                                {item.badge >
+                                99
+                                  ? "99+"
+                                  : item.badge}
+                              </span>
+                            )}
                         </NavLink>
-                      )
-                    )}
-
-                  </div>
-
+                      );
+                    }
+                  )}
                 </div>
-              )
-            )}
+              </div>
+            )
+          )}
+        </nav>
 
-            {/* ==================================================
-                MOBILE LOGOUT
-                ================================================== */}
+        {/* ====================================================
+            BOTTOM ACTIONS
+           ==================================================== */}
 
-            <div className="admin-menu-bottom">
+        <div className="admin-navbar-bottom">
+          {/* Messages */}
+          <button
+            type="button"
+            className="admin-navbar-bottom-button"
+            onClick={
+              handleMessagesClick
+            }
+          >
+            <span className="admin-nav-icon">
+              ✉
+            </span>
 
-              <button
-                type="button"
-                className="admin-nav-link admin-logout-button"
-                onClick={
-                  handleLogout
-                }
-              >
+            <span>
+              الرسائل
+            </span>
 
-                <span className="admin-nav-icon-wrapper">
-
-                  <span
-                    className="admin-nav-icon"
-                    aria-hidden="true"
-                  >
-                    ↪
-                  </span>
-
-                </span>
-
-                <span className="admin-nav-label">
-                  تسجيل الخروج
-                </span>
-
-              </button>
-
-            </div>
-
-          </nav>
-
-          {/* ==================================================
-              ACTIONS
-              ================================================== */}
-
-          <div className="admin-navbar-actions">
-
-            {/* ------------------------------------------------
-                الرسائل
-                ------------------------------------------------ */}
-
-            <button
-              type="button"
-              className="admin-navbar-icon-button"
-              onClick={() =>
-                navigate(
-                  "/admin/messages"
-                )
-              }
-              aria-label={
-                unreadCount > 0
-                  ? `الرسائل، ${unreadCount} غير مقروءة`
-                  : "الرسائل"
-              }
-            >
-
-              <span
-                aria-hidden="true"
-              >
-                ✉
+            {unreadCount > 0 && (
+              <span className="admin-nav-badge">
+                {unreadCount > 99
+                  ? "99+"
+                  : unreadCount}
               </span>
+            )}
+          </button>
 
-              {unreadCount > 0 && (
-                <span
-                  className="admin-notification-dot"
-                  aria-hidden="true"
-                />
-              )}
+          {/* Profile */}
+          <button
+            type="button"
+            className="admin-navbar-bottom-button"
+            onClick={() => {
+              setProfileOpen(
+                (previous) =>
+                  !previous
+              );
 
-            </button>
+              setMessagesOpen(false);
+            }}
+          >
+            <span className="admin-nav-icon">
+              ◉
+            </span>
 
-            {/* ------------------------------------------------
-                الملف الشخصي
-                ------------------------------------------------ */}
+            <span>
+              الملف الشخصي
+            </span>
+          </button>
 
-            <button
-              type="button"
-              className="admin-profile"
-              onClick={() =>
-                navigate(
-                  "/admin/profile"
-                )
-              }
-              aria-label="الملف الشخصي للمدير"
-            >
+          {/* Logout */}
+          <button
+            type="button"
+            className="admin-navbar-bottom-button admin-navbar-logout"
+            onClick={
+              handleLogout
+            }
+          >
+            <span className="admin-nav-icon">
+              ⇥
+            </span>
 
-              <div className="admin-profile-avatar">
+            <span>
+              تسجيل الخروج
+            </span>
+          </button>
+        </div>
 
-                {admin.photo ? (
+        {/* ====================================================
+            PROFILE DROPDOWN
+           ==================================================== */}
+
+        {profileOpen && (
+          <div className="admin-navbar-profile-dropdown">
+            <div className="admin-navbar-profile-header">
+              <div className="admin-navbar-profile-avatar">
+                {user?.photo ? (
                   <img
-                    src={admin.photo}
-                    alt={displayName}
-                    onError={(event) => {
-                      event.currentTarget.style.display =
-                        "none";
-                    }}
+                    src={user.photo}
+                    alt={fullName}
                   />
                 ) : (
                   initials
                 )}
-
               </div>
 
-              <div className="admin-profile-info">
-
+              <div>
                 <strong>
-                  {displayName}
+                  {fullName}
                 </strong>
 
                 <span>
-                  مدير النظام
+                  {user?.email ||
+                    "admin@aapi.dz"}
                 </span>
-
               </div>
-
-            </button>
-
-            {/* ------------------------------------------------
-                تسجيل الخروج Desktop
-                ------------------------------------------------ */}
+            </div>
 
             <button
               type="button"
-              className="admin-logout-button admin-desktop-logout"
-              onClick={
-                handleLogout
+              onClick={() =>
+                handleNavigation(
+                  "/admin/profile"
+                )
               }
-              title="تسجيل الخروج"
-              aria-label="تسجيل الخروج"
             >
-
-              <span
-                className="admin-nav-icon"
-                aria-hidden="true"
-              >
-                ↪
-              </span>
-
+              الملف الشخصي
             </button>
 
+            <button
+              type="button"
+              onClick={() =>
+                handleNavigation(
+                  "/admin/settings"
+                )
+              }
+            >
+              الإعدادات
+            </button>
           </div>
+        )}
+      </aside>
 
-        </div>
+      {/* ========================================================
+          MOBILE HEADER
+         ======================================================== */}
 
-        {/* ====================================================
-            مؤشر الصفحة
-            ==================================================== */}
-
-        <div className="admin-navbar-page-indicator">
-
-          <span />
-
-          <small>
-            {currentPage}
-          </small>
-
-        </div>
-
-      </header>
-
-      {/* ======================================================
-          MOBILE BUTTON
-          ====================================================== */}
-
-      <button
-        type="button"
-        className={`admin-mobile-toggle ${
-          mobileOpen
-            ? "active"
-            : ""
-        }`}
-        onClick={() =>
-          setMobileOpen(
-            (value) => !value
-          )
-        }
-        aria-label={
-          mobileOpen
-            ? "إغلاق القائمة"
-            : "فتح القائمة"
-        }
-        aria-expanded={
-          mobileOpen
-        }
+      <div
+        className="admin-mobile-header"
+        dir="rtl"
       >
-
-        <span />
-        <span />
-        <span />
-
-      </button>
-
-      {/* ======================================================
-          MOBILE OVERLAY
-          ====================================================== */}
-
-      {mobileOpen && (
         <button
           type="button"
-          className="admin-sidebar-overlay"
+          className="admin-mobile-menu-button"
           onClick={() =>
-            setMobileOpen(false)
+            setMobileOpen(true)
           }
-          aria-label="إغلاق القائمة"
-        />
-      )}
+          aria-label="فتح القائمة"
+        >
+          ☰
+        </button>
+
+        <div className="admin-mobile-brand">
+          <div className="admin-navbar-logo">
+            A
+          </div>
+
+          <div>
+            <strong>AAPI</strong>
+
+            <span>
+              الإدارة
+            </span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="admin-mobile-message-button"
+          onClick={
+            handleMessagesClick
+          }
+          aria-label="الرسائل"
+        >
+          ✉
+
+          {unreadCount > 0 && (
+            <span>
+              {unreadCount > 99
+                ? "99+"
+                : unreadCount}
+            </span>
+          )}
+        </button>
+      </div>
     </>
   );
 }
