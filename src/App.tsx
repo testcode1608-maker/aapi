@@ -30,22 +30,7 @@ import InvestorDashboard from "./pages/InvestorDashboard";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsersPage from "./pages/AdminUsersPage";
-
-/*
- * صفحات Admin القادمة
- * إذا لم تكن الملفات موجودة بعد، اترك الاستيرادات معلقة
- * حتى لا يظهر خطأ Vite.
- *
- * عند إنشاء الصفحات سنضيفها هنا.
- */
-
-// import AdminProjectsPage from "./pages/AdminProjectsPage";
-// import AdminInvestmentsPage from "./pages/AdminInvestmentsPage";
-// import AdminRequestsPage from "./pages/AdminRequestsPage";
-// import AdminMessagesPage from "./pages/AdminMessagesPage";
-// import AdminDocumentsPage from "./pages/AdminDocumentsPage";
-// import AdminSettingsPage from "./pages/AdminSettingsPage";
-// import AdminProfilePage from "./pages/AdminProfilePage";
+import AdminInvestorsPage from "./pages/AdminInvestorsPage";
 
 /* ============================================================
    GLOBAL COMPONENTS
@@ -144,6 +129,24 @@ function AdminUsersRoute() {
   }
 
   return <AdminUsersPage />;
+}
+
+/* ============================================================
+   ADMIN INVESTORS ROUTE
+   ============================================================ */
+
+function AdminInvestorsRoute() {
+  const user = getCurrentUser();
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
+
+  return <AdminInvestorsPage />;
 }
 
 /* ============================================================
@@ -257,14 +260,6 @@ function InvestorRoute() {
     return <Navigate to="/login" replace />;
   }
 
-  /*
-   * نقبل:
-   * investisseur
-   * investor
-   *
-   * حتى يكون النظام متوافقًا مع البيانات القديمة.
-   */
-
   if (user.role !== "investisseur" && user.role !== "investor") {
     return <Navigate to="/" replace />;
   }
@@ -284,11 +279,6 @@ function AppContent() {
   const isInvestorDashboard =
     location.pathname.startsWith("/investor/dashboard");
 
-  /*
-   * لا نعرض Header/Footer العامين داخل لوحة الإدارة
-   * أو لوحة المستثمر.
-   */
-
   const hideGlobalLayout = isAdminRoute || isInvestorDashboard;
 
   return (
@@ -306,64 +296,22 @@ function AppContent() {
              ================================================== */}
 
           <Route path="/" element={<Home />} />
-
           <Route path="/agency" element={<Agency />} />
-
           <Route path="/investor" element={<Investor />} />
-
-          <Route
-            path="/opportunities"
-            element={<OpportunitiesPage />}
-          />
-
-          <Route
-            path="/sectors"
-            element={<SectorsPage />}
-          />
-
-          <Route
-            path="/news"
-            element={<NewsPage />}
-          />
-
-          <Route
-            path="/events"
-            element={<EventsPage />}
-          />
-
-          <Route
-            path="/announcements"
-            element={<AnnouncementsPage />}
-          />
-
-          <Route
-            path="/contact"
-            element={<Contact />}
-          />
-
-          <Route
-            path="/news/:id"
-            element={<NewsDetails />}
-          />
-
-          <Route
-            path="/announcements/:id"
-            element={<AnnouncementsDetails />}
-          />
-
-          <Route
-            path="/investor/register"
-            element={<InvestorRegistration />}
-          />
-
-          <Route
-            path="/login"
-            element={<Login />}
-          />
+          <Route path="/opportunities" element={<OpportunitiesPage />} />
+          <Route path="/sectors" element={<SectorsPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/events" element={<EventsPage />} />
+          <Route path="/announcements" element={<AnnouncementsPage />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/news/:id" element={<NewsDetails />} />
+          <Route path="/announcements/:id" element={<AnnouncementsDetails />} />
+          <Route path="/investor/register" element={<InvestorRegistration />} />
+          <Route path="/login" element={<Login />} />
 
           {/* ==================================================
               INVESTOR DASHBOARD
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/investor/dashboard"
@@ -377,7 +325,7 @@ function AppContent() {
 
           {/* ==================================================
               ADMIN DASHBOARD
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin/dashboard"
@@ -386,7 +334,7 @@ function AppContent() {
 
           {/* ==================================================
               ADMIN USERS
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin/users"
@@ -394,19 +342,17 @@ function AppContent() {
           />
 
           {/* ==================================================
+              ADMIN INVESTORS
+             ================================================== */
+
+          <Route
+            path="/admin/investors"
+            element={<AdminInvestorsRoute />}
+          />
+
+          {/* ==================================================
               ADMIN PROJECTS
-             ==================================================
-             
-             مؤقتًا حتى إنشاء AdminProjectsPage.
-             بعد إنشاء الصفحة يمكن استبدال AdminProtectedRoute
-             بـ:
-             
-             <Route
-               path="/admin/projects"
-               element={<AdminProjectsPage />}
-             />
-             
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin/projects"
@@ -415,7 +361,7 @@ function AppContent() {
 
           {/* ==================================================
               ADMIN INVESTMENTS
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin/investments"
@@ -424,7 +370,7 @@ function AppContent() {
 
           {/* ==================================================
               ADMIN REQUESTS
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin/requests"
@@ -433,7 +379,7 @@ function AppContent() {
 
           {/* ==================================================
               ADMIN MESSAGES
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin/messages"
@@ -442,7 +388,7 @@ function AppContent() {
 
           {/* ==================================================
               ADMIN DOCUMENTS
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin/documents"
@@ -451,7 +397,7 @@ function AppContent() {
 
           {/* ==================================================
               ADMIN SETTINGS
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin/settings"
@@ -460,7 +406,7 @@ function AppContent() {
 
           {/* ==================================================
               ADMIN PROFILE
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin/profile"
@@ -469,30 +415,20 @@ function AppContent() {
 
           {/* ==================================================
               /ADMIN
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="/admin"
-            element={
-              <Navigate
-                to="/admin/dashboard"
-                replace
-              />
-            }
+            element={<Navigate to="/admin/dashboard" replace />}
           />
 
           {/* ==================================================
               404
-             ================================================== */}
+             ================================================== */
 
           <Route
             path="*"
-            element={
-              <Navigate
-                to="/"
-                replace
-              />
-            }
+            element={<Navigate to="/" replace />}
           />
         </Routes>
       </main>
