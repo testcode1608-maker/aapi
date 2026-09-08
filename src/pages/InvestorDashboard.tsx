@@ -10,6 +10,7 @@ import {
   useState,
   type FormEvent,
 } from "react";
+import InvestorNavbar from "../components/InvestorNavbar";
 
 /* ============================================================
    TYPES
@@ -613,6 +614,8 @@ function InvestorDashboard() {
   const [activities, setActivities] =
     useState<DashboardActivity[]>([]);
 
+  
+
   const [loading, setLoading] =
     useState(true);
 
@@ -762,17 +765,33 @@ function InvestorDashboard() {
           return;
         }
 
+        /* ======================================================
+           USER
+           ====================================================== */
+
         setUser(
           data.user || null
         );
+
+        /* ======================================================
+           PROFILE
+           ====================================================== */
 
         setProfile(
           data.profile || null
         );
 
+        /* ======================================================
+           STATS
+           ====================================================== */
+
         setStats(
           data.stats || null
         );
+
+        /* ======================================================
+           PROJECTS
+           ====================================================== */
 
         setProjects(
           Array.isArray(data.projects)
@@ -794,6 +813,10 @@ function InvestorDashboard() {
               )
             : []
         );
+
+        /* ======================================================
+           INVESTMENTS
+           ====================================================== */
 
         setInvestments(
           Array.isArray(
@@ -823,6 +846,10 @@ function InvestorDashboard() {
             : []
         );
 
+        /* ======================================================
+           REQUESTS
+           ====================================================== */
+
         setRequests(
           Array.isArray(data.requests)
             ? data.requests.map(
@@ -844,6 +871,10 @@ function InvestorDashboard() {
               )
             : []
         );
+
+        /* ======================================================
+           DOCUMENTS
+           ====================================================== */
 
         setDocuments(
           Array.isArray(
@@ -868,6 +899,10 @@ function InvestorDashboard() {
               )
             : []
         );
+
+        /* ======================================================
+           MESSAGES
+           ====================================================== */
 
         setMessages(
           Array.isArray(data.messages)
@@ -894,6 +929,10 @@ function InvestorDashboard() {
             : []
         );
 
+        /* ======================================================
+           NOTIFICATIONS
+           ====================================================== */
+
         setNotifications(
           Array.isArray(
             data.notifications
@@ -913,11 +952,25 @@ function InvestorDashboard() {
             : []
         );
 
+        /* ======================================================
+           ACTIVITIES FROM PHP
+           ====================================================== */
+
         setActivities(
           Array.isArray(data.activities)
             ? data.activities
             : []
         );
+
+        /* ======================================================
+           LAST DATA FROM PHP
+           ====================================================== */
+
+        
+
+        /* ======================================================
+           UPDATE LOCAL USER
+           ====================================================== */
 
         if (data.user) {
           localStorage.setItem(
@@ -1293,6 +1346,11 @@ function InvestorDashboard() {
         date_fin: "",
       });
 
+      /*
+       * إعادة تحميل لوحة التحكم بعد لحظة قصيرة
+       * حتى تظهر رسالة النجاح ويتم تحديث:
+       * المشاريع + الإحصائيات + النشاطات + الإشعارات.
+       */
       window.setTimeout(() => {
         window.location.reload();
       }, 900);
@@ -1483,6 +1541,11 @@ function InvestorDashboard() {
           .slice(0, 10);
       }
 
+      /*
+       * Fallback uniquement si une ancienne
+       * version du PHP ne retourne pas activities.
+       */
+
       const items: DashboardActivity[] =
         [];
 
@@ -1632,12 +1695,17 @@ function InvestorDashboard() {
       requests,
     ]);
 
+  /* ============================================================
+     LOADING
+     ============================================================ */
+
   if (loading) {
     return (
       <div
         className="investor-dashboard-page"
         dir="rtl"
       >
+        <InvestorNavbar currentPage="dashboard" />
         <div className="investor-dashboard-content">
           <section className="investor-dashboard-section">
             <div className="investor-dashboard-page-header">
@@ -1660,6 +1728,10 @@ function InvestorDashboard() {
       </div>
     );
   }
+
+  /* ============================================================
+     ERROR
+     ============================================================ */
 
   if (error) {
     return (
@@ -1701,13 +1773,23 @@ function InvestorDashboard() {
     );
   }
 
+  /* ============================================================
+     RENDER
+     ============================================================ */
+
   return (
     <div
       className="investor-dashboard-page"
       dir="rtl"
     >
+      {/* ======================================================
+          TOPBAR
+          ====================================================== */}
+
       <header className="investor-dashboard-topbar">
+
         <div className="investor-dashboard-brand">
+
           <div className="investor-dashboard-brand-mark">
             <i className="bi bi-buildings" />
           </div>
@@ -1721,9 +1803,11 @@ function InvestorDashboard() {
               فضاء المستثمر
             </span>
           </div>
+
         </div>
 
         <div className="investor-dashboard-topbar-actions">
+
           <Link
             to="/investor/dashboard/notifications"
             className="investor-dashboard-notification"
@@ -1743,7 +1827,9 @@ function InvestorDashboard() {
           </Link>
 
           <div className="investor-dashboard-user">
+
             <div className="investor-dashboard-user-avatar">
+
               {userPhotoUrl ? (
                 <img
                   src={userPhotoUrl}
@@ -1752,9 +1838,11 @@ function InvestorDashboard() {
               ) : (
                 initials
               )}
+
             </div>
 
             <div className="investor-dashboard-user-info">
+
               <strong>
                 {fullName}
               </strong>
@@ -1762,15 +1850,31 @@ function InvestorDashboard() {
               <span>
                 {user?.email || "—"}
               </span>
+
             </div>
+
           </div>
+
         </div>
+
       </header>
 
+      {/* ======================================================
+          LAYOUT
+          ====================================================== */}
+
       <div className="investor-dashboard-layout">
+
+        {/* ====================================================
+            SIDEBAR
+            ==================================================== */}
+
         <aside className="investor-dashboard-sidebar">
+
           <div className="investor-dashboard-sidebar-header">
+
             <div className="investor-dashboard-sidebar-avatar">
+
               {userPhotoUrl ? (
                 <img
                   src={userPhotoUrl}
@@ -1779,6 +1883,7 @@ function InvestorDashboard() {
               ) : (
                 initials
               )}
+
             </div>
 
             <div>
@@ -1790,9 +1895,11 @@ function InvestorDashboard() {
                 مستثمر
               </span>
             </div>
+
           </div>
 
           <nav className="investor-dashboard-nav">
+
             <Link
               to="/investor/dashboard"
               className={navClass(
@@ -1846,6 +1953,7 @@ function InvestorDashboard() {
                   )}
                 </span>
               )}
+
             </Link>
 
             <Link
@@ -1967,9 +2075,11 @@ function InvestorDashboard() {
                 الإعدادات
               </span>
             </Link>
+
           </nav>
 
           <div className="investor-dashboard-sidebar-footer">
+
             <button
               type="button"
               className="investor-dashboard-logout"
@@ -1981,15 +2091,29 @@ function InvestorDashboard() {
                 تسجيل الخروج
               </span>
             </button>
+
           </div>
+
         </aside>
 
+        {/* ====================================================
+            MAIN CONTENT
+            ==================================================== */}
+
         <main className="investor-dashboard-content">
+
+          {/* ==================================================
+              DASHBOARD
+              ================================================== */}
+
           {dashboardSection ===
             "dashboard" && (
             <section className="investor-dashboard-section">
+
               <div className="investor-dashboard-page-header">
+
                 <div>
+
                   <span className="investor-dashboard-overline">
                     فضاء المستثمر
                   </span>
@@ -2002,6 +2126,7 @@ function InvestorDashboard() {
                     تابع مشاريعك واستثماراتك
                     وطلباتك من مكان واحد.
                   </p>
+
                 </div>
 
                 <Link
@@ -2011,15 +2136,23 @@ function InvestorDashboard() {
                   <i className="bi bi-plus-lg" />
                   مشروع جديد
                 </Link>
+
               </div>
 
+              {/* ==============================================
+                  STATS
+                  ============================================== */}
+
               <div className="investor-dashboard-stats">
+
                 <div className="investor-dashboard-stat-card">
+
                   <div className="investor-dashboard-stat-icon">
                     <i className="bi bi-building" />
                   </div>
 
                   <div className="investor-dashboard-stat-content">
+
                     <span>
                       إجمالي المشاريع
                     </span>
@@ -2035,15 +2168,19 @@ function InvestorDashboard() {
                         stats?.projects_active
                       )} مشروع نشط
                     </small>
+
                   </div>
+
                 </div>
 
                 <div className="investor-dashboard-stat-card">
+
                   <div className="investor-dashboard-stat-icon">
                     <i className="bi bi-cash-stack" />
                   </div>
 
                   <div className="investor-dashboard-stat-content">
+
                     <span>
                       الاستثمارات النشطة
                     </span>
@@ -2059,15 +2196,19 @@ function InvestorDashboard() {
                         stats?.total_investment
                       )}
                     </small>
+
                   </div>
+
                 </div>
 
                 <div className="investor-dashboard-stat-card">
+
                   <div className="investor-dashboard-stat-icon">
                     <i className="bi bi-file-earmark-text" />
                   </div>
 
                   <div className="investor-dashboard-stat-content">
+
                     <span>
                       الطلبات قيد المعالجة
                     </span>
@@ -2084,15 +2225,19 @@ function InvestorDashboard() {
                         stats?.requests_total
                       )}
                     </small>
+
                   </div>
+
                 </div>
 
                 <div className="investor-dashboard-stat-card">
+
                   <div className="investor-dashboard-stat-icon">
                     <i className="bi bi-folder2-open" />
                   </div>
 
                   <div className="investor-dashboard-stat-content">
+
                     <span>
                       الوثائق
                     </span>
@@ -2106,13 +2251,27 @@ function InvestorDashboard() {
                     <small>
                       وثيقة مسجلة
                     </small>
+
                   </div>
+
                 </div>
+
               </div>
 
+              {/* ==============================================
+                  GRID
+                  ============================================== */}
+
               <div className="investor-dashboard-grid">
+
+                {/* ============================================
+                    PROJECTS
+                    ============================================ */}
+
                 <div className="investor-dashboard-card investor-dashboard-projects-card">
+
                   <div className="investor-dashboard-card-header">
+
                     <div>
                       <span className="investor-dashboard-card-overline">
                         المشاريع
@@ -2128,9 +2287,11 @@ function InvestorDashboard() {
                     >
                       عرض الكل
                     </Link>
+
                   </div>
 
                   <div className="investor-dashboard-project-list">
+
                     {projects
                       .slice(0, 3)
                       .map(
@@ -2147,11 +2308,13 @@ function InvestorDashboard() {
                                 project.id
                               }
                             >
+
                               <div className="investor-dashboard-project-icon">
                                 <i className="bi bi-building" />
                               </div>
 
                               <div className="investor-dashboard-project-info">
+
                                 <strong>
                                   {
                                     project.titre
@@ -2172,6 +2335,7 @@ function InvestorDashboard() {
                                     project.nombre_emplois
                                   } منصب
                                 </small>
+
                               </div>
 
                               <span
@@ -2183,6 +2347,7 @@ function InvestorDashboard() {
                                   status.label
                                 }
                               </span>
+
                             </div>
                           );
                         }
@@ -2191,11 +2356,13 @@ function InvestorDashboard() {
                     {projects.length ===
                       0 && (
                       <div className="investor-dashboard-project-item">
+
                         <div className="investor-dashboard-project-icon">
                           <i className="bi bi-building" />
                         </div>
 
                         <div className="investor-dashboard-project-info">
+
                           <strong>
                             لا توجد مشاريع بعد
                           </strong>
@@ -2203,14 +2370,24 @@ function InvestorDashboard() {
                           <span>
                             يمكنك إضافة مشروع استثماري جديد.
                           </span>
+
                         </div>
+
                       </div>
                     )}
+
                   </div>
+
                 </div>
 
+                {/* ============================================
+                    INVESTMENTS
+                    ============================================ */}
+
                 <div className="investor-dashboard-card investor-dashboard-investment-summary">
+
                   <div className="investor-dashboard-card-header">
+
                     <div>
                       <span className="investor-dashboard-card-overline">
                         الاستثمارات
@@ -2220,9 +2397,11 @@ function InvestorDashboard() {
                         ملخص الاستثمارات
                       </h2>
                     </div>
+
                   </div>
 
                   <div className="investor-dashboard-investment-total">
+
                     <span>
                       إجمالي الاستثمارات
                     </span>
@@ -2232,10 +2411,13 @@ function InvestorDashboard() {
                         stats?.total_investment
                       )}
                     </strong>
+
                   </div>
 
                   <div className="investor-dashboard-progress">
+
                     <div className="investor-dashboard-progress-header">
+
                       <span>
                         نسبة المشاريع المكتملة
                       </span>
@@ -2243,18 +2425,23 @@ function InvestorDashboard() {
                       <strong>
                         {projectCompletion}%
                       </strong>
+
                     </div>
 
                     <div className="investor-dashboard-progress-bar">
+
                       <span
                         style={{
                           width: `${projectCompletion}%`,
                         }}
                       />
+
                     </div>
+
                   </div>
 
                   <div className="investor-dashboard-investment-items">
+
                     <div>
                       <span>
                         الاستثمارات النشطة
@@ -2288,11 +2475,19 @@ function InvestorDashboard() {
                         )}
                       </strong>
                     </div>
+
                   </div>
+
                 </div>
 
+                {/* ============================================
+                    ACTIVITY
+                    ============================================ */}
+
                 <div className="investor-dashboard-card investor-dashboard-activity-card">
+
                   <div className="investor-dashboard-card-header">
+
                     <div>
                       <span className="investor-dashboard-card-overline">
                         النشاط
@@ -2302,9 +2497,11 @@ function InvestorDashboard() {
                         آخر النشاطات
                       </h2>
                     </div>
+
                   </div>
 
                   <div className="investor-dashboard-activity-list">
+
                     {dashboardActivities.map(
                       (
                         activity,
@@ -2314,16 +2511,20 @@ function InvestorDashboard() {
                           className="investor-dashboard-activity-item"
                           key={`${activity.title}-${activity.date || ""}-${index}`}
                         >
+
                           <div className="investor-dashboard-activity-icon">
+
                             <i
                               className={`bi ${
                                 activity.icon ||
                                 "bi-clock-history"
                               }`}
                             />
+
                           </div>
 
                           <div className="investor-dashboard-activity-content">
+
                             <strong>
                               {
                                 activity.title
@@ -2341,7 +2542,9 @@ function InvestorDashboard() {
                                 activity.date
                               )}
                             </small>
+
                           </div>
+
                         </div>
                       )
                     )}
@@ -2349,11 +2552,13 @@ function InvestorDashboard() {
                     {dashboardActivities.length ===
                       0 && (
                       <div className="investor-dashboard-activity-item">
+
                         <div className="investor-dashboard-activity-icon">
                           <i className="bi bi-clock-history" />
                         </div>
 
                         <div className="investor-dashboard-activity-content">
+
                           <strong>
                             لا توجد نشاطات حديثة
                           </strong>
@@ -2361,19 +2566,31 @@ function InvestorDashboard() {
                           <span>
                             ستظهر هنا آخر التحديثات المتعلقة بحسابك.
                           </span>
+
                         </div>
+
                       </div>
                     )}
+
                   </div>
+
                 </div>
+
               </div>
+
             </section>
           )}
+
+          {/* ==================================================
+              PROJECTS
+              ================================================== */}
 
           {dashboardSection ===
             "projects" && (
             <section className="investor-dashboard-section">
+
               <div className="investor-dashboard-page-header">
+
                 <div>
                   <span className="investor-dashboard-overline">
                     المشاريع
@@ -2387,10 +2604,17 @@ function InvestorDashboard() {
                     أضف مشروعاً جديداً أو تابع جميع مشاريعك المسجلة في حسابك.
                   </p>
                 </div>
+
               </div>
 
+              {/* ==================================================
+                  CREATE PROJECT FORM
+                  ================================================== */}
+
               <div className="investor-dashboard-card investor-project-create-form">
+
                 <div className="investor-dashboard-card-header">
+
                   <div>
                     <span className="investor-dashboard-card-overline">
                       مشروع جديد
@@ -2402,6 +2626,7 @@ function InvestorDashboard() {
                   </div>
 
                   <i className="bi bi-building-add" />
+
                 </div>
 
                 {projectCreateError && (
@@ -2444,8 +2669,15 @@ function InvestorDashboard() {
                   }
                   noValidate
                 >
+
                   <div className="investor-project-form-grid">
+
+                    {/* ================================
+                        TITRE
+                        ================================ */}
+
                     <div className="investor-project-form-field full">
+
                       <label htmlFor="project-titre">
                         عنوان المشروع
                         <span> *</span>
@@ -2472,9 +2704,15 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       />
+
                     </div>
 
+                    {/* ================================
+                        DESCRIPTION
+                        ================================ */}
+
                     <div className="investor-project-form-field full">
+
                       <label htmlFor="project-description">
                         وصف المشروع
                         <span> *</span>
@@ -2501,9 +2739,15 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       />
+
                     </div>
 
+                    {/* ================================
+                        SECTOR
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-sector">
                         القطاع الاستثماري
                       </label>
@@ -2526,6 +2770,7 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       >
+
                         <option value="">
                           اختر القطاع
                         </option>
@@ -2544,10 +2789,17 @@ function InvestorDashboard() {
                             </option>
                           )
                         )}
+
                       </select>
+
                     </div>
 
+                    {/* ================================
+                        WILAYA
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-wilaya">
                         الولاية
                         <span> *</span>
@@ -2574,9 +2826,15 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       />
+
                     </div>
 
+                    {/* ================================
+                        COMMUNE
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-commune">
                         البلدية
                       </label>
@@ -2601,9 +2859,15 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       />
+
                     </div>
 
+                    {/* ================================
+                        ADDRESS
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-adresse">
                         العنوان
                       </label>
@@ -2628,9 +2892,15 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       />
+
                     </div>
 
+                    {/* ================================
+                        AMOUNT
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-montant">
                         مبلغ الاستثمار
                         <span> *</span>
@@ -2663,9 +2933,15 @@ function InvestorDashboard() {
                       <small>
                         المبلغ بالدينار الجزائري DA
                       </small>
+
                     </div>
 
+                    {/* ================================
+                        JOBS
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-emplois">
                         عدد مناصب العمل
                         <span> *</span>
@@ -2694,9 +2970,15 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       />
+
                     </div>
 
+                    {/* ================================
+                        SUPERFICIE
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-superficie">
                         المساحة
                       </label>
@@ -2723,9 +3005,15 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       />
+
                     </div>
 
+                    {/* ================================
+                        UNIT
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-unite">
                         وحدة المساحة
                       </label>
@@ -2748,6 +3036,7 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       >
+
                         <option value="m²">
                           متر مربع (m²)
                         </option>
@@ -2755,10 +3044,17 @@ function InvestorDashboard() {
                         <option value="ha">
                           هكتار (ha)
                         </option>
+
                       </select>
+
                     </div>
 
+                    {/* ================================
+                        START DATE
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-date-debut">
                         تاريخ بداية المشروع
                       </label>
@@ -2782,9 +3078,15 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       />
+
                     </div>
 
+                    {/* ================================
+                        END DATE
+                        ================================ */}
+
                     <div className="investor-project-form-field">
+
                       <label htmlFor="project-date-fin">
                         تاريخ نهاية المشروع
                       </label>
@@ -2808,10 +3110,17 @@ function InvestorDashboard() {
                           creatingProject
                         }
                       />
+
                     </div>
+
                   </div>
 
+                  {/* ================================
+                      ACTIONS
+                      ================================ */}
+
                   <div className="investor-project-form-actions">
+
                     <button
                       type="submit"
                       className="investor-dashboard-primary-btn"
@@ -2861,11 +3170,19 @@ function InvestorDashboard() {
                       <i className="bi bi-arrow-counterclockwise" />
                       إعادة تعيين
                     </button>
+
                   </div>
+
                 </form>
+
               </div>
 
+              {/* ==================================================
+                  PROJECT LIST
+                  ================================================== */}
+
               <div className="investor-dashboard-grid">
+
                 {projects.map(
                   (project) => {
                     const status =
@@ -2880,7 +3197,9 @@ function InvestorDashboard() {
                           project.id
                         }
                       >
+
                         <div className="investor-dashboard-card-header">
+
                           <div>
                             <span className="investor-dashboard-card-overline">
                               مشروع استثماري
@@ -2902,15 +3221,19 @@ function InvestorDashboard() {
                               status.label
                             }
                           </span>
+
                         </div>
 
                         <div className="investor-dashboard-project-list">
+
                           <div className="investor-dashboard-project-item">
+
                             <div className="investor-dashboard-project-icon">
                               <i className="bi bi-building" />
                             </div>
 
                             <div className="investor-dashboard-project-info">
+
                               <strong>
                                 {
                                   project.secteurs ||
@@ -2933,9 +3256,13 @@ function InvestorDashboard() {
                                   project.montant_investissement
                                 )}
                               </small>
+
                             </div>
+
                           </div>
+
                         </div>
+
                       </div>
                     );
                   }
@@ -2944,7 +3271,9 @@ function InvestorDashboard() {
                 {projects.length ===
                   0 && (
                   <div className="investor-dashboard-card investor-dashboard-projects-card">
+
                     <div className="investor-dashboard-card-header">
+
                       <div>
                         <span className="investor-dashboard-card-overline">
                           المشاريع
@@ -2954,17 +3283,27 @@ function InvestorDashboard() {
                           لا توجد مشاريع
                         </h2>
                       </div>
+
                     </div>
+
                   </div>
                 )}
+
               </div>
+
             </section>
           )}
+
+          {/* ==================================================
+              INVESTMENTS
+              ================================================== */}
 
           {dashboardSection ===
             "investments" && (
             <section className="investor-dashboard-section">
+
               <div className="investor-dashboard-page-header">
+
                 <div>
                   <span className="investor-dashboard-overline">
                     الاستثمارات
@@ -2978,9 +3317,11 @@ function InvestorDashboard() {
                     جميع عمليات الاستثمار المرتبطة بحسابك.
                   </p>
                 </div>
+
               </div>
 
               <div className="investor-dashboard-grid">
+
                 {investments.map(
                   (investment) => {
                     const status =
@@ -2995,7 +3336,9 @@ function InvestorDashboard() {
                           investment.id
                         }
                       >
+
                         <div className="investor-dashboard-card-header">
+
                           <div>
                             <span className="investor-dashboard-card-overline">
                               استثمار
@@ -3018,9 +3361,11 @@ function InvestorDashboard() {
                               status.label
                             }
                           </span>
+
                         </div>
 
                         <div className="investor-dashboard-investment-total">
+
                           <span>
                             مبلغ الاستثمار
                           </span>
@@ -3030,9 +3375,11 @@ function InvestorDashboard() {
                               investment.montant
                             )}
                           </strong>
+
                         </div>
 
                         <div className="investor-dashboard-investment-items">
+
                           <div>
                             <span>
                               المرجع
@@ -3057,7 +3404,9 @@ function InvestorDashboard() {
                               )}
                             </strong>
                           </div>
+
                         </div>
+
                       </div>
                     );
                   }
@@ -3066,7 +3415,9 @@ function InvestorDashboard() {
                 {investments.length ===
                   0 && (
                   <div className="investor-dashboard-card investor-dashboard-projects-card">
+
                     <div className="investor-dashboard-card-header">
+
                       <div>
                         <span className="investor-dashboard-card-overline">
                           الاستثمارات
@@ -3076,17 +3427,27 @@ function InvestorDashboard() {
                           لا توجد استثمارات
                         </h2>
                       </div>
+
                     </div>
+
                   </div>
                 )}
+
               </div>
+
             </section>
           )}
+
+          {/* ==================================================
+              REQUESTS
+              ================================================== */}
 
           {dashboardSection ===
             "requests" && (
             <section className="investor-dashboard-section">
+
               <div className="investor-dashboard-page-header">
+
                 <div>
                   <span className="investor-dashboard-overline">
                     الطلبات
@@ -3100,9 +3461,11 @@ function InvestorDashboard() {
                     متابعة جميع طلباتك الاستثمارية.
                   </p>
                 </div>
+
               </div>
 
               <div className="investor-dashboard-grid">
+
                 {requests.map(
                   (request) => {
                     const status =
@@ -3117,7 +3480,9 @@ function InvestorDashboard() {
                           request.id
                         }
                       >
+
                         <div className="investor-dashboard-card-header">
+
                           <div>
                             <span className="investor-dashboard-card-overline">
                               طلب استثماري
@@ -3139,15 +3504,19 @@ function InvestorDashboard() {
                               status.label
                             }
                           </span>
+
                         </div>
 
                         <div className="investor-dashboard-project-list">
+
                           <div className="investor-dashboard-project-item">
+
                             <div className="investor-dashboard-project-icon">
                               <i className="bi bi-file-earmark-text" />
                             </div>
 
                             <div className="investor-dashboard-project-info">
+
                               <strong>
                                 {
                                   request.type_demande
@@ -3168,9 +3537,13 @@ function InvestorDashboard() {
                                     )
                                   : "—"}
                               </small>
+
                             </div>
+
                           </div>
+
                         </div>
+
                       </div>
                     );
                   }
@@ -3179,7 +3552,9 @@ function InvestorDashboard() {
                 {requests.length ===
                   0 && (
                   <div className="investor-dashboard-card investor-dashboard-projects-card">
+
                     <div className="investor-dashboard-card-header">
+
                       <div>
                         <span className="investor-dashboard-card-overline">
                           الطلبات
@@ -3189,17 +3564,27 @@ function InvestorDashboard() {
                           لا توجد طلبات
                         </h2>
                       </div>
+
                     </div>
+
                   </div>
                 )}
+
               </div>
+
             </section>
           )}
+
+          {/* ==================================================
+              DOCUMENTS
+              ================================================== */}
 
           {dashboardSection ===
             "documents" && (
             <section className="investor-dashboard-section">
+
               <div className="investor-dashboard-page-header">
+
                 <div>
                   <span className="investor-dashboard-overline">
                     الوثائق
@@ -3213,9 +3598,11 @@ function InvestorDashboard() {
                     جميع الوثائق المرتبطة بحسابك ومشاريعك.
                   </p>
                 </div>
+
               </div>
 
               <div className="investor-dashboard-grid">
+
                 {documents.map(
                   (document) => {
                     const status =
@@ -3235,7 +3622,9 @@ function InvestorDashboard() {
                           document.id
                         }
                       >
+
                         <div className="investor-dashboard-card-header">
+
                           <div>
                             <span className="investor-dashboard-card-overline">
                               وثيقة
@@ -3257,15 +3646,19 @@ function InvestorDashboard() {
                               status.label
                             }
                           </span>
+
                         </div>
 
                         <div className="investor-dashboard-project-list">
+
                           <div className="investor-dashboard-project-item">
+
                             <div className="investor-dashboard-project-icon">
                               <i className="bi bi-file-earmark-text" />
                             </div>
 
                             <div className="investor-dashboard-project-info">
+
                               <strong>
                                 {
                                   document.nom_original ||
@@ -3286,6 +3679,7 @@ function InvestorDashboard() {
                                     )
                                   : "—"}
                               </small>
+
                             </div>
 
                             {documentUrl && (
@@ -3300,8 +3694,11 @@ function InvestorDashboard() {
                                 تحميل
                               </a>
                             )}
+
                           </div>
+
                         </div>
+
                       </div>
                     );
                   }
@@ -3310,7 +3707,9 @@ function InvestorDashboard() {
                 {documents.length ===
                   0 && (
                   <div className="investor-dashboard-card investor-dashboard-projects-card">
+
                     <div className="investor-dashboard-card-header">
+
                       <div>
                         <span className="investor-dashboard-card-overline">
                           الوثائق
@@ -3320,17 +3719,27 @@ function InvestorDashboard() {
                           لا توجد وثائق
                         </h2>
                       </div>
+
                     </div>
+
                   </div>
                 )}
+
               </div>
+
             </section>
           )}
+
+          {/* ==================================================
+              MESSAGES
+              ================================================== */}
 
           {dashboardSection ===
             "messages" && (
             <section className="investor-dashboard-section">
+
               <div className="investor-dashboard-page-header">
+
                 <div>
                   <span className="investor-dashboard-overline">
                     التواصل
@@ -3344,10 +3753,13 @@ function InvestorDashboard() {
                     الرسائل الواردة إلى حسابك.
                   </p>
                 </div>
+
               </div>
 
               <div className="investor-dashboard-card investor-dashboard-activity-card">
+
                 <div className="investor-dashboard-activity-list">
+
                   {messages.map(
                     (message) => {
                       const sender =
@@ -3360,11 +3772,13 @@ function InvestorDashboard() {
                             message.id
                           }
                         >
+
                           <div className="investor-dashboard-activity-icon">
                             <i className="bi bi-chat-left-text" />
                           </div>
 
                           <div className="investor-dashboard-activity-content">
+
                             <strong>
                               {
                                 message.sujet ||
@@ -3383,6 +3797,7 @@ function InvestorDashboard() {
                                 message.created_at
                               )}
                             </small>
+
                           </div>
 
                           {!toNumber(
@@ -3392,6 +3807,7 @@ function InvestorDashboard() {
                               جديدة
                             </span>
                           )}
+
                         </div>
                       );
                     }
@@ -3400,11 +3816,13 @@ function InvestorDashboard() {
                   {messages.length ===
                     0 && (
                     <div className="investor-dashboard-activity-item">
+
                       <div className="investor-dashboard-activity-icon">
                         <i className="bi bi-chat-left-text" />
                       </div>
 
                       <div className="investor-dashboard-activity-content">
+
                         <strong>
                           لا توجد رسائل
                         </strong>
@@ -3412,18 +3830,29 @@ function InvestorDashboard() {
                         <span>
                           لا توجد رسائل واردة حالياً.
                         </span>
+
                       </div>
+
                     </div>
                   )}
+
                 </div>
+
               </div>
+
             </section>
           )}
+
+          {/* ==================================================
+              NOTIFICATIONS
+              ================================================== */}
 
           {dashboardSection ===
             "notifications" && (
             <section className="investor-dashboard-section">
+
               <div className="investor-dashboard-page-header">
+
                 <div>
                   <span className="investor-dashboard-overline">
                     التنبيهات
@@ -3437,10 +3866,13 @@ function InvestorDashboard() {
                     آخر الإشعارات والتحديثات المتعلقة بحسابك.
                   </p>
                 </div>
+
               </div>
 
               <div className="investor-dashboard-card investor-dashboard-activity-card">
+
                 <div className="investor-dashboard-activity-list">
+
                   {notifications.map(
                     (
                       notification
@@ -3451,7 +3883,9 @@ function InvestorDashboard() {
                           notification.id
                         }
                       >
+
                         <div className="investor-dashboard-activity-icon">
+
                           <i
                             className={`bi ${
                               notification.type ===
@@ -3460,12 +3894,20 @@ function InvestorDashboard() {
                                 : notification.type ===
                                   "message"
                                 ? "bi-chat-left-text"
+                                : notification.type ===
+                                  "projet"
+                                ? "bi-building"
+                                : notification.type ===
+                                  "demande"
+                                ? "bi-file-earmark-text"
                                 : "bi-bell"
                             }`}
                           />
+
                         </div>
 
                         <div className="investor-dashboard-activity-content">
+
                           <strong>
                             {
                               notification.titre
@@ -3483,15 +3925,17 @@ function InvestorDashboard() {
                               notification.created_at
                             )}
                           </small>
+
                         </div>
 
                         {!toNumber(
                           notification.lu
                         ) && (
                           <span className="investor-dashboard-status warning">
-                            جديدة
+                            جديد
                           </span>
                         )}
+
                       </div>
                     )
                   )}
@@ -3499,11 +3943,13 @@ function InvestorDashboard() {
                   {notifications.length ===
                     0 && (
                     <div className="investor-dashboard-activity-item">
+
                       <div className="investor-dashboard-activity-icon">
                         <i className="bi bi-bell" />
                       </div>
 
                       <div className="investor-dashboard-activity-content">
+
                         <strong>
                           لا توجد إشعارات
                         </strong>
@@ -3511,18 +3957,29 @@ function InvestorDashboard() {
                         <span>
                           لا توجد إشعارات جديدة حالياً.
                         </span>
+
                       </div>
+
                     </div>
                   )}
+
                 </div>
+
               </div>
+
             </section>
           )}
+
+          {/* ==================================================
+              PROFILE
+              ================================================== */}
 
           {dashboardSection ===
             "profile" && (
             <section className="investor-dashboard-section">
+
               <div className="investor-dashboard-page-header">
+
                 <div>
                   <span className="investor-dashboard-overline">
                     الحساب
@@ -3533,173 +3990,239 @@ function InvestorDashboard() {
                   </h1>
 
                   <p>
-                    معلومات حساب المستثمر الخاصة بك.
+                    معلومات المستثمر المسجلة في قاعدة البيانات.
                   </p>
                 </div>
+
               </div>
 
-              <div className="investor-dashboard-card">
-                <div className="investor-dashboard-profile-header">
-                  <div className="investor-dashboard-profile-avatar">
-                    {userPhotoUrl ? (
-                      <img
-                        src={userPhotoUrl}
-                        alt={fullName}
-                      />
-                    ) : (
-                      initials
-                    )}
-                  </div>
+              <div className="investor-dashboard-card investor-dashboard-profile">
 
-                  <div>
-                    <h2>
-                      {fullName}
-                    </h2>
+                <div className="investor-dashboard-profile-avatar">
 
-                    <p>
-                      {user?.email || "—"}
-                    </p>
-                  </div>
+                  {userPhotoUrl ? (
+                    <img
+                      src={userPhotoUrl}
+                      alt={fullName}
+                    />
+                  ) : (
+                    initials
+                  )}
+
                 </div>
 
-                <div className="investor-dashboard-profile-grid">
-                  <div>
-                    <strong>
-                      الاسم
-                    </strong>
+                <div className="investor-dashboard-profile-info">
 
-                    <span>
-                      {user?.prenom || "—"}
-                    </span>
-                  </div>
+                  <h2>
+                    {fullName}
+                  </h2>
 
-                  <div>
-                    <strong>
-                      اللقب
-                    </strong>
+                  <span>
+                    {user?.email ||
+                      "—"}
+                  </span>
 
-                    <span>
-                      {user?.nom || "—"}
-                    </span>
-                  </div>
+                  <span>
+                    {user?.telephone ||
+                      "لا يوجد رقم هاتف"}
+                  </span>
 
-                  <div>
-                    <strong>
-                      البريد الإلكتروني
-                    </strong>
+                  <span>
+                    {profile?.nom_entreprise ||
+                      "مستثمر فردي"}
+                  </span>
 
-                    <span>
-                      {user?.email || "—"}
-                    </span>
-                  </div>
+                  <span>
+                    {profile?.wilaya ||
+                      "—"}
 
-                  <div>
-                    <strong>
-                      رقم الهاتف
-                    </strong>
+                    {profile?.commune
+                      ? ` · ${profile.commune}`
+                      : ""}
+                  </span>
 
-                    <span>
-                      {user?.telephone ||
-                        "غير مسجل"}
-                    </span>
-                  </div>
-
-                  <div>
-                    <strong>
-                      نوع المستثمر
-                    </strong>
-
-                    <span>
-                      {profile?.type_investisseur ||
-                        "—"}
-                    </span>
-                  </div>
-
-                  <div>
-                    <strong>
-                      المؤسسة
-                    </strong>
-
-                    <span>
-                      {profile?.nom_entreprise ||
-                        "—"}
-                    </span>
-                  </div>
-
-                  <div>
-                    <strong>
-                      النشاط
-                    </strong>
-
-                    <span>
-                      {profile?.secteur_activite ||
-                        "—"}
-                    </span>
-                  </div>
-
-                  <div>
-                    <strong>
-                      الولاية
-                    </strong>
-
-                    <span>
-                      {profile?.wilaya ||
-                        "—"}
-                    </span>
-                  </div>
-
-                  <div>
-                    <strong>
-                      البلدية
-                    </strong>
-
-                    <span>
-                      {profile?.commune ||
-                        "—"}
-                    </span>
-                  </div>
-
-                  <div>
-                    <strong>
-                      العنوان
-                    </strong>
-
-                    <span>
-                      {profile?.adresse ||
-                        "—"}
-                    </span>
-                  </div>
-
-                  <div>
-                    <strong>
-                      السجل التجاري
-                    </strong>
-
-                    <span>
-                      {profile?.registre_commerce ||
-                        "—"}
-                    </span>
-                  </div>
-
-                  <div>
-                    <strong>
-                      الموقع الإلكتروني
-                    </strong>
-
-                    <span>
-                      {profile?.site_web ||
-                        "—"}
-                    </span>
-                  </div>
                 </div>
+
               </div>
+
+              <div className="investor-dashboard-grid">
+
+                <div className="investor-dashboard-card">
+
+                  <div className="investor-dashboard-card-header">
+
+                    <div>
+                      <span className="investor-dashboard-card-overline">
+                        معلومات المستثمر
+                      </span>
+
+                      <h2>
+                        البيانات الشخصية
+                      </h2>
+                    </div>
+
+                  </div>
+
+                  <div className="investor-dashboard-settings-list">
+
+                    <div className="investor-dashboard-setting-item">
+
+                      <div className="investor-dashboard-setting-icon">
+                        <i className="bi bi-person" />
+                      </div>
+
+                      <div>
+                        <strong>
+                          الاسم الكامل
+                        </strong>
+
+                        <span>
+                          {fullName}
+                        </span>
+                      </div>
+
+                    </div>
+
+                    <div className="investor-dashboard-setting-item">
+
+                      <div className="investor-dashboard-setting-icon">
+                        <i className="bi bi-envelope" />
+                      </div>
+
+                      <div>
+                        <strong>
+                          البريد الإلكتروني
+                        </strong>
+
+                        <span>
+                          {user?.email ||
+                            "—"}
+                        </span>
+                      </div>
+
+                    </div>
+
+                    <div className="investor-dashboard-setting-item">
+
+                      <div className="investor-dashboard-setting-icon">
+                        <i className="bi bi-telephone" />
+                      </div>
+
+                      <div>
+                        <strong>
+                          الهاتف
+                        </strong>
+
+                        <span>
+                          {user?.telephone ||
+                            "—"}
+                        </span>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div className="investor-dashboard-card">
+
+                  <div className="investor-dashboard-card-header">
+
+                    <div>
+                      <span className="investor-dashboard-card-overline">
+                        الشركة
+                      </span>
+
+                      <h2>
+                        معلومات النشاط
+                      </h2>
+                    </div>
+
+                  </div>
+
+                  <div className="investor-dashboard-settings-list">
+
+                    <div className="investor-dashboard-setting-item">
+
+                      <div className="investor-dashboard-setting-icon">
+                        <i className="bi bi-building" />
+                      </div>
+
+                      <div>
+                        <strong>
+                          المؤسسة
+                        </strong>
+
+                        <span>
+                          {profile?.nom_entreprise ||
+                            "—"}
+                        </span>
+                      </div>
+
+                    </div>
+
+                    <div className="investor-dashboard-setting-item">
+
+                      <div className="investor-dashboard-setting-icon">
+                        <i className="bi bi-briefcase" />
+                      </div>
+
+                      <div>
+                        <strong>
+                          النشاط
+                        </strong>
+
+                        <span>
+                          {profile?.secteur_activite ||
+                            "—"}
+                        </span>
+                      </div>
+
+                    </div>
+
+                    <div className="investor-dashboard-setting-item">
+
+                      <div className="investor-dashboard-setting-icon">
+                        <i className="bi bi-geo-alt" />
+                      </div>
+
+                      <div>
+                        <strong>
+                          الموقع
+                        </strong>
+
+                        <span>
+                          {profile?.wilaya ||
+                            "—"}
+
+                          {profile?.commune
+                            ? ` · ${profile.commune}`
+                            : ""}
+                        </span>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
             </section>
           )}
+
+          {/* ==================================================
+              SETTINGS
+              ================================================== */}
 
           {dashboardSection ===
             "settings" && (
             <section className="investor-dashboard-section">
+
               <div className="investor-dashboard-page-header">
+
                 <div>
                   <span className="investor-dashboard-overline">
                     الحساب
@@ -3710,40 +4233,105 @@ function InvestorDashboard() {
                   </h1>
 
                   <p>
-                    إعدادات حساب المستثمر.
+                    معلومات وإعدادات حساب المستثمر.
                   </p>
                 </div>
+
               </div>
 
               <div className="investor-dashboard-card">
-                <div className="investor-dashboard-card-header">
-                  <div>
-                    <span className="investor-dashboard-card-overline">
-                      الحساب
-                    </span>
 
-                    <h2>
-                      معلومات الحساب
-                    </h2>
+                <div className="investor-dashboard-settings-list">
+
+                  <div className="investor-dashboard-setting-item">
+
+                    <div className="investor-dashboard-setting-icon">
+                      <i className="bi bi-envelope" />
+                    </div>
+
+                    <div>
+                      <strong>
+                        البريد الإلكتروني
+                      </strong>
+
+                      <span>
+                        {user?.email ||
+                          "—"}
+                      </span>
+                    </div>
+
                   </div>
+
+                  <div className="investor-dashboard-setting-item">
+
+                    <div className="investor-dashboard-setting-icon">
+                      <i className="bi bi-person-badge" />
+                    </div>
+
+                    <div>
+                      <strong>
+                        نوع الحساب
+                      </strong>
+
+                      <span>
+                        مستثمر
+                      </span>
+                    </div>
+
+                  </div>
+
+                  <div className="investor-dashboard-setting-item">
+
+                    <div className="investor-dashboard-setting-icon">
+                      <i className="bi bi-shield-check" />
+                    </div>
+
+                    <div>
+                      <strong>
+                        حالة الحساب
+                      </strong>
+
+                      <span>
+                        {user?.statut ===
+                        "actif"
+                          ? "حساب نشط"
+                          : user?.statut ||
+                            "—"}
+                      </span>
+                    </div>
+
+                  </div>
+
+                  <div className="investor-dashboard-setting-item">
+
+                    <div className="investor-dashboard-setting-icon">
+                      <i className="bi bi-phone" />
+                    </div>
+
+                    <div>
+                      <strong>
+                        رقم الهاتف
+                      </strong>
+
+                      <span>
+                        {user?.telephone ||
+                          "غير مسجل"}
+                      </span>
+                    </div>
+
+                  </div>
+
                 </div>
 
-                <p>
-                  يمكنك إدارة بيانات حسابك من خلال ملفك الشخصي.
-                </p>
-
-                <Link
-                  to="/investor/dashboard/profile"
-                  className="investor-dashboard-primary-btn"
-                >
-                  <i className="bi bi-person" />
-                  فتح الملف الشخصي
-                </Link>
               </div>
+
             </section>
           )}
+
         </main>
+
       </div>
+
     </div>
   );
 }
