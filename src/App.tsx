@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 
 /* ============================================================
    PUBLIC PAGES
@@ -74,7 +80,11 @@ function getCurrentUser(): CurrentUser | null {
 
     return user as CurrentUser;
   } catch (error) {
-    console.error("Erreur lecture utilisateur:", error);
+    console.error(
+      "Erreur lecture utilisateur:",
+      error
+    );
+
     return null;
   }
 }
@@ -85,6 +95,12 @@ function getCurrentUser(): CurrentUser | null {
 
 function ScrollToTop() {
   const { pathname } = useLocation();
+
+  /*
+   * pathname est volontairement lu afin que
+   * le composant soit recalculé à chaque navigation.
+   */
+  void pathname;
 
   window.scrollTo({
     top: 0,
@@ -103,11 +119,21 @@ function AdminDashboardRoute() {
   const user = getCurrentUser();
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
   if (user.role !== "admin") {
-    return <Navigate to="/" replace />;
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
   }
 
   return <AdminDashboard />;
@@ -121,11 +147,21 @@ function AdminUsersRoute() {
   const user = getCurrentUser();
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
   if (user.role !== "admin") {
-    return <Navigate to="/" replace />;
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
   }
 
   return <AdminUsersPage />;
@@ -139,11 +175,21 @@ function AdminInvestorsRoute() {
   const user = getCurrentUser();
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
   if (user.role !== "admin") {
-    return <Navigate to="/" replace />;
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
   }
 
   return <AdminInvestorsPage />;
@@ -157,11 +203,21 @@ function AdminProtectedRoute() {
   const user = getCurrentUser();
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
   if (user.role !== "admin") {
-    return <Navigate to="/" replace />;
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
   }
 
   return <AdminPlaceholder />;
@@ -183,7 +239,8 @@ function AdminPlaceholder() {
         alignItems: "center",
         justifyContent: "center",
         padding: "30px",
-        fontFamily: "Arial, sans-serif",
+        fontFamily:
+          "Arial, sans-serif",
       }}
     >
       <div
@@ -194,7 +251,8 @@ function AdminPlaceholder() {
           borderRadius: "20px",
           padding: "40px",
           textAlign: "center",
-          boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
+          boxShadow:
+            "0 10px 40px rgba(0,0,0,0.08)",
         }}
       >
         <div
@@ -232,7 +290,8 @@ function AdminPlaceholder() {
             fontSize: "16px",
           }}
         >
-          هذه الصفحة سيتم ربطها بالواجهة الإدارية قريبًا.
+          هذه الصفحة سيتم ربطها بالواجهة
+          الإدارية قريبًا.
         </p>
 
         <p
@@ -257,11 +316,24 @@ function InvestorRoute() {
   const user = getCurrentUser();
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
-  if (user.role !== "investisseur" && user.role !== "investor") {
-    return <Navigate to="/" replace />;
+  if (
+    user.role !== "investisseur" &&
+    user.role !== "investor"
+  ) {
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
   }
 
   return <InvestorDashboard />;
@@ -274,166 +346,270 @@ function InvestorRoute() {
 function AppContent() {
   const location = useLocation();
 
-  const isAdminRoute = location.pathname.startsWith("/admin");
+  const isAdminRoute =
+    location.pathname.startsWith(
+      "/admin"
+    );
 
   const isInvestorDashboard =
-    location.pathname.startsWith("/investor/dashboard");
+    location.pathname.startsWith(
+      "/investor/dashboard"
+    );
 
-  const hideGlobalLayout = isAdminRoute || isInvestorDashboard;
+  const hideGlobalLayout =
+    isAdminRoute ||
+    isInvestorDashboard;
 
   return (
     <>
-      {!hideGlobalLayout && <Header />}
+      {!hideGlobalLayout && (
+        <Header />
+      )}
 
       <main
         style={{
-          minHeight: hideGlobalLayout ? "100vh" : "calc(100vh - 200px)",
+          minHeight: hideGlobalLayout
+            ? "100vh"
+            : "calc(100vh - 200px)",
         }}
       >
         <Routes>
+
           {/* ==================================================
               PUBLIC ROUTES
              ================================================== */}
 
-          <Route path="/" element={<Home />} />
-          <Route path="/agency" element={<Agency />} />
-          <Route path="/investor" element={<Investor />} />
-          <Route path="/opportunities" element={<OpportunitiesPage />} />
-          <Route path="/sectors" element={<SectorsPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/announcements" element={<AnnouncementsPage />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/news/:id" element={<NewsDetails />} />
-          <Route path="/announcements/:id" element={<AnnouncementsDetails />} />
-          <Route path="/investor/register" element={<InvestorRegistration />} />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={<Home />}
+          />
+
+          <Route
+            path="/agency"
+            element={<Agency />}
+          />
+
+          <Route
+            path="/investor"
+            element={<Investor />}
+          />
+
+          <Route
+            path="/opportunities"
+            element={<OpportunitiesPage />}
+          />
+
+          <Route
+            path="/sectors"
+            element={<SectorsPage />}
+          />
+
+          <Route
+            path="/news"
+            element={<NewsPage />}
+          />
+
+          <Route
+            path="/events"
+            element={<EventsPage />}
+          />
+
+          <Route
+            path="/announcements"
+            element={<AnnouncementsPage />}
+          />
+
+          <Route
+            path="/contact"
+            element={<Contact />}
+          />
+
+          <Route
+            path="/news/:id"
+            element={<NewsDetails />}
+          />
+
+          <Route
+            path="/announcements/:id"
+            element={
+              <AnnouncementsDetails />
+            }
+          />
+
+          <Route
+            path="/investor/register"
+            element={
+              <InvestorRegistration />
+            }
+          />
+
+          <Route
+            path="/login"
+            element={<Login />}
+          />
 
           {/* ==================================================
               INVESTOR DASHBOARD
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/investor/dashboard"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           <Route
             path="/investor/dashboard/*"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN DASHBOARD
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/dashboard"
-            element={<AdminDashboardRoute />}
+            element={
+              <AdminDashboardRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN USERS
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/users"
-            element={<AdminUsersRoute />}
+            element={
+              <AdminUsersRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN INVESTORS
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/investors"
-            element={<AdminInvestorsRoute />}
+            element={
+              <AdminInvestorsRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN PROJECTS
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/projects"
-            element={<AdminProtectedRoute />}
+            element={
+              <AdminProtectedRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN INVESTMENTS
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/investments"
-            element={<AdminProtectedRoute />}
+            element={
+              <AdminProtectedRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN REQUESTS
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/requests"
-            element={<AdminProtectedRoute />}
+            element={
+              <AdminProtectedRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN MESSAGES
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/messages"
-            element={<AdminProtectedRoute />}
+            element={
+              <AdminProtectedRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN DOCUMENTS
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/documents"
-            element={<AdminProtectedRoute />}
+            element={
+              <AdminProtectedRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN SETTINGS
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/settings"
-            element={<AdminProtectedRoute />}
+            element={
+              <AdminProtectedRoute />
+            }
           />
 
           {/* ==================================================
               ADMIN PROFILE
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin/profile"
-            element={<AdminProtectedRoute />}
+            element={
+              <AdminProtectedRoute />
+            }
           />
 
           {/* ==================================================
               /ADMIN
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="/admin"
-            element={<Navigate to="/admin/dashboard" replace />}
+            element={
+              <Navigate
+                to="/admin/dashboard"
+                replace
+              />
+            }
           />
 
           {/* ==================================================
               404
-             ================================================== */
+             ================================================== */}
 
           <Route
             path="*"
-            element={<Navigate to="/" replace />}
+            element={
+              <Navigate
+                to="/"
+                replace
+              />
+            }
           />
+
         </Routes>
       </main>
 
-      {!hideGlobalLayout && <Footer />}
+      {!hideGlobalLayout && (
+        <Footer />
+      )}
     </>
   );
 }
@@ -446,6 +622,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+
       <AppContent />
     </BrowserRouter>
   );
