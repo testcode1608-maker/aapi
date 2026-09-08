@@ -1,0 +1,1104 @@
+/* ============================================================
+   AAPI — INVESTOR NAVBAR
+   ============================================================ */
+
+:root {
+  --investor-primary: #087443;
+  --investor-primary-dark: #055c35;
+  --investor-primary-light: #eaf6f0;
+
+  --investor-gold: #c9a227;
+  --investor-gold-light: #f7f0d8;
+
+  --investor-dark: #14221b;
+  --investor-text: #26352e;
+  --investor-muted: #718078;
+
+  --investor-white: #ffffff;
+  --investor-bg: #f5f8f6;
+  --investor-border: #e3ebe6;
+
+  --investor-danger: #d64545;
+  --investor-danger-light: #fff1f1;
+
+  --investor-sidebar-width: 285px;
+
+  --investor-shadow:
+    0 10px 35px rgba(20, 34, 27, 0.08);
+
+  --investor-shadow-hover:
+    0 14px 40px rgba(20, 34, 27, 0.13);
+
+  --investor-radius: 14px;
+
+  --investor-transition:
+    all 0.25s ease;
+}
+
+
+/* ============================================================
+   NAVBAR PRINCIPALE
+   ============================================================ */
+
+.investor-navbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  width: var(--investor-sidebar-width);
+  height: 100vh;
+
+  z-index: 1000;
+
+  background: var(--investor-white);
+
+  border-left: 1px solid var(--investor-border);
+
+  box-shadow: var(--investor-shadow);
+
+  direction: rtl;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+
+/* ============================================================
+   INNER
+   ============================================================ */
+
+.investor-navbar-inner {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   BRAND
+   ============================================================ */
+
+.investor-navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-height: 86px;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid var(--investor-border);
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f8fbf9 100%
+    );
+}
+
+
+/* ============================================================
+   LOGO
+   ============================================================ */
+
+.investor-brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--investor-primary),
+      var(--investor-primary-dark)
+    );
+
+  color: var(--investor-white);
+
+  font-size: 22px;
+  font-weight: 800;
+
+  box-shadow:
+    0 7px 18px rgba(8, 116, 67, 0.22);
+}
+
+
+/* ============================================================
+   BRAND TEXT
+   ============================================================ */
+
+.investor-brand-text {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  text-align: right;
+}
+
+.investor-brand-text strong {
+  color: var(--investor-dark);
+
+  font-size: 18px;
+  font-weight: 800;
+
+  line-height: 1.3;
+}
+
+.investor-brand-text span {
+  margin-top: 3px;
+
+  color: var(--investor-muted);
+
+  font-size: 11px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   MENU
+   ============================================================ */
+
+.investor-navbar-menu {
+  display: flex;
+  flex: 1;
+
+  flex-direction: column;
+
+  padding: 18px 14px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color:
+    rgba(8, 116, 67, 0.25)
+    transparent;
+}
+
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+.investor-navbar-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.investor-navbar-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.investor-navbar-menu::-webkit-scrollbar-thumb {
+  background: rgba(8, 116, 67, 0.25);
+
+  border-radius: 10px;
+}
+
+.investor-navbar-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(8, 116, 67, 0.45);
+}
+
+
+/* ============================================================
+   MENU SECTION
+   ============================================================ */
+
+.investor-menu-section {
+  margin-bottom: 20px;
+}
+
+.investor-menu-section:last-of-type {
+  margin-bottom: 10px;
+}
+
+
+/* ============================================================
+   MENU TITLE
+   ============================================================ */
+
+.investor-menu-title {
+  padding: 0 12px;
+  margin-bottom: 8px;
+
+  color: #89968f;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.7px;
+}
+
+
+/* ============================================================
+   MENU ITEMS
+   ============================================================ */
+
+.investor-menu-items {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+/* ============================================================
+   NAV LINK
+   ============================================================ */
+
+.investor-nav-link {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-height: 48px;
+
+  padding: 10px 13px;
+
+  gap: 12px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background: transparent;
+
+  color: var(--investor-text);
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition: var(--investor-transition);
+
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   NAV LINK HOVER
+   ============================================================ */
+
+.investor-nav-link:hover {
+  background: var(--investor-primary-light);
+
+  color: var(--investor-primary);
+
+  transform: translateX(-2px);
+}
+
+
+/* ============================================================
+   ACTIVE LINK
+   ============================================================ */
+
+.investor-nav-link.active {
+  background:
+    linear-gradient(
+      135deg,
+      var(--investor-primary-light),
+      #f0f8f4
+    );
+
+  color: var(--investor-primary);
+
+  font-weight: 800;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(8, 116, 67, 0.08);
+}
+
+
+/* ============================================================
+   ACTIVE INDICATOR
+   ============================================================ */
+
+.investor-nav-link.active::before {
+  content: "";
+
+  position: absolute;
+
+  right: 0;
+
+  top: 50%;
+
+  width: 3px;
+  height: 24px;
+
+  transform: translateY(-50%);
+
+  border-radius: 4px 0 0 4px;
+
+  background: var(--investor-primary);
+}
+
+
+/* ============================================================
+   ICON WRAPPER
+   ============================================================ */
+
+.investor-nav-icon-wrapper {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  background: #f3f6f4;
+
+  transition: var(--investor-transition);
+}
+
+
+/* ============================================================
+   ICON
+   ============================================================ */
+
+.investor-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #607068;
+
+  font-size: 17px;
+  line-height: 1;
+
+  transition: var(--investor-transition);
+}
+
+
+/* ============================================================
+   ICON HOVER
+   ============================================================ */
+
+.investor-nav-link:hover .investor-nav-icon-wrapper {
+  background: var(--investor-white);
+}
+
+.investor-nav-link:hover .investor-nav-icon {
+  color: var(--investor-primary);
+}
+
+
+/* ============================================================
+   ACTIVE ICON
+   ============================================================ */
+
+.investor-nav-link.active
+.investor-nav-icon-wrapper {
+  background: var(--investor-white);
+
+  box-shadow:
+    0 4px 12px rgba(8, 116, 67, 0.08);
+}
+
+.investor-nav-link.active
+.investor-nav-icon {
+  color: var(--investor-primary);
+}
+
+
+/* ============================================================
+   LABEL
+   ============================================================ */
+
+.investor-nav-label {
+  flex: 1;
+
+  min-width: 0;
+
+  text-align: right;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* ============================================================
+   NOTIFICATION BADGE
+   ============================================================ */
+
+.investor-notification-badge {
+  position: absolute;
+
+  top: -5px;
+  left: -5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 5px;
+
+  border: 2px solid var(--investor-white);
+
+  border-radius: 20px;
+
+  background: var(--investor-danger);
+
+  color: var(--investor-white);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  line-height: 1;
+
+  box-shadow:
+    0 3px 8px rgba(214, 69, 69, 0.25);
+}
+
+
+/* ============================================================
+   MENU BOTTOM
+   ============================================================ */
+
+.investor-menu-bottom {
+  margin-top: auto;
+
+  padding-top: 12px;
+
+  border-top: 1px solid var(--investor-border);
+}
+
+
+/* ============================================================
+   LOGOUT BUTTON
+   ============================================================ */
+
+.investor-logout-button {
+  color: var(--investor-danger);
+}
+
+.investor-logout-button
+.investor-nav-icon-wrapper {
+  background: var(--investor-danger-light);
+}
+
+.investor-logout-button
+.investor-nav-icon {
+  color: var(--investor-danger);
+}
+
+.investor-logout-button:hover {
+  background: var(--investor-danger-light);
+
+  color: var(--investor-danger);
+
+  transform: translateX(-2px);
+}
+
+.investor-logout-button:hover
+.investor-nav-icon-wrapper {
+  background: var(--investor-white);
+}
+
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+
+.investor-navbar-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 12px 14px;
+
+  border-top: 1px solid var(--investor-border);
+
+  background: var(--investor-white);
+}
+
+
+/* ============================================================
+   MESSAGE BUTTON
+   ============================================================ */
+
+.investor-navbar-icon-button {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border: 1px solid var(--investor-border);
+  border-radius: 11px;
+
+  background: var(--investor-white);
+
+  color: var(--investor-text);
+
+  font-size: 17px;
+
+  cursor: pointer;
+
+  transition: var(--investor-transition);
+}
+
+.investor-navbar-icon-button:hover {
+  border-color: rgba(8, 116, 67, 0.18);
+
+  background: var(--investor-primary-light);
+
+  color: var(--investor-primary);
+
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   NOTIFICATION DOT
+   ============================================================ */
+
+.investor-notification-dot {
+  position: absolute;
+
+  top: 7px;
+  right: 7px;
+
+  width: 8px;
+  height: 8px;
+
+  border: 2px solid var(--investor-white);
+
+  border-radius: 50%;
+
+  background: var(--investor-danger);
+
+  box-sizing: content-box;
+}
+
+
+/* ============================================================
+   PROFILE
+   ============================================================ */
+
+.investor-profile {
+  display: flex;
+  align-items: center;
+
+  flex: 1;
+
+  min-width: 0;
+
+  gap: 9px;
+
+  padding: 5px;
+
+  border: 0;
+
+  border-radius: 12px;
+
+  background: transparent;
+
+  color: var(--investor-text);
+
+  font-family: inherit;
+
+  text-align: right;
+
+  cursor: pointer;
+
+  transition: var(--investor-transition);
+}
+
+.investor-profile:hover {
+  background: var(--investor-bg);
+}
+
+
+/* ============================================================
+   PROFILE AVATAR
+   ============================================================ */
+
+.investor-profile-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--investor-primary),
+      var(--investor-primary-dark)
+    );
+
+  color: var(--investor-white);
+
+  font-size: 12px;
+  font-weight: 800;
+
+  box-shadow:
+    0 4px 12px rgba(8, 116, 67, 0.18);
+}
+
+.investor-profile-avatar img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* ============================================================
+   PROFILE INFO
+   ============================================================ */
+
+.investor-profile-info {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+
+  min-width: 0;
+}
+
+.investor-profile-info strong {
+  display: block;
+
+  color: var(--investor-dark);
+
+  font-size: 11px;
+  font-weight: 800;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.investor-profile-info span {
+  margin-top: 2px;
+
+  color: var(--investor-muted);
+
+  font-size: 9px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   DESKTOP LOGOUT
+   ============================================================ */
+
+.investor-desktop-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: 1px solid rgba(214, 69, 69, 0.15);
+  border-radius: 10px;
+
+  background: var(--investor-danger-light);
+
+  color: var(--investor-danger);
+
+  cursor: pointer;
+
+  transition: var(--investor-transition);
+}
+
+.investor-desktop-logout:hover {
+  background: var(--investor-danger);
+
+  color: var(--investor-white);
+
+  border-color: var(--investor-danger);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 15px rgba(214, 69, 69, 0.18);
+}
+
+
+/* ============================================================
+   PAGE INDICATOR
+   ============================================================ */
+
+.investor-navbar-page-indicator {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  min-height: 30px;
+
+  padding: 0 18px;
+
+  border-top: 1px solid var(--investor-border);
+
+  background: #fafcfb;
+
+  color: var(--investor-muted);
+}
+
+.investor-navbar-page-indicator span {
+  width: 6px;
+  height: 6px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--investor-primary);
+
+  box-shadow:
+    0 0 0 3px rgba(8, 116, 67, 0.08);
+}
+
+.investor-navbar-page-indicator small {
+  font-size: 9px;
+  font-weight: 700;
+
+  text-transform: capitalize;
+}
+
+
+/* ============================================================
+   MOBILE TOGGLE
+   ============================================================ */
+
+.investor-mobile-toggle {
+  display: none;
+
+  position: fixed;
+
+  top: 16px;
+  right: 16px;
+
+  z-index: 1200;
+
+  width: 46px;
+  height: 46px;
+
+  padding: 10px;
+
+  border: 1px solid var(--investor-border);
+  border-radius: 12px;
+
+  background: var(--investor-white);
+
+  box-shadow:
+    0 8px 25px rgba(20, 34, 27, 0.12);
+
+  cursor: pointer;
+
+  transition: var(--investor-transition);
+}
+
+.investor-mobile-toggle:hover {
+  background: var(--investor-primary-light);
+
+  border-color: rgba(8, 116, 67, 0.2);
+}
+
+.investor-mobile-toggle span {
+  display: block;
+
+  width: 100%;
+  height: 2px;
+
+  margin: 5px 0;
+
+  border-radius: 3px;
+
+  background: var(--investor-primary);
+
+  transition: var(--investor-transition);
+}
+
+
+/* ============================================================
+   SIDEBAR OVERLAY
+   ============================================================ */
+
+.investor-sidebar-overlay {
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 900;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+
+  border: 0;
+
+  background:
+    rgba(20, 34, 27, 0.42);
+
+  backdrop-filter: blur(2px);
+
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   FOCUS ACCESSIBILITY
+   ============================================================ */
+
+.investor-nav-link:focus-visible,
+.investor-navbar-icon-button:focus-visible,
+.investor-profile:focus-visible,
+.investor-logout-button:focus-visible,
+.investor-mobile-toggle:focus-visible {
+  outline: 3px solid rgba(8, 116, 67, 0.22);
+
+  outline-offset: 2px;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  :root {
+    --investor-sidebar-width: 260px;
+  }
+
+  .investor-navbar-brand {
+    padding: 16px;
+  }
+
+  .investor-navbar-menu {
+    padding: 16px 11px;
+  }
+
+  .investor-nav-link {
+    min-height: 46px;
+
+    padding: 9px 11px;
+
+    gap: 10px;
+  }
+
+  .investor-nav-icon-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .investor-navbar-actions {
+    padding: 10px;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  .investor-navbar {
+    width: min(
+      var(--investor-sidebar-width),
+      86vw
+    );
+
+    transform: translateX(110%);
+
+    box-shadow:
+      0 15px 45px rgba(20, 34, 27, 0.18);
+  }
+
+  .investor-navbar.mobile-open {
+    transform: translateX(0);
+  }
+
+
+  /* MENU */
+
+  .investor-navbar-menu {
+    padding-top: 20px;
+  }
+
+
+  /* TOGGLE */
+
+  .investor-mobile-toggle {
+    display: block;
+  }
+
+
+  /* OVERLAY */
+
+  .investor-sidebar-overlay {
+    display: block;
+  }
+
+
+  /* ACTIONS */
+
+  .investor-navbar-actions {
+    padding-bottom: 14px;
+  }
+
+
+  /* DESKTOP LOGOUT */
+
+  .investor-desktop-logout {
+    display: none;
+  }
+
+
+  /* PAGE INDICATOR */
+
+  .investor-navbar-page-indicator {
+    min-height: 28px;
+  }
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+  .investor-navbar {
+    width: 88vw;
+  }
+
+  .investor-navbar-brand {
+    min-height: 78px;
+
+    padding: 14px;
+  }
+
+  .investor-brand-logo {
+    width: 43px;
+    height: 43px;
+
+    border-radius: 12px;
+
+    font-size: 19px;
+  }
+
+  .investor-brand-text strong {
+    font-size: 16px;
+  }
+
+  .investor-brand-text span {
+    font-size: 10px;
+  }
+
+  .investor-menu-title {
+    padding-right: 9px;
+  }
+
+  .investor-nav-link {
+    min-height: 45px;
+
+    font-size: 12px;
+  }
+
+  .investor-profile-info {
+    display: none;
+  }
+
+  .investor-profile {
+    flex: 0 0 auto;
+  }
+
+  .investor-navbar-actions {
+    justify-content: flex-start;
+  }
+
+  .investor-navbar-icon-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .investor-mobile-toggle {
+    top: 12px;
+    right: 12px;
+
+    width: 43px;
+    height: 43px;
+  }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .investor-navbar,
+  .investor-nav-link,
+  .investor-nav-icon,
+  .investor-nav-icon-wrapper,
+  .investor-navbar-icon-button,
+  .investor-profile,
+  .investor-desktop-logout,
+  .investor-mobile-toggle,
+  .investor-mobile-toggle span {
+    transition: none;
+  }
+}
