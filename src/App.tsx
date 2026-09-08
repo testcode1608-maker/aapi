@@ -11,6 +11,10 @@ import { useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
+/* ============================================================
+   PUBLIC PAGES
+   ============================================================ */
+
 import Home from "./pages/Home";
 import Agency from "./pages/Agency";
 import Investor from "./pages/Investor";
@@ -24,8 +28,19 @@ import NewsDetails from "./pages/NewsDetails";
 import AnnouncementsDetails from "./pages/AnnouncementsDetails";
 import InvestorRegistration from "./pages/InvestorRegistration";
 import Login from "./pages/Login";
+
+/* ============================================================
+   INVESTOR
+   ============================================================ */
+
 import InvestorDashboard from "./pages/InvestorDashboard";
+
+/* ============================================================
+   ADMIN
+   ============================================================ */
+
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminUsersPage from "./pages/AdminUsersPage";
 
 /* ============================================================
    SCROLL TO TOP
@@ -51,38 +66,203 @@ function ScrollToTop() {
 
 function getCurrentUser() {
   try {
-    const storedUser = localStorage.getItem("aapi_user");
+    const storedUser =
+      localStorage.getItem("aapi_user");
 
     if (!storedUser) {
       return null;
     }
 
-    return JSON.parse(storedUser);
-  } catch {
+    const user = JSON.parse(storedUser);
+
+    if (!user || typeof user !== "object") {
+      localStorage.removeItem("aapi_user");
+      return null;
+    }
+
+    return user;
+  } catch (error) {
+    console.error(
+      "Erreur lecture aapi_user:",
+      error
+    );
+
     localStorage.removeItem("aapi_user");
+
     return null;
   }
 }
 
 /* ============================================================
-   ADMIN ROUTE
-   فقط admin يستطيع الدخول
+   CHECK ADMIN
    ============================================================ */
 
-function AdminRoute() {
+function isAdminUser(user: any) {
+  if (!user) {
+    return false;
+  }
+
+  return (
+    String(user.role || "")
+      .trim()
+      .toLowerCase() === "admin"
+  );
+}
+
+/* ============================================================
+   CHECK INVESTOR
+   ============================================================ */
+
+function isInvestorUser(user: any) {
+  if (!user) {
+    return false;
+  }
+
+  const role = String(user.role || "")
+    .trim()
+    .toLowerCase();
+
+  return (
+    role === "investisseur" ||
+    role === "investor"
+  );
+}
+
+/* ============================================================
+   ADMIN DASHBOARD ROUTE
+   فقط Admin
+   ============================================================ */
+
+function AdminDashboardRoute() {
   const user = getCurrentUser();
 
+  /* ----------------------------------------------------------
+     المستخدم غير مسجل
+     ---------------------------------------------------------- */
+
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
-  const role = String(user.role || "").toLowerCase();
+  /* ----------------------------------------------------------
+     المستخدم ليس Admin
+     ---------------------------------------------------------- */
 
-  if (role !== "admin") {
-    return <Navigate to="/login" replace />;
+  if (!isAdminUser(user)) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
+
+  /* ----------------------------------------------------------
+     Admin
+     ---------------------------------------------------------- */
 
   return <AdminDashboard />;
+}
+
+/* ============================================================
+   ADMIN USERS ROUTE
+   ============================================================ */
+
+function AdminUsersRoute() {
+  const user = getCurrentUser();
+
+  /* ----------------------------------------------------------
+     المستخدم غير مسجل
+     ---------------------------------------------------------- */
+
+  if (!user) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
+
+  /* ----------------------------------------------------------
+     حماية Admin
+     ---------------------------------------------------------- */
+
+  if (!isAdminUser(user)) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
+
+  /* ----------------------------------------------------------
+     Admin Users Page
+     ---------------------------------------------------------- */
+
+  return <AdminUsersPage />;
+}
+
+/* ============================================================
+   ADMIN GENERIC ROUTE
+   للصفحات الإدارية المستقبلية
+   ============================================================ */
+
+function AdminProtectedRoute() {
+  const user = getCurrentUser();
+
+  /* ----------------------------------------------------------
+     المستخدم غير مسجل
+     ---------------------------------------------------------- */
+
+  if (!user) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
+
+  /* ----------------------------------------------------------
+     ليس Admin
+     ---------------------------------------------------------- */
+
+  if (!isAdminUser(user)) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
+
+  /*
+   * في الوقت الحالي نعيد إلى Dashboard.
+   *
+   * عندما ننشئ صفحات:
+   *
+   * /admin/projects
+   * /admin/investments
+   * /admin/messages
+   * /admin/documents
+   * /admin/settings
+   *
+   * سنستبدل هذا الـ Route بالصفحة الخاصة بها.
+   */
+
+  return (
+    <Navigate
+      to="/admin/dashboard"
+      replace
+    />
+  );
 }
 
 /* ============================================================
@@ -93,15 +273,35 @@ function AdminRoute() {
 function InvestorRoute() {
   const user = getCurrentUser();
 
+  /* ----------------------------------------------------------
+     المستخدم غير مسجل
+     ---------------------------------------------------------- */
+
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
-  const role = String(user.role || "").toLowerCase();
+  /* ----------------------------------------------------------
+     ليس مستثمر
+     ---------------------------------------------------------- */
 
-  if (role !== "investisseur" && role !== "investor") {
-    return <Navigate to="/login" replace />;
+  if (!isInvestorUser(user)) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
+
+  /* ----------------------------------------------------------
+     Investor
+     ---------------------------------------------------------- */
 
   return <InvestorDashboard />;
 }
@@ -113,22 +313,50 @@ function InvestorRoute() {
 function AppContent() {
   const { pathname } = useLocation();
 
+  /* ----------------------------------------------------------
+     INVESTOR DASHBOARD
+     ---------------------------------------------------------- */
+
   const isInvestorDashboard =
-    pathname.startsWith("/investor/dashboard");
+    pathname.startsWith(
+      "/investor/dashboard"
+    );
+
+  /* ----------------------------------------------------------
+     ADMIN AREA
+     ---------------------------------------------------------- */
 
   const isAdminDashboard =
-    pathname.startsWith("/admin/dashboard");
+    pathname.startsWith(
+      "/admin/"
+    );
+
+  /* ----------------------------------------------------------
+     DASHBOARD AREA
+     ---------------------------------------------------------- */
 
   const isDashboard =
-    isInvestorDashboard || isAdminDashboard;
+    isInvestorDashboard ||
+    isAdminDashboard;
 
   return (
     <div className="aapi-site">
 
-      {/* HEADER */}
-      {!isDashboard && <Header />}
+      {/* ======================================================
+          HEADER PUBLIC
+          لا يظهر داخل Dashboard
+          ====================================================== */}
+
+      {!isDashboard && (
+        <Header />
+      )}
+
+      {/* ======================================================
+          MAIN
+          ====================================================== */}
 
       <main>
+
         <Routes>
 
           {/* ==================================================
@@ -137,67 +365,93 @@ function AppContent() {
 
           <Route
             path="/"
-            element={<Home />}
+            element={
+              <Home />
+            }
           />
 
           <Route
             path="/agency"
-            element={<Agency />}
+            element={
+              <Agency />
+            }
           />
 
           <Route
             path="/investor"
-            element={<Investor />}
+            element={
+              <Investor />
+            }
           />
 
           <Route
             path="/inscription"
-            element={<InvestorRegistration />}
+            element={
+              <InvestorRegistration />
+            }
           />
 
           <Route
             path="/login"
-            element={<Login />}
+            element={
+              <Login />
+            }
           />
 
           <Route
             path="/opportunities"
-            element={<OpportunitiesPage />}
+            element={
+              <OpportunitiesPage />
+            }
           />
 
           <Route
             path="/sectors"
-            element={<SectorsPage />}
+            element={
+              <SectorsPage />
+            }
           />
 
           <Route
             path="/news"
-            element={<NewsPage />}
+            element={
+              <NewsPage />
+            }
           />
 
           <Route
             path="/news/:id"
-            element={<NewsDetails />}
+            element={
+              <NewsDetails />
+            }
           />
 
           <Route
             path="/events"
-            element={<EventsPage />}
+            element={
+              <EventsPage />
+            }
           />
 
           <Route
             path="/announcements"
-            element={<AnnouncementsPage />}
+            element={
+              <AnnouncementsPage />
+            }
           />
 
           <Route
             path="/announcements/:id"
-            element={<AnnouncementsDetails />}
+            element={
+              <AnnouncementsDetails />
+            }
           />
 
           <Route
             path="/contact"
-            element={<Contact />}
+            element={
+              <Contact />
+            }
           />
 
           {/* ==================================================
@@ -206,7 +460,87 @@ function AppContent() {
 
           <Route
             path="/admin/dashboard"
-            element={<AdminRoute />}
+            element={
+              <AdminDashboardRoute />
+            }
+          />
+
+          {/* ==================================================
+              ADMIN USERS
+              ================================================== */}
+
+          <Route
+            path="/admin/users"
+            element={
+              <AdminUsersRoute />
+            }
+          />
+
+          {/* ==================================================
+              ADMIN FUTURE PAGES
+              ================================================== */}
+
+          <Route
+            path="/admin/projects"
+            element={
+              <AdminProtectedRoute />
+            }
+          />
+
+          <Route
+            path="/admin/investments"
+            element={
+              <AdminProtectedRoute />
+            }
+          />
+
+          <Route
+            path="/admin/requests"
+            element={
+              <AdminProtectedRoute />
+            }
+          />
+
+          <Route
+            path="/admin/messages"
+            element={
+              <AdminProtectedRoute />
+            }
+          />
+
+          <Route
+            path="/admin/documents"
+            element={
+              <AdminProtectedRoute />
+            }
+          />
+
+          <Route
+            path="/admin/settings"
+            element={
+              <AdminProtectedRoute />
+            }
+          />
+
+          <Route
+            path="/admin/profile"
+            element={
+              <AdminProtectedRoute />
+            }
+          />
+
+          {/* ==================================================
+              ADMIN ROOT
+              ================================================== */}
+
+          <Route
+            path="/admin"
+            element={
+              <Navigate
+                to="/admin/dashboard"
+                replace
+              />
+            }
           />
 
           {/* ==================================================
@@ -215,54 +549,92 @@ function AppContent() {
 
           <Route
             path="/investor/dashboard/*"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           <Route
             path="/investor/dashboard/project"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           <Route
             path="/investor/dashboard/investments"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           <Route
             path="/investor/dashboard/requests"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           <Route
             path="/investor/dashboard/documents"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           <Route
             path="/investor/dashboard/messages"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           <Route
             path="/investor/dashboard/notifications"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           <Route
             path="/investor/dashboard/profile"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
           />
 
           <Route
             path="/investor/dashboard/settings"
-            element={<InvestorRoute />}
+            element={
+              <InvestorRoute />
+            }
+          />
+
+          {/* ==================================================
+              404
+              ================================================== */}
+
+          <Route
+            path="*"
+            element={
+              <Navigate
+                to="/"
+                replace
+              />
+            }
           />
 
         </Routes>
+
       </main>
 
-      {/* FOOTER */}
-      {!isDashboard && <Footer />}
+      {/* ======================================================
+          FOOTER PUBLIC
+          ====================================================== */}
+
+      {!isDashboard && (
+        <Footer />
+      )}
 
     </div>
   );
