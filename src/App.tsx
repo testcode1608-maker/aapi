@@ -80,11 +80,7 @@ function getCurrentUser(): CurrentUser | null {
 
     return user as CurrentUser;
   } catch (error) {
-    console.error(
-      "Erreur lecture utilisateur:",
-      error
-    );
-
+    console.error("Erreur lecture utilisateur:", error);
     return null;
   }
 }
@@ -96,10 +92,6 @@ function getCurrentUser(): CurrentUser | null {
 function ScrollToTop() {
   const { pathname } = useLocation();
 
-  /*
-   * pathname est volontairement lu afin que
-   * le composant soit recalculé à chaque navigation.
-   */
   void pathname;
 
   window.scrollTo({
@@ -118,6 +110,9 @@ function ScrollToTop() {
 function AdminDashboardRoute() {
   const user = getCurrentUser();
 
+  /*
+   * Aucun utilisateur connecté
+   */
   if (!user) {
     return (
       <Navigate
@@ -127,6 +122,9 @@ function AdminDashboardRoute() {
     );
   }
 
+  /*
+   * Utilisateur connecté mais non administrateur
+   */
   if (user.role !== "admin") {
     return (
       <Navigate
@@ -136,6 +134,9 @@ function AdminDashboardRoute() {
     );
   }
 
+  /*
+   * Administrateur autorisé
+   */
   return <AdminDashboard />;
 }
 
@@ -239,8 +240,7 @@ function AdminPlaceholder() {
         alignItems: "center",
         justifyContent: "center",
         padding: "30px",
-        fontFamily:
-          "Arial, sans-serif",
+        fontFamily: "Arial, sans-serif",
       }}
     >
       <div
@@ -251,8 +251,7 @@ function AdminPlaceholder() {
           borderRadius: "20px",
           padding: "40px",
           textAlign: "center",
-          boxShadow:
-            "0 10px 40px rgba(0,0,0,0.08)",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
         }}
       >
         <div
@@ -340,31 +339,37 @@ function InvestorRoute() {
 }
 
 /* ============================================================
-   ADMIN LAYOUT DETECTION
+   APP CONTENT
    ============================================================ */
 
 function AppContent() {
   const location = useLocation();
 
+  /*
+   * جميع صفحات /admin تستخدم Layout الإدارة
+   */
   const isAdminRoute =
-    location.pathname.startsWith(
-      "/admin"
-    );
+    location.pathname.startsWith("/admin");
 
+  /*
+   * جميع صفحات /investor/dashboard تستخدم
+   * Layout لوحة المستثمر
+   */
   const isInvestorDashboard =
     location.pathname.startsWith(
       "/investor/dashboard"
     );
 
+  /*
+   * إخفاء Header و Footer العامين
+   */
   const hideGlobalLayout =
     isAdminRoute ||
     isInvestorDashboard;
 
   return (
     <>
-      {!hideGlobalLayout && (
-        <Header />
-      )}
+      {!hideGlobalLayout && <Header />}
 
       <main
         style={{
@@ -431,16 +436,12 @@ function AppContent() {
 
           <Route
             path="/announcements/:id"
-            element={
-              <AnnouncementsDetails />
-            }
+            element={<AnnouncementsDetails />}
           />
 
           <Route
             path="/investor/register"
-            element={
-              <InvestorRegistration />
-            }
+            element={<InvestorRegistration />}
           />
 
           <Route
@@ -463,6 +464,20 @@ function AppContent() {
             path="/investor/dashboard/*"
             element={
               <InvestorRoute />
+            }
+          />
+
+          {/* ==================================================
+              ADMIN ROOT
+             ================================================== */}
+
+          <Route
+            path="/admin"
+            element={
+              <Navigate
+                to="/admin/dashboard"
+                replace
+              />
             }
           />
 
@@ -500,7 +515,7 @@ function AppContent() {
           />
 
           {/* ==================================================
-              ADMIN PROJECTS
+              OTHER ADMIN PAGES
              ================================================== */}
 
           <Route
@@ -510,20 +525,12 @@ function AppContent() {
             }
           />
 
-          {/* ==================================================
-              ADMIN INVESTMENTS
-             ================================================== */}
-
           <Route
             path="/admin/investments"
             element={
               <AdminProtectedRoute />
             }
           />
-
-          {/* ==================================================
-              ADMIN REQUESTS
-             ================================================== */}
 
           <Route
             path="/admin/requests"
@@ -532,20 +539,12 @@ function AppContent() {
             }
           />
 
-          {/* ==================================================
-              ADMIN MESSAGES
-             ================================================== */}
-
           <Route
             path="/admin/messages"
             element={
               <AdminProtectedRoute />
             }
           />
-
-          {/* ==================================================
-              ADMIN DOCUMENTS
-             ================================================== */}
 
           <Route
             path="/admin/documents"
@@ -554,10 +553,6 @@ function AppContent() {
             }
           />
 
-          {/* ==================================================
-              ADMIN SETTINGS
-             ================================================== */}
-
           <Route
             path="/admin/settings"
             element={
@@ -565,28 +560,10 @@ function AppContent() {
             }
           />
 
-          {/* ==================================================
-              ADMIN PROFILE
-             ================================================== */}
-
           <Route
             path="/admin/profile"
             element={
               <AdminProtectedRoute />
-            }
-          />
-
-          {/* ==================================================
-              /ADMIN
-             ================================================== */}
-
-          <Route
-            path="/admin"
-            element={
-              <Navigate
-                to="/admin/dashboard"
-                replace
-              />
             }
           />
 
@@ -607,9 +584,7 @@ function AppContent() {
         </Routes>
       </main>
 
-      {!hideGlobalLayout && (
-        <Footer />
-      )}
+      {!hideGlobalLayout && <Footer />}
     </>
   );
 }

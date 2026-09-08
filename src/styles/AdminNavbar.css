@@ -1,1259 +1,1192 @@
 /* ============================================================
-   AAPI ADMIN NAVBAR
-   RTL / ARABIC VERSION
-   متوافق بالكامل مع AdminNavbar.tsx
-   ============================================================ */
-
+AAPI ADMIN NAVBAR
+RTL / ARABIC VERSION
+Compatible with AdminNavbar.tsx
+============================================================ */
 
 /* ============================================================
-   VARIABLES
-   ============================================================ */
+VARIABLES
+============================================================ */
 
 :root {
-  --aapi-green: #087443;
-  --aapi-dark-green: #055c35;
-  --aapi-light-green: #eaf6f0;
-  --aapi-gold: #c9a227;
-  --aapi-dark: #14221b;
+--aapi-green: #087443;
+--aapi-dark-green: #055c35;
+--aapi-light-green: #eaf6f0;
+--aapi-gold: #c9a227;
+--aapi-dark: #14221b;
+--aapi-white: #ffffff;
 
-  --aapi-white: #ffffff;
+--aapi-gray-50: #f8faf9;
+--aapi-gray-100: #f1f5f3;
+--aapi-gray-200: #e4ebe7;
+--aapi-gray-300: #d4ded9;
+--aapi-gray-400: #a5b3ac;
+--aapi-gray-500: #718078;
+--aapi-gray-600: #56635c;
 
-  --aapi-gray-50: #f8faf9;
-  --aapi-gray-100: #f1f5f3;
-  --aapi-gray-200: #e4ebe7;
-  --aapi-gray-300: #d4ded9;
-  --aapi-gray-400: #a5b3ac;
-  --aapi-gray-500: #718078;
-  --aapi-gray-600: #56635c;
-
-  /*
-    نفس القيمة المستعملة مع AdminDashboard.css
-  */
-  --admin-navbar-width: clamp(220px, 22vw, 285px);
+--admin-navbar-width: clamp(220px, 22vw, 285px);
 }
 
-
 /* ============================================================
-   RESET
-   ============================================================ */
+RESET
+============================================================ */
 
 .admin-navbar,
 .admin-navbar *,
 .admin-mobile-toggle,
-.admin-sidebar-overlay {
-  box-sizing: border-box;
+.admin-mobile-toggle *,
+.admin-sidebar-overlay,
+.admin-mobile-header,
+.admin-mobile-header * {
+box-sizing: border-box;
 }
 
-
 /* ============================================================
-   BODY
-   ============================================================ */
+BODY
+============================================================ */
 
 body.admin-menu-open {
-  overflow: hidden;
+overflow: hidden;
 }
 
+/* ============================================================
+MOBILE HEADER
+============================================================ */
+
+.admin-mobile-header {
+display: none;
+}
 
 /* ============================================================
-   NAVBAR — DESKTOP
-   ============================================================ */
+ADMIN NAVBAR — DESKTOP
+============================================================ */
 
 .admin-navbar {
-  position: fixed;
+position: fixed;
+top: 0;
+right: 0;
+bottom: 0;
+left: auto;
 
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: auto;
+width: var(--admin-navbar-width);
 
-  width: var(--admin-navbar-width);
+margin: 0;
+padding: 0;
 
-  margin: 0;
-  padding: 0;
+background: var(--aapi-white);
 
-  background: var(--aapi-white);
+border-left: 1px solid var(--aapi-gray-200);
+border-right: 0;
 
-  border-left: 1px solid var(--aapi-gray-200);
-  border-right: 0;
+box-shadow: -8px 0 30px rgba(20, 34, 27, 0.08);
 
-  box-shadow:
-    -8px 0 30px rgba(20, 34, 27, 0.08);
+z-index: 1000;
 
-  z-index: 1000;
+display: flex;
+flex-direction: column;
 
-  display: flex;
-  flex-direction: column;
+overflow: hidden;
 
-  overflow: hidden;
+direction: rtl;
 
-  direction: rtl;
+isolation: isolate;
 
-  isolation: isolate;
-
-  font-family:
-    "Tajawal",
-    "Cairo",
-    "Arial",
-    sans-serif;
+font-family:
+"Tajawal",
+"Cairo",
+"Arial",
+sans-serif;
 }
 
-
 /* ============================================================
-   INNER
-   ============================================================ */
+INNER
+============================================================ */
 
 .admin-navbar-inner {
-  width: 100%;
-  height: 100%;
+width: 100%;
+height: 100%;
 
-  min-width: 0;
-  min-height: 0;
+min-width: 0;
+min-height: 0;
 
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 
-  padding: 16px 14px 10px;
+padding: 16px 14px 10px;
 
-  direction: rtl;
+direction: rtl;
 }
 
-
 /* ============================================================
-   BRAND
-   ============================================================ */
+BRAND
+============================================================ */
 
 .admin-navbar-brand {
-  width: 100%;
-  min-width: 0;
+width: 100%;
+min-width: 0;
 
-  display: flex;
-  align-items: center;
+display: flex;
+align-items: center;
 
-  gap: 10px;
+gap: 10px;
 
-  padding: 2px 2px 16px;
+padding: 2px 2px 16px;
 
-  border-bottom: 1px solid var(--aapi-gray-200);
+border-bottom: 1px solid var(--aapi-gray-200);
 
-  flex-shrink: 0;
+flex-shrink: 0;
 
-  direction: rtl;
+direction: rtl;
 }
 
-
 /* ============================================================
-   LOGO
-   ============================================================ */
+LOGO
+============================================================ */
 
 .admin-brand-logo {
-  width: 43px;
-  height: 43px;
+width: 43px;
+height: 43px;
+min-width: 43px;
 
-  min-width: 43px;
+border: 0;
+border-radius: 12px;
 
-  border: 0;
-  border-radius: 12px;
+display: flex;
+align-items: center;
+justify-content: center;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+background:
+linear-gradient(
+135deg,
+var(--aapi-green),
+var(--aapi-dark-green)
+);
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--aapi-green),
-      var(--aapi-dark-green)
-    );
+color: var(--aapi-white);
 
-  color: var(--aapi-white);
+font-size: 20px;
+font-weight: 800;
 
-  font-size: 20px;
-  font-weight: 800;
+cursor: pointer;
 
-  cursor: pointer;
+box-shadow:
+0 5px 14px rgba(8, 116, 67, 0.20);
 
-  box-shadow:
-    0 5px 14px rgba(8, 116, 67, 0.20);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+transition:
+transform 0.2s ease,
+box-shadow 0.2s ease;
 }
 
 .admin-brand-logo:hover {
-  transform: translateY(-1px);
+transform: translateY(-1px);
 
-  box-shadow:
-    0 7px 18px rgba(8, 116, 67, 0.25);
+box-shadow:
+0 7px 18px rgba(8, 116, 67, 0.25);
 }
 
 .admin-brand-logo:focus-visible {
-  outline: 3px solid rgba(201, 162, 39, 0.35);
-  outline-offset: 2px;
+outline: 3px solid rgba(201, 162, 39, 0.35);
+outline-offset: 2px;
 }
 
-
 /* ============================================================
-   BRAND TEXT
-   ============================================================ */
+BRAND TEXT
+============================================================ */
 
 .admin-brand-text {
-  min-width: 0;
+min-width: 0;
+flex: 1;
 
-  flex: 1;
+display: flex;
+flex-direction: column;
 
-  display: flex;
-  flex-direction: column;
+gap: 2px;
 
-  gap: 2px;
+overflow: hidden;
 
-  overflow: hidden;
-
-  direction: rtl;
-  text-align: right;
+direction: rtl;
+text-align: right;
 }
 
 .admin-brand-text strong {
-  color: var(--aapi-dark);
+color: var(--aapi-dark);
 
-  font-size: clamp(16px, 1.3vw, 20px);
+font-size: clamp(16px, 1.3vw, 20px);
+font-weight: 800;
 
-  font-weight: 800;
+line-height: 1.2;
 
-  line-height: 1.2;
-
-  white-space: nowrap;
+white-space: nowrap;
 }
 
 .admin-brand-text span {
-  color: var(--aapi-gray-500);
+color: var(--aapi-gray-500);
 
-  font-size: 10px;
+font-size: 10px;
 
-  white-space: nowrap;
+white-space: nowrap;
 
-  overflow: hidden;
-
-  text-overflow: ellipsis;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
-
 /* ============================================================
-   MENU
-   ============================================================ */
+MENU
+============================================================ */
 
 .admin-navbar-menu {
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
+width: 100%;
+min-width: 0;
+min-height: 0;
 
-  flex: 1;
+flex: 1;
 
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 
-  overflow-y: auto;
-  overflow-x: hidden;
+overflow-y: auto;
+overflow-x: hidden;
 
-  padding: 16px 0 8px;
+padding: 16px 0 8px;
 
-  scrollbar-width: thin;
+scrollbar-width: thin;
 
-  scrollbar-color:
-    var(--aapi-gray-300)
-    transparent;
+scrollbar-color:
+var(--aapi-gray-300)
+transparent;
 
-  direction: rtl;
+direction: rtl;
 }
 
 .admin-navbar-menu::-webkit-scrollbar {
-  width: 5px;
+width: 5px;
 }
 
 .admin-navbar-menu::-webkit-scrollbar-track {
-  background: transparent;
+background: transparent;
 }
 
 .admin-navbar-menu::-webkit-scrollbar-thumb {
-  background: var(--aapi-gray-300);
-  border-radius: 20px;
+background: var(--aapi-gray-300);
+border-radius: 20px;
 }
 
-
 /* ============================================================
-   MENU SECTION
-   ============================================================ */
+MENU SECTION
+============================================================ */
 
 .admin-menu-section {
-  width: 100%;
+width: 100%;
 
-  margin-bottom: 18px;
+margin-bottom: 18px;
 
-  direction: rtl;
+direction: rtl;
 }
 
 .admin-menu-title {
-  padding: 0 9px 8px;
+padding: 0 9px 8px;
 
-  color: var(--aapi-gray-400);
+color: var(--aapi-gray-400);
 
-  font-size: 10px;
+font-size: 10px;
+font-weight: 800;
 
-  font-weight: 800;
+text-align: right;
 
-  letter-spacing: 0;
-
-  text-align: right;
-
-  direction: rtl;
+direction: rtl;
 }
 
 .admin-menu-items {
-  width: 100%;
+width: 100%;
 
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 
-  gap: 3px;
+gap: 3px;
 
-  direction: rtl;
+direction: rtl;
 }
 
-
 /* ============================================================
-   NAV LINK
-   ============================================================ */
+NAV LINK
+============================================================ */
 
 .admin-nav-link {
-  position: relative;
+position: relative;
 
-  width: 100%;
-  min-width: 0;
+width: 100%;
+min-width: 0;
+min-height: 44px;
 
-  min-height: 44px;
+display: flex;
+align-items: center;
 
-  display: flex;
-  align-items: center;
+gap: 10px;
 
-  gap: 10px;
+padding: 8px 10px;
 
-  padding: 8px 10px;
+border: 0;
+border-radius: 10px;
 
-  border: 0;
-  border-radius: 10px;
+background: transparent;
 
-  background: transparent;
+color: var(--aapi-gray-600);
 
-  color: var(--aapi-gray-600);
+font-family:
+"Tajawal",
+"Cairo",
+"Arial",
+sans-serif;
 
-  font-family:
-    "Tajawal",
-    "Cairo",
-    "Arial",
-    sans-serif;
+font-size: 13px;
+font-weight: 600;
 
-  font-size: 13px;
-  font-weight: 600;
+text-align: right;
+text-decoration: none;
 
-  text-align: right;
+cursor: pointer;
 
-  text-decoration: none;
+transition:
+background 0.2s ease,
+color 0.2s ease,
+transform 0.2s ease;
 
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-
-  direction: rtl;
+direction: rtl;
 }
 
 .admin-nav-link:hover {
-  background: var(--aapi-gray-100);
-
-  color: var(--aapi-green);
+background: var(--aapi-gray-100);
+color: var(--aapi-green);
 }
 
 .admin-nav-link.active {
-  background: var(--aapi-light-green);
+background: var(--aapi-light-green);
 
-  color: var(--aapi-green);
+color: var(--aapi-green);
 
-  font-weight: 750;
+font-weight: 750;
 }
 
-
 /* ============================================================
-   ACTIVE INDICATOR — RIGHT
-   ============================================================ */
+ACTIVE INDICATOR
+============================================================ */
 
 .admin-nav-link.active::before {
-  content: "";
+content: "";
 
-  position: absolute;
+position: absolute;
 
-  right: 0;
+right: 0;
 
-  top: 7px;
-  bottom: 7px;
+top: 7px;
+bottom: 7px;
 
-  width: 3px;
+width: 3px;
 
-  border-radius: 4px;
+border-radius: 4px;
 
-  background: var(--aapi-green);
+background: var(--aapi-green);
 }
 
-
 /* ============================================================
-   FOCUS
-   ============================================================ */
+FOCUS
+============================================================ */
 
 .admin-nav-link:focus-visible {
-  outline: 3px solid rgba(8, 116, 67, 0.20);
-  outline-offset: 2px;
+outline: 3px solid rgba(8, 116, 67, 0.20);
+outline-offset: 2px;
 }
 
-
 /* ============================================================
-   ICON WRAPPER
-   ============================================================ */
+ICON WRAPPER
+============================================================ */
 
 .admin-nav-icon-wrapper {
-  position: relative;
+position: relative;
 
-  width: 30px;
-  height: 30px;
+width: 30px;
+height: 30px;
+min-width: 30px;
 
-  min-width: 30px;
+flex: 0 0 30px;
 
-  flex: 0 0 30px;
+display: flex;
+align-items: center;
+justify-content: center;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  direction: rtl;
+direction: rtl;
 }
 
-
 /* ============================================================
-   ICON
-   ============================================================ */
+ICON
+============================================================ */
 
 .admin-nav-icon {
-  width: 30px;
-  height: 30px;
+width: 30px;
+height: 30px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+display: flex;
+align-items: center;
+justify-content: center;
 
-  border-radius: 8px;
+border-radius: 8px;
 
-  background: var(--aapi-gray-100);
+background: var(--aapi-gray-100);
 
-  color: var(--aapi-gray-600);
+color: var(--aapi-gray-600);
 
-  font-size: 15px;
-
-  line-height: 1;
+font-size: 15px;
+line-height: 1;
 }
 
 .admin-nav-link:hover .admin-nav-icon,
 .admin-nav-link.active .admin-nav-icon {
-  background: var(--aapi-white);
-
-  color: var(--aapi-green);
+background: var(--aapi-white);
+color: var(--aapi-green);
 }
 
-
 /* ============================================================
-   LABEL
-   ============================================================ */
+LABEL
+============================================================ */
 
 .admin-nav-label {
-  min-width: 0;
+min-width: 0;
+flex: 1;
 
-  flex: 1;
+overflow: hidden;
 
-  overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
 
-  white-space: nowrap;
+text-align: right;
 
-  text-overflow: ellipsis;
-
-  text-align: right;
-
-  direction: rtl;
+direction: rtl;
 }
 
-
 /* ============================================================
-   NOTIFICATION BADGE
-   ============================================================ */
+NOTIFICATION BADGE
+============================================================ */
 
 .admin-notification-badge {
-  position: absolute;
+position: absolute;
 
-  top: -5px;
-  left: -5px;
+top: -5px;
+left: -5px;
 
-  min-width: 17px;
-  height: 17px;
+min-width: 17px;
+height: 17px;
 
-  padding: 0 4px;
+padding: 0 4px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+display: flex;
+align-items: center;
+justify-content: center;
 
-  border: 2px solid var(--aapi-white);
+border: 2px solid var(--aapi-white);
 
-  border-radius: 50px;
+border-radius: 50px;
 
-  background: #d9363e;
+background: #d9363e;
 
-  color: var(--aapi-white);
+color: var(--aapi-white);
 
-  font-size: 8px;
-  font-weight: 800;
+font-size: 8px;
+font-weight: 800;
 
-  line-height: 1;
+line-height: 1;
 
-  direction: ltr;
+direction: ltr;
 }
 
-
 /* ============================================================
-   MENU BOTTOM
-   ============================================================ */
+MENU BOTTOM
+============================================================ */
 
 .admin-menu-bottom {
-  width: 100%;
+width: 100%;
 
-  margin-top: auto;
+margin-top: auto;
 
-  padding-top: 9px;
+padding-top: 9px;
 
-  border-top: 1px solid var(--aapi-gray-200);
+border-top: 1px solid var(--aapi-gray-200);
 }
 
-
 /* ============================================================
-   LOGOUT
-   ============================================================ */
+LOGOUT
+============================================================ */
 
 .admin-logout-button {
-  font-family:
-    "Tajawal",
-    "Cairo",
-    "Arial",
-    sans-serif;
+font-family:
+"Tajawal",
+"Cairo",
+"Arial",
+sans-serif;
 }
 
 .admin-logout-button:hover {
-  background: #fff3f3;
-
-  color: #a63b3b;
+background: #fff3f3;
+color: #a63b3b;
 }
 
 .admin-logout-button:hover .admin-nav-icon {
-  background: #ffe8e8;
-
-  color: #a63b3b;
+background: #ffe8e8;
+color: #a63b3b;
 }
 
-
 /* ============================================================
-   ACTIONS
-   ============================================================ */
+ACTIONS
+============================================================ */
 
 .admin-navbar-actions {
-  width: 100%;
-  min-width: 0;
+width: 100%;
+min-width: 0;
 
-  display: flex;
-  align-items: center;
+display: flex;
+align-items: center;
 
-  gap: 6px;
+gap: 6px;
 
-  padding-top: 10px;
+padding-top: 10px;
 
-  flex-shrink: 0;
+flex-shrink: 0;
 
-  direction: rtl;
+direction: rtl;
 }
 
-
 /* ============================================================
-   MESSAGE BUTTON
-   ============================================================ */
+MESSAGE BUTTON
+============================================================ */
 
 .admin-navbar-icon-button {
-  position: relative;
+position: relative;
 
-  width: 39px;
-  height: 39px;
+width: 39px;
+height: 39px;
+min-width: 39px;
 
-  min-width: 39px;
+flex: 0 0 39px;
 
-  flex: 0 0 39px;
+display: flex;
+align-items: center;
+justify-content: center;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+padding: 0;
 
-  padding: 0;
+border: 1px solid var(--aapi-gray-200);
 
-  border: 1px solid var(--aapi-gray-200);
+border-radius: 10px;
 
-  border-radius: 10px;
+background: var(--aapi-white);
 
-  background: var(--aapi-white);
+color: var(--aapi-gray-600);
 
-  color: var(--aapi-gray-600);
+font-family: inherit;
 
-  font-family: inherit;
+font-size: 16px;
 
-  font-size: 16px;
+cursor: pointer;
 
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
+transition:
+background 0.2s ease,
+color 0.2s ease,
+border-color 0.2s ease;
 }
 
 .admin-navbar-icon-button:hover {
-  background: var(--aapi-light-green);
+background: var(--aapi-light-green);
 
-  color: var(--aapi-green);
+color: var(--aapi-green);
 
-  border-color:
-    rgba(8, 116, 67, 0.20);
+border-color:
+rgba(8, 116, 67, 0.20);
 }
 
-
 /* ============================================================
-   NOTIFICATION DOT
-   ============================================================ */
+NOTIFICATION DOT
+============================================================ */
 
 .admin-notification-dot {
-  position: absolute;
+position: absolute;
 
-  top: 6px;
-  right: 6px;
+top: 6px;
+right: 6px;
 
-  width: 8px;
-  height: 8px;
+width: 8px;
+height: 8px;
 
-  border: 2px solid var(--aapi-white);
+border: 2px solid var(--aapi-white);
 
-  border-radius: 50%;
+border-radius: 50%;
 
-  background: #d9363e;
+background: #d9363e;
 }
 
-
 /* ============================================================
-   PROFILE
-   ============================================================ */
+PROFILE
+============================================================ */
 
 .admin-profile {
-  min-width: 0;
+min-width: 0;
+flex: 1;
 
-  flex: 1;
+display: flex;
+align-items: center;
 
-  display: flex;
-  align-items: center;
+gap: 7px;
 
-  gap: 7px;
+padding: 4px;
 
-  padding: 4px;
+border: 0;
+border-radius: 10px;
 
-  border: 0;
-  border-radius: 10px;
+background: transparent;
 
-  background: transparent;
+color: var(--aapi-dark);
 
-  color: var(--aapi-dark);
+font-family:
+"Tajawal",
+"Cairo",
+"Arial",
+sans-serif;
 
-  font-family:
-    "Tajawal",
-    "Cairo",
-    "Arial",
-    sans-serif;
+text-align: right;
 
-  text-align: right;
+cursor: pointer;
 
-  cursor: pointer;
+overflow: hidden;
 
-  overflow: hidden;
-
-  direction: rtl;
+direction: rtl;
 }
 
 .admin-profile:hover {
-  background: var(--aapi-gray-100);
+background: var(--aapi-gray-100);
 }
 
 .admin-profile:focus-visible {
-  outline: 3px solid rgba(8, 116, 67, 0.20);
-  outline-offset: 2px;
+outline: 3px solid rgba(8, 116, 67, 0.20);
+outline-offset: 2px;
 }
 
-
 /* ============================================================
-   PROFILE AVATAR
-   ============================================================ */
+PROFILE AVATAR
+============================================================ */
 
 .admin-profile-avatar {
-  width: 36px;
-  height: 36px;
+width: 36px;
+height: 36px;
+min-width: 36px;
 
-  min-width: 36px;
+flex: 0 0 36px;
 
-  flex: 0 0 36px;
+display: flex;
+align-items: center;
+justify-content: center;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+overflow: hidden;
 
-  overflow: hidden;
+border-radius: 50%;
 
-  border-radius: 50%;
+background:
+linear-gradient(
+135deg,
+var(--aapi-green),
+var(--aapi-dark-green)
+);
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--aapi-green),
-      var(--aapi-dark-green)
-    );
+color: var(--aapi-white);
 
-  color: var(--aapi-white);
-
-  font-size: 12px;
-  font-weight: 800;
+font-size: 12px;
+font-weight: 800;
 }
 
 .admin-profile-avatar img {
-  width: 100%;
-  height: 100%;
+width: 100%;
+height: 100%;
 
-  display: block;
+display: block;
 
-  object-fit: cover;
+object-fit: cover;
 }
 
-
 /* ============================================================
-   PROFILE INFO
-   ============================================================ */
+PROFILE INFO
+============================================================ */
 
 .admin-profile-info {
-  min-width: 0;
+min-width: 0;
+flex: 1;
 
-  flex: 1;
+display: flex;
+flex-direction: column;
 
-  display: flex;
-  flex-direction: column;
+gap: 2px;
 
-  gap: 2px;
+overflow: hidden;
 
-  overflow: hidden;
+direction: rtl;
 
-  direction: rtl;
-
-  text-align: right;
+text-align: right;
 }
 
 .admin-profile-info strong {
-  color: var(--aapi-dark);
+color: var(--aapi-dark);
 
-  font-size: 10px;
-  font-weight: 750;
+font-size: 10px;
+font-weight: 750;
 
-  white-space: nowrap;
+white-space: nowrap;
 
-  overflow: hidden;
-
-  text-overflow: ellipsis;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
 .admin-profile-info span {
-  color: var(--aapi-gray-500);
+color: var(--aapi-gray-500);
 
-  font-size: 8px;
+font-size: 8px;
 
-  white-space: nowrap;
+white-space: nowrap;
 
-  overflow: hidden;
-
-  text-overflow: ellipsis;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
-
 /* ============================================================
-   PAGE INDICATOR
-   ============================================================ */
+PAGE INDICATOR
+============================================================ */
 
 .admin-navbar-page-indicator {
-  width: 100%;
+width: 100%;
+min-height: 30px;
 
-  min-height: 30px;
+display: flex;
+align-items: center;
 
-  display: flex;
-  align-items: center;
+gap: 7px;
 
-  gap: 7px;
+padding: 7px 17px 9px;
 
-  padding: 7px 17px 9px;
+border-top: 1px solid var(--aapi-gray-200);
 
-  border-top: 1px solid var(--aapi-gray-200);
+background: var(--aapi-gray-50);
 
-  background: var(--aapi-gray-50);
+flex-shrink: 0;
 
-  flex-shrink: 0;
-
-  direction: rtl;
+direction: rtl;
 }
 
 .admin-navbar-page-indicator span {
-  width: 6px;
-  height: 6px;
+width: 6px;
+height: 6px;
+min-width: 6px;
 
-  min-width: 6px;
+border-radius: 50%;
 
-  border-radius: 50%;
-
-  background: var(--aapi-green);
+background: var(--aapi-green);
 }
 
 .admin-navbar-page-indicator small {
-  min-width: 0;
+min-width: 0;
 
-  color: var(--aapi-gray-500);
+color: var(--aapi-gray-500);
 
-  font-size: 9px;
+font-size: 9px;
 
-  white-space: nowrap;
+white-space: nowrap;
 
-  overflow: hidden;
+overflow: hidden;
+text-overflow: ellipsis;
 
-  text-overflow: ellipsis;
-
-  text-align: right;
+text-align: right;
 }
 
-
 /* ============================================================
-   DESKTOP LOGOUT
-   ============================================================ */
+DESKTOP LOGOUT
+============================================================ */
 
 .admin-desktop-logout {
-  width: 39px;
-  height: 39px;
+width: 39px;
+height: 39px;
+min-width: 39px;
 
-  min-width: 39px;
+flex: 0 0 39px;
 
-  flex: 0 0 39px;
+padding: 0;
 
-  padding: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+display: flex;
+align-items: center;
+justify-content: center;
 }
 
 .admin-desktop-logout .admin-nav-icon {
-  background: transparent;
-
-  font-size: 16px;
+background: transparent;
+font-size: 16px;
 }
 
-
 /* ============================================================
-   MOBILE TOGGLE
-   ============================================================ */
+MOBILE TOGGLE
+============================================================ */
 
 .admin-mobile-toggle {
-  display: none;
+display: none;
 
-  position: fixed;
+position: fixed;
 
-  top: 14px;
+top: 14px;
+right: 14px;
+left: auto;
 
-  right: 14px;
-  left: auto;
+width: 44px;
+height: 44px;
 
-  width: 44px;
-  height: 44px;
+padding: 0;
 
-  padding: 0;
+border: 0;
+border-radius: 11px;
 
-  border: 0;
+background: var(--aapi-green);
 
-  border-radius: 11px;
+box-shadow:
+0 8px 22px rgba(20, 34, 27, 0.20);
 
-  background: var(--aapi-green);
+z-index: 1200;
 
-  box-shadow:
-    0 8px 22px rgba(20, 34, 27, 0.20);
+cursor: pointer;
 
-  z-index: 1200;
+align-items: center;
+justify-content: center;
 
-  cursor: pointer;
+flex-direction: column;
 
-  align-items: center;
-  justify-content: center;
+gap: 5px;
 
-  flex-direction: column;
-
-  gap: 5px;
-
-  direction: rtl;
+direction: rtl;
 }
 
 .admin-mobile-toggle:hover {
-  background: var(--aapi-dark-green);
+background: var(--aapi-dark-green);
+}
+
+.admin-mobile-toggle:focus-visible {
+outline: 3px solid rgba(201, 162, 39, 0.45);
+outline-offset: 3px;
 }
 
 .admin-mobile-toggle span {
-  width: 20px;
-  height: 2px;
+width: 20px;
+height: 2px;
 
-  border-radius: 2px;
+border-radius: 2px;
 
-  background: var(--aapi-white);
+background: var(--aapi-white);
 
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
+transition:
+transform 0.2s ease,
+opacity 0.2s ease;
 }
 
-
 /* ============================================================
-   MOBILE TOGGLE ACTIVE
-   ============================================================ */
+MOBILE TOGGLE ACTIVE
+============================================================ */
 
 .admin-mobile-toggle.active span:nth-child(1) {
-  transform:
-    translateY(7px)
-    rotate(45deg);
+transform:
+translateY(7px)
+rotate(45deg);
 }
 
 .admin-mobile-toggle.active span:nth-child(2) {
-  opacity: 0;
+opacity: 0;
 }
 
 .admin-mobile-toggle.active span:nth-child(3) {
-  transform:
-    translateY(-7px)
-    rotate(-45deg);
+transform:
+translateY(-7px)
+rotate(-45deg);
 }
 
-
 /* ============================================================
-   MOBILE OVERLAY
-   ============================================================ */
+MOBILE OVERLAY
+============================================================ */
 
 .admin-sidebar-overlay {
-  position: fixed;
+position: fixed;
 
-  inset: 0;
+inset: 0;
 
-  width: 100%;
-  height: 100%;
+width: 100%;
+height: 100%;
 
-  padding: 0;
-  margin: 0;
+padding: 0;
+margin: 0;
 
-  border: 0;
+border: 0;
 
-  background:
-    rgba(20, 34, 27, 0.48);
+background:
+rgba(20, 34, 27, 0.48);
 
-  z-index: 999;
+z-index: 999;
 
-  cursor: pointer;
+cursor: pointer;
 }
 
-
 /* ============================================================
-   TABLET
-   ============================================================ */
+TABLET
+============================================================ */
 
 @media (max-width: 1100px) {
-
-  :root {
-    --admin-navbar-width:
-      clamp(210px, 23vw, 250px);
-  }
-
-  .admin-navbar-inner {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .admin-nav-link {
-    min-height: 42px;
-
-    padding:
-      7px 9px;
-
-    font-size: 12px;
-  }
-
-  .admin-brand-logo {
-    width: 40px;
-    height: 40px;
-
-    min-width: 40px;
-  }
-
-  .admin-nav-icon-wrapper {
-    width: 29px;
-    height: 29px;
-
-    min-width: 29px;
-
-    flex-basis: 29px;
-  }
-
-  .admin-nav-icon {
-    width: 29px;
-    height: 29px;
-  }
+:root {
+--admin-navbar-width:
+clamp(210px, 23vw, 250px);
 }
 
+.admin-navbar-inner {
+padding-left: 12px;
+padding-right: 12px;
+}
+
+.admin-nav-link {
+min-height: 42px;
+
+padding:
+  7px 9px;
+
+font-size: 12px;
+
+}
+
+.admin-brand-logo {
+width: 40px;
+height: 40px;
+min-width: 40px;
+}
+
+.admin-nav-icon-wrapper {
+width: 29px;
+height: 29px;
+min-width: 29px;
+
+flex-basis: 29px;
+
+}
+
+.admin-nav-icon {
+width: 29px;
+height: 29px;
+}
+}
 
 /* ============================================================
-   MOBILE — RTL
-   ============================================================ */
+MOBILE
+============================================================ */
 
 @media (max-width: 800px) {
-
-  :root {
-    --admin-navbar-width: 0px;
-  }
-
-  /*
-    القائمة تظهر من اليمين
-  */
-
-  .admin-navbar {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: auto;
-
-    width: min(310px, 88vw);
-    max-width: 88vw;
-
-    transform:
-      translateX(105%);
-
-    border-left:
-      1px solid var(--aapi-gray-200);
-
-    border-right: 0;
-
-    transition:
-      transform 0.25s ease;
-
-    box-shadow:
-      -10px 0 35px
-      rgba(20, 34, 27, 0.18);
-
-    direction: rtl;
-  }
-
-  /*
-    القائمة مفتوحة
-  */
-
-  .admin-navbar.mobile-open {
-    transform:
-      translateX(0);
-  }
-
-  /*
-    زر فتح القائمة
-  */
-
-  .admin-mobile-toggle {
-    display: flex;
-
-    top: 14px;
-
-    right: 14px;
-    left: auto;
-
-    direction: rtl;
-  }
-
-  /*
-    إخفاء الأدوات العلوية على الهاتف
-  */
-
-  .admin-navbar-actions {
-    display: none;
-  }
-
-  /*
-    القائمة
-  */
-
-  .admin-navbar-menu {
-    padding-top: 15px;
-
-    direction: rtl;
-  }
-
-  /*
-    إخفاء Logout desktop
-  */
-
-  .admin-desktop-logout {
-    display: none;
-  }
-
-  /*
-    إخفاء Profile desktop
-  */
-
-  .admin-profile {
-    display: none;
-  }
-
-  /*
-    إظهار Logout داخل القائمة
-  */
-
-  .admin-menu-bottom {
-    display: block;
-  }
-
-  /*
-    RTL كامل
-  */
-
-  .admin-navbar,
-  .admin-navbar-inner,
-  .admin-navbar-menu,
-  .admin-menu-section,
-  .admin-menu-items,
-  .admin-nav-link {
-    direction: rtl;
-  }
-
-  .admin-nav-link {
-    text-align: right;
-  }
-
-  .admin-nav-label {
-    text-align: right;
-  }
-
-  .admin-menu-title {
-    text-align: right;
-  }
-
-  .admin-brand-text {
-    text-align: right;
-  }
-
-  .admin-profile-info {
-    text-align: right;
-  }
+:root {
+--admin-navbar-width: 0px;
 }
 
+/* Mobile header */
+.admin-mobile-header {
+display: flex;
+
+align-items: center;
+justify-content: space-between;
+
+width: 100%;
+height: 64px;
+
+padding: 0 16px;
+
+background: var(--aapi-white);
+
+border-bottom:
+  1px solid var(--aapi-gray-200);
+
+position: sticky;
+
+top: 0;
+
+z-index: 900;
+
+direction: rtl;
+
+}
+
+/* Sidebar */
+.admin-navbar {
+top: 0;
+right: 0;
+bottom: 0;
+left: auto;
+
+width: min(310px, 88vw);
+max-width: 88vw;
+
+transform:
+  translateX(105%);
+
+border-left:
+  1px solid var(--aapi-gray-200);
+
+border-right: 0;
+
+transition:
+  transform 0.25s ease;
+
+box-shadow:
+  -10px 0 35px
+  rgba(20, 34, 27, 0.18);
+
+direction: rtl;
+
+}
+
+/* Sidebar open */
+.admin-navbar.mobile-open {
+transform:
+translateX(0);
+}
+
+/* Mobile button */
+.admin-mobile-toggle {
+display: flex;
+
+top: 14px;
+right: 14px;
+left: auto;
+
+}
+
+/* Hide desktop actions */
+.admin-navbar-actions {
+display: none;
+}
+
+/* Menu */
+.admin-navbar-menu {
+padding-top: 15px;
+direction: rtl;
+}
+
+/* Hide desktop logout */
+.admin-desktop-logout {
+display: none;
+}
+
+/* Hide desktop profile */
+.admin-profile {
+display: none;
+}
+
+/* Mobile logout */
+.admin-menu-bottom {
+display: block;
+}
+
+/* RTL */
+.admin-navbar,
+.admin-navbar-inner,
+.admin-navbar-menu,
+.admin-menu-section,
+.admin-menu-items,
+.admin-nav-link {
+direction: rtl;
+}
+
+.admin-nav-link {
+text-align: right;
+}
+
+.admin-nav-label {
+text-align: right;
+}
+
+.admin-menu-title {
+text-align: right;
+}
+
+.admin-brand-text {
+text-align: right;
+}
+
+.admin-profile-info {
+text-align: right;
+}
+}
 
 /* ============================================================
-   SMALL MOBILE
-   ============================================================ */
+SMALL MOBILE
+============================================================ */
 
 @media (max-width: 600px) {
-
-  .admin-navbar {
-    width: min(300px, 86vw);
-
-    max-width: 86vw;
-  }
-
-  .admin-mobile-toggle {
-    top: 12px;
-
-    right: 12px;
-    left: auto;
-
-    width: 42px;
-    height: 42px;
-  }
-
-  .admin-navbar-inner {
-    padding:
-      14px 13px 9px;
-  }
+.admin-navbar {
+width: min(300px, 86vw);
+max-width: 86vw;
 }
 
+.admin-mobile-toggle {
+top: 12px;
+right: 12px;
+
+width: 42px;
+height: 42px;
+
+}
+
+.admin-navbar-inner {
+padding:
+14px 13px 9px;
+}
+}
 
 /* ============================================================
-   VERY SMALL MOBILE
-   ============================================================ */
+VERY SMALL MOBILE
+============================================================ */
 
 @media (max-width: 400px) {
-
-  .admin-navbar {
-    width: 88vw;
-
-    max-width: 88vw;
-  }
-
-  .admin-nav-link {
-    min-height: 41px;
-
-    font-size: 12px;
-  }
-
-  .admin-brand-text strong {
-    font-size: 16px;
-  }
+.admin-navbar {
+width: 88vw;
+max-width: 88vw;
 }
 
+.admin-nav-link {
+min-height: 41px;
+font-size: 12px;
+}
+
+.admin-brand-text strong {
+font-size: 16px;
+}
+}
 
 /* ============================================================
-   REDUCED MOTION
-   ============================================================ */
+REDUCED MOTION
+============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-
-  .admin-navbar,
-  .admin-mobile-toggle,
-  .admin-brand-logo,
-  .admin-nav-link,
-  .admin-mobile-toggle span {
-    transition: none !important;
-  }
+.admin-navbar,
+.admin-mobile-toggle,
+.admin-brand-logo,
+.admin-nav-link,
+.admin-mobile-toggle span {
+transition: none !important;
+}
 }
 
-
 /* ============================================================
-   PRINT
-   ============================================================ */
+PRINT
+============================================================ */
 
 @media print {
+.admin-navbar,
+.admin-mobile-toggle,
+.admin-sidebar-overlay,
+.admin-mobile-header {
+display: none !important;
+}
 
-  .admin-navbar,
-  .admin-mobile-toggle,
-  .admin-sidebar-overlay {
-    display: none !important;
-  }
-
-  body.admin-menu-open {
-    overflow: visible !important;
-  }
+body.admin-menu-open {
+overflow: visible !important;
+}
 }

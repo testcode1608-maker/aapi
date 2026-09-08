@@ -1,15 +1,11 @@
-import {
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-
+import { useCallback, useEffect, useState } from "react";
 import {
   NavLink,
   useLocation,
   useNavigate,
 } from "react-router-dom";
 
+import "../styles/AdminNavbar.css";
 /* ============================================================
    TYPES
    ============================================================ */
@@ -18,26 +14,26 @@ interface AdminNavbarProps {
   currentPage?: string;
 }
 
-interface MenuItem {
-  id: string;
-  label: string;
-  icon: string;
-  path: string;
-  badge?: number;
-}
-
-interface MenuSection {
-  title: string;
-  items: MenuItem[];
-}
-
 interface StoredUser {
   id?: number;
   nom?: string;
   prenom?: string;
   email?: string;
   role?: string;
+  statut?: string;
   photo?: string | null;
+}
+
+interface MenuItem {
+  id: string;
+  label: string;
+  icon: string;
+  path: string;
+}
+
+interface MenuSection {
+  title: string;
+  items: MenuItem[];
 }
 
 /* ============================================================
@@ -48,7 +44,7 @@ const MESSAGES_API =
   "http://localhost/aapi-api/auth/admin/messages.php";
 
 /* ============================================================
-   HELPERS
+   GET USER
    ============================================================ */
 
 function getStoredUser(): StoredUser | null {
@@ -77,7 +73,7 @@ function getStoredUser(): StoredUser | null {
 }
 
 /* ============================================================
-   COMPONENT
+   ADMIN NAVBAR
    ============================================================ */
 
 function AdminNavbar({
@@ -85,10 +81,6 @@ function AdminNavbar({
 }: AdminNavbarProps) {
   const location = useLocation();
   const navigate = useNavigate();
-
-  /* ==========================================================
-     STATE
-     ========================================================== */
 
   const [user, setUser] =
     useState<StoredUser | null>(null);
@@ -99,9 +91,6 @@ function AdminNavbar({
   const [profileOpen, setProfileOpen] =
     useState(false);
 
-  const [messagesOpen, setMessagesOpen] =
-    useState(false);
-
   const [unreadCount, setUnreadCount] =
     useState(0);
 
@@ -110,23 +99,41 @@ function AdminNavbar({
      ========================================================== */
 
   useEffect(() => {
-    const currentUser = getStoredUser();
+    const loadUser = () => {
+      setUser(getStoredUser());
+    };
 
-    setUser(currentUser);
+    loadUser();
+
+    window.addEventListener(
+      "storage",
+      loadUser
+    );
+
+    return () => {
+      window.removeEventListener(
+        "storage",
+        loadUser
+      );
+    };
   }, []);
 
   /* ==========================================================
-     GET ADMIN ID
+     ADMIN ID
      ========================================================== */
 
-  const getAdminId = useCallback((): number | null => {
+  const getAdminId = useCallback(() => {
     const currentUser = getStoredUser();
 
-    if (!currentUser?.id) {
+    if (!currentUser) {
       return null;
     }
 
     if (currentUser.role !== "admin") {
+      return null;
+    }
+
+    if (!currentUser.id) {
       return null;
     }
 
@@ -137,8 +144,8 @@ function AdminNavbar({
      LOAD UNREAD MESSAGES
      ========================================================== */
 
-  const loadUnreadMessages = useCallback(
-    async () => {
+  const loadUnreadMessages =
+    useCallback(async () => {
       const adminId = getAdminId();
 
       if (!adminId) {
@@ -147,15 +154,15 @@ function AdminNavbar({
       }
 
       try {
-        const url =
-          `${MESSAGES_API}?user_id=${adminId}&unread_only=1`;
-
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        });
+        const response = await fetch(
+          `${MESSAGES_API}?user_id=${adminId}&unread_only=1`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(
@@ -163,23 +170,39 @@ function AdminNavbar({
           );
         }
 
-        const data = await response.json();
+        const data =
+          await response.json();
+
+        /*
+         * Format:
+         * {
+         *   success: true,
+         *   messages: [...]
+         * }
+         */
 
         if (
-          data &&
-          Array.isArray(data.messages)
+          Array.isArray(
+            data?.messages
+          )
         ) {
-          const count =
-            data.messages.length;
+          setUnreadCount(
+            data.messages.length
+          );
 
-          setUnreadCount(count);
           return;
         }
 
+        /*
+         * Format:
+         * {
+         *   unread_count: 5
+         * }
+         */
+
         if (
-          data &&
-          typeof data.unread_count ===
-            "number"
+          typeof data?.unread_count ===
+          "number"
         ) {
           setUnreadCount(
             data.unread_count
@@ -188,12 +211,19 @@ function AdminNavbar({
           return;
         }
 
+        /*
+         * Format:
+         * {
+         *   stats: {
+         *     messages_non_lus: 5
+         *   }
+         * }
+         */
+
         if (
-          data &&
-          data.stats &&
-          typeof data.stats
-            .messages_non_lus ===
-            "number"
+          typeof data?.stats
+            ?.messages_non_lus ===
+          "number"
         ) {
           setUnreadCount(
             data.stats.messages_non_lus
@@ -204,35 +234,30 @@ function AdminNavbar({
 
         setUnreadCount(0);
       } catch (error) {
-        /*
-         * Le backend messages peut ne pas être
-         * encore disponible. On ne bloque pas
-         * la navbar dans ce cas.
-         */
         console.warn(
-          "Impossible de charger les messages non lus:",
+          "Messages non lus indisponibles:",
           error
         );
 
+        /*
+         * Ne jamais bloquer le Dashboard
+         * si l'API messages n'est pas disponible.
+         */
         setUnreadCount(0);
       }
-    },
-    [getAdminId]
-  );
+    }, [getAdminId]);
 
   /* ==========================================================
-     INITIAL LOAD + AUTO REFRESH
+     INITIAL MESSAGE LOAD
      ========================================================== */
 
   useEffect(() => {
     loadUnreadMessages();
 
-    const interval = window.setInterval(
-      () => {
+    const interval =
+      window.setInterval(() => {
         loadUnreadMessages();
-      },
-      30000
-    );
+      }, 30000);
 
     return () => {
       window.clearInterval(interval);
@@ -240,72 +265,13 @@ function AdminNavbar({
   }, [loadUnreadMessages]);
 
   /* ==========================================================
-     STORAGE EVENT
+     CLOSE MOBILE MENU ON ROUTE CHANGE
      ========================================================== */
 
   useEffect(() => {
-    const handleStorage = () => {
-      const currentUser =
-        getStoredUser();
-
-      setUser(currentUser);
-
-      loadUnreadMessages();
-    };
-
-    window.addEventListener(
-      "storage",
-      handleStorage
-    );
-
-    return () => {
-      window.removeEventListener(
-        "storage",
-        handleStorage
-      );
-    };
-  }, [loadUnreadMessages]);
-
-  /* ==========================================================
-     ACTIVE MENU
-     ========================================================== */
-
-  const isActive = (
-    page: string
-  ): boolean => {
-    const pathname =
-      location.pathname;
-
-    if (page === "dashboard") {
-      return (
-        pathname === "/admin" ||
-        pathname === "/admin/" ||
-        pathname === "/admin/dashboard"
-      );
-    }
-
-    const expectedPath =
-      `/admin/${page}`;
-
-    if (
-      pathname === expectedPath ||
-      pathname.startsWith(
-        `${expectedPath}/`
-      )
-    ) {
-      return true;
-    }
-
-    if (
-      currentPage &&
-      currentPage.toLowerCase().trim() ===
-        page.toLowerCase().trim()
-    ) {
-      return true;
-    }
-
-    return false;
-  };
+    setMobileOpen(false);
+    setProfileOpen(false);
+  }, [location.pathname]);
 
   /* ==========================================================
      MENU
@@ -329,12 +295,6 @@ function AdminNavbar({
           icon: "♙",
           path: "/admin/users",
         },
-
-        /*
-         * =====================================================
-         * INVESTORS
-         * =====================================================
-         */
 
         {
           id: "investors",
@@ -364,11 +324,17 @@ function AdminNavbar({
         },
 
         {
+          id: "requests",
+          label: "الطلبات",
+          icon: "⌁",
+          path: "/admin/requests",
+        },
+
+        {
           id: "messages",
           label: "الرسائل",
           icon: "✉",
           path: "/admin/messages",
-          badge: unreadCount,
         },
 
         {
@@ -395,18 +361,18 @@ function AdminNavbar({
   ];
 
   /* ==========================================================
-     DISPLAY USER
+     USER DISPLAY
      ========================================================== */
 
   const firstName =
-    user?.prenom || "";
+    user?.prenom?.trim() || "";
 
   const lastName =
-    user?.nom || "";
+    user?.nom?.trim() || "";
 
   const fullName =
-    `${firstName} ${lastName}`
-      .trim() || "Administrateur";
+    `${firstName} ${lastName}`.trim() ||
+    "Administrateur";
 
   const initials =
     `${firstName.charAt(0)}${lastName.charAt(
@@ -414,15 +380,46 @@ function AdminNavbar({
     )}`.toUpperCase() || "AD";
 
   /* ==========================================================
+     ACTIVE ROUTE
+     ========================================================== */
+
+  const isItemActive = (
+    item: MenuItem
+  ) => {
+    const pathname =
+      location.pathname;
+
+    /*
+     * Dashboard
+     */
+    if (item.id === "dashboard") {
+      return (
+        pathname === "/admin" ||
+        pathname === "/admin/" ||
+        pathname === "/admin/dashboard"
+      );
+    }
+
+    /*
+     * Toutes les autres pages
+     */
+    return (
+      pathname === item.path ||
+      pathname.startsWith(
+        `${item.path}/`
+      )
+    );
+  };
+
+  /* ==========================================================
      NAVIGATION
      ========================================================== */
 
-  const handleNavigation = (
+  const navigateTo = (
     path: string
   ) => {
     setMobileOpen(false);
     setProfileOpen(false);
-    setMessagesOpen(false);
 
     navigate(path);
   };
@@ -432,24 +429,17 @@ function AdminNavbar({
      ========================================================== */
 
   const handleLogout = () => {
-    try {
-      localStorage.removeItem(
-        "aapi_user"
-      );
+    localStorage.removeItem(
+      "aapi_user"
+    );
 
-      localStorage.removeItem(
-        "aapi_token"
-      );
+    localStorage.removeItem(
+      "aapi_token"
+    );
 
-      localStorage.removeItem(
-        "token"
-      );
-    } catch (error) {
-      console.error(
-        "Erreur déconnexion:",
-        error
-      );
-    }
+    localStorage.removeItem(
+      "token"
+    );
 
     setUser(null);
 
@@ -459,22 +449,14 @@ function AdminNavbar({
   };
 
   /* ==========================================================
-     CLOSE MOBILE MENU
+     PROFILE
      ========================================================== */
 
-  const closeMobileMenu = () => {
-    setMobileOpen(false);
-  };
-
-  /* ==========================================================
-     MARK MESSAGES READ
-     ========================================================== */
-
-  const handleMessagesClick = () => {
-    setMessagesOpen(false);
+  const openProfile = () => {
+    setProfileOpen(false);
     setMobileOpen(false);
 
-    navigate("/admin/messages");
+    navigate("/admin/profile");
   };
 
   /* ==========================================================
@@ -488,15 +470,56 @@ function AdminNavbar({
          ====================================================== */}
 
       {mobileOpen && (
-        <div
+        <button
+          type="button"
           className="admin-navbar-overlay"
-          onClick={closeMobileMenu}
-          aria-hidden="true"
+          aria-label="إغلاق القائمة"
+          onClick={() =>
+            setMobileOpen(false)
+          }
         />
       )}
 
       {/* ======================================================
-          NAVBAR
+          MOBILE TOP BAR
+         ====================================================== */}
+
+      <div
+        className="admin-mobile-header"
+        dir="rtl"
+      >
+        <button
+          type="button"
+          className="admin-mobile-menu-button"
+          onClick={() =>
+            setMobileOpen(true)
+          }
+          aria-label="فتح القائمة"
+        >
+          ☰
+        </button>
+
+        <button
+          type="button"
+          className="admin-mobile-brand"
+          onClick={() =>
+            navigateTo(
+              "/admin/dashboard"
+            )
+          }
+        >
+          <span className="admin-mobile-logo">
+            A
+          </span>
+
+          <span>
+            AAPI
+          </span>
+        </button>
+      </div>
+
+      {/* ======================================================
+          SIDEBAR
          ====================================================== */}
 
       <aside
@@ -516,38 +539,37 @@ function AdminNavbar({
             type="button"
             className="admin-navbar-brand-button"
             onClick={() =>
-              handleNavigation(
+              navigateTo(
                 "/admin/dashboard"
               )
             }
-            aria-label="لوحة التحكم"
           >
-            <div className="admin-navbar-logo">
+            <span className="admin-navbar-logo">
               A
-            </div>
+            </span>
 
-            <div className="admin-navbar-brand-text">
+            <span className="admin-navbar-brand-text">
               <strong>AAPI</strong>
-
-              <span>
+              <small>
                 الإدارة
-              </span>
-            </div>
+              </small>
+            </span>
           </button>
 
-          {/* Mobile close */}
           <button
             type="button"
             className="admin-navbar-mobile-close"
-            onClick={closeMobileMenu}
-            aria-label="إغلاق القائمة"
+            onClick={() =>
+              setMobileOpen(false)
+            }
+            aria-label="إغلاق"
           >
             ×
           </button>
         </div>
 
         {/* ====================================================
-            ADMIN PROFILE
+            ADMIN USER
            ==================================================== */}
 
         <div className="admin-navbar-user">
@@ -574,7 +596,7 @@ function AdminNavbar({
         </div>
 
         {/* ====================================================
-            NAVIGATION
+            MENU
            ==================================================== */}
 
         <nav className="admin-navbar-menu">
@@ -592,27 +614,29 @@ function AdminNavbar({
                   {section.items.map(
                     (item) => {
                       const active =
-                        isActive(
-                          item.id
+                        isItemActive(
+                          item
                         );
 
                       return (
                         <NavLink
                           key={item.id}
                           to={item.path}
-                          className={`admin-nav-link ${
+                          end={
+                            item.id ===
+                            "dashboard"
+                          }
+                          className={
                             active
-                              ? "active"
-                              : ""
-                          }`}
+                              ? "admin-nav-link active"
+                              : "admin-nav-link"
+                          }
                           onClick={() => {
                             setMobileOpen(
                               false
                             );
+
                             setProfileOpen(
-                              false
-                            );
-                            setMessagesOpen(
                               false
                             );
                           }}
@@ -625,14 +649,15 @@ function AdminNavbar({
                             {item.label}
                           </span>
 
-                          {item.badge !==
-                            undefined &&
-                            item.badge > 0 && (
+                          {item.id ===
+                            "messages" &&
+                            unreadCount >
+                              0 && (
                               <span className="admin-nav-badge">
-                                {item.badge >
+                                {unreadCount >
                                 99
                                   ? "99+"
-                                  : item.badge}
+                                  : unreadCount}
                               </span>
                             )}
                         </NavLink>
@@ -646,47 +671,20 @@ function AdminNavbar({
         </nav>
 
         {/* ====================================================
-            BOTTOM ACTIONS
+            BOTTOM
            ==================================================== */}
 
         <div className="admin-navbar-bottom">
-          {/* Messages */}
+          {/* PROFILE */}
+
           <button
             type="button"
             className="admin-navbar-bottom-button"
-            onClick={
-              handleMessagesClick
-            }
-          >
-            <span className="admin-nav-icon">
-              ✉
-            </span>
-
-            <span>
-              الرسائل
-            </span>
-
-            {unreadCount > 0 && (
-              <span className="admin-nav-badge">
-                {unreadCount > 99
-                  ? "99+"
-                  : unreadCount}
-              </span>
-            )}
-          </button>
-
-          {/* Profile */}
-          <button
-            type="button"
-            className="admin-navbar-bottom-button"
-            onClick={() => {
+            onClick={() =>
               setProfileOpen(
-                (previous) =>
-                  !previous
-              );
-
-              setMessagesOpen(false);
-            }}
+                (value) => !value
+              )
+            }
           >
             <span className="admin-nav-icon">
               ◉
@@ -697,7 +695,8 @@ function AdminNavbar({
             </span>
           </button>
 
-          {/* Logout */}
+          {/* LOGOUT */}
+
           <button
             type="button"
             className="admin-navbar-bottom-button admin-navbar-logout"
@@ -747,10 +746,8 @@ function AdminNavbar({
 
             <button
               type="button"
-              onClick={() =>
-                handleNavigation(
-                  "/admin/profile"
-                )
+              onClick={
+                openProfile
               }
             >
               الملف الشخصي
@@ -759,7 +756,7 @@ function AdminNavbar({
             <button
               type="button"
               onClick={() =>
-                handleNavigation(
+                navigateTo(
                   "/admin/settings"
                 )
               }
@@ -769,59 +766,6 @@ function AdminNavbar({
           </div>
         )}
       </aside>
-
-      {/* ========================================================
-          MOBILE HEADER
-         ======================================================== */}
-
-      <div
-        className="admin-mobile-header"
-        dir="rtl"
-      >
-        <button
-          type="button"
-          className="admin-mobile-menu-button"
-          onClick={() =>
-            setMobileOpen(true)
-          }
-          aria-label="فتح القائمة"
-        >
-          ☰
-        </button>
-
-        <div className="admin-mobile-brand">
-          <div className="admin-navbar-logo">
-            A
-          </div>
-
-          <div>
-            <strong>AAPI</strong>
-
-            <span>
-              الإدارة
-            </span>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className="admin-mobile-message-button"
-          onClick={
-            handleMessagesClick
-          }
-          aria-label="الرسائل"
-        >
-          ✉
-
-          {unreadCount > 0 && (
-            <span>
-              {unreadCount > 99
-                ? "99+"
-                : unreadCount}
-            </span>
-          )}
-        </button>
-      </div>
     </>
   );
 }
