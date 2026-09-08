@@ -1,0 +1,567 @@
+/* ============================================================
+   AAPI ADMIN — INVESTORS
+   ============================================================ */
+
+.admin-investors-page {
+  min-height: 100vh;
+  background:
+    linear-gradient(
+      180deg,
+      #f7faf8 0%,
+      #eef5f1 100%
+    );
+  color: #14221b;
+}
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+
+.admin-investors-content {
+  width: min(1500px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 42px 0 70px;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.admin-investors-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 28px;
+}
+
+.admin-section-kicker {
+  display: inline-flex;
+  margin-bottom: 8px;
+  color: #087443;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.admin-investors-header h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.15;
+  font-weight: 900;
+}
+
+.admin-investors-header p {
+  margin: 10px 0 0;
+  color: #66736d;
+  font-size: 15px;
+}
+
+/* ============================================================
+   REFRESH
+   ============================================================ */
+
+.admin-refresh-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid #d7e3dc;
+  border-radius: 12px;
+  background: #fff;
+  color: #087443;
+  cursor: pointer;
+  font-weight: 800;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-refresh-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(20, 34, 27, 0.08);
+}
+
+.admin-refresh-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* ============================================================
+   STATS
+   ============================================================ */
+
+.admin-investors-stats {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.investor-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 120px;
+  padding: 20px;
+  border: 1px solid #e0e9e4;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow:
+    0 8px 28px rgba(20, 34, 27, 0.045);
+}
+
+.investor-stat-card .stat-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  place-items: center;
+  border-radius: 14px;
+  background: #eaf6f0;
+  color: #087443;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.investor-stat-card.success .stat-icon {
+  background: #eaf6f0;
+  color: #087443;
+}
+
+.investor-stat-card.warning .stat-icon {
+  background: #fff7df;
+  color: #a27a08;
+}
+
+.investor-stat-card.gold .stat-icon {
+  background: #f9f4df;
+  color: #9c7911;
+}
+
+.investor-stat-card small {
+  display: block;
+  margin-bottom: 5px;
+  color: #66736d;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.investor-stat-card strong {
+  display: inline-block;
+  color: #14221b;
+  font-size: 27px;
+  font-weight: 900;
+}
+
+.investor-stat-card em {
+  display: inline-block;
+  margin-right: 7px;
+  color: #087443;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+
+.admin-investors-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 22px;
+  border: 1px solid #e0e9e4;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.investor-search {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 260px;
+  height: 46px;
+  padding: 0 13px;
+  border: 1px solid #dce6e1;
+  border-radius: 11px;
+  background: #fafcfb;
+}
+
+.investor-search span {
+  margin-left: 8px;
+  color: #087443;
+  font-size: 21px;
+}
+
+.investor-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #14221b;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.admin-investors-filters select,
+.status-select {
+  height: 46px;
+  padding: 0 13px;
+  border: 1px solid #dce6e1;
+  border-radius: 11px;
+  outline: 0;
+  background: #fafcfb;
+  color: #26362e;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.clear-filters {
+  height: 46px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 11px;
+  background: #f3f6f4;
+  color: #087443;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 800;
+}
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+
+.admin-page-error {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  border: 1px solid #efd6d6;
+  border-radius: 14px;
+  background: #fff7f7;
+  color: #8b3030;
+}
+
+.admin-page-error strong {
+  font-weight: 900;
+}
+
+.admin-page-error span {
+  flex: 1;
+}
+
+.admin-page-error button {
+  padding: 8px 13px;
+  border: 0;
+  border-radius: 8px;
+  background: #8b3030;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+}
+
+/* ============================================================
+   TABLE CARD
+   ============================================================ */
+
+.admin-investors-table-card {
+  overflow: hidden;
+  border: 1px solid #e0e9e4;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow:
+    0 10px 35px rgba(20, 34, 27, 0.05);
+}
+
+.table-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 76px;
+  padding: 0 22px;
+  border-bottom: 1px solid #edf1ef;
+}
+
+.table-card-header h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.table-card-header span {
+  color: #7a8580;
+  font-size: 12px;
+}
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.admin-table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-table-wrapper table {
+  width: 100%;
+  min-width: 1100px;
+  border-collapse: collapse;
+}
+
+.admin-table-wrapper th {
+  padding: 15px 16px;
+  background: #f8faf9;
+  color: #68746e;
+  font-size: 12px;
+  font-weight: 900;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.admin-table-wrapper td {
+  padding: 16px;
+  border-top: 1px solid #edf1ef;
+  color: #33423b;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.admin-table-wrapper tbody tr {
+  transition: background 0.15s ease;
+}
+
+.admin-table-wrapper tbody tr:hover {
+  background: #fbfdfc;
+}
+
+/* ============================================================
+   INVESTOR PERSON
+   ============================================================ */
+
+.investor-person {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 220px;
+}
+
+.investor-avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #eaf6f0;
+  color: #087443;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.investor-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.investor-person strong {
+  display: block;
+  color: #14221b;
+  font-size: 13px;
+}
+
+.investor-person span {
+  display: block;
+  margin-top: 3px;
+  color: #78837e;
+  font-size: 11px;
+}
+
+.company-name {
+  color: #087443;
+  font-weight: 800;
+}
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.status-badge i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status-actif {
+  background: #eaf6f0;
+  color: #087443;
+}
+
+.status-inactif {
+  background: #f1f3f2;
+  color: #68746e;
+}
+
+.status-suspendu {
+  background: #fff4dc;
+  color: #9a7109;
+}
+
+.status-select {
+  height: 36px;
+  min-width: 105px;
+  padding: 0 9px;
+  font-size: 11px;
+}
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+.admin-table-loading {
+  display: flex;
+  min-height: 300px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: #68746e;
+}
+
+.loading-spinner {
+  width: 35px;
+  height: 35px;
+  border: 3px solid #dce9e2;
+  border-top-color: #087443;
+  border-radius: 50%;
+  animation: admin-spin 0.8s linear infinite;
+}
+
+@keyframes admin-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   EMPTY
+   ============================================================ */
+
+.admin-empty-state {
+  display: flex;
+  min-height: 300px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 35px;
+  text-align: center;
+}
+
+.admin-empty-state > div {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 13px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eaf6f0;
+  color: #087443;
+  font-size: 25px;
+}
+
+.admin-empty-state h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.admin-empty-state p {
+  margin: 8px 0 0;
+  color: #78837e;
+  font-size: 13px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .admin-investors-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-investors-filters {
+    flex-wrap: wrap;
+  }
+
+  .investor-search {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-investors-content {
+    width: min(
+      100% - 24px,
+      1500px
+    );
+    padding-top: 25px;
+  }
+
+  .admin-investors-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-investors-header h1 {
+    font-size: 30px;
+  }
+
+  .admin-investors-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-investors-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .investor-search {
+    min-width: 0;
+  }
+
+  .admin-investors-filters select,
+  .clear-filters {
+    width: 100%;
+  }
+
+  .admin-page-error {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-page-error button {
+    width: 100%;
+  }
+}
