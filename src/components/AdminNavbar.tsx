@@ -16,8 +16,10 @@ interface AdminUser {
   nom?: string;
   prenom?: string;
   email?: string;
-  photo?: string | null;
+  telephone?: string | null;
   role?: string;
+  statut?: string;
+  photo?: string | null;
 }
 
 interface MenuItem {
@@ -33,8 +35,11 @@ interface MenuSection {
   items: MenuItem[];
 }
 
-const API_URL =
-  "http://localhost/aapi-api/auth/admin/dashboard.php";
+/* ============================================================
+   ADMIN NAVBAR
+   لا يستدعي dashboard.php
+   البيانات الأساسية تأتي من localStorage
+   ============================================================ */
 
 function AdminNavbar({
   currentPage = "لوحة التحكم",
@@ -50,18 +55,73 @@ function AdminNavbar({
     nom: "المدير",
     prenom: "",
     email: "",
-    photo: null,
+    telephone: null,
     role: "admin",
+    statut: "actif",
+    photo: null,
   });
 
   /* ============================================================
-     تحميل بيانات المدير
+     تحميل بيانات المدير من localStorage فقط
      ============================================================ */
 
   useEffect(() => {
     let cancelled = false;
 
-    const loadAdminData = async () => {
+    const loadAdminFromStorage = () => {
+      try {
+        const storedUser = localStorage.getItem("aapi_user");
+
+        if (!storedUser) {
+          return;
+        }
+
+        const user = JSON.parse(storedUser) as AdminUser;
+
+        if (!user || !user.id) {
+          console.warn(
+            "AdminNavbar: بيانات المستخدم غير صالحة."
+          );
+          return;
+        }
+
+        if (
+          String(user.role || "").toLowerCase() !==
+          "admin"
+        ) {
+          console.warn(
+            "AdminNavbar: المستخدم الحالي ليس Admin."
+          );
+          return;
+        }
+
+        if (!cancelled) {
+          setAdmin({
+            ...user,
+            role: "admin",
+          });
+        }
+      } catch (error) {
+        console.error(
+          "AdminNavbar: خطأ في قراءة aapi_user:",
+          error
+        );
+      }
+    };
+
+    loadAdminFromStorage();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  /* ============================================================
+     تحديث بيانات المدير إذا تغير localStorage
+     ============================================================ */
+
+  useEffect(() => {
+    const handleStorageChange = () => {
       try {
         const storedUser =
           localStorage.getItem("aapi_user");
@@ -70,96 +130,42 @@ function AdminNavbar({
           return;
         }
 
-        let user: AdminUser;
+        const user =
+          JSON.parse(storedUser) as AdminUser;
 
-        try {
-          user = JSON.parse(storedUser);
-        } catch {
-          return;
-        }
-
-        if (!user?.id) {
-          return;
-        }
-
-        const response = await fetch(
-          `${API_URL}?user_id=${encodeURIComponent(
-            String(user.id)
-          )}`,
-          {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              Accept: "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          return;
-        }
-
-        const data = await response.json();
-
-        if (cancelled) {
-          return;
-        }
-
-        /* --------------------------------------------------------
-           بيانات المدير
-           -------------------------------------------------------- */
-
-        if (data?.admin) {
+        if (
+          user?.id &&
+          String(user.role || "").toLowerCase() ===
+            "admin"
+        ) {
           setAdmin({
             ...user,
-            ...data.admin,
+            role: "admin",
           });
-        } else if (data?.user) {
-          setAdmin({
-            ...user,
-            ...data.user,
-          });
-        } else {
-          setAdmin(user);
-        }
-
-        /* --------------------------------------------------------
-           الرسائل غير المقروءة
-           -------------------------------------------------------- */
-
-        if (data?.stats) {
-          const count =
-            data.stats.messages_unread ??
-            data.stats.messages_non_lus ??
-            data.stats.unread_messages ??
-            0;
-
-          setUnreadCount(
-            Number(count) || 0
-          );
         }
       } catch (error) {
         console.error(
-          "خطأ أثناء تحميل بيانات المدير:",
+          "AdminNavbar: خطأ أثناء تحديث المستخدم:",
           error
         );
-
-        /*
-         * في حالة عدم الاتصال بالخادم:
-         * نستعمل البيانات الموجودة في localStorage
-         */
       }
     };
 
-    void loadAdminData();
+    window.addEventListener(
+      "storage",
+      handleStorageChange
+    );
 
     return () => {
-      cancelled = true;
+      window.removeEventListener(
+        "storage",
+        handleStorageChange
+      );
     };
   }, []);
 
   /* ============================================================
-     إغلاق القائمة بعد الانتقال إلى صفحة أخرى
+     إغلاق القائمة بعد تغيير الصفحة
      ============================================================ */
 
   useEffect(() => {
@@ -167,7 +173,7 @@ function AdminNavbar({
   }, [location.pathname]);
 
   /* ============================================================
-     منع Scroll الصفحة عند فتح القائمة على الهاتف
+     منع Scroll عند فتح القائمة في الهاتف
      ============================================================ */
 
   useEffect(() => {
@@ -214,9 +220,7 @@ function AdminNavbar({
   const isActive = (page: string) => {
     const pathname = location.pathname;
 
-    /*
-     * لوحة التحكم
-     */
+    /* لوحة التحكم */
     if (page === "dashboard") {
       return (
         pathname === "/admin" ||
@@ -224,9 +228,7 @@ function AdminNavbar({
       );
     }
 
-    /*
-     * التحقق من URL
-     */
+    /* الصفحة الحالية حسب URL */
     if (
       pathname === `/admin/${page}` ||
       pathname.startsWith(`/admin/${page}/`)
@@ -234,16 +236,16 @@ function AdminNavbar({
       return true;
     }
 
-    /*
-     * الصفحة الحالية
-     */
+    /* الصفحة الحالية حسب currentPage */
     const normalizedCurrentPage =
       currentPage
         .toLowerCase()
         .trim();
 
     const normalizedPage =
-      page.toLowerCase().trim();
+      page
+        .toLowerCase()
+        .trim();
 
     return (
       normalizedCurrentPage ===
@@ -349,10 +351,14 @@ function AdminNavbar({
      ============================================================ */
 
   const firstInitial =
-    admin.prenom?.trim()?.[0] || "";
+    admin.prenom
+      ?.trim()
+      ?.charAt(0) || "";
 
   const lastInitial =
-    admin.nom?.trim()?.[0] || "م";
+    admin.nom
+      ?.trim()
+      ?.charAt(0) || "م";
 
   const initials =
     `${firstInitial}${lastInitial}`
@@ -398,11 +404,15 @@ function AdminNavbar({
             </button>
 
             <div className="admin-brand-text">
-              <strong>AAPI</strong>
+
+              <strong>
+                AAPI
+              </strong>
 
               <span>
                 الإدارة
               </span>
+
             </div>
 
           </div>
@@ -593,9 +603,7 @@ function AdminNavbar({
                   <img
                     src={admin.photo}
                     alt={displayName}
-                    onError={(
-                      event
-                    ) => {
+                    onError={(event) => {
                       event.currentTarget.style.display =
                         "none";
                     }}
