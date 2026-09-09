@@ -1,7 +1,15 @@
 /* ============================================================
    AAPI — ADMIN NAVBAR
    AdminNavbar.css
-   RTL / Responsive / Buttons Fixed
+
+   RTL / Responsive / No Button Conflicts
+   Compatible with AdminDashboard.css
+   Compatible with AdminInvestors.css
+   ============================================================ */
+
+
+/* ============================================================
+   GLOBAL VARIABLES
    ============================================================ */
 
 :root {
@@ -20,8 +28,13 @@
   --aapi-gray-500: #718078;
   --aapi-gray-600: #56635c;
 
+  /*
+   * IMPORTANT:
+   * This is the shared width used by all Admin pages.
+   */
   --admin-navbar-width: clamp(220px, 22vw, 285px);
 }
+
 
 /* ============================================================
    RESET
@@ -34,73 +47,6 @@
   box-sizing: border-box;
 }
 
-.admin-navbar button { appearance: none;
-  -webkit-appearance: none;
-
-  width: 100%;
-  min-height: 44px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin: 0;
-  padding: 10px 14px;
-
-  border: 1px solid transparent;
-  border-radius: 10px;
-
-  background: transparent;
-  color: var(--aapi-gray-600);
-
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.4;
-
-  text-decoration: none;
-  cursor: pointer;
-
-  direction: rtl;
-  text-align: right;
-
-  box-sizing: border-box;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.admin-navbar-button:hover {
-  background: var(--aapi-light-green);
-  color: var(--aapi-green);
-  border-color: rgba(8, 116, 67, 0.12);
-}
-
-.admin-navbar-button:active {
-  transform: scale(0.98);
-}
-
-.admin-navbar-button:focus {
-  outline: none;
-}
-
-.admin-navbar-button:focus-visible {
-  outline: 3px solid rgba(201, 162, 39, 0.3);
-  outline-offset: 2px;
-}
-
-.admin-navbar-button.active {
-  background: var(--aapi-light-green);
-  color: var(--aapi-green);
-  border-color: rgba(8, 116, 67, 0.15);
-  font-weight: 800;
-}
-.admin-navbar a {
-  font-family: inherit;
-}
 
 /* ============================================================
    MAIN NAVBAR
@@ -120,19 +66,20 @@
   margin: 0;
   padding: 0;
 
-  background: var(--aapi-white);
-
-  border-left: 1px solid var(--aapi-gray-200);
-  border-right: 0;
-
-  box-shadow: -8px 0 30px rgba(20, 34, 27, 0.08);
-
   z-index: 1000;
 
   display: flex;
   flex-direction: column;
 
   overflow: hidden;
+
+  background: var(--aapi-white);
+
+  border-left: 1px solid var(--aapi-gray-200);
+  border-right: 0;
+
+  box-shadow:
+    -8px 0 30px rgba(20, 34, 27, 0.08);
 
   direction: rtl;
 
@@ -144,6 +91,7 @@
     "Arial",
     sans-serif;
 }
+
 
 /* ============================================================
    INNER
@@ -163,21 +111,22 @@
   overflow: hidden;
 }
 
+
 /* ============================================================
-   BRAND
+   BRAND CONTAINER
    ============================================================ */
 
 .admin-navbar-brand {
   width: 100%;
   min-width: 0;
 
-  margin: 0;
-  padding: 2px 2px 16px;
-
   display: flex;
   align-items: center;
 
   gap: 8px;
+
+  margin: 0;
+  padding: 2px 2px 16px;
 
   border-bottom: 1px solid var(--aapi-gray-200);
 
@@ -188,6 +137,13 @@
   overflow: hidden;
 }
 
+
+/* ============================================================
+   BRAND BUTTON
+   IMPORTANT:
+   Do NOT use .admin-navbar button here.
+   ============================================================ */
+
 .admin-navbar-brand-button {
   appearance: none;
   -webkit-appearance: none;
@@ -196,8 +152,7 @@
   min-width: 0;
   height: auto;
 
-  margin: 0;
-  padding: 0;
+  flex: 1 1 auto;
 
   display: flex;
   align-items: center;
@@ -205,25 +160,35 @@
 
   gap: 10px;
 
+  margin: 0;
+  padding: 0;
+
   border: 0;
+  border-radius: 0;
+
   outline: none;
   box-shadow: none;
 
   background: transparent;
   color: inherit;
 
+  font-family: inherit;
+
   cursor: pointer;
 
   direction: rtl;
+
   text-align: right;
 
   overflow: hidden;
 }
 
+
 .admin-navbar-brand-button:hover {
   background: transparent;
   color: inherit;
 }
+
 
 .admin-navbar-brand-button:focus,
 .admin-navbar-brand-button:active {
@@ -233,6 +198,14 @@
   background: transparent;
 }
 
+
+.admin-navbar-brand-button:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.30);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+
 /* ============================================================
    LOGO
    ============================================================ */
@@ -240,6 +213,7 @@
 .admin-navbar-logo {
   width: 43px;
   height: 43px;
+
   min-width: 43px;
 
   flex: 0 0 43px;
@@ -272,6 +246,7 @@
     box-shadow 0.2s ease;
 }
 
+
 .admin-navbar-brand-button:hover .admin-navbar-logo {
   transform: translateY(-1px);
 
@@ -279,16 +254,16 @@
     0 7px 18px rgba(8, 116, 67, 0.25);
 }
 
+
 /* ============================================================
    BRAND TEXT
    ============================================================ */
 
 .admin-navbar-brand-text {
+  width: auto;
   min-width: 0;
 
   flex: 1 1 auto;
-
-  width: auto;
 
   display: flex;
   flex-direction: column;
@@ -307,6 +282,7 @@
 
   text-align: right;
 }
+
 
 .admin-navbar-brand-text strong {
   display: block;
@@ -333,6 +309,7 @@
   text-align: right;
 }
 
+
 .admin-navbar-brand-text small {
   display: block;
 
@@ -358,8 +335,9 @@
   text-align: right;
 }
 
+
 /* ============================================================
-   MOBILE CLOSE
+   MOBILE CLOSE BUTTON
    ============================================================ */
 
 .admin-navbar-mobile-close {
@@ -368,6 +346,7 @@
 
   width: 32px;
   height: 32px;
+
   min-width: 32px;
 
   flex: 0 0 32px;
@@ -381,9 +360,9 @@
   padding: 0;
 
   border: 0;
-  outline: none;
-
   border-radius: 8px;
+
+  outline: none;
 
   background: var(--aapi-gray-100);
   color: var(--aapi-gray-600);
@@ -396,17 +375,24 @@
   line-height: 1;
 
   cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
+
 
 .admin-navbar-mobile-close:hover {
   background: #fff0ee;
   color: #c0392b;
 }
 
+
 .admin-navbar-mobile-close:focus-visible {
   outline: 3px solid rgba(201, 162, 39, 0.30);
   outline-offset: 2px;
 }
+
 
 /* ============================================================
    ADMIN USER
@@ -416,16 +402,15 @@
   width: 100%;
   min-width: 0;
 
-  margin: 14px 0 8px;
-  padding: 10px;
-
   display: flex;
   align-items: center;
 
   gap: 10px;
 
-  border: 1px solid var(--aapi-gray-200);
+  margin: 14px 0 8px;
+  padding: 10px;
 
+  border: 1px solid var(--aapi-gray-200);
   border-radius: 13px;
 
   background: var(--aapi-gray-50);
@@ -437,6 +422,7 @@
   flex-shrink: 0;
 }
 
+
 /* ============================================================
    USER AVATAR
    ============================================================ */
@@ -444,6 +430,7 @@
 .admin-navbar-user-avatar {
   width: 40px;
   height: 40px;
+
   min-width: 40px;
 
   flex: 0 0 40px;
@@ -471,6 +458,7 @@
   line-height: 1;
 }
 
+
 .admin-navbar-user-avatar img {
   width: 100%;
   height: 100%;
@@ -480,11 +468,13 @@
   object-fit: cover;
 }
 
+
 /* ============================================================
    USER INFO
    ============================================================ */
 
 .admin-navbar-user-info {
+  width: auto;
   min-width: 0;
 
   flex: 1 1 auto;
@@ -500,6 +490,7 @@
 
   text-align: right;
 }
+
 
 .admin-navbar-user-info strong {
   display: block;
@@ -526,6 +517,7 @@
   text-align: right;
 }
 
+
 .admin-navbar-user-info span {
   display: block;
 
@@ -550,6 +542,7 @@
 
   text-align: right;
 }
+
 
 /* ============================================================
    MENU
@@ -579,21 +572,26 @@
     transparent;
 }
 
+
 .admin-navbar-menu::-webkit-scrollbar {
   width: 5px;
 }
+
 
 .admin-navbar-menu::-webkit-scrollbar-track {
   background: transparent;
 }
 
+
 .admin-navbar-menu::-webkit-scrollbar-thumb {
   background: var(--aapi-gray-300);
+
   border-radius: 10px;
 }
 
+
 /* ============================================================
-   NAV LINKS
+   NAVIGATION LINK
    ============================================================ */
 
 .admin-nav-link {
@@ -604,13 +602,13 @@
   min-width: 0;
   min-height: 46px;
 
-  margin: 0;
-  padding: 10px 12px;
-
   display: flex;
   align-items: center;
 
   gap: 10px;
+
+  margin: 0;
+  padding: 10px 12px;
 
   border: 1px solid transparent;
   border-radius: 10px;
@@ -626,9 +624,9 @@
 
   line-height: 1.4;
 
-  cursor: pointer;
-
   text-decoration: none;
+
+  cursor: pointer;
 
   direction: rtl;
 
@@ -641,6 +639,7 @@
     transform 0.2s ease;
 }
 
+
 .admin-nav-link:hover {
   background: var(--aapi-light-green);
 
@@ -651,6 +650,7 @@
 
   text-decoration: none;
 }
+
 
 .admin-nav-link.active {
   background: var(--aapi-light-green);
@@ -663,12 +663,19 @@
   font-weight: 800;
 }
 
+
+.admin-nav-link:focus {
+  outline: none;
+}
+
+
 .admin-nav-link:focus-visible {
   outline: 3px solid
     rgba(201, 162, 39, 0.30);
 
   outline-offset: 2px;
 }
+
 
 /* ============================================================
    ICON WRAPPER
@@ -677,6 +684,7 @@
 .admin-nav-icon-wrapper {
   width: 34px;
   height: 34px;
+
   min-width: 34px;
 
   flex: 0 0 34px;
@@ -696,12 +704,14 @@
     color 0.2s ease;
 }
 
+
 .admin-nav-link:hover .admin-nav-icon-wrapper,
 .admin-nav-link.active .admin-nav-icon-wrapper {
   background: rgba(8, 116, 67, 0.10);
 
   color: var(--aapi-green);
 }
+
 
 /* ============================================================
    ICON
@@ -710,6 +720,8 @@
 .admin-nav-icon {
   width: 18px;
   height: 18px;
+
+  min-width: 18px;
 
   flex: 0 0 18px;
 
@@ -720,28 +732,31 @@
   stroke-width: 2;
 }
 
+
 /* ============================================================
    LABEL
    ============================================================ */
 
 .admin-nav-label {
+  width: auto;
   min-width: 0;
 
   flex: 1 1 auto;
 
   overflow: hidden;
 
+  color: inherit;
+
   white-space: nowrap;
 
   text-overflow: ellipsis;
 
-  color: inherit;
-
   text-align: right;
 }
 
+
 /* ============================================================
-   NOTIFICATION BADGE
+   NOTIFICATION
    ============================================================ */
 
 .admin-notification-badge {
@@ -768,8 +783,9 @@
   line-height: 1;
 }
 
+
 /* ============================================================
-   BOTTOM AREA
+   BOTTOM
    ============================================================ */
 
 .admin-menu-bottom {
@@ -784,18 +800,21 @@
   flex-shrink: 0;
 }
 
+
 /* ============================================================
-   NAVBAR ACTIONS
+   ACTIONS
    ============================================================ */
 
 .admin-navbar-actions {
   width: 100%;
+  min-width: 0;
 
   display: flex;
   align-items: center;
 
   gap: 8px;
 }
+
 
 /* ============================================================
    ICON BUTTON
@@ -807,26 +826,28 @@
 
   width: 38px;
   height: 38px;
+
   min-width: 38px;
 
-  margin: 0;
-  padding: 0;
+  flex: 0 0 38px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  border: 1px solid var(--aapi-gray-200);
+  margin: 0;
+  padding: 0;
 
+  border: 1px solid var(--aapi-gray-200);
   border-radius: 9px;
 
   background: var(--aapi-white);
 
   color: var(--aapi-gray-600);
 
-  cursor: pointer;
-
   font-family: inherit;
+
+  cursor: pointer;
 
   line-height: 1;
 
@@ -836,6 +857,7 @@
     border-color 0.2s ease,
     transform 0.2s ease;
 }
+
 
 .admin-navbar-icon-button:hover {
   background: var(--aapi-light-green);
@@ -848,12 +870,19 @@
   transform: translateY(-1px);
 }
 
+
+.admin-navbar-icon-button:focus {
+  outline: none;
+}
+
+
 .admin-navbar-icon-button:focus-visible {
   outline: 3px solid
     rgba(201, 162, 39, 0.30);
 
   outline-offset: 2px;
 }
+
 
 /* ============================================================
    LOGOUT
@@ -864,10 +893,8 @@
   -webkit-appearance: none;
 
   width: 100%;
+  min-width: 0;
   min-height: 42px;
-
-  margin: 0;
-  padding: 9px 12px;
 
   display: flex;
   align-items: center;
@@ -875,8 +902,10 @@
 
   gap: 8px;
 
-  border: 1px solid #f0d7d3;
+  margin: 0;
+  padding: 9px 12px;
 
+  border: 1px solid #f0d7d3;
   border-radius: 10px;
 
   background: #fff8f7;
@@ -899,6 +928,7 @@
     transform 0.2s ease;
 }
 
+
 .admin-desktop-logout:hover {
   background: #fff0ee;
 
@@ -909,12 +939,19 @@
   transform: translateY(-1px);
 }
 
+
+.admin-desktop-logout:focus {
+  outline: none;
+}
+
+
 .admin-desktop-logout:focus-visible {
   outline: 3px solid
     rgba(201, 162, 39, 0.30);
 
   outline-offset: 2px;
 }
+
 
 /* ============================================================
    PROFILE
@@ -924,13 +961,13 @@
   width: 100%;
   min-width: 0;
 
-  margin: 8px 0 0;
-  padding: 10px;
-
   display: flex;
   align-items: center;
 
   gap: 9px;
+
+  margin: 8px 0 0;
+  padding: 10px;
 
   border-radius: 10px;
 
@@ -939,16 +976,20 @@
   overflow: hidden;
 }
 
+
 .admin-profile-avatar {
   width: 34px;
   height: 34px;
+
   min-width: 34px;
 
-  border-radius: 50%;
+  flex: 0 0 34px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 50%;
 
   background:
     linear-gradient(
@@ -963,9 +1004,12 @@
   font-weight: 800;
 }
 
+
 .admin-profile-info {
+  width: auto;
   min-width: 0;
-  flex: 1;
+
+  flex: 1 1 auto;
 
   display: flex;
   flex-direction: column;
@@ -976,6 +1020,7 @@
 
   text-align: right;
 }
+
 
 .admin-profile-info strong,
 .admin-profile-info span {
@@ -990,6 +1035,7 @@
   text-overflow: ellipsis;
 }
 
+
 .admin-profile-info strong {
   color: var(--aapi-dark);
 
@@ -997,11 +1043,13 @@
   font-weight: 800;
 }
 
+
 .admin-profile-info span {
   color: var(--aapi-gray-500);
 
   font-size: 9px;
 }
+
 
 /* ============================================================
    PAGE INDICATOR
@@ -1009,6 +1057,7 @@
 
 .admin-navbar-page-indicator {
   width: 100%;
+  min-width: 0;
 
   margin: 7px 0 0;
   padding: 5px 8px;
@@ -1027,6 +1076,7 @@
   text-overflow: ellipsis;
 }
 
+
 /* ============================================================
    MOBILE OVERLAY
    ============================================================ */
@@ -1036,13 +1086,28 @@
 
   inset: 0;
 
-  background:
-    rgba(20, 34, 27, 0.45);
-
   z-index: 999;
 
   display: none;
+
+  background:
+    rgba(20, 34, 27, 0.45);
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.25s ease;
 }
+
+
+.admin-sidebar-overlay.active {
+  opacity: 1;
+
+  pointer-events: auto;
+}
+
 
 /* ============================================================
    MOBILE HEADER
@@ -1051,6 +1116,7 @@
 .admin-mobile-header {
   display: none;
 }
+
 
 /* ============================================================
    MOBILE TOGGLE
@@ -1062,10 +1128,10 @@
 
   width: 42px;
   height: 42px;
+
   min-width: 42px;
 
-  margin: 0;
-  padding: 8px;
+  flex: 0 0 42px;
 
   display: none;
 
@@ -1075,14 +1141,30 @@
 
   gap: 5px;
 
-  border: 1px solid var(--aapi-gray-200);
+  margin: 0;
+  padding: 8px;
 
+  border: 1px solid var(--aapi-gray-200);
   border-radius: 9px;
 
   background: var(--aapi-white);
 
   cursor: pointer;
 }
+
+
+.admin-mobile-toggle:focus {
+  outline: none;
+}
+
+
+.admin-mobile-toggle:focus-visible {
+  outline: 3px solid
+    rgba(201, 162, 39, 0.30);
+
+  outline-offset: 2px;
+}
+
 
 .admin-mobile-toggle span {
   width: 20px;
@@ -1099,31 +1181,42 @@
     opacity 0.2s ease;
 }
 
+
 .admin-mobile-toggle.active span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+  transform:
+    translateY(7px)
+    rotate(45deg);
 }
+
 
 .admin-mobile-toggle.active span:nth-child(2) {
   opacity: 0;
 }
 
+
 .admin-mobile-toggle.active span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+  transform:
+    translateY(-7px)
+    rotate(-45deg);
 }
+
 
 /* ============================================================
    TABLET
    ============================================================ */
 
 @media (max-width: 1000px) {
+
   :root {
     --admin-navbar-width: 240px;
   }
+
 
   .admin-navbar-inner {
     padding-left: 10px;
     padding-right: 10px;
   }
+
 
   .admin-nav-link {
     min-height: 44px;
@@ -1133,47 +1226,56 @@
     font-size: 12px;
   }
 
+
   .admin-nav-icon-wrapper {
     width: 32px;
     height: 32px;
+
     min-width: 32px;
+
+    flex-basis: 32px;
   }
 }
+
 
 /* ============================================================
    MOBILE
    ============================================================ */
 
 @media (max-width: 800px) {
+
   .admin-navbar {
-    width: 285px;
+    width: min(285px, 86vw);
     max-width: 86vw;
 
     transform: translateX(110%);
 
     transition:
       transform 0.25s ease;
-
-    box-shadow:
-      -12px 0 35px rgba(20, 34, 27, 0.16);
   }
+
 
   .admin-navbar.mobile-open {
     transform: translateX(0);
   }
 
+
   .admin-navbar-mobile-close {
     display: flex;
   }
 
+
   .admin-navbar-brand-button {
     width: auto;
+
     flex: 1 1 auto;
   }
+
 
   .admin-navbar-user {
     margin-top: 12px;
   }
+
 
   .admin-mobile-header {
     position: fixed;
@@ -1199,80 +1301,91 @@
     direction: rtl;
   }
 
+
   .admin-mobile-toggle {
     display: flex;
   }
 
+
   .admin-sidebar-overlay {
     display: block;
-
-    opacity: 0;
-    pointer-events: none;
-
-    transition:
-      opacity 0.25s ease;
-  }
-
-  .admin-sidebar-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
   }
 }
+
 
 /* ============================================================
    SMALL MOBILE
    ============================================================ */
 
 @media (max-width: 480px) {
+
   .admin-navbar {
     width: 275px;
     max-width: 88vw;
   }
 
+
   .admin-navbar-inner {
-    padding: 13px 11px 9px;
+    padding:
+      13px
+      11px
+      9px;
   }
+
 
   .admin-navbar-logo {
     width: 40px;
     height: 40px;
+
     min-width: 40px;
+
     flex-basis: 40px;
   }
+
 
   .admin-navbar-brand-text strong {
     font-size: 17px;
   }
 
+
   .admin-navbar-brand-text small {
     font-size: 9px;
   }
+
 
   .admin-navbar-user {
     padding: 9px;
   }
 
+
   .admin-navbar-user-avatar {
     width: 37px;
     height: 37px;
+
     min-width: 37px;
+
     flex-basis: 37px;
   }
+
 
   .admin-nav-link {
     min-height: 43px;
 
-    padding: 8px 9px;
+    padding:
+      8px
+      9px;
 
     font-size: 11px;
   }
 }
+
 
 /* ============================================================
    REDUCED MOTION
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
+
   .admin-navbar,
   .admin-navbar *,
   .admin-navbar *::before,
