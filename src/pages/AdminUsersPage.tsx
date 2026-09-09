@@ -6,7 +6,7 @@ import {
 } from "react";
 
 import AdminNavbar from "../components/AdminNavbar";
-import "../styles/AdminUsersPage.css";
+import "../styles/main.css";
 
 interface AdminUser {
   id: number;

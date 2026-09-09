@@ -5,7 +5,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import "../styles/AdminNavbar.css";
+import "../styles/main.css";
 /* ============================================================
    TYPES
    ============================================================ */

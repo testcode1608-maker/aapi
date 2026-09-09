@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import AdminNavbar from "../components/AdminNavbar";
-import "../styles/AdminRequestsPage.css";
+import "../styles/main.css";
 
 const API_URL =
   "http://localhost/aapi-api/auth/admin/requests.php";

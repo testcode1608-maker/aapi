@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 import AdminNavbar from "../components/AdminNavbar";
-import "../styles/AdminDashboard.css";
+import "../styles/main.css";
 
 /* ============================================================
    TYPES
