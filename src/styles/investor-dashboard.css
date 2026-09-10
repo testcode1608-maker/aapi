@@ -1,0 +1,255 @@
+/* ==========================================================
+   AAPI — Investor Dashboard
+   Scoped, maintainable visual layer. AAPI palette only.
+   ========================================================== */
+
+.investor-dashboard-page {
+  --id-green: #087443;
+  --id-dark-green: #055c35;
+  --id-light-green: #eaf6f0;
+  --id-gold: #c9a227;
+  --id-dark: #14221b;
+  --id-gray: #66736d;
+  --id-light: #f5f7f6;
+  --id-white: #ffffff;
+  --id-border: #dfe8e3;
+  --id-shadow: 0 12px 35px rgba(20, 34, 27, .08);
+  --id-radius: 18px;
+  min-height: 100vh;
+  background: var(--id-light);
+  color: var(--id-dark);
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  direction: rtl;
+}
+
+.investor-dashboard-page *,
+.investor-dashboard-page *::before,
+.investor-dashboard-page *::after { box-sizing: border-box; }
+
+.investor-dashboard-topbar {
+  height: 76px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 28px;
+  background: var(--id-white);
+  border-bottom: 1px solid var(--id-border);
+  box-shadow: 0 4px 18px rgba(20,34,27,.04);
+}
+
+.investor-dashboard-brand,
+.investor-dashboard-topbar-actions,
+.investor-dashboard-user,
+.investor-dashboard-sidebar-header { display: flex; align-items: center; }
+
+.investor-dashboard-brand { gap: 12px; }
+.investor-dashboard-brand-mark {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: grid; place-items: center;
+  background: var(--id-green); color: var(--id-white);
+  font-size: 20px;
+  box-shadow: 0 7px 18px rgba(8,116,67,.2);
+}
+.investor-dashboard-brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+.investor-dashboard-brand-text strong { color: var(--id-dark-green); font-size: 17px; }
+.investor-dashboard-brand-text span { color: var(--id-gray); font-size: 12px; margin-top: 3px; }
+
+.investor-dashboard-topbar-actions { gap: 18px; }
+.investor-dashboard-notification {
+  position: relative; width: 42px; height: 42px; border-radius: 12px;
+  display: grid; place-items: center; color: var(--id-dark-green);
+  background: var(--id-light-green); text-decoration: none;
+  transition: .18s ease;
+}
+.investor-dashboard-notification:hover { transform: translateY(-1px); background: #dff1e8; }
+.investor-dashboard-notification-badge,
+.investor-dashboard-nav-badge {
+  min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--id-gold); color: var(--id-white); font-size: 11px; font-weight: 700;
+}
+.investor-dashboard-notification-badge { position: absolute; top: -5px; left: -5px; border: 2px solid var(--id-white); }
+
+.investor-dashboard-user { gap: 10px; }
+.investor-dashboard-user-avatar,
+.investor-dashboard-sidebar-avatar {
+  overflow: hidden; flex: 0 0 auto; display: grid; place-items: center;
+  background: var(--id-green); color: var(--id-white); font-weight: 700;
+}
+.investor-dashboard-user-avatar { width: 42px; height: 42px; border-radius: 50%; }
+.investor-dashboard-user-avatar img,
+.investor-dashboard-sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.investor-dashboard-user-info { display: flex; flex-direction: column; min-width: 0; }
+.investor-dashboard-user-info strong { font-size: 13px; color: var(--id-dark); }
+.investor-dashboard-user-info span { font-size: 11px; color: var(--id-gray); margin-top: 3px; direction: ltr; text-align: right; }
+
+.investor-dashboard-layout { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: calc(100vh - 76px); }
+.investor-dashboard-sidebar {
+  position: sticky; top: 76px; height: calc(100vh - 76px);
+  display: flex; flex-direction: column;
+  padding: 22px 16px 16px;
+  background: var(--id-dark-green); color: var(--id-white);
+  overflow-y: auto;
+}
+.investor-dashboard-sidebar-header { gap: 11px; padding: 4px 8px 22px; border-bottom: 1px solid rgba(255,255,255,.13); }
+.investor-dashboard-sidebar-avatar { width: 44px; height: 44px; border-radius: 14px; background: var(--id-gold); }
+.investor-dashboard-sidebar-header > div:last-child { min-width: 0; display: flex; flex-direction: column; }
+.investor-dashboard-sidebar-header strong { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.investor-dashboard-sidebar-header span { margin-top: 3px; color: rgba(255,255,255,.68); font-size: 11px; }
+.investor-dashboard-nav { display: flex; flex-direction: column; gap: 5px; padding-top: 18px; }
+.investor-dashboard-nav-link {
+  min-height: 44px; padding: 0 13px; border-radius: 12px;
+  display: flex; align-items: center; gap: 11px;
+  color: rgba(255,255,255,.78); text-decoration: none;
+  font-size: 13px; font-weight: 600; transition: .18s ease;
+}
+.investor-dashboard-nav-link i { width: 20px; text-align: center; font-size: 16px; }
+.investor-dashboard-nav-link:hover { color: var(--id-white); background: rgba(255,255,255,.09); }
+.investor-dashboard-nav-link.active { color: var(--id-white); background: rgba(255,255,255,.14); box-shadow: inset -3px 0 0 var(--id-gold); }
+.investor-dashboard-nav-link .investor-dashboard-nav-badge { margin-right: auto; }
+.investor-dashboard-nav-divider { height: 1px; margin: 10px 8px; background: rgba(255,255,255,.12); }
+.investor-dashboard-sidebar-footer { margin-top: auto; padding-top: 18px; }
+.investor-dashboard-logout {
+  width: 100%; min-height: 44px; border: 1px solid rgba(255,255,255,.14); border-radius: 12px;
+  background: transparent; color: rgba(255,255,255,.82); cursor: pointer;
+  display: flex; align-items: center; gap: 11px; padding: 0 13px;
+  font: inherit; font-size: 13px; transition: .18s ease;
+}
+.investor-dashboard-logout:hover { background: rgba(255,255,255,.08); color: var(--id-white); }
+
+.investor-dashboard-main { min-width: 0; padding: 30px; }
+.investor-dashboard-section { width: min(1240px, 100%); margin: 0 auto; }
+.investor-dashboard-section-header,
+.investor-dashboard-page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
+.investor-dashboard-overline,
+.investor-dashboard-card-overline { color: var(--id-green); font-size: 11px; font-weight: 800; letter-spacing: .02em; }
+.investor-dashboard-section h1,
+.investor-dashboard-page-header h1 { margin: 5px 0 7px; color: var(--id-dark); font-size: clamp(24px, 3vw, 31px); line-height: 1.25; }
+.investor-dashboard-section-header p,
+.investor-dashboard-page-header p { margin: 0; color: var(--id-gray); font-size: 13px; }
+
+.investor-dashboard-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
+.investor-dashboard-stat-card {
+  min-height: 124px; padding: 18px; border: 1px solid var(--id-border); border-radius: var(--id-radius);
+  background: var(--id-white); box-shadow: var(--id-shadow); display: flex; gap: 14px; align-items: flex-start;
+}
+.investor-dashboard-stat-icon {
+  width: 44px; height: 44px; border-radius: 13px; flex: 0 0 auto;
+  display: grid; place-items: center; background: var(--id-light-green); color: var(--id-green); font-size: 18px;
+}
+.investor-dashboard-stat-content { min-width: 0; display: flex; flex-direction: column; }
+.investor-dashboard-stat-content > span { color: var(--id-gray); font-size: 12px; }
+.investor-dashboard-stat-content > strong { color: var(--id-dark-green); font-size: 26px; line-height: 1.2; margin: 6px 0 3px; }
+.investor-dashboard-stat-content > small { color: var(--id-gray); font-size: 10px; }
+
+.investor-dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, .9fr); gap: 18px; }
+.investor-dashboard-card {
+  min-width: 0; padding: 21px; border: 1px solid var(--id-border); border-radius: var(--id-radius);
+  background: var(--id-white); box-shadow: var(--id-shadow);
+}
+.investor-dashboard-projects-card { grid-column: span 1; }
+.investor-dashboard-investment-summary { grid-column: span 1; }
+.investor-dashboard-activity-card { grid-column: 1 / -1; }
+.investor-dashboard-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.investor-dashboard-card-header h2 { margin: 4px 0 0; color: var(--id-dark); font-size: 17px; }
+.investor-dashboard-card-header a { color: var(--id-green); font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.investor-dashboard-card-header a:hover { text-decoration: underline; }
+
+.investor-dashboard-project-list,
+.investor-dashboard-activity-list { display: flex; flex-direction: column; }
+.investor-dashboard-project-item,
+.investor-dashboard-activity-item {
+  display: flex; align-items: center; gap: 12px; padding: 13px 0;
+  border-bottom: 1px solid #edf1ef;
+}
+.investor-dashboard-project-item:last-child,
+.investor-dashboard-activity-item:last-child { border-bottom: 0; padding-bottom: 0; }
+.investor-dashboard-project-icon,
+.investor-dashboard-activity-icon {
+  width: 40px; height: 40px; border-radius: 12px; flex: 0 0 auto;
+  display: grid; place-items: center; background: var(--id-light-green); color: var(--id-green);
+}
+.investor-dashboard-project-info,
+.investor-dashboard-activity-content { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+.investor-dashboard-project-info strong,
+.investor-dashboard-activity-content strong { color: var(--id-dark); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.investor-dashboard-project-info span,
+.investor-dashboard-activity-content span { color: var(--id-gray); font-size: 11px; margin-top: 3px; }
+.investor-dashboard-project-info small,
+.investor-dashboard-activity-content small { color: #8a9690; font-size: 10px; margin-top: 3px; }
+
+.investor-dashboard-status { flex: 0 0 auto; padding: 5px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.investor-dashboard-status.success { color: var(--id-dark-green); background: var(--id-light-green); }
+.investor-dashboard-status.warning { color: #8a6c10; background: #fbf5dc; }
+.investor-dashboard-status.danger { color: #8b3030; background: #fbe9e9; }
+.investor-dashboard-status.info { color: #315f53; background: #e7f0ed; }
+
+.investor-dashboard-investment-total { padding: 14px 0 20px; border-bottom: 1px solid var(--id-border); display: flex; flex-direction: column; gap: 6px; }
+.investor-dashboard-investment-total span { color: var(--id-gray); font-size: 12px; }
+.investor-dashboard-investment-total strong { color: var(--id-green); font-size: 24px; }
+.investor-dashboard-progress { padding: 19px 0; border-bottom: 1px solid var(--id-border); }
+.investor-dashboard-progress-header { display: flex; justify-content: space-between; gap: 10px; color: var(--id-gray); font-size: 11px; }
+.investor-dashboard-progress-header strong { color: var(--id-green); }
+.investor-dashboard-progress-bar { height: 8px; margin-top: 9px; overflow: hidden; border-radius: 999px; background: #e7eee9; }
+.investor-dashboard-progress-bar span { display: block; height: 100%; border-radius: inherit; background: var(--id-green); transition: width .35s ease; }
+.investor-dashboard-investment-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 17px; }
+.investor-dashboard-investment-items div { padding: 11px; border-radius: 12px; background: var(--id-light); display: flex; flex-direction: column; gap: 5px; }
+.investor-dashboard-investment-items span { color: var(--id-gray); font-size: 10px; }
+.investor-dashboard-investment-items strong { color: var(--id-dark-green); font-size: 17px; }
+
+.investor-dashboard-activity-card .investor-dashboard-activity-list { max-height: 430px; overflow-y: auto; padding-left: 3px; }
+
+.investor-dashboard-primary-btn {
+  min-height: 44px; padding: 0 17px; border: 0; border-radius: 12px;
+  background: var(--id-green); color: var(--id-white); cursor: pointer; font: inherit; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: .18s ease;
+}
+.investor-dashboard-primary-btn:hover { background: var(--id-dark-green); transform: translateY(-1px); }
+
+.investor-dashboard-loading,
+.investor-dashboard-error { min-height: 100vh; display: grid; place-items: center; align-content: center; gap: 12px; padding: 30px; text-align: center; }
+.investor-dashboard-loading p,
+.investor-dashboard-error p { margin: 0; color: var(--id-gray); font-size: 13px; }
+.investor-dashboard-loading-spinner { width: 42px; height: 42px; border: 4px solid #dcebe3; border-top-color: var(--id-green); border-radius: 50%; animation: investor-dashboard-spin .8s linear infinite; }
+.investor-dashboard-error { min-height: calc(100vh - 40px); }
+.investor-dashboard-error > i { color: var(--id-gold); font-size: 32px; }
+.investor-dashboard-error h2 { margin: 0; color: var(--id-dark); }
+@keyframes investor-dashboard-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 1100px) {
+  .investor-dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+  .investor-dashboard-grid { grid-template-columns: 1fr; }
+  .investor-dashboard-projects-card,
+  .investor-dashboard-investment-summary,
+  .investor-dashboard-activity-card { grid-column: auto; }
+}
+
+@media (max-width: 800px) {
+  .investor-dashboard-topbar { height: 68px; padding: 0 15px; }
+  .investor-dashboard-user-info { display: none; }
+  .investor-dashboard-layout { grid-template-columns: 1fr; }
+  .investor-dashboard-sidebar { position: static; height: auto; max-height: none; padding: 12px; }
+  .investor-dashboard-sidebar-header { display: none; }
+  .investor-dashboard-nav { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); padding-top: 0; }
+  .investor-dashboard-nav-divider { display: none; }
+  .investor-dashboard-sidebar-footer { margin-top: 8px; }
+  .investor-dashboard-main { padding: 20px 15px 30px; }
+}
+
+@media (max-width: 520px) {
+  .investor-dashboard-brand-text { display: none; }
+  .investor-dashboard-stats { grid-template-columns: 1fr; }
+  .investor-dashboard-stat-card { min-height: 108px; }
+  .investor-dashboard-card { padding: 16px; }
+  .investor-dashboard-section h1,
+  .investor-dashboard-page-header h1 { font-size: 22px; }
+  .investor-dashboard-project-item,
+  .investor-dashboard-activity-item { align-items: flex-start; }
+  .investor-dashboard-status { margin-right: auto; }
+  .investor-dashboard-investment-items { grid-template-columns: 1fr; }
+}
