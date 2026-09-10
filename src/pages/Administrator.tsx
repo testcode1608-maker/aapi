@@ -1,7 +1,27 @@
 import { useCallback, useEffect, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Activity, BarChart3, Building2, CheckCircle2, ClipboardList, FileCheck2, FolderKanban, LayoutDashboard, LogOut, Menu, MessageSquare, RefreshCw, Settings, TrendingUp, UserCheck, Users, Wallet, X } from "lucide-react";
+import {
+  Activity,
+  BarChart3,
+  BriefcaseBusiness,
+  Building2,
+  CheckCircle2,
+  ClipboardList,
+  FileCheck2,
+  FolderKanban,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  MessageSquare,
+  RefreshCw,
+  Settings,
+  TrendingUp,
+  UserCheck,
+  Users,
+  Wallet,
+  X,
+} from "lucide-react";
 import "../styles/main.css";
 
 const API = "http://localhost/aapi-api/auth/admin/admin.php";
