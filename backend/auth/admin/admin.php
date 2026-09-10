@@ -2,9 +2,7 @@
 /**
  * AAPI — ADMIN UNIFIED API
  *
- * Endpoint unique pour l'administration.
- * GET :  admin.php?action=dashboard|users|investors|projects|investments|requests&user_id=1
- * POST: les mêmes actions d'administration sont transmis aux handlers existants.
+ * Endpoint unique pour toute l'administration.
  */
 declare(strict_types=1);
 
@@ -46,10 +44,16 @@ $handlers = [
     'projects' => __DIR__.'/projects.php',
     'investments' => __DIR__.'/investments.php',
     'requests' => __DIR__.'/requests.php',
+    'messages' => __DIR__.'/messages.php',
+    'documents' => __DIR__.'/documents.php',
     'update_project_status' => __DIR__.'/dashboard.php',
     'update_user_status' => __DIR__.'/users.php',
     'update_investor_status' => __DIR__.'/investors.php',
     'update_investment_status' => __DIR__.'/investments.php',
+    'update_request_status' => __DIR__.'/requests.php',
+    'mark_message_read' => __DIR__.'/messages.php',
+    'mark_message_unread' => __DIR__.'/messages.php',
+    'update_document_status' => __DIR__.'/documents.php',
 ];
 
 if (!isset($handlers[$action])) {
@@ -62,9 +66,4 @@ if (!isset($handlers[$action])) {
     exit;
 }
 
-/*
- * Les anciens handlers restent la source de vérité pour la logique SQL.
- * Ce fichier fournit une seule URL publique à React, sans dupliquer
- * ni risquer de casser le code PHP déjà testé.
- */
 require $handlers[$action];
