@@ -1,0 +1,279 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  Activity,
+  BarChart3,
+  BriefcaseBusiness,
+  Building2,
+  CheckCircle2,
+  ClipboardList,
+  FileCheck2,
+  FolderKanban,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  MessageSquare,
+  RefreshCw,
+  Settings,
+  TrendingUp,
+  UserCheck,
+  Users,
+  Wallet,
+  X,
+} from "lucide-react";
+import "../styles/main.css";
+
+const API = "http://localhost/aapi-api/auth/admin/admin.php";
+
+type Section = "dashboard" | "users" | "investors" | "projects" | "investments" | "requests";
+type AnyRecord = Record<string, any>;
+
+const statusLabels: Record<string, string> = {
+  brouillon: "مسودة",
+  soumis: "مُرسل",
+  en_etude: "قيد الدراسة",
+  approuve: "مقبول",
+  en_cours: "قيد التنفيذ",
+  realise: "منجز",
+  rejete: "مرفوض",
+  archive: "مؤرشف",
+  actif: "نشط",
+  inactif: "غير نشط",
+  suspendu: "موقوف",
+  en_attente: "في الانتظار",
+  termine: "منتهي",
+  annule: "ملغى",
+  nouvelle: "جديد",
+  acceptee: "مقبول",
+  refusee: "مرفوض",
+  terminee: "منتهٍ",
+};
+
+const projectStatuses = ["brouillon", "soumis", "en_etude", "approuve", "en_cours", "realise", "rejete", "archive"];
+const userStatuses = ["actif", "inactif", "suspendu"];
+const investmentStatuses = ["en_attente", "valide", "en_cours", "termine", "annule"];
+
+function currentUser(): AnyRecord | null {
+  try {
+    const value = localStorage.getItem("aapi_user");
+    if (!value) return null;
+    const user = JSON.parse(value);
+    return user && typeof user === "object" ? user : null;
+  } catch {
+    return null;
+  }
+}
+
+function label(value: any) {
+  return statusLabels[String(value ?? "")] ?? String(value ?? "—").replaceAll("_", " ");
+}
+
+function number(value: any) {
+  return Number(value ?? 0).toLocaleString("fr-DZ");
+}
+
+function money(value: any) {
+  return `${Number(value ?? 0).toLocaleString("fr-DZ")} DA`;
+}
+
+function firstName(user: AnyRecord) {
+  return `${user.prenom ?? ""} ${user.nom ?? ""}`.trim() || user.email || "Administrateur";
+}
+
+function Nav({ unread, onClose }: { unread: number; onClose: () => void }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const user = currentUser() ?? {};
+  const links: Array<[string, string, React.ReactNode, string?]> = [
+    ["/admin/dashboard", "لوحة التحكم", <LayoutDashboard size={18} />],
+    ["/admin/users", "المستخدمون", <Users size={18} />],
+    ["/admin/investors", "المستثمرون", <UserCheck size={18} />],
+    ["/admin/projects", "المشاريع", <FolderKanban size={18} />],
+    ["/admin/investments", "الاستثمارات", <Wallet size={18} />],
+    ["/admin/requests", "الطلبات", <ClipboardList size={18} />],
+  ];
+
+  const logout = () => {
+    localStorage.removeItem("aapi_user");
+    navigate("/login", { replace: true });
+  };
+
+  return (
+    <>
+      <div className="admin-mobile-header">
+        <button className="admin-mobile-menu-button" onClick={onClose} aria-label="فتح القائمة"><Menu size={20} /></button>
+        <strong>AAPI</strong>
+      </div>
+      <aside className="admin-navbar">
+        <div className="admin-navbar-brand">
+          <button className="admin-navbar-brand-button" onClick={() => navigate("/admin/dashboard")}>
+            <span className="admin-navbar-logo">A</span>
+            <span className="admin-navbar-brand-text"><strong>AAPI</strong><small>الإدارة المركزية</small></span>
+          </button>
+          <button className="admin-navbar-mobile-close" onClick={onClose}><X size={19} /></button>
+        </div>
+
+        <div className="admin-navbar-user">
+          <span className="admin-navbar-user-avatar">{String(user.prenom ?? user.nom ?? "A").slice(0, 2).toUpperCase()}</span>
+          <span className="admin-navbar-user-info"><strong>{firstName(user)}</strong><span>مسؤول النظام</span></span>
+        </div>
+
+        <nav className="admin-navbar-menu">
+          <div className="admin-navbar-section">
+            <div className="admin-navbar-section-title">الرئيسية</div>
+            <div className="admin-navbar-section-items">
+              {links.map(([to, text, icon]) => (
+                <NavLink key={to} to={to} onClick={onClose} className={({ isActive }) => `admin-nav-link${isActive ? " active" : ""}`}>
+                  <span className="admin-nav-icon">{icon}</span><span className="admin-nav-label">{text}</span>
+                  {to === "/admin/requests" && unread > 0 && <span className="admin-nav-badge">{unread}</span>}
+                </NavLink>
+              ))}
+            </div>
+          </div>
+          <div className="admin-navbar-section">
+            <div className="admin-navbar-section-title">النظام</div>
+            <div className="admin-navbar-section-items">
+              <NavLink to="/admin/messages" onClick={onClose} className={({ isActive }) => `admin-nav-link${isActive ? " active" : ""}`}><span className="admin-nav-icon"><MessageSquare size={18} /></span><span className="admin-nav-label">الرسائل</span>{unread > 0 && <span className="admin-nav-badge">{unread}</span>}</NavLink>
+              <NavLink to="/admin/documents" onClick={onClose} className={({ isActive }) => `admin-nav-link${isActive ? " active" : ""}`}><span className="admin-nav-icon"><FileCheck2 size={18} /></span><span className="admin-nav-label">الوثائق</span></NavLink>
+              <NavLink to="/admin/settings" onClick={onClose} className={({ isActive }) => `admin-nav-link${isActive ? " active" : ""}`}><span className="admin-nav-icon"><Settings size={18} /></span><span className="admin-nav-label">الإعدادات</span></NavLink>
+            </div>
+          </div>
+        </nav>
+
+        <div className="admin-navbar-bottom">
+          <button className="admin-navbar-bottom-button" onClick={() => navigate("/")}><Building2 size={17} /> الموقع العام</button>
+          <button className="admin-navbar-bottom-button admin-navbar-logout" onClick={logout}><LogOut size={17} /> تسجيل الخروج</button>
+        </div>
+      </aside>
+      {location.pathname.startsWith("/admin") && <span className="admin-nav-current" hidden />}
+    </>
+  );
+}
+
+function StatCard({ icon, title, value, sub }: { icon: React.ReactNode; title: string; value: any; sub?: string }) {
+  return <div className="admin-kpi-card"><div className="admin-kpi-icon">{icon}</div><div className="admin-kpi-content"><span>{title}</span><strong>{typeof value === "number" ? number(value) : value}</strong>{sub && <small>{sub}</small>}</div><TrendingUp className="admin-kpi-arrow" size={17} /></div>;
+}
+
+function Dashboard({ userId }: { userId: number }) {
+  const [data, setData] = useState<AnyRecord>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const load = useCallback(async () => {
+    setLoading(true); setError("");
+    try {
+      const res = await fetch(`${API}?action=dashboard&user_id=${userId}`);
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message || "تعذر تحميل البيانات");
+      setData(json);
+    } catch (e) { setError(e instanceof Error ? e.message : "حدث خطأ"); }
+    finally { setLoading(false); }
+  }, [userId]);
+  useEffect(() => { void load(); }, [load]);
+
+  const stats = data.stats ?? {};
+  const projects = data.projects ?? data.recent_projects ?? data.recentProjects ?? [];
+  const users = data.users ?? {};
+  const investments = data.investments ?? data.investment_stats ?? {};
+  const requests = data.requests ?? data.request_stats ?? {};
+  const totalProjects = Number(stats.projects_total ?? stats.total_projects ?? projects.length ?? 0);
+  const approved = Number(stats.projects_approuve ?? stats.approuve ?? 0);
+  const activeProjects = Number(stats.projects_en_cours ?? stats.en_cours ?? 0);
+  const totalInvestors = Number(stats.investors_total ?? stats.investisseurs ?? users.investors ?? 0);
+  const totalValue = stats.projects_value ?? stats.total_value ?? 0;
+  const approvalRate = totalProjects ? Math.round((approved / totalProjects) * 100) : 0;
+
+  return <div className="admin-dashboard"><header className="admin-dashboard-header"><div className="admin-dashboard-header-content"><div className="admin-dashboard-welcome"><span className="admin-dashboard-eyebrow">AAPI / ADMIN</span><h1>لوحة التحكم</h1><p>نظرة شاملة على نشاط الوكالة والاستثمار.</p></div><button className="admin-refresh-button" onClick={() => void load()} disabled={loading}><RefreshCw size={16} className={loading ? "spin" : ""} /> تحديث البيانات</button></div></header>
+    {error && <div className="admin-dashboard-error"><span>{error}</span><button onClick={() => void load()}>إعادة المحاولة</button></div>}
+    <main className="admin-dashboard-main">
+      <div className="admin-kpi-grid">
+        <StatCard icon={<FolderKanban size={20} />} title="إجمالي المشاريع" value={totalProjects} sub={`${activeProjects} قيد التنفيذ`} />
+        <StatCard icon={<Users size={20} />} title="المستثمرون" value={totalInvestors} />
+        <StatCard icon={<Wallet size={20} />} title="قيمة الاستثمارات" value={money(stats.investments_total ?? investments.montant_total ?? totalValue)} />
+        <StatCard icon={<BriefcaseBusiness size={20} />} title="مناصب العمل" value={stats.jobs_total ?? stats.total_jobs ?? 0} />
+      </div>
+      <div className="admin-analytics-grid">
+        <section className="admin-panel"><div className="admin-panel-header"><h2>مؤشرات المشاريع</h2><BarChart3 className="admin-panel-header-icon" size={18} /></div><div className="admin-circular-stats"><div><div className="admin-circular-progress" style={{ "--progress": approvalRate } as React.CSSProperties}><div className="admin-circular-inner">{approvalRate}%</div></div><div className="admin-circular-info">نسبة المشاريع المقبولة</div></div><div><div className="admin-circular-progress" style={{ "--progress": totalProjects ? Math.round((activeProjects / totalProjects) * 100) : 0 } as React.CSSProperties}><div className="admin-circular-inner">{totalProjects ? Math.round((activeProjects / totalProjects) * 100) : 0}%</div></div><div className="admin-circular-info">المشاريع النشطة</div></div><div><div className="admin-circular-progress" style={{ "--progress": Number(stats.documents_valid_percent ?? stats.documents_percentage ?? 0) } as React.CSSProperties}><div className="admin-circular-inner">{Number(stats.documents_valid_percent ?? stats.documents_percentage ?? 0)}%</div></div><div className="admin-circular-info">الوثائق السليمة</div></div></div></section>
+        <section className="admin-panel"><div className="admin-panel-header"><h2>حالة الاستثمارات</h2><Wallet className="admin-panel-header-icon" size={18} /></div><div className="admin-progress-list"><Progress label="في الانتظار" value={investments.en_attente ?? stats.investments_pending ?? 0} total={investments.total ?? stats.investments_total_count ?? 0} /><Progress label="مقبولة" value={investments.valide ?? stats.investments_valid ?? 0} total={investments.total ?? stats.investments_total_count ?? 0} /><Progress label="قيد التنفيذ" value={investments.en_cours ?? 0} total={investments.total ?? stats.investments_total_count ?? 0} /></div></section>
+      </div>
+      <section className="admin-project-status-panel"><header><h2>توزيع حالات المشاريع</h2><Activity size={18} /></header><div className="admin-status-grid">{projectStatuses.slice(0, 4).map(s => <div className="admin-status-card" key={s}><strong>{number(stats[`projects_${s}`] ?? stats[s] ?? 0)}</strong><span>{label(s)}</span></div>)}</div></section>
+      <section className="admin-recent-projects"><header><h2>آخر المشاريع</h2><span className="admin-panel-link">أحدث البيانات</span></header><div className="admin-project-table-wrapper"><table className="admin-project-table"><thead><tr><th>المشروع</th><th>المستثمر</th><th>الولاية</th><th>الحالة</th><th>القيمة</th></tr></thead><tbody>{Array.isArray(projects) && projects.slice(0, 8).map((p: AnyRecord, i: number) => <tr key={p.id ?? i}><td className="admin-project-name">{p.titre ?? p.title ?? p.nom ?? "مشروع"}</td><td>{p.nom ? `${p.prenom ?? ""} ${p.nom}` : p.investor_name ?? p.investisseur ?? "—"}</td><td>{p.wilaya ?? "—"}</td><td><span className={`admin-status-badge status-${p.statut}`}>{label(p.statut)}</span></td><td>{money(p.montant_investissement ?? p.montant ?? 0)}</td></tr>)}</tbody></table>{(!Array.isArray(projects) || projects.length === 0) && <div className="admin-empty-state">لا توجد مشاريع لعرضها حالياً.</div>}</div></section>
+    </main>
+  </div>;
+}
+
+function Progress({ label: text, value, total }: { label: string; value: any; total: any }) { const percent = Number(total) > 0 ? Math.min(100, Math.round((Number(value) / Number(total)) * 100)) : 0; return <div className="admin-progress-item"><div className="admin-progress-top"><span>{text}</span><strong>{percent}%</strong></div><div className="admin-progress-bar"><span style={{ "--progress": `${percent}%` } as React.CSSProperties} /></div></div>; }
+
+function DataPage({ section, userId }: { section: Section; userId: number }) {
+  const config: Record<Section, { title: string; subtitle: string; action: string }> = {
+    dashboard: { title: "لوحة التحكم", subtitle: "", action: "dashboard" },
+    users: { title: "المستخدمون", subtitle: "إدارة حسابات مستخدمي المنصة", action: "users" },
+    investors: { title: "المستثمرون", subtitle: "إدارة ملفات المستثمرين", action: "investors" },
+    projects: { title: "المشاريع", subtitle: "متابعة ومراجعة مشاريع الاستثمار", action: "projects" },
+    investments: { title: "الاستثمارات", subtitle: "متابعة عمليات الاستثمار", action: "investments" },
+    requests: { title: "الطلبات", subtitle: "متابعة طلبات المستثمرين", action: "requests" },
+  };
+  const c = config[section];
+  const [rows, setRows] = useState<AnyRecord[]>([]);
+  const [stats, setStats] = useState<AnyRecord>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("all");
+  const load = useCallback(async () => {
+    setLoading(true); setError("");
+    try {
+      const query = new URLSearchParams({ action: c.action, user_id: String(userId) });
+      if (search) query.set("search", search);
+      if (section === "investors" && filter !== "all") query.set("statut", filter);
+      if (section === "users" && filter !== "all") query.set("statut", filter);
+      const res = await fetch(`${API}?${query}`); const json = await res.json();
+      if (!json.success) throw new Error(json.message || "تعذر تحميل البيانات");
+      const key = section === "users" ? "users" : section;
+      setRows(Array.isArray(json[key]) ? json[key] : Array.isArray(json.data) ? json.data : []);
+      setStats(json.stats ?? {});
+    } catch (e) { setError(e instanceof Error ? e.message : "حدث خطأ"); }
+    finally { setLoading(false); }
+  }, [c.action, filter, search, section, userId]);
+  useEffect(() => { void load(); }, [load]);
+
+  const updateStatus = async (row: AnyRecord, value: string) => {
+    let action = ""; const body: AnyRecord = { user_id: userId, statut: value };
+    if (section === "users") { action = "update_user_status"; body.target_user_id = row.id; }
+    if (section === "investors") { action = "update_investor_status"; body.target_user_id = row.id; }
+    if (section === "projects") { action = "update_project_status"; body.project_id = row.id; }
+    if (section === "investments") { action = "update_investment_status"; body.investment_id = row.id; }
+    if (!action) return;
+    body.action = action;
+    try { const res = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); const json = await res.json(); if (!json.success) throw new Error(json.message || "فشل التحديث"); await load(); } catch (e) { setError(e instanceof Error ? e.message : "تعذر التحديث"); }
+  };
+
+  const columns = useMemo(() => {
+    if (section === "users") return ["المستخدم", "البريد الإلكتروني", "الدور", "الحالة"];
+    if (section === "investors") return ["المستثمر", "الشركة", "الولاية", "النوع", "الحالة"];
+    if (section === "projects") return ["المشروع", "المستثمر", "الولاية", "الحالة", "القيمة"];
+    if (section === "investments") return ["المرجع", "المستثمر", "المشروع", "المبلغ", "الحالة"];
+    return ["الطلب", "المستثمر", "التاريخ", "الأولوية", "الحالة"];
+  }, [section]);
+
+  return <div className={`admin-${section}-page`}><header className="admin-dashboard-header"><div><span className="admin-section-kicker">AAPI / ADMIN</span><h1>{c.title}</h1><p>{c.subtitle}</p></div><button className="admin-refresh-button" onClick={() => void load()} disabled={loading}><RefreshCw size={16} /> تحديث</button></header><main className={`admin-${section}-content`}>
+    <div className="admin-kpi-grid">{section === "users" && <><StatCard icon={<Users size={20} />} title="إجمالي المستخدمين" value={stats.total} /><StatCard icon={<UserCheck size={20} />} title="المستثمرون" value={stats.investisseurs} /><StatCard icon={<CheckCircle2 size={20} />} title="الحسابات النشطة" value={stats.actifs} /><StatCard icon={<Users size={20} />} title="نسبة النشاط" value={`${stats.pourcentage_actifs ?? 0}%`} /></>}{section === "investors" && <><StatCard icon={<UserCheck size={20} />} title="إجمالي المستثمرين" value={stats.total} /><StatCard icon={<CheckCircle2 size={20} />} title="النشطون" value={stats.actifs} /><StatCard icon={<Building2 size={20} />} title="شركات" value={stats.personnes_morales} /><StatCard icon={<TrendingUp size={20} />} title="نسبة النشاط" value={`${stats.pourcentage_actifs ?? 0}%`} /></>}{section === "projects" && <><StatCard icon={<FolderKanban size={20} />} title="إجمالي المشاريع" value={stats.total} /><StatCard icon={<ClipboardList size={20} />} title="المُرسلة" value={stats.soumis} /><StatCard icon={<CheckCircle2 size={20} />} title="المقبولة" value={stats.approuve} /><StatCard icon={<Wallet size={20} />} title="القيمة" value={money(stats.total_value ?? stats.montant_total)} /></>}{section === "investments" && <><StatCard icon={<Wallet size={20} />} title="إجمالي الاستثمارات" value={stats.total} /><StatCard icon={<Clock3Fallback />} title="قيد الانتظار" value={stats.en_attente} /><StatCard icon={<CheckCircle2 size={20} />} title="مقبولة" value={stats.valide} /><StatCard icon={<TrendingUp size={20} />} title="المبلغ الإجمالي" value={money(stats.montant_total)} /></>}{section === "requests" && <><StatCard icon={<ClipboardList size={20} />} title="إجمالي الطلبات" value={stats.total} /><StatCard icon={<Activity size={20} />} title="جديدة" value={stats.nouvelle} /><StatCard icon={<TrendingUp size={20} />} title="قيد المعالجة" value={stats.en_cours} /><StatCard icon={<CheckCircle2 size={20} />} title="مقبولة" value={stats.acceptee} /></>}</div>
+    <div className="admin-project-filters"><div className="project-search"><input value={search} onChange={e => setSearch(e.target.value)} placeholder="بحث..." /></div>{(section === "users" || section === "investors") && <select value={filter} onChange={e => setFilter(e.target.value)}><option value="all">كل الحالات</option>{userStatuses.map(s => <option key={s} value={s}>{label(s)}</option>)}</select>}</div>
+    {error && <div className="admin-page-error"><span>{error}</span><button onClick={() => void load()}>إعادة المحاولة</button></div>}
+    <section className="admin-project-table-card"><div className="table-card-header"><h2>{c.title}</h2><span>{rows.length} سجل</span></div><div className="admin-project-table-wrapper">{loading ? <div className="admin-empty-state"><RefreshCw className="spin" size={22} /> جارٍ التحميل...</div> : rows.length === 0 ? <div className="admin-empty-state">لا توجد بيانات مطابقة.</div> : <table className="admin-project-table"><thead><tr>{columns.map(x => <th key={x}>{x}</th>)}</tr></thead><tbody>{rows.map((row, i) => <tr key={row.id ?? i}>{section === "users" && <><td className="admin-project-name">{row.prenom} {row.nom}</td><td>{row.email}</td><td>{row.role}</td><td><StatusSelect value={row.statut} options={userStatuses} disabled={row.role === "admin"} onChange={v => void updateStatus(row, v)} /></td></>}{section === "investors" && <><td className="admin-project-name">{row.prenom} {row.nom}</td><td>{row.nom_entreprise ?? "—"}</td><td>{row.wilaya ?? "—"}</td><td>{label(row.type_investisseur)}</td><td><StatusSelect value={row.statut} options={userStatuses} onChange={v => void updateStatus(row, v)} /></td></>}{section === "projects" && <><td className="admin-project-name">{row.titre ?? row.nom ?? "مشروع"}</td><td>{row.investisseur ?? `${row.prenom ?? ""} ${row.nom ?? ""}`}</td><td>{row.wilaya ?? "—"}</td><td><StatusSelect value={row.statut} options={projectStatuses} onChange={v => void updateStatus(row, v)} /></td><td>{money(row.montant_investissement ?? row.montant ?? 0)}</td></>}{section === "investments" && <><td>{row.reference ?? `#${row.id}`}</td><td>{row.prenom} {row.nom}</td><td>{row.titre_projet ?? "—"}</td><td>{money(row.montant)}</td><td><StatusSelect value={row.statut} options={investmentStatuses} onChange={v => void updateStatus(row, v)} /></td></>}{section === "requests" && <><td className="admin-project-name">{row.objet ?? row.type_demande ?? "طلب"}</td><td>{row.prenom} {row.nom}</td><td>{row.created_at ?? row.date_creation ?? "—"}</td><td><span className={`admin-status-badge priority-${row.priorite}`}>{label(row.priorite)}</span></td><td><span className={`admin-status-badge status-${row.statut}`}>{label(row.statut)}</span></td></>}</tr>)}</tbody></table>}</div></section>
+  </main></div>;
+}
+
+function Clock3Fallback() { return <Activity size={20} />; }
+function StatusSelect({ value, options, onChange, disabled }: { value: string; options: string[]; onChange: (value: string) => void; disabled?: boolean }) { return <select className={`status-select status-${value}`} value={value ?? ""} disabled={disabled} onChange={e => onChange(e.target.value)}>{options.map(s => <option key={s} value={s}>{label(s)}</option>)}</select>; }
+
+export default function Administrator() {
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const user = currentUser();
+  const userId = Number(user?.id ?? 0);
+  const path = location.pathname;
+  const section: Section = path.includes("/users") ? "users" : path.includes("/investors") ? "investors" : path.includes("/projects") ? "projects" : path.includes("/investments") ? "investments" : path.includes("/requests") ? "requests" : "dashboard";
+
+  if (!user || String(user.role).toLowerCase() !== "admin") return null;
+  return <div dir="rtl" className={`administrator-shell ${mobileOpen ? "admin-mobile-open" : ""}`}><Nav unread={0} onClose={() => setMobileOpen(v => !v)} />{mobileOpen && <button className="admin-navbar-overlay" onClick={() => setMobileOpen(false)} aria-label="إغلاق القائمة" />}{section === "dashboard" ? <Dashboard userId={userId} /> : <DataPage section={section} userId={userId} />}</div>;
+}
