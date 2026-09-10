@@ -7,7 +7,6 @@ interface InvestorDashboardSidebarProps {
   stats: DashboardStats | null;
   projectsCount: number;
   userPhotoUrl: string;
-  dashboardSection: string;
   navClass: (section: string) => string;
   onLogout: () => void;
 }
@@ -17,7 +16,6 @@ export default function InvestorDashboardSidebar({
   stats,
   projectsCount,
   userPhotoUrl,
-  dashboardSection,
   navClass,
   onLogout,
 }: InvestorDashboardSidebarProps) {
@@ -42,60 +40,41 @@ export default function InvestorDashboardSidebar({
           <i className="bi bi-grid-1x2" />
           <span>لوحة التحكم</span>
         </Link>
-
         <Link to="/investor/dashboard/projects" className={navClass("projects")}>
           <i className="bi bi-building" />
           <span>مشاريعي</span>
           {projectsCount > 0 && <span className="investor-dashboard-nav-badge">{projectsCount}</span>}
         </Link>
-
         <Link to="/investor/dashboard/investments" className={navClass("investments")}>
           <i className="bi bi-cash-stack" />
           <span>استثماراتي</span>
-          {toNumber(stats?.investments_active) > 0 && (
-            <span className="investor-dashboard-nav-badge">{toNumber(stats?.investments_active)}</span>
-          )}
+          {toNumber(stats?.investments_active) > 0 && <span className="investor-dashboard-nav-badge">{toNumber(stats?.investments_active)}</span>}
         </Link>
-
         <Link to="/investor/dashboard/requests" className={navClass("requests")}>
           <i className="bi bi-file-earmark-text" />
           <span>طلباتي</span>
-          {toNumber(stats?.requests_pending) > 0 && (
-            <span className="investor-dashboard-nav-badge">{toNumber(stats?.requests_pending)}</span>
-          )}
+          {toNumber(stats?.requests_pending) > 0 && <span className="investor-dashboard-nav-badge">{toNumber(stats?.requests_pending)}</span>}
         </Link>
-
         <Link to="/investor/dashboard/documents" className={navClass("documents")}>
           <i className="bi bi-folder2-open" />
           <span>وثائقي</span>
-          {toNumber(stats?.documents_total) > 0 && (
-            <span className="investor-dashboard-nav-badge">{toNumber(stats?.documents_total)}</span>
-          )}
+          {toNumber(stats?.documents_total) > 0 && <span className="investor-dashboard-nav-badge">{toNumber(stats?.documents_total)}</span>}
         </Link>
-
         <div className="investor-dashboard-nav-divider" />
-
         <Link to="/investor/dashboard/messages" className={navClass("messages")}>
           <i className="bi bi-chat-left-text" />
           <span>الرسائل</span>
-          {toNumber(stats?.messages_unread) > 0 && (
-            <span className="investor-dashboard-nav-badge">{toNumber(stats?.messages_unread)}</span>
-          )}
+          {toNumber(stats?.messages_unread) > 0 && <span className="investor-dashboard-nav-badge">{toNumber(stats?.messages_unread)}</span>}
         </Link>
-
         <Link to="/investor/dashboard/notifications" className={navClass("notifications")}>
           <i className="bi bi-bell" />
           <span>الإشعارات</span>
-          {toNumber(stats?.notifications_unread) > 0 && (
-            <span className="investor-dashboard-nav-badge">{toNumber(stats?.notifications_unread)}</span>
-          )}
+          {toNumber(stats?.notifications_unread) > 0 && <span className="investor-dashboard-nav-badge">{toNumber(stats?.notifications_unread)}</span>}
         </Link>
-
         <Link to="/investor/dashboard/profile" className={navClass("profile")}>
           <i className="bi bi-person" />
           <span>ملفي الشخصي</span>
         </Link>
-
         <Link to="/investor/dashboard/settings" className={navClass("settings")}>
           <i className="bi bi-gear" />
           <span>الإعدادات</span>
