@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/main.css";
+import "../styles/investor-dashboard.css";
 import InvestorDashboardSidebar from "../components/investor/InvestorDashboardSidebar";
 import InvestorDashboardTopbar from "../components/investor/InvestorDashboardTopbar";
 import InvestorDashboardOverview from "../components/investor/InvestorDashboardOverview";
