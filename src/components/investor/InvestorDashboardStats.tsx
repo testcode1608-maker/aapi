@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { DashboardStats } from "../../types/investorDashboard";
 import { formatAmount, toNumber } from "../../utils/investorDashboard";
 
@@ -8,8 +9,8 @@ interface InvestorDashboardStatsProps {
 interface StatCardProps {
   icon: string;
   label: string;
-  value: React.ReactNode;
-  detail: React.ReactNode;
+  value: ReactNode;
+  detail: ReactNode;
 }
 
 const StatCard = ({ icon, label, value, detail }: StatCardProps) => (
