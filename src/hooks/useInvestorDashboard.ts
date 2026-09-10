@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL, LOGIN_ROUTE } from "../utils/investorDashboard";
-import { normalizeDocuments, normalizeInvestments, normalizeMessages, normalizeNotifications, normalizeProjects, normalizeRequests } from "../utils/investorDashboardData";
+import { getCompletedInvestments, getDashboardActivities, getProjectCompletion, normalizeDocuments, normalizeInvestments, normalizeMessages, normalizeNotifications, normalizeProjects, normalizeRequests } from "../utils/investorDashboardData";
 import type { DashboardActivity, DashboardDocument, DashboardInvestment, DashboardMessage, DashboardNotification, DashboardProfile, DashboardProject, DashboardRequest, DashboardResponse, DashboardStats, DashboardUser } from "../types/investorDashboard";
 
-interface UseInvestorDashboardResult {
+export interface UseInvestorDashboardResult {
   user: DashboardUser | null; profile: DashboardProfile | null; stats: DashboardStats | null;
   projects: DashboardProject[]; investments: DashboardInvestment[]; requests: DashboardRequest[];
   documents: DashboardDocument[]; messages: DashboardMessage[]; notifications: DashboardNotification[];
-  activities: DashboardActivity[]; loading: boolean; error: string; reload: () => Promise<void>;
+  activities: DashboardActivity[]; projectCompletion: number; completedInvestments: number;
+  loading: boolean; error: string; reload: () => Promise<void>;
 }
 
 function getStoredUserId(): number | null {
@@ -56,7 +57,10 @@ export function useInvestorDashboard(): UseInvestorDashboardResult {
   }, [navigate]);
 
   useEffect(() => { void reload(); }, [reload]);
-  return { user, profile, stats, projects, investments, requests, documents, messages, notifications, activities, loading, error, reload };
+  const projectCompletion = getProjectCompletion(stats);
+  const completedInvestments = getCompletedInvestments(investments, stats);
+  const dashboardActivities = getDashboardActivities(activities, notifications, documents, messages);
+  return { user, profile, stats, projects, investments, requests, documents, messages, notifications, activities: dashboardActivities, projectCompletion, completedInvestments, loading, error, reload };
 }
 
 export default useInvestorDashboard;
