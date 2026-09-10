@@ -20,15 +20,15 @@ body.aapi-admin-light .administrator-shell .admin-navbar{border-left-color:#d7e3
 body.aapi-admin-light .administrator-shell .admin-mobile-header{background:rgba(255,255,255,.94);border-bottom-color:#dce5df;color:#173125}body.aapi-admin-light .administrator-shell .admin-mobile-menu-button{background:#f1f6f3;border-color:#d6e2db;color:#075b36}
 
 /* AAPI ADMIN — RTL search / filter alignment */
-.administrator-shell .admin-data-toolbar{direction:rtl;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.administrator-shell .admin-data-search{position:relative;display:flex;align-items:center;direction:rtl;min-width:260px}
-.administrator-shell .admin-data-search input{width:100%;height:44px;padding:0 42px 0 14px!important;text-align:right;direction:rtl;box-sizing:border-box}
-.administrator-shell .admin-data-search input::placeholder{text-align:right;direction:rtl;opacity:.72}
-.administrator-shell .admin-data-search svg{position:absolute;right:14px;left:auto;pointer-events:none}
-.administrator-shell .admin-data-filter{height:44px;min-width:175px;padding:0 38px 0 34px!important;text-align:right;direction:rtl;box-sizing:border-box;cursor:pointer}
-.administrator-shell .admin-data-toolbar select{direction:rtl;text-align:right;text-align-last:right}
-.administrator-shell .admin-data-toolbar select option{direction:rtl;text-align:right}
-body.aapi-admin-light .administrator-shell .admin-data-search input{color:#4e5c54!important;background:#fff!important;border-color:#d7e2dc!important}
-body.aapi-admin-light .administrator-shell .admin-data-search input::placeholder{color:#66736d!important;opacity:.8}
-body.aapi-admin-light .administrator-shell .admin-data-filter{color:#4e5c54!important;background:#fff!important;border-color:#d7e2dc!important}
-@media(max-width:800px){.administrator-shell .admin-data-toolbar{align-items:stretch}.administrator-shell .admin-data-search{width:100%;min-width:0}.administrator-shell .admin-data-filter{width:100%;min-width:0}}
+.administrator-shell .admin-data-toolbar,.administrator-shell .admin-toolbar{direction:rtl;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.administrator-shell .admin-data-search,.administrator-shell .admin-toolbar .project-search,.administrator-shell .admin-toolbar .admin-search{position:relative;display:flex;align-items:center;direction:rtl;min-width:260px}
+.administrator-shell .admin-data-search input,.administrator-shell .admin-toolbar .project-search input,.administrator-shell .admin-toolbar .admin-search input{width:100%;height:44px;padding:0 42px 0 14px!important;text-align:right!important;direction:rtl!important;box-sizing:border-box}
+.administrator-shell .admin-data-search input::placeholder,.administrator-shell .admin-toolbar input::placeholder{direction:rtl!important;text-align:right!important;unicode-bidi:plaintext;opacity:.72}
+.administrator-shell .admin-data-search svg,.administrator-shell .admin-toolbar .project-search svg,.administrator-shell .admin-toolbar .admin-search svg{position:absolute;right:14px;left:auto;pointer-events:none}
+.administrator-shell .admin-data-filter,.administrator-shell .admin-toolbar select{height:44px;min-width:175px;padding:0 38px 0 34px!important;text-align:right!important;direction:rtl!important;text-align-last:right!important;box-sizing:border-box;cursor:pointer}
+.administrator-shell .admin-data-toolbar select,.administrator-shell .admin-toolbar select{direction:rtl!important;text-align:right!important;text-align-last:right!important}
+.administrator-shell .admin-data-toolbar select option,.administrator-shell .admin-toolbar select option{direction:rtl!important;text-align:right!important}
+body.aapi-admin-light .administrator-shell .admin-data-search input,body.aapi-admin-light .administrator-shell .admin-toolbar input{color:#4e5c54!important;background:#fff!important;border-color:#d7e2dc!important}
+body.aapi-admin-light .administrator-shell .admin-data-search input::placeholder,body.aapi-admin-light .administrator-shell .admin-toolbar input::placeholder{color:#66736d!important;opacity:.8}
+body.aapi-admin-light .administrator-shell .admin-data-filter,body.aapi-admin-light .administrator-shell .admin-toolbar select{color:#4e5c54!important;background:#fff!important;border-color:#d7e2dc!important}
+@media(max-width:800px){.administrator-shell .admin-data-toolbar,.administrator-shell .admin-toolbar{align-items:stretch}.administrator-shell .admin-data-search,.administrator-shell .admin-toolbar .project-search,.administrator-shell .admin-toolbar .admin-search{width:100%;min-width:0}.administrator-shell .admin-data-filter,.administrator-shell .admin-toolbar select{width:100%;min-width:0}}
