@@ -1,14 +1,14 @@
 import type { DashboardProfile, DashboardUser } from "../../types/investorDashboard";
 
-interface Props { user: DashboardUser | null; profile: DashboardProfile | null; fullName: string; initials: string; userPhotoUrl: string; }
+interface Props { user: DashboardUser | null; profile: DashboardProfile | null; fullName: string; userPhotoUrl: string; }
 
-export default function InvestorProfileSection({ user, profile, fullName, initials, userPhotoUrl }: Props) {
+export default function InvestorProfileSection({ user, profile, fullName, userPhotoUrl }: Props) {
   const location = `${profile?.wilaya || "—"}${profile?.commune ? ` · ${profile.commune}` : ""}`;
   return (
     <section className="investor-dashboard-section">
       <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الحساب</span><h1>ملفي الشخصي</h1><p>معلومات المستثمر المسجلة في قاعدة البيانات.</p></div></div>
       <div className="investor-dashboard-card investor-dashboard-profile">
-        <div className="investor-dashboard-profile-avatar">{userPhotoUrl ? <img src={userPhotoUrl} alt={fullName} /> : initials}</div>
+        <div className="investor-dashboard-profile-avatar">{userPhotoUrl ? <img src={userPhotoUrl} alt={fullName} /> : fullName.charAt(0)}</div>
         <div className="investor-dashboard-profile-info"><h2>{fullName}</h2><span>{user?.email || "—"}</span><span>{user?.telephone || "لا يوجد رقم هاتف"}</span><span>{profile?.nom_entreprise || "مستثمر فردي"}</span><span>{location}</span></div>
       </div>
       <div className="investor-dashboard-grid">
