@@ -1,0 +1,29 @@
+/* AAPI — Investor Projects: clean RTL form/list layer */
+.investor-project-create-form{margin-bottom:20px}
+.investor-project-create-form .investor-dashboard-card-header>i{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:var(--id-light-green);color:var(--id-green);font-size:18px}
+.investor-project-create-form form{display:flex;flex-direction:column;gap:20px}
+.investor-project-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.investor-project-form-field{min-width:0;display:flex;flex-direction:column;gap:7px}
+.investor-project-form-field.full{grid-column:1/-1}
+.investor-project-form-field label{color:var(--id-dark);font-size:12px;font-weight:700}
+.investor-project-form-field label span{color:var(--id-gold)}
+.investor-project-form-field input,.investor-project-form-field textarea,.investor-project-form-field select{width:100%;min-height:44px;padding:10px 13px;border:1px solid var(--id-border);border-radius:11px;background:var(--id-white);color:var(--id-dark);font:inherit;font-size:12px;outline:none;transition:border-color .18s,box-shadow .18s}
+.investor-project-form-field textarea{min-height:120px;resize:vertical;line-height:1.8}
+.investor-project-form-field input:focus,.investor-project-form-field textarea:focus,.investor-project-form-field select:focus{border-color:var(--id-green);box-shadow:0 0 0 3px rgba(8,116,67,.09)}
+.investor-project-form-field input:disabled,.investor-project-form-field textarea:disabled,.investor-project-form-field select:disabled{opacity:.65;cursor:not-allowed}
+.investor-project-form-field small{color:var(--id-gray);font-size:10px}
+.investor-project-create-form .investor-dashboard-status{display:flex;align-items:center;gap:7px;width:100%;padding:10px 12px;border:1px solid transparent}
+.investor-project-create-form .investor-dashboard-status.danger{border-color:#f2d0d0}
+.investor-project-create-form .investor-dashboard-status.success{border-color:#cfe8da}
+.investor-project-form-actions{display:flex;align-items:center;justify-content:flex-start;gap:10px;flex-wrap:wrap}
+.investor-project-form-actions .investor-dashboard-logout{width:auto;min-width:120px;color:var(--id-gray);border-color:var(--id-border);background:var(--id-white);justify-content:center}
+.investor-project-form-actions .investor-dashboard-logout:hover{background:var(--id-light-green);color:var(--id-dark-green)}
+.investor-project-list-card{overflow:hidden}
+.investor-dashboard-projects-card .investor-dashboard-card-header{align-items:center}
+.investor-dashboard-projects-card .investor-dashboard-card-header h2{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.investor-dashboard-projects-card .investor-dashboard-project-item{padding:15px 0}
+.investor-dashboard-projects-card .investor-dashboard-project-info strong{font-size:13px}
+.investor-dashboard-projects-card .investor-dashboard-project-info small{font-weight:700;color:var(--id-dark-green)}
+.investor-dashboard-projects-card .investor-dashboard-status{margin-inline-start:auto}
+@media(max-width:760px){.investor-project-form-grid{grid-template-columns:1fr}.investor-project-form-field.full{grid-column:auto}.investor-project-create-form{padding:17px}.investor-project-form-actions{flex-direction:column;align-items:stretch}.investor-project-form-actions .investor-dashboard-primary-btn,.investor-project-form-actions .investor-dashboard-logout{width:100%}}
+@media(max-width:460px){.investor-project-create-form .investor-dashboard-card-header{gap:10px}.investor-project-create-form .investor-dashboard-card-header h2{font-size:15px}.investor-dashboard-projects-card .investor-dashboard-card-header{align-items:flex-start}.investor-dashboard-projects-card .investor-dashboard-status{margin-inline-start:0}.investor-dashboard-projects-card .investor-dashboard-project-item{align-items:flex-start}}
