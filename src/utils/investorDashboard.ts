@@ -2,116 +2,21 @@ export const API_BASE_URL = "http://localhost/aapi-api";
 export const API_URL = `${API_BASE_URL}/auth/investor/dashboard.php`;
 export const CREATE_PROJECT_API_URL = `${API_BASE_URL}/auth/investor/create-project.php`;
 export const LOGIN_ROUTE = "/login";
-
 export const PROJECT_SECTORS = [
-  { id: 1, nom: "الزراعة" },
-  { id: 2, nom: "الصناعة" },
-  { id: 3, nom: "التكنولوجيا" },
-  { id: 4, nom: "السياحة" },
-  { id: 5, nom: "الطاقات" },
-  { id: 6, nom: "النقل" },
-  { id: 7, nom: "الصحة" },
-  { id: 8, nom: "الخدمات" },
+  { id: 1, nom: "الزراعة" }, { id: 2, nom: "الصناعة" }, { id: 3, nom: "التكنولوجيا" }, { id: 4, nom: "السياحة" },
+  { id: 5, nom: "الطاقات" }, { id: 6, nom: "النقل" }, { id: 7, nom: "الصحة" }, { id: 8, nom: "الخدمات" },
 ] as const;
-
-export function toNumber(value: unknown): number {
-  const number = Number(value);
-  return Number.isFinite(number) ? number : 0;
-}
-
-export function formatAmount(value?: number | null): string {
-  return `${new Intl.NumberFormat("fr-DZ", { maximumFractionDigits: 0 }).format(toNumber(value))} DA`;
-}
-
-export function formatDate(value?: string | null): string {
-  if (!value) return "—";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("fr-DZ", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
-}
-
-export function formatRelativeTime(value?: string | null): string {
-  if (!value) return "";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "";
-  const difference = Math.max(0, Date.now() - date.getTime());
-  const minutes = Math.floor(difference / 60000);
-  const hours = Math.floor(difference / 3600000);
-  const days = Math.floor(difference / 86400000);
-  if (minutes < 1) return "الآن";
-  if (minutes < 60) return `منذ ${minutes} دقيقة`;
-  if (hours < 24) return `منذ ${hours} ساعة`;
-  if (days < 7) return `منذ ${days} يوم`;
-  return formatDate(value);
-}
-
+export function toNumber(value: unknown): number { const number = Number(value); return Number.isFinite(number) ? number : 0; }
+export function formatAmount(value?: number | null): string { return `${new Intl.NumberFormat("fr-DZ", { maximumFractionDigits: 0 }).format(toNumber(value))} DA`; }
+export function formatDate(value?: string | null): string { if (!value) return "—"; const date = new Date(value); if (Number.isNaN(date.getTime())) return "—"; return new Intl.DateTimeFormat("fr-DZ", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date); }
+export function formatRelativeTime(value?: string | null): string { if (!value) return ""; const date = new Date(value); if (Number.isNaN(date.getTime())) return ""; const difference = Math.max(0, Date.now() - date.getTime()); const minutes = Math.floor(difference / 60000), hours = Math.floor(difference / 3600000), days = Math.floor(difference / 86400000); if (minutes < 1) return "الآن"; if (minutes < 60) return `منذ ${minutes} دقيقة`; if (hours < 24) return `منذ ${hours} ساعة`; if (days < 7) return `منذ ${days} يوم`; return formatDate(value); }
 export interface StatusInfo { className: string; label: string; }
 const status = (tone: "success" | "warning" | "danger", label: string): StatusInfo => ({ className: `investor-dashboard-status ${tone}`, label });
-
-export function getProjectStatus(value?: string | null): StatusInfo {
-  switch (value) {
-    case "en_cours": return status("success", "قيد الإنجاز");
-    case "approuve": return status("success", "معتمد");
-    case "realise": return status("success", "مكتمل");
-    case "en_etude": return status("warning", "قيد الدراسة");
-    case "soumis": return status("warning", "مقدم");
-    case "brouillon": return status("warning", "مسودة");
-    case "archive": return status("warning", "مؤرشف");
-    case "rejete": return status("danger", "مرفوض");
-    default: return status("warning", value || "غير محدد");
-  }
-}
-
-export function getInvestmentStatus(value?: string | null): StatusInfo {
-  switch (value) {
-    case "valide": return status("success", "معتمد");
-    case "en_cours": return status("success", "قيد التنفيذ");
-    case "termine": return status("success", "مكتمل");
-    case "en_attente": return status("warning", "قيد الانتظار");
-    case "annule": return status("danger", "ملغى");
-    default: return status("warning", value || "غير محدد");
-  }
-}
-
-export function getRequestStatus(value?: string | null): StatusInfo {
-  switch (value) {
-    case "acceptee": return status("success", "مقبول");
-    case "terminee": return status("success", "مكتمل");
-    case "refusee": return status("danger", "مرفوض");
-    case "nouvelle": return status("warning", "جديدة");
-    case "en_cours": return status("warning", "قيد المعالجة");
-    case "en_attente": return status("warning", "قيد الانتظار");
-    default: return status("warning", value || "غير محدد");
-  }
-}
-
-export function getDocumentStatus(value?: string | null): StatusInfo {
-  switch (value) {
-    case "valide": return status("success", "صحيحة");
-    case "en_attente": return status("warning", "قيد المراجعة");
-    case "rejete": return status("danger", "مرفوضة");
-    default: return status("warning", value || "غير محدد");
-  }
-}
-
-export function getFileUrl(value?: string | null): string {
-  const file = value?.trim() || "";
-  if (!file) return "";
-  if (/^https?:\/\//i.test(file)) return file;
-  return `${API_BASE_URL}/${file.replace(/^\/+/, "")}`;
-}
-
-export function getUserInitials(prenom?: string | null, nom?: string | null): string {
-  const first = prenom?.trim().charAt(0) || "";
-  const last = nom?.trim().charAt(0) || "";
-  return `${first}${last}`.trim() || "م";
-}
-
-export function getUserFullName(prenom?: string | null, nom?: string | null): string {
-  return `${prenom || ""} ${nom || ""}`.trim() || "المستثمر";
-}
-
-export function getUserPhotoUrl(user?: { photo?: string | null; photo_url?: string | null; avatar?: string | null } | null): string {
-  const photo = user?.photo_url || user?.photo || user?.avatar || "";
-  return getFileUrl(photo);
-}
+export function getProjectStatus(value?: string | null): StatusInfo { switch (value) { case "en_cours": return status("success", "قيد الإنجاز"); case "approuve": return status("success", "معتمد"); case "realise": return status("success", "مكتمل"); case "en_etude": return status("warning", "قيد الدراسة"); case "soumis": return status("warning", "مقدم"); case "brouillon": return status("warning", "مسودة"); case "archive": return status("warning", "مؤرشف"); case "rejete": return status("danger", "مرفوض"); default: return status("warning", value || "غير محدد"); } }
+export function getInvestmentStatus(value?: string | null): StatusInfo { switch (value) { case "valide": return status("success", "معتمد"); case "en_cours": return status("success", "قيد التنفيذ"); case "termine": return status("success", "مكتمل"); case "en_attente": return status("warning", "قيد الانتظار"); case "annule": return status("danger", "ملغى"); default: return status("warning", value || "غير محدد"); } }
+export function getRequestStatus(value?: string | null): StatusInfo { switch (value) { case "acceptee": return status("success", "مقبول"); case "terminee": return status("success", "مكتمل"); case "refusee": return status("danger", "مرفوض"); case "nouvelle": return status("warning", "جديدة"); case "en_cours": return status("warning", "قيد المعالجة"); case "en_attente": return status("warning", "قيد الانتظار"); default: return status("warning", value || "غير محدد"); } }
+export function getDocumentStatus(value?: string | null): StatusInfo { switch (value) { case "valide": return status("success", "صحيحة"); case "en_attente": return status("warning", "قيد المراجعة"); case "rejete": return status("danger", "مرفوضة"); default: return status("warning", value || "غير محدد"); } }
+export function getFileUrl(value?: string | null): string { const file = value?.trim() || ""; if (!file) return ""; if (/^https?:\/\//i.test(file)) return file; return `${API_BASE_URL}/${file.replace(/^\/+/, "")}`; }
+export function getUserInitials(prenom?: string | null, nom?: string | null): string { const first = prenom?.trim().charAt(0) || "", last = nom?.trim().charAt(0) || ""; return `${first}${last}`.trim() || "م"; }
+export function getUserFullName(user?: { prenom?: string | null; nom?: string | null } | null): string { return `${user?.prenom || ""} ${user?.nom || ""}`.trim() || "المستثمر"; }
+export function getUserPhotoUrl(user?: { photo?: string | null; photo_url?: string | null; avatar?: string | null } | null): string { return getFileUrl(user?.photo_url || user?.photo || user?.avatar || ""); }
