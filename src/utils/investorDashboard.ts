@@ -20,32 +20,24 @@ export function toNumber(value: unknown): number {
 }
 
 export function formatAmount(value?: number | null): string {
-  return `${new Intl.NumberFormat("fr-DZ", {
-    maximumFractionDigits: 0,
-  }).format(toNumber(value))} DA`;
+  return `${new Intl.NumberFormat("fr-DZ", { maximumFractionDigits: 0 }).format(toNumber(value))} DA`;
 }
 
 export function formatDate(value?: string | null): string {
   if (!value) return "—";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("fr-DZ", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(date);
+  return new Intl.DateTimeFormat("fr-DZ", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
 }
 
 export function formatRelativeTime(value?: string | null): string {
   if (!value) return "";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "";
-
   const difference = Math.max(0, Date.now() - date.getTime());
   const minutes = Math.floor(difference / 60000);
   const hours = Math.floor(difference / 3600000);
   const days = Math.floor(difference / 86400000);
-
   if (minutes < 1) return "الآن";
   if (minutes < 60) return `منذ ${minutes} دقيقة`;
   if (hours < 24) return `منذ ${hours} ساعة`;
@@ -53,15 +45,8 @@ export function formatRelativeTime(value?: string | null): string {
   return formatDate(value);
 }
 
-export interface StatusInfo {
-  className: string;
-  label: string;
-}
-
-const status = (tone: "success" | "warning" | "danger", label: string): StatusInfo => ({
-  className: `investor-dashboard-status ${tone}`,
-  label,
-});
+export interface StatusInfo { className: string; label: string; }
+const status = (tone: "success" | "warning" | "danger", label: string): StatusInfo => ({ className: `investor-dashboard-status ${tone}`, label });
 
 export function getProjectStatus(value?: string | null): StatusInfo {
   switch (value) {
@@ -124,4 +109,9 @@ export function getUserInitials(prenom?: string | null, nom?: string | null): st
 
 export function getUserFullName(prenom?: string | null, nom?: string | null): string {
   return `${prenom || ""} ${nom || ""}`.trim() || "المستثمر";
+}
+
+export function getUserPhotoUrl(user?: { photo?: string | null; photo_url?: string | null; avatar?: string | null } | null): string {
+  const photo = user?.photo_url || user?.photo || user?.avatar || "";
+  return getFileUrl(photo);
 }
