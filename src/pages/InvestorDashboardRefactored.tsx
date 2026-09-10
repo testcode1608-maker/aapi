@@ -27,7 +27,18 @@ export default function InvestorDashboardRefactored() {
   const section = location.pathname.split("/")[3] || "dashboard";
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
-  const navClass = (path: string) => location.pathname === path ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
+  const paths: Record<string, string> = {
+    dashboard: "/investor/dashboard",
+    projects: "/investor/dashboard/projects",
+    investments: "/investor/dashboard/investments",
+    requests: "/investor/dashboard/requests",
+    documents: "/investor/dashboard/documents",
+    messages: "/investor/dashboard/messages",
+    notifications: "/investor/dashboard/notifications",
+    profile: "/investor/dashboard/profile",
+    settings: "/investor/dashboard/settings",
+  };
+  const navClass = (name: string) => location.pathname === paths[name] ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
   const logout = () => { localStorage.removeItem("aapi_user"); navigate("/login", { replace: true }); };
 
   if (loading) return <div className="investor-dashboard-loading"><div className="investor-dashboard-loading-spinner"/><p>جاري تحميل لوحة المستثمر...</p></div>;
@@ -46,5 +57,5 @@ export default function InvestorDashboardRefactored() {
     default: content = <InvestorDashboardOverview stats={stats} projects={projects} investments={investments} activities={activities} projectCompletion={projectCompletion} completedInvestments={completedInvestments} />;
   }
 
-  return <div className="investor-dashboard-page"><InvestorDashboardTopbar user={user} fullName={fullName} userPhotoUrl={userPhotoUrl} /><div className="investor-dashboard-layout"><InvestorDashboardSidebar user={user} stats={stats} projectsCount={projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} /><main className="investor-dashboard-main">{content}</main></div></div>;
+  return <div className="investor-dashboard-page"><InvestorDashboardTopbar user={user} stats={stats} userPhotoUrl={userPhotoUrl} /><div className="investor-dashboard-layout"><InvestorDashboardSidebar user={user} stats={stats} projectsCount={projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} /><main className="investor-dashboard-main">{content}</main></div></div>;
 }
