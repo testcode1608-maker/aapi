@@ -1,8 +1,8 @@
-import { useCallback, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/main.css";
 import "../styles/investor-dashboard.css";
 import "../styles/investor-dashboard-extra.css";
+import "../styles/investor-projects.css";
 import InvestorDashboardSidebar from "../components/investor/InvestorDashboardSidebar";
 import InvestorDashboardTopbar from "../components/investor/InvestorDashboardTopbar";
 import InvestorDashboardOverview from "../components/investor/InvestorDashboardOverview";
@@ -15,66 +15,36 @@ import InvestorMessagesSection from "../components/investor/InvestorMessagesSect
 import InvestorNotificationsSection from "../components/investor/InvestorNotificationsSection";
 import InvestorProfileSection from "../components/investor/InvestorProfileSection";
 import InvestorSettingsSection from "../components/investor/InvestorSettingsSection";
-import useInvestorDashboard from "../hooks/useInvestorDashboard";
-import useCreateInvestorProject from "../hooks/useCreateInvestorProject";
-import { getFileUrl, getUserFullName } from "../utils/investorDashboard";
+import { useInvestorDashboard } from "../hooks/useInvestorDashboard";
+import { useCreateInvestorProject } from "../hooks/useCreateInvestorProject";
+import { getUserFullName, getUserPhotoUrl } from "../utils/investorDashboard";
 
 export default function InvestorDashboardRefactored() {
   const location = useLocation();
   const navigate = useNavigate();
-  const dashboard = useInvestorDashboard();
-  const projectCreate = useCreateInvestorProject();
+  const { user, profile, stats, projects, investments, requests, documents, messages, notifications, activities, projectCompletion, completedInvestments, loading, error, reload } = useInvestorDashboard();
+  const createProject = useCreateInvestorProject(reload);
+  const section = location.pathname.split("/")[3] || "dashboard";
+  const fullName = getUserFullName(user);
+  const userPhotoUrl = getUserPhotoUrl(user);
+  const navClass = (path: string) => location.pathname === path ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
+  const logout = () => { localStorage.removeItem("aapi_user"); navigate("/login", { replace: true }); };
 
-  const dashboardSection = useMemo(() => {
-    const parts = location.pathname.split("/").filter(Boolean);
-    return parts[2] || "dashboard";
-  }, [location.pathname]);
+  if (loading) return <div className="investor-dashboard-loading"><div className="investor-dashboard-loading-spinner"/><p>جاري تحميل لوحة المستثمر...</p></div>;
+  if (error) return <div className="investor-dashboard-error"><i className="bi bi-exclamation-triangle"/><h2>تعذر تحميل لوحة المستثمر</h2><p>{error}</p><button className="investor-dashboard-primary-btn" onClick={() => void reload()}>إعادة المحاولة</button></div>;
 
-  const navClass = useCallback((section: string) => {
-    const active = dashboardSection === section;
-    return `investor-dashboard-nav-link${active ? " active" : ""}`;
-  }, [dashboardSection]);
-
-  const fullName = getUserFullName(dashboard.user?.prenom, dashboard.user?.nom);
-  const userPhotoUrl = getFileUrl(dashboard.user?.photo);
-
-  const logout = useCallback(() => {
-    localStorage.removeItem("aapi_user");
-    navigate("/login", { replace: true });
-  }, [navigate]);
-
-  if (dashboard.loading) {
-    return <div className="investor-dashboard-page" dir="rtl"><div className="investor-dashboard-loading"><div className="investor-dashboard-loading-spinner" /><p>جاري تحميل فضاء المستثمر...</p></div></div>;
+  let content;
+  switch (section) {
+    case "projects": content = <><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الاستثمار</span><h1>مشاريعي الاستثمارية</h1><p>إنشاء ومتابعة المشاريع المرسلة إلى الإدارة.</p></div></div><InvestorProjectCreateForm {...createProject} /><InvestorProjectList projects={projects} /></>; break;
+    case "investments": content = <InvestorInvestmentsSection investments={investments} />; break;
+    case "requests": content = <InvestorRequestsSection requests={requests} />; break;
+    case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
+    case "messages": content = <InvestorMessagesSection messages={messages} />; break;
+    case "notifications": content = <InvestorNotificationsSection notifications={notifications} />; break;
+    case "profile": content = <InvestorProfileSection user={user} profile={profile} fullName={fullName} userPhotoUrl={userPhotoUrl} />; break;
+    case "settings": content = <InvestorSettingsSection user={user} />; break;
+    default: content = <InvestorDashboardOverview stats={stats} projects={projects} investments={investments} activities={activities} projectCompletion={projectCompletion} completedInvestments={completedInvestments} />;
   }
 
-  if (dashboard.error) {
-    return <div className="investor-dashboard-page" dir="rtl"><div className="investor-dashboard-error"><i className="bi bi-exclamation-triangle" /><h2>تعذر تحميل لوحة التحكم</h2><p>{dashboard.error}</p><button type="button" className="investor-dashboard-primary-btn" onClick={() => void dashboard.reload()}><i className="bi bi-arrow-clockwise" /> إعادة المحاولة</button></div></div>;
-  }
-
-  const section = (() => {
-    switch (dashboardSection) {
-      case "projects":
-        return <section className="investor-dashboard-section">
-          <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">المشاريع</span><h1>مشاريعي</h1><p>إدارة ومتابعة مشاريعك الاستثمارية.</p></div></div>
-          <InvestorProjectCreateForm form={projectCreate.form} setForm={projectCreate.setForm} creating={projectCreate.creating} error={projectCreate.error} success={projectCreate.success} onSubmit={projectCreate.submit} onReset={projectCreate.resetForm} />
-          <InvestorProjectList projects={dashboard.projects} />
-        </section>;
-      case "investments": return <InvestorInvestmentsSection investments={dashboard.investments} />;
-      case "requests": return <InvestorRequestsSection requests={dashboard.requests} />;
-      case "documents": return <InvestorDocumentsSection documents={dashboard.documents} />;
-      case "messages": return <InvestorMessagesSection messages={dashboard.messages} />;
-      case "notifications": return <InvestorNotificationsSection notifications={dashboard.notifications} />;
-      case "profile": return <InvestorProfileSection user={dashboard.user} profile={dashboard.profile} fullName={fullName} userPhotoUrl={userPhotoUrl} />;
-      case "settings": return <InvestorSettingsSection user={dashboard.user} />;
-      default: return <InvestorDashboardOverview stats={dashboard.stats} projects={dashboard.projects} investments={dashboard.investments} activities={dashboard.activities} projectCompletion={dashboard.projectCompletion} completedInvestments={dashboard.completedInvestments} />;
-    }
-  })();
-
-  return <div className="investor-dashboard-page" dir="rtl">
-    <InvestorDashboardTopbar user={dashboard.user} stats={dashboard.stats} userPhotoUrl={userPhotoUrl} />
-    <div className="investor-dashboard-layout">
-      <InvestorDashboardSidebar user={dashboard.user} stats={dashboard.stats} projectsCount={dashboard.projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} />
-      <main className="investor-dashboard-main">{section}</main>
-    </div>
-  </div>;
+  return <div className="investor-dashboard-page"><InvestorDashboardTopbar user={user} fullName={fullName} userPhotoUrl={userPhotoUrl} /><div className="investor-dashboard-layout"><InvestorDashboardSidebar user={user} stats={stats} projectsCount={projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} /><main className="investor-dashboard-main">{content}</main></div></div>;
 }
