@@ -12,7 +12,7 @@ import NewsDetails from "./pages/NewsDetails";
 import AnnouncementsDetails from "./pages/AnnouncementsDetails";
 import InvestorRegistration from "./pages/InvestorRegistration";
 import Login from "./pages/Login";
-import InvestorDashboard from "./pages/InvestorDashboard";
+import InvestorDashboard from "./pages/InvestorDashboardRefactored";
 import Administrator from "./pages/Administrator";
 import AdminSettings from "./pages/AdminSettings";
 import Header from "./components/Header";
