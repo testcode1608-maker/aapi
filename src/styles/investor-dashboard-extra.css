@@ -1,0 +1,20 @@
+/* AAPI Investor Dashboard — profile and communication refinements */
+.investor-dashboard-profile{display:flex;align-items:center;gap:22px;margin-bottom:18px;padding:24px;background:var(--id-white);border:1px solid var(--id-border);border-radius:var(--id-radius);box-shadow:var(--id-shadow)}
+.investor-dashboard-profile-avatar{width:82px;height:82px;flex:0 0 82px;overflow:hidden;display:grid;place-items:center;border-radius:22px;background:var(--id-green);color:var(--id-white);font-size:28px;font-weight:800;box-shadow:0 10px 24px rgba(8,116,67,.16)}
+.investor-dashboard-profile-avatar img{width:100%;height:100%;object-fit:cover}
+.investor-dashboard-profile-info{min-width:0;display:grid;gap:5px}
+.investor-dashboard-profile-info h2{margin:0 0 3px;color:var(--id-dark);font-size:22px}
+.investor-dashboard-profile-info span{color:var(--id-gray);font-size:12px}
+.investor-dashboard-profile-info span:first-of-type{direction:ltr;text-align:right}
+.investor-dashboard-settings-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.investor-dashboard-setting-item{display:flex;align-items:center;gap:11px;min-width:0;padding:13px;border:1px solid #edf1ef;border-radius:12px;background:#fff}
+.investor-dashboard-setting-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:11px;background:var(--id-light-green);color:var(--id-green);font-size:15px}
+.investor-dashboard-setting-item>div:last-child{min-width:0;display:flex;flex-direction:column;gap:4px}
+.investor-dashboard-setting-item strong{font-size:11px;color:var(--id-dark)}
+.investor-dashboard-setting-item span{font-size:11px;color:var(--id-gray);overflow-wrap:anywhere}
+.investor-dashboard-activity-item{transition:background .18s ease;padding-right:8px;padding-left:8px;border-radius:10px}
+.investor-dashboard-activity-item:hover{background:var(--id-light-green)}
+.investor-dashboard-status{border:0}
+.investor-dashboard-card-header>div{min-width:0}
+@media(max-width:760px){.investor-dashboard-profile{padding:18px;gap:14px}.investor-dashboard-profile-avatar{width:64px;height:64px;flex-basis:64px;border-radius:18px;font-size:22px}.investor-dashboard-profile-info h2{font-size:18px}.investor-dashboard-settings-list{grid-template-columns:1fr}}
+@media(max-width:460px){.investor-dashboard-profile{align-items:flex-start}.investor-dashboard-profile-info span{overflow-wrap:anywhere}.investor-dashboard-activity-item{align-items:flex-start}}
