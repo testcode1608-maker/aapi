@@ -1,4 +1,4 @@
-import {
+import type {
   DashboardActivity,
   DashboardDocument,
   DashboardInvestment,
@@ -136,7 +136,9 @@ export function getDashboardActivities(
     const sender = `${message.sender_prenom || ""} ${message.sender_nom || ""}`.trim();
     items.push({
       title: "رسالة جديدة",
-      text: sender ? `من ${sender}: ${message.sujet || message.contenu || ""}` : message.sujet || message.contenu || "",
+      text: sender
+        ? `من ${sender}: ${message.sujet || message.contenu || ""}`
+        : message.sujet || message.contenu || "",
       date: message.created_at,
       icon: "bi-chat-left-text",
     });
@@ -152,7 +154,9 @@ export function getDashboardActivities(
     .slice(0, 10);
 }
 
-export function getProjectCompletion(stats: DashboardResponse["stats"] | null): number {
+export function getProjectCompletion(
+  stats: DashboardResponse["stats"] | null,
+): number {
   if (!stats || toNumber(stats.projects_total) <= 0) return 0;
   return Math.min(
     100,
