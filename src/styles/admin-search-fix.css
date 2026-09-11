@@ -1,7 +1,7 @@
-/* AAPI ADMIN — search bar only */
+/* AAPI ADMIN — search bar only, Aura-style */
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search{
   width:256px!important;
-  height:38px!important;
+  height:36px!important;
   box-sizing:border-box!important;
   padding:6px 40px 6px 16px!important;
   display:flex!important;
@@ -12,6 +12,8 @@ body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project
   border-radius:9999px!important;
   color:#fff!important;
   font-size:14px!important;
+  font-weight:400!important;
+  line-height:20px!important;
   box-shadow:none!important;
   transition:all .2s ease!important;
 }
@@ -29,7 +31,7 @@ body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input,
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input[type="search"]{
   width:100%!important;
-  height:24px!important;
+  height:20px!important;
   min-width:0!important;
   margin:0!important;
   padding:0!important;
@@ -39,7 +41,8 @@ body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project
   color:#fff!important;
   caret-color:#fff!important;
   font-size:14px!important;
-  line-height:24px!important;
+  font-weight:400!important;
+  line-height:20px!important;
   -webkit-text-fill-color:#fff!important;
 }
 
