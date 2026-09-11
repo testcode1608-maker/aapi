@@ -1,10 +1,57 @@
+.admin-quick-theme-toggle{position:absolute;top:16px;left:16px;width:34px;height:34px;padding:0;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.06);color:#f4d66d;display:grid;place-items:center;cursor:pointer;z-index:60;font-size:16px;line-height:1;transition:background .2s ease,border-color .2s ease,transform .2s ease,color .2s ease;box-shadow:0 6px 18px rgba(0,0,0,.12)}.admin-quick-theme-toggle:hover{transform:translateY(-1px);background:rgba(8,116,67,.18);border-color:rgba(8,116,67,.45)}.admin-quick-theme-toggle:active{transform:scale(.94)}body.aapi-admin-light .admin-quick-theme-toggle{background:#f4f8f6;border-color:#d6e2db;color:#087443;box-shadow:0 5px 15px rgba(25,70,48,.08)}body.aapi-admin-light .admin-quick-theme-toggle:hover{background:#e8f5ee;border-color:#bfe0cc}
+.administrator-shell .admin-navbar{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-left-color:rgba(255,255,255,.08);box-shadow:-20px 0 55px rgba(0,0,0,.2)}.administrator-shell .admin-navbar-brand-button{border-radius:12px;transition:background .2s ease,transform .2s ease}.administrator-shell .admin-navbar-brand-button:hover{background:rgba(255,255,255,.035);transform:translateX(-2px)}.administrator-shell .admin-navbar-logo{box-shadow:0 8px 28px rgba(8,116,67,.16),0 0 0 1px rgba(201,162,39,.14)}.administrator-shell .admin-navbar-user{background:linear-gradient(135deg,rgba(8,116,67,.10),rgba(255,255,255,.025));border-color:rgba(8,116,67,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}.administrator-shell .admin-navbar-user-avatar{box-shadow:0 0 0 3px rgba(8,116,67,.08)}.administrator-shell .admin-nav-link{min-height:44px;border:1px solid transparent}.administrator-shell .admin-nav-link:hover{border-color:rgba(255,255,255,.045);transform:translateX(-2px)}.administrator-shell .admin-nav-link.active{border-color:rgba(8,116,67,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.035),inset 0 0 0 1px rgba(8,116,67,.14),0 8px 24px rgba(8,116,67,.07)}.administrator-shell .admin-nav-link.active .admin-nav-icon svg{filter:drop-shadow(0 0 6px rgba(201,162,39,.2))}.administrator-shell .admin-navbar-bottom-button{border:1px solid transparent;transition:all .2s ease}.administrator-shell .admin-navbar-bottom-button:hover{border-color:rgba(255,255,255,.045)}.administrator-shell .admin-dashboard-header{padding-top:34px}.administrator-shell .admin-dashboard-welcome h1{font-size:29px}.administrator-shell .admin-dashboard-eyebrow{color:#8b959f;letter-spacing:1px}.administrator-shell .admin-kpi-card{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}.administrator-shell .admin-kpi-card:hover{transform:translateY(-3px);border-color:rgba(8,116,67,.32);box-shadow:0 16px 38px rgba(0,0,0,.18)}.administrator-shell .admin-kpi-icon{box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}.administrator-shell .admin-panel,.administrator-shell .admin-recent-projects{transition:border-color .2s ease,box-shadow .2s ease}.administrator-shell .admin-panel:hover,.administrator-shell .admin-recent-projects:hover{border-color:rgba(8,116,67,.2)}.administrator-shell .admin-circular-progress{filter:drop-shadow(0 8px 18px rgba(8,116,67,.08))}.administrator-shell .admin-circular-inner{box-shadow:inset 0 0 0 1px rgba(255,255,255,.035)}
+body.aapi-admin-light .administrator-shell .admin-navbar{border-left-color:#d7e3dc;box-shadow:-18px 0 45px rgba(20,70,45,.07)}body.aapi-admin-light .administrator-shell .admin-navbar-user{background:linear-gradient(135deg,#f0f8f3,#fff);border-color:#dce9e1}body.aapi-admin-light .administrator-shell .admin-nav-link{border-color:transparent}body.aapi-admin-light .administrator-shell .admin-nav-link:hover{border-color:#dce9e1;transform:translateX(-2px)}body.aapi-admin-light .administrator-shell .admin-nav-link.active{border-color:#c8e3d2;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 8px 22px rgba(8,116,67,.06)}body.aapi-admin-light .administrator-shell .admin-kpi-card:hover{border-color:#bcdcca;box-shadow:0 16px 35px rgba(25,70,48,.09)}
+@media(max-width:1100px){.administrator-shell .admin-navbar{width:240px}.administrator-shell .admin-dashboard-header,.administrator-shell .admin-dashboard-main,.administrator-shell .admin-projects-content,.administrator-shell .admin-requests-content,.administrator-shell .admin-users-content,.administrator-shell .admin-investments-content,.administrator-shell .admin-investors-content,.administrator-shell .admin-messages-content,.administrator-shell .admin-documents-content{margin-right:240px}.administrator-shell .admin-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.administrator-shell .admin-navbar{width:min(84vw,310px);transform:translateX(105%);transition:transform .24s ease}.administrator-shell.admin-sidebar-open .admin-navbar{transform:translateX(0)}.administrator-shell .admin-navbar.open{transform:translateX(0)}.administrator-shell.admin-sidebar-open::before{content:"";position:fixed;inset:0;background:rgba(3,20,12,.46);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:850}.administrator-shell .admin-dashboard-header,.administrator-shell .admin-dashboard-main,.administrator-shell .admin-projects-content,.administrator-shell .admin-requests-content,.administrator-shell .admin-users-content,.administrator-shell .admin-investments-content,.administrator-shell .admin-investors-content,.administrator-shell .admin-messages-content,.administrator-shell .admin-documents-content{margin-right:0}.administrator-shell .admin-dashboard-header{padding:72px 16px 14px}.administrator-shell .admin-dashboard-main{padding:18px 16px 35px}.administrator-shell .admin-kpi-grid{grid-template-columns:1fr}.administrator-shell .admin-analytics-grid{grid-template-columns:1fr}.administrator-shell .admin-circular-stats{grid-template-columns:1fr 1fr}.administrator-shell .admin-mobile-header{display:flex;position:fixed;top:0;right:0;left:0;height:58px;align-items:center;justify-content:space-between;padding:0 14px;background:rgba(9,10,12,.92);backdrop-filter:blur(16px);z-index:900;border-bottom:1px solid rgba(255,255,255,.08);color:#fff}.administrator-shell .admin-mobile-menu-button{width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:rgba(255,255,255,.05);color:#fff;cursor:pointer}.administrator-shell .admin-navbar-mobile-close{display:grid;position:absolute;top:17px;left:15px;width:32px;height:32px;place-items:center;border-radius:9px;background:rgba(255,255,255,.05);color:#fff;cursor:pointer}.administrator-shell .admin-navbar-brand{padding-left:45px}.administrator-shell .admin-circular-progress{width:105px;height:105px}.administrator-shell .admin-circular-inner{width:81px;height:81px}}body.aapi-admin-light .administrator-shell .admin-mobile-header{background:rgba(255,255,255,.94);border-bottom-color:#dce5df;color:#173125}body.aapi-admin-light .administrator-shell .admin-mobile-menu-button{background:#f1f6f3;border-color:#d6e2db;color:#075b36}
+/* AAPI ADMIN — polished search/filter toolbar */
+.administrator-shell .admin-toolbar{direction:rtl;display:grid;grid-template-columns:minmax(280px,1fr) auto auto;align-items:center;gap:12px;width:100%;margin:0 0 18px;padding:12px;background:#f5f7f6;border:1px solid #dfe8e3;border-radius:14px;box-sizing:border-box;box-shadow:0 6px 20px rgba(20,34,27,.05)}
+.administrator-shell .admin-toolbar .project-search,.administrator-shell .admin-toolbar .admin-search{position:relative;display:flex!important;align-items:center;justify-content:flex-start;width:100%!important;min-width:0!important;height:46px!important;margin:0!important;padding:0!important;background:#fff;border:1px solid #d7e2dc!important;border-radius:12px!important;box-sizing:border-box;overflow:hidden;box-shadow:0 1px 2px rgba(20,34,27,.03);transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.administrator-shell .admin-toolbar .project-search:hover,.administrator-shell .admin-toolbar .admin-search:hover{border-color:#b9d5c5!important;box-shadow:0 3px 10px rgba(8,116,67,.07)}
+.administrator-shell .admin-toolbar .project-search:focus-within,.administrator-shell .admin-toolbar .admin-search:focus-within{border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.10),0 4px 14px rgba(8,116,67,.08)!important}
+.administrator-shell .admin-toolbar .project-search svg,.administrator-shell .admin-toolbar .admin-search svg{position:absolute!important;right:14px!important;left:auto!important;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#087443;pointer-events:none;z-index:2}
+.administrator-shell .admin-toolbar .project-search input,.administrator-shell .admin-toolbar .admin-search input{display:block!important;width:100%!important;height:44px!important;min-width:0!important;margin:0!important;padding:0 44px 0 16px!important;border:0!important;outline:0!important;background:transparent!important;color:#14221b!important;font-family:inherit!important;font-size:14px!important;font-weight:500;line-height:44px!important;text-align:right!important;direction:rtl!important;box-sizing:border-box!important}
+.administrator-shell .admin-toolbar .project-search input:focus,.administrator-shell .admin-toolbar .admin-search input:focus{outline:0!important;box-shadow:none!important}
+.administrator-shell .admin-toolbar .project-search input::placeholder,.administrator-shell .admin-toolbar .admin-search input::placeholder{color:#66736d!important;opacity:1!important;text-align:right!important;direction:rtl!important}
+.administrator-shell .admin-toolbar select{width:auto!important;min-width:165px!important;height:46px!important;margin:0!important;padding:0 14px 0 34px!important;border:1px solid #d7e2dc!important;border-radius:12px!important;background:#fff!important;color:#14221b!important;font-family:inherit!important;font-size:14px!important;font-weight:500;line-height:44px!important;text-align:right!important;text-align-last:right!important;direction:rtl!important;box-sizing:border-box!important;outline:0!important;cursor:pointer;box-shadow:0 1px 2px rgba(20,34,27,.03);transition:background .2s ease,border-color .2s ease,box-shadow .2s ease}
+.administrator-shell .admin-toolbar select:hover{border-color:#b9d5c5!important;box-shadow:0 3px 10px rgba(8,116,67,.07)}
+.administrator-shell .admin-toolbar select:focus{border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.10),0 4px 14px rgba(8,116,67,.08)!important}
+.administrator-shell .admin-toolbar select option{background:#fff;color:#14221b;direction:rtl;text-align:right}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar{background:#111317;border-color:#252930;box-shadow:0 10px 28px rgba(0,0,0,.16)}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search{background:#15181c!important;border-color:#2b3239!important;color:#f3f5f4!important;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search:hover,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search:hover{border-color:#087443!important;box-shadow:0 3px 12px rgba(8,116,67,.12)}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search:focus-within,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search:focus-within{border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.18),0 5px 16px rgba(0,0,0,.24)!important}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search input,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search input{background:transparent!important;color:#f3f5f4!important}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar input::placeholder{color:#858e98!important}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar select{background:#15181c!important;border-color:#2b3239!important;color:#f3f5f4!important;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar select:hover{border-color:#087443!important;box-shadow:0 3px 12px rgba(8,116,67,.12)}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar select:focus{border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.18),0 5px 16px rgba(0,0,0,.24)!important}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar select option{background:#15181c;color:#f3f5f4}
+body.aapi-admin-light .administrator-shell .admin-toolbar{background:#f5f7f6;border-color:#dfe8e3}
+body.aapi-admin-light .administrator-shell .admin-toolbar .project-search,body.aapi-admin-light .administrator-shell .admin-toolbar .admin-search{background:#fff!important;border-color:#d7e2dc!important;color:#14221b!important}
+body.aapi-admin-light .administrator-shell .admin-toolbar select{background:#fff!important;border-color:#d7e2dc!important;color:#14221b!important}
+body.aapi-admin-light .administrator-shell .admin-toolbar .project-search input,body.aapi-admin-light .administrator-shell .admin-toolbar .admin-search input{color:#14221b!important;background:transparent!important}
+@media(max-width:800px){.administrator-shell .admin-toolbar{grid-template-columns:1fr;padding:10px;gap:9px}.administrator-shell .admin-toolbar .project-search,.administrator-shell .admin-toolbar .admin-search,.administrator-shell .admin-toolbar select{width:100%!important;min-width:0!important}}
 
-/* AAPI ADMIN — Aura-style search input */
+/* AAPI ADMIN — Aura-style dark search field */
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search{background:#18181b!important;background-color:#18181b!important;border:1px solid #303036!important;border-radius:10px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 1px 2px rgba(0,0,0,.35)!important;color:#f4f4f5!important;color-scheme:dark!important}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search:hover,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search:hover{background:#1c1c20!important;border-color:#3b3b43!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 3px 12px rgba(0,0,0,.32)!important}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search:focus-within,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search:focus-within{background:#18181b!important;border-color:#087443!important;box-shadow:0 0 0 2px rgba(8,116,67,.18),inset 0 1px 0 rgba(255,255,255,.025),0 5px 16px rgba(0,0,0,.30)!important}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search input,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search input,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search input[type="search"],body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search input[type="search"]{background:#18181b!important;background-color:#18181b!important;color:#f4f4f5!important;caret-color:#c9a227!important;color-scheme:dark!important;-webkit-text-fill-color:#f4f4f5!important}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search input::placeholder,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search input::placeholder{color:#8b8b93!important;opacity:1!important}
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search input:-webkit-autofill,body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search input:-webkit-autofill{-webkit-text-fill-color:#f4f4f5!important;-webkit-box-shadow:0 0 0 1000px #18181b inset!important;box-shadow:0 0 0 1000px #18181b inset!important;caret-color:#c9a227!important}
+
+/* AAPI ADMIN — final RTL toolbar alignment */
+.administrator-shell .admin-toolbar{grid-template-columns:minmax(0,1fr) 180px 180px;direction:rtl;align-items:stretch}.administrator-shell .admin-toolbar > *{min-width:0;align-self:stretch}.administrator-shell .admin-toolbar .project-search,.administrator-shell .admin-toolbar .admin-search{width:100%!important;height:46px!important;justify-self:stretch}.administrator-shell .admin-toolbar select{width:180px!important;min-width:180px!important;height:46px!important;justify-self:stretch;line-height:normal!important;padding-top:0!important;padding-bottom:0!important}.administrator-shell .admin-toolbar input{font-family:inherit!important;unicode-bidi:plaintext}
+@media(max-width:1100px){.administrator-shell .admin-toolbar{grid-template-columns:minmax(0,1fr) 160px 160px}.administrator-shell .admin-toolbar select{width:160px!important;min-width:160px!important}}
+@media(max-width:800px){.administrator-shell .admin-toolbar{grid-template-columns:1fr;align-items:stretch}.administrator-shell .admin-toolbar select{width:100%!important;min-width:0!important}.administrator-shell .admin-toolbar .project-search,.administrator-shell .admin-toolbar .admin-search{width:100%!important}}
+
+/* AAPI ADMIN — final Aura search input override */
 .administrator-shell .admin-toolbar .project-search,
 .administrator-shell .admin-toolbar .admin-search{
   width:256px!important;
   min-width:256px!important;
   height:36px!important;
+  flex:0 0 256px!important;
   display:flex!important;
   align-items:center!important;
   position:relative!important;
@@ -18,73 +65,34 @@
   transition:all .2s ease!important;
 }
 .administrator-shell .admin-toolbar .project-search:hover,
-.administrator-shell .admin-toolbar .admin-search:hover{
-  border-color:rgba(255,255,255,.16)!important;
-  background:#1c1c20!important;
-}
+.administrator-shell .admin-toolbar .admin-search:hover{border-color:rgba(255,255,255,.16)!important;background:#1c1c20!important}
 .administrator-shell .admin-toolbar .project-search:focus-within,
-.administrator-shell .admin-toolbar .admin-search:focus-within{
-  border-color:rgba(139,92,246,.50)!important;
-  box-shadow:0 0 0 1px rgba(139,92,246,.50)!important;
-  background:#18181b!important;
-}
+.administrator-shell .admin-toolbar .admin-search:focus-within{border-color:rgba(139,92,246,.50)!important;box-shadow:0 0 0 1px rgba(139,92,246,.50)!important;background:#18181b!important}
 .administrator-shell .admin-toolbar .project-search input,
 .administrator-shell .admin-toolbar .admin-search input{
   width:100%!important;
   height:34px!important;
   min-width:0!important;
-  padding:0 42px 0 16px!important;
+  padding:6px 40px 6px 16px!important;
   margin:0!important;
   border:0!important;
   outline:none!important;
-  background:transparent!important;
+  background:#18181b!important;
   color:#fff!important;
   font-family:inherit!important;
   font-size:14px!important;
   font-weight:400!important;
-  line-height:34px!important;
+  line-height:20px!important;
   text-align:right!important;
   direction:rtl!important;
   box-shadow:none!important;
   box-sizing:border-box!important;
 }
 .administrator-shell .admin-toolbar .project-search input::placeholder,
-.administrator-shell .admin-toolbar .admin-search input::placeholder{
-  color:#71717a!important;
-  opacity:1!important;
-  text-align:right!important;
-}
+.administrator-shell .admin-toolbar .admin-search input::placeholder{color:#71717a!important;opacity:1!important;text-align:right!important}
 .administrator-shell .admin-toolbar .project-search svg,
-.administrator-shell .admin-toolbar .admin-search svg{
-  position:absolute!important;
-  right:13px!important;
-  left:auto!important;
-  top:50%!important;
-  width:16px!important;
-  height:16px!important;
-  transform:translateY(-50%)!important;
-  color:#71717a!important;
-  pointer-events:none!important;
-  z-index:2!important;
-}
+.administrator-shell .admin-toolbar .admin-search svg{position:absolute!important;right:13px!important;left:auto!important;top:50%!important;width:16px!important;height:16px!important;transform:translateY(-50%)!important;color:#71717a!important;pointer-events:none!important;z-index:2!important}
 .administrator-shell .admin-toolbar .project-search:focus-within svg,
-.administrator-shell .admin-toolbar .admin-search:focus-within svg{
-  color:#a78bfa!important;
-}
-body.aapi-admin-light .administrator-shell .admin-toolbar .project-search,
-body.aapi-admin-light .administrator-shell .admin-toolbar .admin-search{
-  background:#18181b!important;
-  border-color:rgba(255,255,255,.10)!important;
-  color:#fff!important;
-}
-body.aapi-admin-light .administrator-shell .admin-toolbar .project-search input,
-body.aapi-admin-light .administrator-shell .admin-toolbar .admin-search input{
-  color:#fff!important;
-}
-@media(max-width:800px){
-  .administrator-shell .admin-toolbar .project-search,
-  .administrator-shell .admin-toolbar .admin-search{
-    width:100%!important;
-    min-width:0!important;
-  }
-}
+.administrator-shell .admin-toolbar .admin-search:focus-within svg{color:#a78bfa!important}
+@media(max-width:1100px){.administrator-shell .admin-toolbar .project-search,.administrator-shell .admin-toolbar .admin-search{width:220px!important;min-width:220px!important;flex-basis:220px!important}}
+@media(max-width:800px){.administrator-shell .admin-toolbar .project-search,.administrator-shell .admin-toolbar .admin-search{width:100%!important;min-width:0!important;flex:1 1 auto!important}}
