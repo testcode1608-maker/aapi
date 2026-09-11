@@ -1,47 +1,81 @@
-/* AAPI ADMIN — search bar only: fixes the actual .admin-project-filters markup */
+/* AAPI ADMIN — search bar only: requested Aura-style appearance */
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search{
+  width:256px!important;
+  height:38px!important;
+  box-sizing:border-box!important;
+  padding:6px 40px 6px 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  position:relative!important;
   background:#18181b!important;
   background-color:#18181b!important;
-  border:1px solid #303036!important;
-  border-radius:10px!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 1px 2px rgba(0,0,0,.35)!important;
-  color:#f4f4f5!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  border-radius:9999px!important;
+  color:#fff!important;
+  box-shadow:none!important;
   color-scheme:dark!important;
+  transition:all .2s ease!important;
 }
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search:hover{
-  background:#1c1c20!important;
-  border-color:#3b3b43!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 3px 12px rgba(0,0,0,.32)!important;
+  border-color:rgba(255,255,255,.16)!important;
+  background:#18181b!important;
 }
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search:focus-within{
   background:#18181b!important;
-  border-color:#087443!important;
-  box-shadow:0 0 0 2px rgba(8,116,67,.18),inset 0 1px 0 rgba(255,255,255,.025),0 5px 16px rgba(0,0,0,.30)!important;
+  border-color:rgba(139,92,246,.5)!important;
+  box-shadow:0 0 0 1px rgba(139,92,246,.5)!important;
 }
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input,
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input[type="search"]{
+  width:100%!important;
+  height:24px!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  outline:0!important;
   background:#18181b!important;
   background-color:#18181b!important;
-  color:#f4f4f5!important;
-  caret-color:#c9a227!important;
+  color:#fff!important;
+  caret-color:#fff!important;
+  font-size:14px!important;
+  line-height:24px!important;
+  -webkit-text-fill-color:#fff!important;
   color-scheme:dark!important;
-  -webkit-text-fill-color:#f4f4f5!important;
 }
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input::placeholder{
-  color:#8b8b93!important;
+  color:#71717a!important;
   opacity:1!important;
 }
 body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input:-webkit-autofill{
-  -webkit-text-fill-color:#f4f4f5!important;
+  -webkit-text-fill-color:#fff!important;
   -webkit-box-shadow:0 0 0 1000px #18181b inset!important;
   box-shadow:0 0 0 1000px #18181b inset!important;
-  caret-color:#c9a227!important;
 }
-body.aapi-admin-light .administrator-shell .admin-project-filters .project-search,
+body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search svg{
+  position:absolute!important;
+  right:14px!important;
+  left:auto!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:16px!important;
+  height:16px!important;
+  color:#71717a!important;
+  pointer-events:none!important;
+}
+@media(max-width:800px){
+  body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search{
+    width:100%!important;
+  }
+}
+/* Light mode stays unchanged in spirit; only the dark search gets the requested style. */
+body.aapi-admin-light .administrator-shell .admin-project-filters .project-search{
+  background:#fff!important;
+  border-color:#dce5df!important;
+  border-radius:9999px!important;
+}
 body.aapi-admin-light .administrator-shell .admin-project-filters .project-search input{
   background:#fff!important;
-  background-color:#fff!important;
   color:#173125!important;
-  border-color:#dce5df!important;
   -webkit-text-fill-color:#173125!important;
 }
