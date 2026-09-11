@@ -1,83 +1,90 @@
-/* AAPI ADMIN — search bar only, Aura-style */
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search{
-  width:256px!important;
-  height:36px!important;
-  box-sizing:border-box!important;
-  padding:6px 40px 6px 16px!important;
-  display:flex!important;
-  align-items:center!important;
-  position:relative!important;
-  background:#18181b!important;
-  border:1px solid rgba(255,255,255,.10)!important;
-  border-radius:9999px!important;
-  color:#fff!important;
-  font-size:14px!important;
-  font-weight:400!important;
-  line-height:20px!important;
-  box-shadow:none!important;
-  transition:all .2s ease!important;
+/* AAPI ADMIN — search bar only */
+.administrator-shell .admin-project-filters .project-search {
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  height: 50px !important;
+  box-sizing: border-box !important;
+  background: #f1f3f5 !important;
+  border: 2px solid transparent !important;
+  border-radius: 50px !important;
+  padding: 5px 10px 5px 20px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: none !important;
 }
 
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search:hover{
-  border-color:rgba(255,255,255,.10)!important;
+.administrator-shell .admin-project-filters .project-search:focus-within {
+  background: #fff !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15) !important;
+  outline: none !important;
 }
 
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search:focus-within{
-  outline:none!important;
-  border-color:rgba(139,92,246,.5)!important;
-  box-shadow:0 0 0 1px rgba(139,92,246,.5)!important;
+.administrator-shell .admin-project-filters .project-search input,
+.administrator-shell .admin-project-filters .project-search input[type="search"] {
+  flex: 1 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: normal !important;
+  color: #333 !important;
+  -webkit-text-fill-color: #333 !important;
 }
 
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input,
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input[type="search"]{
-  width:100%!important;
-  height:20px!important;
-  min-width:0!important;
-  margin:0!important;
-  padding:0!important;
-  border:0!important;
-  outline:0!important;
-  background:transparent!important;
-  color:#fff!important;
-  caret-color:#fff!important;
-  font-size:14px!important;
-  font-weight:400!important;
-  line-height:20px!important;
-  -webkit-text-fill-color:#fff!important;
+.administrator-shell .admin-project-filters .project-search input::placeholder {
+  color: #adb5bd !important;
+  opacity: 1 !important;
 }
 
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input::placeholder{
-  color:#71717a!important;
-  opacity:1!important;
+.administrator-shell .admin-project-filters .project-search svg {
+  width: 18px !important;
+  height: 18px !important;
+  color: #6c757d !important;
+  flex-shrink: 0 !important;
+  margin-left: 10px !important;
+  position: static !important;
+  transform: none !important;
 }
 
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search svg{
-  position:absolute!important;
-  right:14px!important;
-  left:auto!important;
-  top:50%!important;
-  transform:translateY(-50%)!important;
-  width:16px!important;
-  height:16px!important;
-  color:#71717a!important;
-  pointer-events:none!important;
+.administrator-shell .admin-project-filters .project-search button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #3b82f6 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease !important;
 }
 
-@media(max-width:800px){
-  body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search{
-    width:100%!important;
+.administrator-shell .admin-project-filters .project-search button:hover {
+  background: #2563eb !important;
+}
+
+.administrator-shell .admin-project-filters .project-search button svg {
+  width: 18px !important;
+  height: 18px !important;
+  color: #fff !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 800px) {
+  .administrator-shell .admin-project-filters .project-search {
+    max-width: 100% !important;
+    width: 100% !important;
   }
-}
-
-/* Light mode — search bar only */
-body.aapi-admin-light .administrator-shell .admin-project-filters .project-search{
-  background:#fff!important;
-  border-color:#dce5df!important;
-  border-radius:9999px!important;
-}
-
-body.aapi-admin-light .administrator-shell .admin-project-filters .project-search input{
-  background:transparent!important;
-  color:#173125!important;
-  -webkit-text-fill-color:#173125!important;
 }
