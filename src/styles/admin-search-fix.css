@@ -1,32 +1,42 @@
-/* AAPI ADMIN — search bar only: requested Aura-style appearance */
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search{
-  width:256px!important;
-  height:38px!important;
+/* AAPI ADMIN — requested styling on the actual .admin-toolbar class only */
+.administrator-shell .admin-toolbar{
   box-sizing:border-box!important;
-  padding:6px 40px 6px 16px!important;
+  width:100%!important;
+  min-height:52px!important;
+  padding:7px 10px!important;
   display:flex!important;
   align-items:center!important;
-  position:relative!important;
+  gap:10px!important;
   background:#18181b!important;
   background-color:#18181b!important;
   border:1px solid rgba(255,255,255,.10)!important;
   border-radius:9999px!important;
-  color:#fff!important;
   box-shadow:none!important;
-  color-scheme:dark!important;
   transition:all .2s ease!important;
 }
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search:hover{
+.administrator-shell .admin-toolbar:hover{
   border-color:rgba(255,255,255,.16)!important;
-  background:#18181b!important;
 }
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search:focus-within{
-  background:#18181b!important;
+.administrator-shell .admin-toolbar:focus-within{
   border-color:rgba(139,92,246,.5)!important;
   box-shadow:0 0 0 1px rgba(139,92,246,.5)!important;
 }
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input,
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input[type="search"]{
+.administrator-shell .admin-toolbar .project-search,
+.administrator-shell .admin-toolbar .admin-search{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  width:auto!important;
+  height:38px!important;
+  padding:6px 40px 6px 16px!important;
+  background:#18181b!important;
+  background-color:#18181b!important;
+  border:0!important;
+  border-radius:9999px!important;
+  box-shadow:none!important;
+  color:#fff!important;
+}
+.administrator-shell .admin-toolbar .project-search input,
+.administrator-shell .admin-toolbar .admin-search input{
   width:100%!important;
   height:24px!important;
   min-width:0!important;
@@ -34,25 +44,20 @@ body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project
   padding:0!important;
   border:0!important;
   outline:0!important;
-  background:#18181b!important;
-  background-color:#18181b!important;
+  background:transparent!important;
   color:#fff!important;
   caret-color:#fff!important;
   font-size:14px!important;
   line-height:24px!important;
   -webkit-text-fill-color:#fff!important;
-  color-scheme:dark!important;
 }
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input::placeholder{
+.administrator-shell .admin-toolbar .project-search input::placeholder,
+.administrator-shell .admin-toolbar .admin-search input::placeholder{
   color:#71717a!important;
   opacity:1!important;
 }
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search input:-webkit-autofill{
-  -webkit-text-fill-color:#fff!important;
-  -webkit-box-shadow:0 0 0 1000px #18181b inset!important;
-  box-shadow:0 0 0 1000px #18181b inset!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search svg{
+.administrator-shell .admin-toolbar .project-search svg,
+.administrator-shell .admin-toolbar .admin-search svg{
   position:absolute!important;
   right:14px!important;
   left:auto!important;
@@ -63,19 +68,46 @@ body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project
   color:#71717a!important;
   pointer-events:none!important;
 }
-@media(max-width:800px){
-  body:not(.aapi-admin-light) .administrator-shell .admin-project-filters .project-search{
-    width:100%!important;
-  }
-}
-/* Light mode stays unchanged in spirit; only the dark search gets the requested style. */
-body.aapi-admin-light .administrator-shell .admin-project-filters .project-search{
-  background:#fff!important;
-  border-color:#dce5df!important;
+.administrator-shell .admin-toolbar select{
+  height:38px!important;
+  border:1px solid rgba(255,255,255,.10)!important;
   border-radius:9999px!important;
+  background:#18181b!important;
+  color:#fff!important;
+  box-shadow:none!important;
 }
-body.aapi-admin-light .administrator-shell .admin-project-filters .project-search input{
+body.aapi-admin-light .administrator-shell .admin-toolbar{
   background:#fff!important;
+  background-color:#fff!important;
+  border-color:#dce5df!important;
+  color:#173125!important;
+}
+body.aapi-admin-light .administrator-shell .admin-toolbar .project-search,
+body.aapi-admin-light .administrator-shell .admin-toolbar .admin-search{
+  background:#fff!important;
+  background-color:#fff!important;
+}
+body.aapi-admin-light .administrator-shell .admin-toolbar .project-search input,
+body.aapi-admin-light .administrator-shell .admin-toolbar .admin-search input{
   color:#173125!important;
   -webkit-text-fill-color:#173125!important;
+}
+body.aapi-admin-light .administrator-shell .admin-toolbar select{
+  background:#fff!important;
+  color:#173125!important;
+  border-color:#dce5df!important;
+}
+@media(max-width:800px){
+  .administrator-shell .admin-toolbar{
+    width:100%!important;
+    min-height:auto!important;
+    border-radius:18px!important;
+    flex-wrap:wrap!important;
+  }
+  .administrator-shell .admin-toolbar .project-search,
+  .administrator-shell .admin-toolbar .admin-search,
+  .administrator-shell .admin-toolbar select{
+    width:100%!important;
+    flex:1 1 100%!important;
+  }
 }
