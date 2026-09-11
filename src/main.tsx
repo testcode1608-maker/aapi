@@ -7,7 +7,6 @@ import App from "./App";
 import "./index.css";
 import "./styles/admin-theme.css";
 import "./styles/admin-quick-theme.css";
-import "./styles/admin-search-fix.css";
 
 const applyAdminTheme = (theme: "dark" | "light") => {
   document.body.classList.toggle("aapi-admin-light", theme === "light");
@@ -16,9 +15,7 @@ const applyAdminTheme = (theme: "dark" | "light") => {
 };
 
 const savedAdminTheme = localStorage.getItem("aapi-admin-theme");
-if (savedAdminTheme === "light") {
-  document.body.classList.add("aapi-admin-light");
-}
+if (savedAdminTheme === "light") document.body.classList.add("aapi-admin-light");
 
 window.addEventListener("aapi-theme-change", (event) => {
   const theme = (event as CustomEvent<"dark" | "light">).detail;
@@ -58,9 +55,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   </React.StrictMode>
 );
 
-const adminThemeObserver = new MutationObserver(() => {
-  addQuickAdminThemeToggle();
-});
-
+const adminThemeObserver = new MutationObserver(() => addQuickAdminThemeToggle());
 adminThemeObserver.observe(document.body, { childList: true, subtree: true });
 addQuickAdminThemeToggle();
