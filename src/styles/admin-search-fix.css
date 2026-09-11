@@ -1,5 +1,6 @@
-/* AAPI ADMIN — search bar only */
-.administrator-shell .admin-project-filters .project-search {
+/* AAPI ADMIN — search inside admin-toolbar only */
+.administrator-shell .admin-toolbar .project-search,
+.administrator-shell .admin-toolbar .admin-search {
   display: flex !important;
   align-items: center !important;
   width: 100% !important;
@@ -12,17 +13,21 @@
   padding: 5px 10px 5px 20px !important;
   transition: all 0.3s ease !important;
   box-shadow: none !important;
+  overflow: hidden !important;
 }
 
-.administrator-shell .admin-project-filters .project-search:focus-within {
+.administrator-shell .admin-toolbar .project-search:focus-within,
+.administrator-shell .admin-toolbar .admin-search:focus-within {
   background: #fff !important;
   border-color: #3b82f6 !important;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15) !important;
   outline: none !important;
 }
 
-.administrator-shell .admin-project-filters .project-search input,
-.administrator-shell .admin-project-filters .project-search input[type="search"] {
+.administrator-shell .admin-toolbar .project-search input,
+.administrator-shell .admin-toolbar .admin-search input,
+.administrator-shell .admin-toolbar .project-search input[type="search"],
+.administrator-shell .admin-toolbar .admin-search input[type="search"] {
   flex: 1 !important;
   width: auto !important;
   min-width: 0 !important;
@@ -39,12 +44,14 @@
   -webkit-text-fill-color: #333 !important;
 }
 
-.administrator-shell .admin-project-filters .project-search input::placeholder {
+.administrator-shell .admin-toolbar .project-search input::placeholder,
+.administrator-shell .admin-toolbar .admin-search input::placeholder {
   color: #adb5bd !important;
   opacity: 1 !important;
 }
 
-.administrator-shell .admin-project-filters .project-search svg {
+.administrator-shell .admin-toolbar .project-search svg,
+.administrator-shell .admin-toolbar .admin-search svg {
   width: 18px !important;
   height: 18px !important;
   color: #6c757d !important;
@@ -54,7 +61,8 @@
   transform: none !important;
 }
 
-.administrator-shell .admin-project-filters .project-search button {
+.administrator-shell .admin-toolbar .project-search button,
+.administrator-shell .admin-toolbar .admin-search button {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -71,11 +79,13 @@
   transition: background 0.2s ease !important;
 }
 
-.administrator-shell .admin-project-filters .project-search button:hover {
+.administrator-shell .admin-toolbar .project-search button:hover,
+.administrator-shell .admin-toolbar .admin-search button:hover {
   background: #2563eb !important;
 }
 
-.administrator-shell .admin-project-filters .project-search button svg {
+.administrator-shell .admin-toolbar .project-search button svg,
+.administrator-shell .admin-toolbar .admin-search button svg {
   width: 18px !important;
   height: 18px !important;
   color: #fff !important;
@@ -83,7 +93,8 @@
 }
 
 @media (max-width: 800px) {
-  .administrator-shell .admin-project-filters .project-search {
+  .administrator-shell .admin-toolbar .project-search,
+  .administrator-shell .admin-toolbar .admin-search {
     max-width: 100% !important;
     width: 100% !important;
   }
