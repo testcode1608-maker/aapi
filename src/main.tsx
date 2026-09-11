@@ -7,6 +7,7 @@ import App from "./App";
 import "./index.css";
 import "./styles/admin-theme.css";
 import "./styles/admin-quick-theme.css";
+import "./styles/admin-search-fix.css";
 
 const applyAdminTheme = (theme: "dark" | "light") => {
   document.body.classList.toggle("aapi-admin-light", theme === "light");
