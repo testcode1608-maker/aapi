@@ -3,6 +3,10 @@ import type { CSSProperties, ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { BarChart3, BriefcaseBusiness, Building2, ClipboardList, FileCheck2, FolderKanban, LayoutDashboard, LogOut, Menu, MessageSquare, RefreshCw, Settings, TrendingUp, UserCheck, Users, Wallet, X } from "lucide-react";
 import "../styles/main.css";
+import "../styles/admin-quick-theme.css";
+import "../styles/admin-theme.css";
+
+
 const API="http://localhost/aapi-api/auth/admin/admin.php"; type R=Record<string,any>; type Section="dashboard"|"users"|"investors"|"projects"|"investments"|"requests"|"messages"|"documents";
 const labels:Record<string,string>={brouillon:"مسودة",soumis:"مُرسل",en_etude:"قيد الدراسة",approuve:"مقبول",en_cours:"قيد التنفيذ",realise:"منجز",rejete:"مرفوض",archive:"مؤرشف",actif:"نشط",inactif:"غير نشط",suspendu:"موقوف",en_attente:"في الانتظار",valide:"مقبول",termine:"منتهي",annule:"ملغى",nouvelle:"جديد",acceptee:"مقبول",refusee:"مرفوض",terminee:"منتهٍ",lu:"مقروء",non_lu:"غير مقروء"};
 const projectStatuses=["brouillon","soumis","en_etude","approuve","en_cours","realise","rejete","archive"],userStatuses=["actif","inactif","suspendu"],investmentStatuses=["en_attente","valide","en_cours","termine","annule"],requestStatuses=["nouvelle","en_cours","en_attente","acceptee","refusee","terminee"],documentStatuses=["en_attente","valide","rejete"];
