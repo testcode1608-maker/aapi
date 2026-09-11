@@ -1,0 +1,169 @@
+.administrator-shell .admin-toolbar {
+  direction: rtl;
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 12px;
+  background: #ffffff;
+  border: 1px solid #dfe8e3;
+  border-radius: 14px;
+  box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(20, 34, 27, 0.05);
+}
+
+.administrator-shell .admin-toolbar .project-search,
+.administrator-shell .admin-toolbar .admin-search {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 46px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #ffffff;
+  border: 1px solid #d7e2dc !important;
+  border-radius: 11px !important;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.administrator-shell .admin-toolbar .project-search:hover,
+.administrator-shell .admin-toolbar .admin-search:hover {
+  border-color: #b9d5c5 !important;
+  box-shadow: 0 3px 10px rgba(8, 116, 67, .06);
+}
+
+.administrator-shell .admin-toolbar .project-search:focus-within,
+.administrator-shell .admin-toolbar .admin-search:focus-within {
+  border-color: #087443 !important;
+  box-shadow: 0 0 0 3px rgba(8, 116, 67, .10) !important;
+}
+
+.administrator-shell .admin-toolbar .project-search svg,
+.administrator-shell .admin-toolbar .admin-search svg {
+  position: absolute !important;
+  right: 14px !important;
+  left: auto !important;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  color: #087443;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.administrator-shell .admin-toolbar .project-search input,
+.administrator-shell .admin-toolbar .admin-search input {
+  width: 100% !important;
+  height: 44px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 44px 0 16px !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  color: #14221b !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  line-height: 44px !important;
+  text-align: right !important;
+  direction: rtl !important;
+  box-sizing: border-box !important;
+}
+
+.administrator-shell .admin-toolbar input::placeholder {
+  color: #7b8982 !important;
+  opacity: 1 !important;
+  font-size: 13px;
+  font-weight: 400;
+  text-align: right !important;
+  direction: rtl !important;
+}
+
+.administrator-shell .admin-toolbar input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.administrator-shell .admin-toolbar select {
+  min-width: 165px !important;
+  height: 46px !important;
+  margin: 0 !important;
+  padding: 0 14px 0 34px !important;
+  border: 1px solid #d7e2dc !important;
+  border-radius: 11px !important;
+  background: #ffffff !important;
+  color: #14221b !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  text-align: right !important;
+  text-align-last: right !important;
+  direction: rtl !important;
+  outline: none !important;
+  cursor: pointer;
+  box-sizing: border-box !important;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.administrator-shell .admin-toolbar select:hover,
+.administrator-shell .admin-toolbar select:focus {
+  border-color: #087443 !important;
+  box-shadow: 0 0 0 3px rgba(8, 116, 67, .10) !important;
+}
+
+.administrator-shell .admin-toolbar select option {
+  background: #ffffff;
+  color: #14221b;
+  direction: rtl;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar {
+  background: #111317;
+  border-color: #272c32;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .project-search,
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar .admin-search,
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar select {
+  background: #18181b !important;
+  border-color: #303036 !important;
+  color: #f4f4f5 !important;
+  color-scheme: dark;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar input {
+  color: #f4f4f5 !important;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar input::placeholder {
+  color: #8f969f !important;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-toolbar select option {
+  background: #18181b;
+  color: #f4f4f5;
+}
+
+@media (max-width: 800px) {
+  .administrator-shell .admin-toolbar {
+    grid-template-columns: 1fr;
+    gap: 9px;
+    padding: 10px;
+  }
+
+  .administrator-shell .admin-toolbar .project-search,
+  .administrator-shell .admin-toolbar .admin-search,
+  .administrator-shell .admin-toolbar select {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
