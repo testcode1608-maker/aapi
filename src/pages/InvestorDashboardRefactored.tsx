@@ -27,17 +27,7 @@ export default function InvestorDashboardRefactored() {
   const section = location.pathname.split("/")[3] || "dashboard";
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
-  const paths: Record<string, string> = {
-    dashboard: "/investor/dashboard",
-    projects: "/investor/dashboard/projects",
-    investments: "/investor/dashboard/investments",
-    requests: "/investor/dashboard/requests",
-    documents: "/investor/dashboard/documents",
-    messages: "/investor/dashboard/messages",
-    notifications: "/investor/dashboard/notifications",
-    profile: "/investor/dashboard/profile",
-    settings: "/investor/dashboard/settings",
-  };
+  const paths: Record<string, string> = { dashboard: "/investor/dashboard", projects: "/investor/dashboard/projects", investments: "/investor/dashboard/investments", requests: "/investor/dashboard/requests", documents: "/investor/dashboard/documents", messages: "/investor/dashboard/messages", notifications: "/investor/dashboard/notifications", profile: "/investor/dashboard/profile", settings: "/investor/dashboard/settings" };
   const navClass = (name: string) => location.pathname === paths[name] ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
   const logout = () => { localStorage.removeItem("aapi_user"); navigate("/login", { replace: true }); };
 
@@ -46,7 +36,7 @@ export default function InvestorDashboardRefactored() {
 
   let content;
   switch (section) {
-    case "projects": content = <><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الاستثمار</span><h1>مشاريعي الاستثمارية</h1><p>إنشاء ومتابعة المشاريع المرسلة إلى الإدارة.</p></div></div><InvestorProjectCreateForm {...createProject} /><InvestorProjectList projects={projects} /></>; break;
+    case "projects": content = <><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الاستثمار</span><h1>مشاريعي الاستثمارية</h1><p>إنشاء ومتابعة المشاريع المرسلة إلى الإدارة.</p></div></div><InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} /><InvestorProjectList projects={projects} /></>; break;
     case "investments": content = <InvestorInvestmentsSection investments={investments} />; break;
     case "requests": content = <InvestorRequestsSection requests={requests} />; break;
     case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
