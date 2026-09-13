@@ -1,0 +1,29 @@
+/* AAPI — COMPLETE PUBLIC PAGES DARK MODE */
+
+body.aapi-site-dark main{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark main>div,body.aapi-site-dark main>div>div,body.aapi-site-dark main section{color:#edf4f0}
+body.aapi-site-dark .investor-registration-section,body.aapi-site-dark .login-page,body.aapi-site-dark .login-section,body.aapi-site-dark .news-page-section,body.aapi-site-dark .news-page-cta,body.aapi-site-dark .news-featured-section,body.aapi-site-dark .events-page-section,body.aapi-site-dark .events-page-cta,body.aapi-site-dark .announcements-page-section,body.aapi-site-dark .announcements-page-cta,body.aapi-site-dark .contact-section,body.aapi-site-dark .contact-page-section,body.aapi-site-dark .opportunities-page-section,body.aapi-site-dark .sectors-page-section,body.aapi-site-dark .agency-page-section,body.aapi-site-dark .investor-page-section{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark .inner-hero,body.aapi-site-dark .news-inner-hero,body.aapi-site-dark .events-inner-hero,body.aapi-site-dark .announcements-inner-hero,body.aapi-site-dark .contact-inner-hero,body.aapi-site-dark .agency-inner-hero,body.aapi-site-dark .investor-inner-hero,body.aapi-site-dark .opportunities-inner-hero,body.aapi-site-dark .sectors-inner-hero{background:#0b2b1d!important;color:#fff!important}
+body.aapi-site-dark main [class*="-card"],body.aapi-site-dark main [class*="_card"]{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark main [class*="-card"] h1,body.aapi-site-dark main [class*="-card"] h2,body.aapi-site-dark main [class*="-card"] h3,body.aapi-site-dark main [class*="-card"] h4,body.aapi-site-dark main [class*="_card"] h1,body.aapi-site-dark main [class*="_card"] h2,body.aapi-site-dark main [class*="_card"] h3,body.aapi-site-dark main [class*="_card"] h4{color:#edf4f0!important}
+body.aapi-site-dark main [class*="-card"] p,body.aapi-site-dark main [class*="-card"] span,body.aapi-site-dark main [class*="_card"] p,body.aapi-site-dark main [class*="_card"] span{color:#aab8b1!important}
+body.aapi-site-dark .investor-registration-card,body.aapi-site-dark .login-card,body.aapi-site-dark .auth-card,body.aapi-site-dark .form-card{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark main input,body.aapi-site-dark main textarea,body.aapi-site-dark main select,body.aapi-site-dark main option{background:#101613!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark main input:focus,body.aapi-site-dark main textarea:focus,body.aapi-site-dark main select:focus{border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.16)!important}
+body.aapi-site-dark .investor-registration-input,body.aapi-site-dark .login-input,body.aapi-site-dark .auth-input{background:#101613!important;border-color:#294238!important}
+body.aapi-site-dark .investor-registration-success,body.aapi-site-dark .news-empty-state{background:#123d2a!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .news-toolbar,body.aapi-site-dark .news-search,body.aapi-site-dark .news-filters,body.aapi-site-dark .news-results-info,body.aapi-site-dark .events-toolbar,body.aapi-site-dark .announcements-toolbar{background:transparent!important;color:#edf4f0!important}
+body.aapi-site-dark .news-filters button,body.aapi-site-dark .events-filter button,body.aapi-site-dark .announcements-filter button{background:#181c19!important;color:#aab8b1!important;border-color:#294238!important}
+body.aapi-site-dark .news-filters button.active,body.aapi-site-dark .events-filter button.active,body.aapi-site-dark .announcements-filter button.active{background:#087443!important;color:#fff!important;border-color:#087443!important}
+body.aapi-site-dark main .aapi-primary-button,body.aapi-site-dark main .green-button,body.aapi-site-dark main .primary-button{background:#087443!important;color:#fff!important;border-color:#087443!important}
+body.aapi-site-dark main .aapi-secondary-button,body.aapi-site-dark main .outline-button,body.aapi-site-dark main .green-outline-button{background:transparent!important;color:#8de0b5!important;border-color:#087443!important}
+body.aapi-site-dark main a:not(.aapi-primary-button):not(.aapi-secondary-button){color:#8de0b5}
+body.aapi-site-dark main table,body.aapi-site-dark main thead,body.aapi-site-dark main tbody,body.aapi-site-dark main tr{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark main th{background:#123d2a!important;color:#edf4f0!important}
+body.aapi-site-dark main td{color:#aab8b1!important;border-color:#294238!important}
+body.aapi-site-dark .news-details,body.aapi-site-dark .news-details-page,body.aapi-site-dark .announcement-details,body.aapi-site-dark .announcement-details-page,body.aapi-site-dark .article-content,body.aapi-site-dark .details-content{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark .article-content p,body.aapi-site-dark .details-content p,body.aapi-site-dark .news-details p,body.aapi-site-dark .announcement-details p{color:#aab8b1!important}
+body.aapi-site-dark footer,body.aapi-site-dark .aapi-footer,body.aapi-site-dark [class*="footer"]{background:#0b100d!important;color:#aab8b1!important;border-color:#294238!important}
+body.aapi-site-dark main .bg-white,body.aapi-site-dark main .bg-light,body.aapi-site-dark main .bg-body,body.aapi-site-dark main .bg-body-tertiary{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark main .modal,body.aapi-site-dark main [role="dialog"],body.aapi-site-dark main [class*="modal"],body.aapi-site-dark main [class*="dropdown-menu"]{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark main hr{border-color:#294238!important;opacity:1!important}
