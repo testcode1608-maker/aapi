@@ -1,367 +1,49 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "../i18n/I18nProvider";
 
-type Opportunity = {
-  id: number;
-  sector: string;
-  icon: string;
-  title: string;
-  location: string;
-  description: string;
-  investment: string;
-  jobs: string;
-};
-
-const sectors = [
-  "الكل",
-  "الصناعة",
-  "الفلاحة",
-  "الطاقة",
-  "السياحة",
-  "التكنولوجيا",
-  "النقل",
-];
-
-const opportunities: Opportunity[] = [
-  {
-    id: 1,
-    sector: "الصناعة",
-    icon: "bi-buildings",
-    title: "وحدة صناعية لإنتاج مواد البناء",
-    location: "الجزائر",
-    description:
-      "فرصة استثمارية لإنشاء وحدة صناعية متخصصة في إنتاج مواد البناء وتلبية احتياجات السوق.",
-    investment: "استثمار متوسط",
-    jobs: "120 منصب",
-  },
-  {
-    id: 2,
-    sector: "الفلاحة",
-    icon: "bi-tree",
-    title: "مشروع فلاحي متكامل",
-    location: "بسكرة",
-    description:
-      "إنشاء واستغلال مشروع فلاحي حديث يعتمد على تقنيات الري والإنتاج الزراعي العصري.",
-    investment: "استثمار متوسط",
-    jobs: "80 منصب",
-  },
-  {
-    id: 3,
-    sector: "الطاقة",
-    icon: "bi-sun",
-    title: "محطة لإنتاج الطاقة الشمسية",
-    location: "الهضاب العليا",
-    description:
-      "تطوير مشروع لإنتاج الطاقة الكهربائية من مصادر الطاقة الشمسية المتجددة.",
-    investment: "استثمار كبير",
-    jobs: "150 منصب",
-  },
-  {
-    id: 4,
-    sector: "السياحة",
-    icon: "bi-buildings",
-    title: "مجمع سياحي وفندقي",
-    location: "وهران",
-    description:
-      "إنجاز مركب سياحي حديث يوفر خدمات الإقامة والترفيه والأنشطة السياحية.",
-    investment: "استثمار كبير",
-    jobs: "200 منصب",
-  },
-  {
-    id: 5,
-    sector: "التكنولوجيا",
-    icon: "bi-cpu",
-    title: "مركز للتكنولوجيا والابتكار",
-    location: "الجزائر العاصمة",
-    description:
-      "إنشاء مركز متخصص في الحلول الرقمية والابتكار وتطوير المؤسسات الناشئة.",
-    investment: "استثمار متوسط",
-    jobs: "100 منصب",
-  },
-  {
-    id: 6,
-    sector: "النقل",
-    icon: "bi-truck",
-    title: "منصة لوجستية متكاملة",
-    location: "سطيف",
-    description:
-      "تطوير منصة لوجستية حديثة لدعم عمليات التخزين والنقل والتوزيع.",
-    investment: "استثمار كبير",
-    jobs: "170 منصب",
-  },
-];
+type Opportunity = { id:number; sector:string; icon:string; title:string; location:string; description:string; investment:string; jobs:string; };
 
 function OpportunitiesPage() {
-  const [activeSector, setActiveSector] = useState("الكل");
+  const { t } = useTranslation();
+  const sectors = [
+    ["all", "all"], ["industry", "industry"], ["agriculture", "agriculture"], ["energy", "energy"],
+    ["tourism", "tourism"], ["technology", "technology"], ["transport", "transport"],
+  ] as const;
+  const opportunities: Opportunity[] = [
+    { id:1, sector:t("opportunitiesPage.industry"), icon:"bi-buildings", title:t("opportunitiesPage.o1"), location:t("opportunitiesPage.locAlgiers"), description:t("opportunitiesPage.o1Text"), investment:t("opportunitiesPage.medium"), jobs:`120 ${t("opportunitiesPage.jobUnit")}` },
+    { id:2, sector:t("opportunitiesPage.agriculture"), icon:"bi-tree", title:t("opportunitiesPage.o2"), location:t("opportunitiesPage.locBiskra"), description:t("opportunitiesPage.o2Text"), investment:t("opportunitiesPage.medium"), jobs:`80 ${t("opportunitiesPage.jobUnit")}` },
+    { id:3, sector:t("opportunitiesPage.energy"), icon:"bi-sun", title:t("opportunitiesPage.o3"), location:t("opportunitiesPage.locHighlands"), description:t("opportunitiesPage.o3Text"), investment:t("opportunitiesPage.large"), jobs:`150 ${t("opportunitiesPage.jobUnit")}` },
+    { id:4, sector:t("opportunitiesPage.tourism"), icon:"bi-buildings", title:t("opportunitiesPage.o4"), location:t("opportunitiesPage.locOran"), description:t("opportunitiesPage.o4Text"), investment:t("opportunitiesPage.large"), jobs:`200 ${t("opportunitiesPage.jobUnit")}` },
+    { id:5, sector:t("opportunitiesPage.technology"), icon:"bi-cpu", title:t("opportunitiesPage.o5"), location:t("opportunitiesPage.locCapital"), description:t("opportunitiesPage.o5Text"), investment:t("opportunitiesPage.medium"), jobs:`100 ${t("opportunitiesPage.jobUnit")}` },
+    { id:6, sector:t("opportunitiesPage.transport"), icon:"bi-truck", title:t("opportunitiesPage.o6"), location:t("opportunitiesPage.locSetif"), description:t("opportunitiesPage.o6Text"), investment:t("opportunitiesPage.large"), jobs:`170 ${t("opportunitiesPage.jobUnit")}` },
+  ];
+  const [activeSector, setActiveSector] = useState("all");
   const [search, setSearch] = useState("");
-
   const filteredOpportunities = useMemo(() => {
-    const searchValue = search.trim().toLowerCase();
-
+    const value = search.trim().toLowerCase();
+    const activeLabel = activeSector === "all" ? "" : t(`opportunitiesPage.${activeSector}`);
     return opportunities.filter((opportunity) => {
-      const matchesSector =
-        activeSector === "الكل" ||
-        opportunity.sector === activeSector;
-
-      const matchesSearch =
-        searchValue === "" ||
-        opportunity.title.toLowerCase().includes(searchValue) ||
-        opportunity.location.toLowerCase().includes(searchValue) ||
-        opportunity.sector.toLowerCase().includes(searchValue);
-
+      const matchesSector = !activeLabel || opportunity.sector === activeLabel;
+      const matchesSearch = !value || [opportunity.title, opportunity.location, opportunity.sector, opportunity.description].some((item) => item.toLowerCase().includes(value));
       return matchesSector && matchesSearch;
     });
-  }, [activeSector, search]);
+  }, [activeSector, search, t]);
+  const resetFilters = () => { setSearch(""); setActiveSector("all"); };
 
-  const resetFilters = () => {
-    setSearch("");
-    setActiveSector("الكل");
-  };
+  return <>
+    <section className="inner-hero opportunities-inner-hero"><div className="container"><div className="inner-hero-content"><span>{t("opportunitiesPage.heroOverline")}</span><h1>{t("opportunitiesPage.heroTitle")}</h1><p>{t("opportunitiesPage.heroText")}</p></div></div></section>
 
-  return (
-    <>
-      {/* ============================================================
-          HERO
-          ============================================================ */}
-      <section className="inner-hero opportunities-inner-hero">
-        <div className="container">
-          <div className="inner-hero-content">
-            <span>الاستثمار</span>
+    <section className="aapi-section-header"><div className="container"><div className="row align-items-end g-4"><div className="col-lg-7"><span className="section-overline">{t("opportunitiesPage.introOverline")}</span><h2 className="opportunities-title">{t("opportunitiesPage.introTitle")}<strong>{t("opportunitiesPage.introStrong")}</strong></h2><p>{t("opportunitiesPage.introText")}</p></div><div className="col-lg-5"><div className="opportunities-search"><i className="bi bi-search" aria-hidden="true"/><input type="search" placeholder={t("opportunitiesPage.searchPlaceholder")} value={search} onChange={(e)=>setSearch(e.target.value)} aria-label={t("opportunitiesPage.searchLabel")}/></div></div></div></div></section>
 
-            <h1>فرص الاستثمار</h1>
+    <section className="opportunities-content"><div className="container">
+      <div className="opportunities-filters"><div className="opportunities-filter-title"><i className="bi bi-funnel" aria-hidden="true"/><span>{t("opportunitiesPage.filter")}</span></div><div className="opportunities-filter-buttons">{sectors.map(([key])=><button key={key} type="button" className={activeSector===key?"active":""} onClick={()=>setActiveSector(key)} aria-pressed={activeSector===key}>{t(`opportunitiesPage.${key}`)}</button>)}</div></div>
+      <div className="opportunities-results-header"><div><span>{t("opportunitiesPage.results")}</span><strong>{filteredOpportunities.length}</strong></div><p>{t("opportunitiesPage.available")}</p></div>
+      <div className="row g-4">{filteredOpportunities.map((opportunity)=><div className="col-lg-4 col-md-6" key={opportunity.id}><article className="opportunity-card"><div className="opportunity-card-top"><div className="opportunity-icon"><i className={`bi ${opportunity.icon}`} aria-hidden="true"/></div><span className="opportunity-sector">{opportunity.sector}</span></div><h3>{opportunity.title}</h3><div className="opportunity-location"><i className="bi bi-geo-alt" aria-hidden="true"/><span>{opportunity.location}</span></div><p>{opportunity.description}</p><div className="opportunity-meta"><div><span>{t("opportunitiesPage.investmentSize")}</span><strong>{opportunity.investment}</strong></div><div><span>{t("opportunitiesPage.jobs")}</span><strong>{opportunity.jobs}</strong></div></div><Link to={`/opportunities?opportunity=${opportunity.id}`} className="opportunity-button" aria-label={`${t("opportunitiesPage.details")} ${opportunity.title}`}>{t("opportunitiesPage.details")}<i className="bi bi-arrow-left" aria-hidden="true"/></Link></article></div>)}</div>
+      {filteredOpportunities.length===0&&<div className="opportunities-empty"><i className="bi bi-search" aria-hidden="true"/><h3>{t("opportunitiesPage.emptyTitle")}</h3><p>{t("opportunitiesPage.emptyText")}</p><button type="button" onClick={resetFilters}>{t("opportunitiesPage.reset")}</button></div>}
+    </div></section>
 
-            <p>
-              اكتشف المشاريع والفرص الاستثمارية المتاحة
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-          INTRO
-          ============================================================ */}
-      <section className="aapi-section-header">
-        <div className="container">
-          <div className="row align-items-end g-4">
-            <div className="col-lg-7">
-              <span className="section-overline">
-                الفرص الاستثمارية
-              </span>
-
-              <h2 className="opportunities-title">
-                اكتشف فرصًا
-                <strong> واعدة في الجزائر</strong>
-              </h2>
-
-              <p>
-                تصفح مجموعة من الفرص الاستثمارية حسب
-                القطاع والموقع، واكتشف المشاريع التي
-                يمكن أن تتوافق مع توجهاتك الاستثمارية.
-              </p>
-            </div>
-
-            <div className="col-lg-5">
-              <div className="opportunities-search">
-                <i
-                  className="bi bi-search"
-                  aria-hidden="true"
-                ></i>
-
-                <input
-                  type="search"
-                  placeholder="ابحث عن فرصة استثمارية..."
-                  value={search}
-                  onChange={(event) =>
-                    setSearch(event.target.value)
-                  }
-                  aria-label="البحث عن فرصة استثمارية"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-          FILTERS + RESULTS
-          ============================================================ */}
-      <section className="opportunities-content">
-        <div className="container">
-          {/* FILTERS */}
-          <div className="opportunities-filters">
-            <div className="opportunities-filter-title">
-              <i
-                className="bi bi-funnel"
-                aria-hidden="true"
-              ></i>
-
-              <span>تصفية حسب القطاع</span>
-            </div>
-
-            <div className="opportunities-filter-buttons">
-              {sectors.map((sector) => (
-                <button
-                  key={sector}
-                  type="button"
-                  className={
-                    activeSector === sector
-                      ? "active"
-                      : ""
-                  }
-                  onClick={() => setActiveSector(sector)}
-                  aria-pressed={activeSector === sector}
-                >
-                  {sector}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* RESULTS HEADER */}
-          <div className="opportunities-results-header">
-            <div>
-              <span>النتائج</span>
-
-              <strong>
-                {filteredOpportunities.length}
-              </strong>
-            </div>
-
-            <p>فرص استثمارية متاحة</p>
-          </div>
-
-          {/* RESULTS */}
-          <div className="row g-4">
-            {filteredOpportunities.map((opportunity) => (
-              <div
-                className="col-lg-4 col-md-6"
-                key={opportunity.id}
-              >
-                <article className="opportunity-card">
-                  <div className="opportunity-card-top">
-                    <div className="opportunity-icon">
-                      <i
-                        className={`bi ${opportunity.icon}`}
-                        aria-hidden="true"
-                      ></i>
-                    </div>
-
-                    <span className="opportunity-sector">
-                      {opportunity.sector}
-                    </span>
-                  </div>
-
-                  <h3>{opportunity.title}</h3>
-
-                  <div className="opportunity-location">
-                    <i
-                      className="bi bi-geo-alt"
-                      aria-hidden="true"
-                    ></i>
-
-                    <span>{opportunity.location}</span>
-                  </div>
-
-                  <p>{opportunity.description}</p>
-
-                  <div className="opportunity-meta">
-                    <div>
-                      <span>حجم الاستثمار</span>
-
-                      <strong>
-                        {opportunity.investment}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>مناصب العمل</span>
-
-                      <strong>
-                        {opportunity.jobs}
-                      </strong>
-                    </div>
-                  </div>
-
-                  <Link
-                    to={`/opportunities?opportunity=${opportunity.id}`}
-                    className="opportunity-button"
-                    aria-label={`تفاصيل ${opportunity.title}`}
-                  >
-                    تفاصيل الفرصة
-
-                    <i
-                      className="bi bi-arrow-left"
-                      aria-hidden="true"
-                    ></i>
-                  </Link>
-                </article>
-              </div>
-            ))}
-          </div>
-
-          {/* EMPTY STATE */}
-          {filteredOpportunities.length === 0 && (
-            <div className="opportunities-empty">
-              <i
-                className="bi bi-search"
-                aria-hidden="true"
-              ></i>
-
-              <h3>
-                لم يتم العثور على نتائج
-              </h3>
-
-              <p>
-                جرّب تغيير كلمة البحث أو اختيار قطاع آخر.
-              </p>
-
-              <button
-                type="button"
-                onClick={resetFilters}
-              >
-                إعادة ضبط البحث
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ============================================================
-          CTA
-          ============================================================ */}
-      <section className="opportunities-cta">
-        <div className="container">
-          <div className="opportunities-cta-box">
-            <div>
-              <span>هل لديك مشروع؟</span>
-
-              <h2>
-                حوّل فكرتك إلى
-                <strong> مشروع استثماري</strong>
-              </h2>
-
-              <p>
-                اكتشف الخدمات والمعلومات التي تساعدك
-                على الانطلاق في مسارك الاستثماري.
-              </p>
-            </div>
-
-            <Link
-              to="/investor"
-              className="opportunities-cta-button"
-            >
-              فضاء المستثمر
-
-              <i
-                className="bi bi-arrow-left"
-                aria-hidden="true"
-              ></i>
-            </Link>
-          </div>
-        </div>
-      </section>
-    </>
-  );
+    <section className="opportunities-cta"><div className="container"><div className="opportunities-cta-box"><div><span>{t("opportunitiesPage.ctaOverline")}</span><h2>{t("opportunitiesPage.ctaTitle")}<strong>{t("opportunitiesPage.ctaStrong")}</strong></h2><p>{t("opportunitiesPage.ctaText")}</p></div><Link to="/investor" className="opportunities-cta-button">{t("opportunitiesPage.investorSpace")}<i className="bi bi-arrow-left" aria-hidden="true"/></Link></div></div></section>
+  </>;
 }
-
 export default OpportunitiesPage;
