@@ -25,7 +25,6 @@ import "./styles/site-theme.css";
 import "./styles/aapi-all-pages-theme.css";
 import "./styles/inscription-dark.css";
 import "./styles/inscription-textarea-dark.css";
-import "./styles/registration-language.css";
 import "./styles/language-switcher.css";
 
 interface CurrentUser {
