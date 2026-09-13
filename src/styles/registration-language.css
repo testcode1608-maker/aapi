@@ -1,0 +1,109 @@
+/* AAPI /inscription — Arabic RTL + French/English LTR */
+
+.investor-registration-section {
+  direction: inherit;
+  text-align: start;
+}
+
+.investor-registration-section[dir="rtl"],
+.investor-registration-ar {
+  direction: rtl !important;
+  text-align: right;
+}
+
+.investor-registration-section[dir="ltr"],
+.investor-registration-fr,
+.investor-registration-en {
+  direction: ltr !important;
+  text-align: left;
+}
+
+.investor-registration-section .investor-registration-header,
+.investor-registration-section .investor-registration-block-title {
+  display: flex;
+  flex-direction: row !important;
+  align-items: flex-start;
+}
+
+.investor-registration-section[dir="rtl"] .investor-registration-header,
+.investor-registration-section[dir="rtl"] .investor-registration-block-title {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.investor-registration-section[dir="ltr"] .investor-registration-header,
+.investor-registration-section[dir="ltr"] .investor-registration-block-title {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+.investor-registration-section[dir="rtl"] .investor-registration-header > div:last-child,
+.investor-registration-section[dir="rtl"] .investor-registration-block-title > div,
+.investor-registration-section[dir="ltr"] .investor-registration-header > div:last-child,
+.investor-registration-section[dir="ltr"] .investor-registration-block-title > div {
+  direction: inherit !important;
+  text-align: inherit !important;
+}
+
+.investor-registration-section[dir="rtl"] label,
+.investor-registration-section[dir="rtl"] h2,
+.investor-registration-section[dir="rtl"] h3,
+.investor-registration-section[dir="rtl"] p,
+.investor-registration-section[dir="rtl"] .section-overline,
+.investor-registration-section[dir="rtl"] .investor-registration-consent {
+  text-align: right !important;
+}
+
+.investor-registration-section[dir="ltr"] label,
+.investor-registration-section[dir="ltr"] h2,
+.investor-registration-section[dir="ltr"] h3,
+.investor-registration-section[dir="ltr"] p,
+.investor-registration-section[dir="ltr"] .section-overline,
+.investor-registration-section[dir="ltr"] .investor-registration-consent {
+  text-align: left !important;
+}
+
+.investor-registration-section[dir="rtl"] input,
+.investor-registration-section[dir="rtl"] select,
+.investor-registration-section[dir="rtl"] textarea {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.investor-registration-section[dir="ltr"] input,
+.investor-registration-section[dir="ltr"] select,
+.investor-registration-section[dir="ltr"] textarea {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+.investor-registration-section[dir="rtl"] .investor-registration-input,
+.investor-registration-section[dir="ltr"] .investor-registration-input {
+  direction: inherit;
+}
+
+.investor-registration-section[dir="rtl"] .investor-registration-actions,
+.investor-registration-section[dir="rtl"] .investor-registration-success-actions {
+  direction: rtl;
+}
+
+.investor-registration-section[dir="ltr"] .investor-registration-actions,
+.investor-registration-section[dir="ltr"] .investor-registration-success-actions {
+  direction: ltr;
+}
+
+/* Bootstrap rows must keep normal column order in both languages. */
+.investor-registration-section .row {
+  direction: inherit;
+}
+
+/* Keep language-specific page styling stronger than old global RTL rules. */
+html[dir="ltr"] .investor-registration-section,
+body[dir="ltr"] .investor-registration-section {
+  direction: ltr !important;
+}
+
+html[dir="rtl"] .investor-registration-section,
+body[dir="rtl"] .investor-registration-section {
+  direction: rtl !important;
+}
