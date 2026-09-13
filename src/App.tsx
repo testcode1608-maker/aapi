@@ -26,9 +26,7 @@ function getCurrentUser(): CurrentUser | null {
     if (!raw) return null;
     const user = JSON.parse(raw);
     return user && typeof user === "object" ? (user as CurrentUser) : null;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
 function ScrollToTop() {
@@ -83,6 +81,7 @@ function AppContent() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/news/:id" element={<NewsDetails />} />
           <Route path="/announcements/:id" element={<AnnouncementsDetails />} />
+          <Route path="/inscription" element={<InvestorRegistration />} />
           <Route path="/investor/register" element={<InvestorRegistration />} />
           <Route path="/login" element={<Login />} />
           <Route path="/investor/dashboard" element={<InvestorRoute />} />
