@@ -1,0 +1,25 @@
+body.aapi-site-dark .investor-registration-section{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark .investor-registration-card{background:#181c19!important;color:#edf4f0!important;border:1px solid #294238!important;box-shadow:0 18px 50px rgba(0,0,0,.28)!important}
+body.aapi-site-dark .investor-registration-header h2,body.aapi-site-dark .investor-registration-block-title h3,body.aapi-site-dark .investor-registration-success h3{color:#edf4f0!important}
+body.aapi-site-dark .investor-registration-header h2 strong{color:#8de0b5!important}
+body.aapi-site-dark .investor-registration-header p,body.aapi-site-dark .investor-registration-block-title p,body.aapi-site-dark .investor-registration-success p{color:#aab8b1!important}
+body.aapi-site-dark .investor-registration-header .section-overline{color:#8de0b5!important}
+body.aapi-site-dark .investor-registration-icon,body.aapi-site-dark .investor-registration-success-icon{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .investor-registration-block{background:#141a17!important;border-color:#294238!important}
+body.aapi-site-dark .investor-registration-block-title>span{background:#123d2a!important;color:#8de0b5!important;border-color:#294238!important}
+body.aapi-site-dark .investor-registration-form label{color:#edf4f0!important}
+body.aapi-site-dark .investor-registration-form label span{color:#e7b83b!important}
+body.aapi-site-dark .investor-registration-input{background:#101613!important;border:1px solid #294238!important;color:#edf4f0!important}
+body.aapi-site-dark .investor-registration-input:focus-within{border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.16)!important}
+body.aapi-site-dark .investor-registration-input i{color:#8de0b5!important}
+body.aapi-site-dark .investor-registration-input input,body.aapi-site-dark .investor-registration-input textarea,body.aapi-site-dark .investor-registration-input select{background:transparent!important;color:#edf4f0!important}
+body.aapi-site-dark .investor-registration-input input::placeholder,body.aapi-site-dark .investor-registration-input textarea::placeholder{color:#6f8178!important}
+body.aapi-site-dark .investor-registration-form select,body.aapi-site-dark .investor-registration-form textarea,body.aapi-site-dark .investor-registration-form input{background:#101613!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .investor-registration-form select option{background:#181c19!important;color:#edf4f0!important}
+body.aapi-site-dark .investor-registration-consent,body.aapi-site-dark .investor-registration-consent label{color:#aab8b1!important}
+body.aapi-site-dark .investor-registration-consent a{color:#8de0b5!important}
+body.aapi-site-dark .investor-registration-actions{border-color:#294238!important}
+body.aapi-site-dark .investor-registration-submit,body.aapi-site-dark .investor-registration-form button[type=submit]{background:#087443!important;color:#fff!important;border-color:#087443!important}
+body.aapi-site-dark .investor-registration-success{background:#123d2a!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .investor-registration-success-actions .aapi-secondary-button{background:transparent!important;color:#8de0b5!important;border-color:#087443!important}
+body.aapi-site-dark .investor-registration-form [role=alert]{background:#3a1d20!important;color:#ffb4b8!important;border-color:#7d343b!important}
