@@ -1,12 +1,12 @@
 /* AAPI — COMPLETE DARK MODE COVERAGE */
-
 html,body,#root{min-height:100%;}
-html.aapi-site-dark-root{background:#0e1210!important;color:#edf4f0!important;color-scheme:dark;}
 body.aapi-site-dark{background:#0e1210!important;color:#edf4f0!important;color-scheme:dark}
 body.aapi-site-dark main{background:#0e1210!important;color:#edf4f0!important}
 body.aapi-site-dark main>div,body.aapi-site-dark main>div>div,body.aapi-site-dark main section{color:#edf4f0!important}
 body.aapi-site-dark main h1,body.aapi-site-dark main h2,body.aapi-site-dark main h3,body.aapi-site-dark main h4,body.aapi-site-dark main h5,body.aapi-site-dark main h6{color:#edf4f0!important}
 body.aapi-site-dark main p,body.aapi-site-dark main li,body.aapi-site-dark main label,body.aapi-site-dark main small{color:#aab8b1!important}
+
+/* Public pages */
 body.aapi-site-dark .investor-registration-section,body.aapi-site-dark .login-page,body.aapi-site-dark .login-section,body.aapi-site-dark .news-page-section,body.aapi-site-dark .news-page-cta,body.aapi-site-dark .news-featured-section,body.aapi-site-dark .events-page-section,body.aapi-site-dark .events-page-cta,body.aapi-site-dark .announcements-page-section,body.aapi-site-dark .announcements-page-cta,body.aapi-site-dark .contact-section,body.aapi-site-dark .contact-page-section,body.aapi-site-dark .opportunities-page-section,body.aapi-site-dark .sectors-page-section,body.aapi-site-dark .agency-page-section,body.aapi-site-dark .investor-page-section{background:#0e1210!important;color:#edf4f0!important}
 body.aapi-site-dark .inner-hero,body.aapi-site-dark .news-inner-hero,body.aapi-site-dark .events-inner-hero,body.aapi-site-dark .announcements-inner-hero,body.aapi-site-dark .contact-inner-hero,body.aapi-site-dark .agency-inner-hero,body.aapi-site-dark .investor-inner-hero,body.aapi-site-dark .opportunities-inner-hero,body.aapi-site-dark .sectors-inner-hero{background:#0b2b1d!important;color:#fff!important}
 body.aapi-site-dark main [class*="-card"],body.aapi-site-dark main [class*="_card"]{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
@@ -21,10 +21,10 @@ body.aapi-site-dark .investor-registration-success,body.aapi-site-dark .news-emp
 body.aapi-site-dark .news-toolbar,body.aapi-site-dark .news-search,body.aapi-site-dark .news-filters,body.aapi-site-dark .news-results-info,body.aapi-site-dark .events-toolbar,body.aapi-site-dark .announcements-toolbar{background:transparent!important;color:#edf4f0!important}
 body.aapi-site-dark .news-filters button,body.aapi-site-dark .events-filter button,body.aapi-site-dark .announcements-filter button{background:#181c19!important;color:#aab8b1!important;border-color:#294238!important}
 body.aapi-site-dark .news-filters button.active,body.aapi-site-dark .events-filter button.active,body.aapi-site-dark .announcements-filter button.active{background:#087443!important;color:#fff!important;border-color:#087443!important}
-body.aapi-site-dark main button:not(.aapi-site-theme-toggle){color:#edf4f0}
+body.aapi-site-dark main button:not(.aapi-site-theme-toggle){color:#edf4f0!important}
 body.aapi-site-dark main .aapi-primary-button,body.aapi-site-dark main .green-button,body.aapi-site-dark main .primary-button{background:#087443!important;color:#fff!important;border-color:#087443!important}
 body.aapi-site-dark main .aapi-secondary-button,body.aapi-site-dark main .outline-button,body.aapi-site-dark main .green-outline-button{background:transparent!important;color:#8de0b5!important;border-color:#087443!important}
-body.aapi-site-dark main a:not(.aapi-primary-button):not(.aapi-secondary-button){color:#8de0b5}
+body.aapi-site-dark main a:not(.aapi-primary-button):not(.aapi-secondary-button){color:#8de0b5!important}
 body.aapi-site-dark main table,body.aapi-site-dark main thead,body.aapi-site-dark main tbody,body.aapi-site-dark main tr{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 body.aapi-site-dark main th{background:#123d2a!important;color:#edf4f0!important}
 body.aapi-site-dark main td{color:#aab8b1!important;border-color:#294238!important}
@@ -35,44 +35,36 @@ body.aapi-site-dark main .bg-white,body.aapi-site-dark main .bg-light,body.aapi-
 body.aapi-site-dark main .modal,body.aapi-site-dark main [role="dialog"],body.aapi-site-dark main [class*="modal"],body.aapi-site-dark main [class*="dropdown-menu"]{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 body.aapi-site-dark main hr{border-color:#294238!important;opacity:1!important}
 
-/* Global overrides for components that use inline/Bootstrap light backgrounds. */
-html.aapi-site-dark-root body,
-html.aapi-site-dark-root #root,
-html.aapi-site-dark-root .container,
-html.aapi-site-dark-root .container-fluid,
-html.aapi-site-dark-root .row,
-html.aapi-site-dark-root [class*="page"],
-html.aapi-site-dark-root [class*="Page"],
-html.aapi-site-dark-root [class*="section"],
-html.aapi-site-dark-root [class*="Section"]{
-  color:#edf4f0!important;
-}
-html.aapi-site-dark-root .bg-white,
-html.aapi-site-dark-root .bg-light,
-html.aapi-site-dark-root .bg-body,
-html.aapi-site-dark-root .bg-body-tertiary,
-html.aapi-site-dark-root [style*="background-color: white"],
-html.aapi-site-dark-root [style*="background-color:#fff"],
-html.aapi-site-dark-root [style*="background-color: #fff"],
-html.aapi-site-dark-root [style*="background: white"],
-html.aapi-site-dark-root [style*="background:#fff"],
-html.aapi-site-dark-root [style*="background: #fff"]{
-  background:#0e1210!important;
-  color:#edf4f0!important;
-}
-html.aapi-site-dark-root .card,
-html.aapi-site-dark-root [class*="card"],
-html.aapi-site-dark-root [class*="Card"]{
-  background:#181c19!important;
-  color:#edf4f0!important;
-  border-color:#294238!important;
-}
-html.aapi-site-dark-root img{filter:none!important;}
-html.aapi-site-dark-root svg{color:inherit;}
-html.aapi-site-dark-root .text-dark,
-html.aapi-site-dark-root .text-body,
-html.aapi-site-dark-root .text-black{color:#edf4f0!important;}
-html.aapi-site-dark-root .text-muted{color:#aab8b1!important;}
+/* Global overrides for Bootstrap and inline light backgrounds. */
+html.aapi-site-dark-root{background:#0e1210!important;color:#edf4f0!important;color-scheme:dark}
+html.aapi-site-dark-root body,html.aapi-site-dark-root #root,html.aapi-site-dark-root .aapi-site{background:#0e1210!important;color:#edf4f0!important}
+html.aapi-site-dark-root .container,html.aapi-site-dark-root .container-fluid,html.aapi-site-dark-root .row{color:#edf4f0!important}
+html.aapi-site-dark-root .bg-white,html.aapi-site-dark-root .bg-light,html.aapi-site-dark-root .bg-body,html.aapi-site-dark-root .bg-body-tertiary,html.aapi-site-dark-root [style*="background-color: white"],html.aapi-site-dark-root [style*="background-color:#fff"],html.aapi-site-dark-root [style*="background-color: #fff"],html.aapi-site-dark-root [style*="background: white"],html.aapi-site-dark-root [style*="background:#fff"],html.aapi-site-dark-root [style*="background: #fff"]{background:#0e1210!important;color:#edf4f0!important}
+html.aapi-site-dark-root .card,html.aapi-site-dark-root [class*="card"],html.aapi-site-dark-root [class*="Card"]{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+html.aapi-site-dark-root .text-dark,html.aapi-site-dark-root .text-body,html.aapi-site-dark-root .text-black{color:#edf4f0!important}
+html.aapi-site-dark-root .text-muted{color:#aab8b1!important}
+
+/* AGENCY PAGE — exact classes used by Agency.tsx */
+body.aapi-site-dark .agency-page,
+body.aapi-site-dark .agency-page main,
+body.aapi-site-dark .agency-introduction,
+body.aapi-site-dark .agency-mission,
+body.aapi-site-dark .agency-values{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark .agency-hero{background:#0b2b1d!important;color:#fff!important}
+body.aapi-site-dark .agency-hero h1,body.aapi-site-dark .agency-hero h1 strong,body.aapi-site-dark .agency-hero p,body.aapi-site-dark .agency-hero .agency-overline,body.aapi-site-dark .agency-hero .agency-breadcrumb,body.aapi-site-dark .agency-hero .agency-breadcrumb a{color:#fff!important}
+body.aapi-site-dark .agency-section-heading h2,body.aapi-site-dark .agency-centered-heading h2,body.aapi-site-dark .agency-values-title,body.aapi-site-dark .agency-intro-card h3,body.aapi-site-dark .agency-service-card h3,body.aapi-site-dark .agency-value-item h3{color:#edf4f0!important}
+body.aapi-site-dark .agency-section-heading h2 strong,body.aapi-site-dark .agency-centered-heading h2 strong,body.aapi-site-dark .agency-values-title strong{color:#8de0b5!important}
+body.aapi-site-dark .agency-section-overline{color:#8de0b5!important}
+body.aapi-site-dark .agency-intro-text,body.aapi-site-dark .agency-centered-heading p,body.aapi-site-dark .agency-values-text,body.aapi-site-dark .agency-intro-card p,body.aapi-site-dark .agency-service-card p,body.aapi-site-dark .agency-value-item p{color:#aab8b1!important}
+body.aapi-site-dark .agency-intro-card,body.aapi-site-dark .agency-service-card,body.aapi-site-dark .agency-value-item{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important;box-shadow:0 12px 35px rgba(0,0,0,.24)!important}
+body.aapi-site-dark .agency-intro-card-icon,body.aapi-site-dark .agency-service-icon,body.aapi-site-dark .agency-value-item>i{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .agency-service-number{color:#52665d!important}
+body.aapi-site-dark .agency-card-line{background:#294238!important}
+body.aapi-site-dark .agency-card-number strong{color:#c9a227!important}
+body.aapi-site-dark .agency-card-number span{color:#aab8b1!important}
+body.aapi-site-dark .agency-final-cta{background:#0b2b1d!important;color:#fff!important}
+body.aapi-site-dark .agency-final-cta h2,body.aapi-site-dark .agency-final-cta span,body.aapi-site-dark .agency-final-cta p{color:#fff!important}
+body.aapi-site-dark .agency-final-button,body.aapi-site-dark .agency-primary-button{background:#087443!important;color:#fff!important;border-color:#087443!important}
 
 /* Dashboard dark-mode coverage when their own theme classes are active. */
 body.aapi-investor-dark .investor-dashboard-page,body.aapi-investor-dark .investor-dashboard-page main{background:#0e1210!important;color:#edf4f0!important}
