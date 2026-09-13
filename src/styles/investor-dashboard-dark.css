@@ -38,6 +38,11 @@
 .aapi-investor-dark .investor-dashboard-error h2{color:#edf4f0}
 .aapi-investor-dark .investor-dashboard-main input,.aapi-investor-dark .investor-dashboard-main select,.aapi-investor-dark .investor-dashboard-main textarea{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 
+/* Keep total investment display identical in light and dark mode */
+.aapi-investor-dark .investor-dashboard-investment-total{border-bottom-color:#294238}
+.aapi-investor-dark .investor-dashboard-investment-total span{color:#66736d}
+.aapi-investor-dark .investor-dashboard-investment-total strong{color:#087443!important}
+
 .investor-dashboard-theme-toggle{
   width:42px;height:42px;border:1px solid var(--id-border);border-radius:12px;
   display:grid;place-items:center;cursor:pointer;background:var(--id-light-green);
