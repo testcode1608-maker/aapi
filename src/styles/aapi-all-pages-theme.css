@@ -1,6 +1,7 @@
 /* AAPI — COMPLETE DARK MODE COVERAGE */
 
 html,body,#root{min-height:100%;}
+html.aapi-site-dark-root{background:#0e1210!important;color:#edf4f0!important;color-scheme:dark;}
 body.aapi-site-dark{background:#0e1210!important;color:#edf4f0!important;color-scheme:dark}
 body.aapi-site-dark main{background:#0e1210!important;color:#edf4f0!important}
 body.aapi-site-dark main>div,body.aapi-site-dark main>div>div,body.aapi-site-dark main section{color:#edf4f0!important}
@@ -33,6 +34,45 @@ body.aapi-site-dark footer,body.aapi-site-dark .aapi-footer,body.aapi-site-dark 
 body.aapi-site-dark main .bg-white,body.aapi-site-dark main .bg-light,body.aapi-site-dark main .bg-body,body.aapi-site-dark main .bg-body-tertiary{background:#0e1210!important;color:#edf4f0!important}
 body.aapi-site-dark main .modal,body.aapi-site-dark main [role="dialog"],body.aapi-site-dark main [class*="modal"],body.aapi-site-dark main [class*="dropdown-menu"]{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 body.aapi-site-dark main hr{border-color:#294238!important;opacity:1!important}
+
+/* Global overrides for components that use inline/Bootstrap light backgrounds. */
+html.aapi-site-dark-root body,
+html.aapi-site-dark-root #root,
+html.aapi-site-dark-root .container,
+html.aapi-site-dark-root .container-fluid,
+html.aapi-site-dark-root .row,
+html.aapi-site-dark-root [class*="page"],
+html.aapi-site-dark-root [class*="Page"],
+html.aapi-site-dark-root [class*="section"],
+html.aapi-site-dark-root [class*="Section"]{
+  color:#edf4f0!important;
+}
+html.aapi-site-dark-root .bg-white,
+html.aapi-site-dark-root .bg-light,
+html.aapi-site-dark-root .bg-body,
+html.aapi-site-dark-root .bg-body-tertiary,
+html.aapi-site-dark-root [style*="background-color: white"],
+html.aapi-site-dark-root [style*="background-color:#fff"],
+html.aapi-site-dark-root [style*="background-color: #fff"],
+html.aapi-site-dark-root [style*="background: white"],
+html.aapi-site-dark-root [style*="background:#fff"],
+html.aapi-site-dark-root [style*="background: #fff"]{
+  background:#0e1210!important;
+  color:#edf4f0!important;
+}
+html.aapi-site-dark-root .card,
+html.aapi-site-dark-root [class*="card"],
+html.aapi-site-dark-root [class*="Card"]{
+  background:#181c19!important;
+  color:#edf4f0!important;
+  border-color:#294238!important;
+}
+html.aapi-site-dark-root img{filter:none!important;}
+html.aapi-site-dark-root svg{color:inherit;}
+html.aapi-site-dark-root .text-dark,
+html.aapi-site-dark-root .text-body,
+html.aapi-site-dark-root .text-black{color:#edf4f0!important;}
+html.aapi-site-dark-root .text-muted{color:#aab8b1!important;}
 
 /* Dashboard dark-mode coverage when their own theme classes are active. */
 body.aapi-investor-dark .investor-dashboard-page,body.aapi-investor-dark .investor-dashboard-page main{background:#0e1210!important;color:#edf4f0!important}
