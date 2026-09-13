@@ -21,3 +21,38 @@ body.aapi-investor-dark .investor-profile-form input[type=email]:focus,body.aapi
 body.aapi-investor-dark .investor-profile-photo-input{background:#123d2a;color:#7ed0a7;border-color:#294238}
 body.aapi-investor-dark .investor-profile-photo-input:hover{background:#174b34}
 @media (max-width:640px){.investor-profile-form{padding:18px}.investor-profile-form .investor-dashboard-card-header h2{font-size:19px}.investor-profile-form input[type=email],.investor-profile-form input[type=tel]{min-height:48px}}
+.investor-dashboard-profile-avatar{
+  width:96px;
+  height:96px;
+  min-width:96px;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--id-light-green);
+  color:var(--id-dark-green);
+  font-size:32px;
+  font-weight:800;
+}
+
+.investor-dashboard-profile-avatar img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+body.aapi-investor-dark .investor-dashboard-profile-avatar{
+  background:#123d2a;
+  color:#7ed0a7;
+}
+
+@media (max-width:640px){
+  .investor-dashboard-profile-avatar{
+    width:80px;
+    height:80px;
+    min-width:80px;
+    font-size:26px;
+  }
+}
