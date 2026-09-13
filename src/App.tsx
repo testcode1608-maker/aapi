@@ -24,6 +24,7 @@ import "./styles/site-theme.css";
 import "./styles/aapi-all-pages-theme.css";
 import "./styles/inscription-dark.css";
 import "./styles/inscription-textarea-dark.css";
+import "./styles/language-switcher.css";
 
 interface CurrentUser { id: number; role?: string; statut?: string; [key: string]: unknown; }
 
