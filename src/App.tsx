@@ -19,6 +19,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import SiteThemeToggle from "./components/SiteThemeToggle";
 import "./styles/site-theme.css";
+import "./styles/aapi-all-pages-theme.css";
 
 interface CurrentUser { id: number; role?: string; statut?: string; [key: string]: unknown; }
 
