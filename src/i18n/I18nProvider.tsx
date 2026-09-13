@@ -41,8 +41,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const setLanguage = (next: Language) => { setLanguageState(next); localStorage.setItem("aapi-language", next); };
 
   useEffect(() => {
+    const direction = language === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = language;
-    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir = direction;
+    document.documentElement.style.direction = direction;
+    document.body.dir = direction;
+    document.body.style.direction = direction;
     document.body.dataset.language = language;
   }, [language]);
 
