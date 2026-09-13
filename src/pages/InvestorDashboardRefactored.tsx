@@ -4,11 +4,13 @@ import "../styles/investor-dashboard.css";
 import "../styles/investor-dashboard-extra.css";
 import "../styles/investor-dashboard-dark.css";
 import "../styles/investor-projects.css";
+import "../styles/investor-investments.css";
 import InvestorDashboardSidebar from "../components/investor/InvestorDashboardSidebar";
 import InvestorDashboardTopbar from "../components/investor/InvestorDashboardTopbar";
 import InvestorDashboardOverview from "../components/investor/InvestorDashboardOverview";
 import InvestorProjectCreateForm from "../components/investor/InvestorProjectCreateForm";
 import InvestorProjectList from "../components/investor/InvestorProjectList";
+import InvestorInvestmentCreateForm from "../components/investor/InvestorInvestmentCreateForm";
 import InvestorInvestmentsSection from "../components/investor/InvestorInvestmentsSection";
 import InvestorRequestsSection from "../components/investor/InvestorRequestsSection";
 import InvestorDocumentsSection from "../components/investor/InvestorDocumentsSection";
@@ -18,6 +20,7 @@ import InvestorProfileSection from "../components/investor/InvestorProfileSectio
 import InvestorSettingsSection from "../components/investor/InvestorSettingsSection";
 import { useInvestorDashboard } from "../hooks/useInvestorDashboard";
 import { useCreateInvestorProject } from "../hooks/useCreateInvestorProject";
+import { useCreateInvestorInvestment } from "../hooks/useCreateInvestorInvestment";
 import { getUserFullName, getUserPhotoUrl } from "../utils/investorDashboard";
 
 export default function InvestorDashboardRefactored() {
@@ -25,6 +28,7 @@ export default function InvestorDashboardRefactored() {
   const navigate = useNavigate();
   const { user, profile, stats, projects, investments, requests, documents, messages, notifications, activities, projectCompletion, completedInvestments, loading, error, reload } = useInvestorDashboard();
   const createProject = useCreateInvestorProject(reload);
+  const createInvestment = useCreateInvestorInvestment(projects, reload);
   const section = location.pathname.split("/")[3] || "dashboard";
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
@@ -38,7 +42,7 @@ export default function InvestorDashboardRefactored() {
   let content;
   switch (section) {
     case "projects": content = <><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الاستثمار</span><h1>مشاريعي الاستثمارية</h1><p>إنشاء ومتابعة المشاريع المرسلة إلى الإدارة.</p></div></div><InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} /><InvestorProjectList projects={projects} /></>; break;
-    case "investments": content = <InvestorInvestmentsSection investments={investments} />; break;
+    case "investments": content = <><InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} /><InvestorInvestmentsSection investments={investments} /></>; break;
     case "requests": content = <InvestorRequestsSection requests={requests} />; break;
     case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
     case "messages": content = <InvestorMessagesSection messages={messages} />; break;
