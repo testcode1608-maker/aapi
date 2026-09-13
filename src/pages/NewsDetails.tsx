@@ -6,7 +6,7 @@ function NewsDetails() {
   const { id } = useParams<{ id: string }>();
   const { language } = useTranslation();
   const page = newsDetailsTranslations[language].page;
-  const article = newsDetailsTranslations[language].articles[id || ""];
+  const article = newsDetailsTranslations[language].articles[id as keyof typeof newsDetailsTranslations[typeof language]["articles"]];
 
   if (!article) return <section className="news-details-not-found"><div className="container"><div className="news-details-empty"><div className="news-details-empty-icon"><i className="bi bi-newspaper" aria-hidden="true"></i></div><h1>{page.notFound}</h1><p>{page.notFoundText}</p><Link to="/news" className="aapi-primary-button">{page.back}<i className="bi bi-arrow-left" aria-hidden="true"></i></Link></div></div></section>;
 
