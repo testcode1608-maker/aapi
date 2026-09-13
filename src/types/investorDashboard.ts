@@ -200,3 +200,10 @@ export interface CreateProjectForm {
   date_debut: string;
   date_fin: string;
 }
+
+export interface CreateInvestmentForm {
+  project_id: string;
+  montant: string;
+  date_investissement: string;
+  notes: string;
+}
