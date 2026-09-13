@@ -3,6 +3,7 @@ import { translations, type Language } from "./translations";
 import { homeTranslations } from "./homeTranslations";
 import { pagesTranslations } from "./pagesTranslations";
 import { extraTranslations } from "./extraTranslations";
+import { newsTranslations } from "./newsTranslations";
 
 type I18nContextValue = { language: Language; setLanguage: (language: Language) => void; t: (key: string) => string };
 const I18nContext = createContext<I18nContextValue | null>(null);
@@ -12,7 +13,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(getInitialLanguage);
   const setLanguage = (next: Language) => { setLanguageState(next); localStorage.setItem("aapi-language", next); };
   useEffect(() => { document.documentElement.lang = language; document.documentElement.dir = language === "ar" ? "rtl" : "ltr"; document.body.dataset.language = language; }, [language]);
-  const value = useMemo<I18nContextValue>(() => ({ language, setLanguage, t: (key: string) => { const parts = key.split("."); const current = resolveKey(translations[language], parts); if (typeof current === "string") return current; const home = resolveKey(homeTranslations[language], parts); if (typeof home === "string") return home; const page = resolveKey(pagesTranslations[language], parts); if (typeof page === "string") return page; const extra = resolveKey(extraTranslations[language], parts); if (typeof extra === "string") return extra; const fallback = resolveKey(translations.ar, parts); if (typeof fallback === "string") return fallback; const homeFallback = resolveKey(homeTranslations.ar, parts); if (typeof homeFallback === "string") return homeFallback; const pageFallback = resolveKey(pagesTranslations.ar, parts); if (typeof pageFallback === "string") return pageFallback; const extraFallback = resolveKey(extraTranslations.ar, parts); return typeof extraFallback === "string" ? extraFallback : key; } }), [language]);
+  const value = useMemo<I18nContextValue>(() => ({ language, setLanguage, t: (key: string) => { const parts = key.split("."); for (const source of [translations[language], homeTranslations[language], pagesTranslations[language], extraTranslations[language], newsTranslations[language]]) { const value = resolveKey(source, parts); if (typeof value === "string") return value; } for (const source of [translations.ar, homeTranslations.ar, pagesTranslations.ar, extraTranslations.ar, newsTranslations.ar]) { const value = resolveKey(source, parts); if (typeof value === "string") return value; } return key; } }), [language]);
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 export function useTranslation() { const context = useContext(I18nContext); if (!context) throw new Error("useTranslation must be used inside I18nProvider"); return context; }
