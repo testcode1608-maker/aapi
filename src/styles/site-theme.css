@@ -1,3 +1,5 @@
+@import "./site-theme-extra.css";
+
 /* ============================================================
    AAPI PUBLIC SITE — GLOBAL DARK / NIGHT MODE
    The Header button toggles body.aapi-site-dark and this file
@@ -22,25 +24,12 @@
 .aapi-site-theme-toggle:hover{transform:translateY(-1px);background:#dff1e8;color:#055c35}
 .aapi-site-theme-toggle:focus-visible{outline:3px solid rgba(201,162,39,.35);outline-offset:2px}
 
-/* ---------- GLOBAL ---------- */
-body.aapi-site-dark{
-  background:#0e1210!important;
-  color:#edf4f0!important;
-  color-scheme:dark;
-}
-body.aapi-site-dark main{
-  background:#0e1210;
-  color:#edf4f0;
-}
+body.aapi-site-dark{background:#0e1210!important;color:#edf4f0!important;color-scheme:dark}
+body.aapi-site-dark main{background:#0e1210;color:#edf4f0}
 body.aapi-site-dark ::selection{background:#087443;color:#fff}
 
-/* ---------- HEADER ---------- */
 body.aapi-site-dark .aapi-top-header,
-body.aapi-site-dark .aapi-main-header{
-  background:#151a17!important;
-  color:#edf4f0!important;
-  border-color:#294238!important;
-}
+body.aapi-site-dark .aapi-main-header{background:#151a17!important;color:#edf4f0!important;border-color:#294238!important}
 body.aapi-site-dark .aapi-header-content,
 body.aapi-site-dark .aapi-top-content{color:#edf4f0}
 body.aapi-site-dark .aapi-logo-text strong,
@@ -54,11 +43,7 @@ body.aapi-site-dark .aapi-nav-dropdown-button:hover,
 body.aapi-site-dark .top-actions a:hover{color:#8de0b5}
 body.aapi-site-dark .aapi-dropdown-menu,
 body.aapi-site-dark .aapi-search-panel,
-body.aapi-site-dark .mobile-navigation{
-  background:#181c19!important;
-  color:#edf4f0!important;
-  border-color:#294238!important;
-}
+body.aapi-site-dark .mobile-navigation{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 body.aapi-site-dark .aapi-dropdown-link,
 body.aapi-site-dark .mobile-navigation a,
 body.aapi-site-dark .mobile-nav-title{color:#edf4f0}
@@ -71,7 +56,6 @@ body.aapi-site-dark .aapi-site-theme-toggle:hover{background:#18543a;color:#f0d6
 body.aapi-site-dark .top-search,
 body.aapi-site-dark .mobile-menu-button{color:#edf4f0}
 
-/* ---------- PUBLIC PAGE BACKGROUNDS ---------- */
 body.aapi-site-dark .page,
 body.aapi-site-dark .page-container,
 body.aapi-site-dark .content,
@@ -79,12 +63,8 @@ body.aapi-site-dark .main-content,
 body.aapi-site-dark .site-main,
 body.aapi-site-dark .page-content,
 body.aapi-site-dark [class*="page"],
-body.aapi-site-dark [class*="-page"]{
-  background-color:transparent;
-  color:#edf4f0;
-}
+body.aapi-site-dark [class*="-page"]{background-color:transparent;color:#edf4f0}
 
-/* ---------- CARDS / PANELS / BOXES ---------- */
 body.aapi-site-dark .card,
 body.aapi-site-dark .section-card,
 body.aapi-site-dark .content-card,
@@ -96,14 +76,8 @@ body.aapi-site-dark .opportunity-card,
 body.aapi-site-dark .sector-card,
 body.aapi-site-dark .faq-item,
 body.aapi-site-dark .contact-card,
-body.aapi-site-dark [class*="card"]{
-  background:#181c19!important;
-  color:#edf4f0!important;
-  border-color:#294238!important;
-  box-shadow:0 12px 35px rgba(0,0,0,.24);
-}
+body.aapi-site-dark [class*="card"]{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important;box-shadow:0 12px 35px rgba(0,0,0,.24)}
 
-/* ---------- TEXT ---------- */
 body.aapi-site-dark h1,
 body.aapi-site-dark h2,
 body.aapi-site-dark h3,
@@ -119,81 +93,44 @@ body.aapi-site-dark label{color:#aab8b1}
 body.aapi-site-dark a{color:inherit}
 body.aapi-site-dark a:hover{color:#8de0b5}
 
-/* ---------- HERO / SECTIONS ---------- */
-body.aapi-site-dark [class*="hero"]{
-  color:#edf4f0;
-}
-body.aapi-site-dark [class*="section"]{
-  color:#edf4f0;
-}
+body.aapi-site-dark [class*="hero"]{color:#edf4f0}
+body.aapi-site-dark [class*="section"]{color:#edf4f0}
 body.aapi-site-dark [class*="section"] p{color:#aab8b1}
 
-/* ---------- FORMS ---------- */
 body.aapi-site-dark input,
 body.aapi-site-dark textarea,
-body.aapi-site-dark select{
-  background:#181c19!important;
-  color:#edf4f0!important;
-  border-color:#294238!important;
-}
+body.aapi-site-dark select{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 body.aapi-site-dark input::placeholder,
 body.aapi-site-dark textarea::placeholder{color:#718079!important}
 body.aapi-site-dark input:focus,
 body.aapi-site-dark textarea:focus,
-body.aapi-site-dark select:focus{
-  border-color:#087443!important;
-  box-shadow:0 0 0 3px rgba(8,116,67,.14)!important;
-}
+body.aapi-site-dark select:focus{border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.14)!important}
 
-/* ---------- TABLES ---------- */
 body.aapi-site-dark table{background:#181c19;color:#edf4f0}
 body.aapi-site-dark th{background:#123d2a;color:#edf4f0;border-color:#294238}
 body.aapi-site-dark td{color:#aab8b1;border-color:#294238}
 body.aapi-site-dark tr:hover td{background:#151a17}
 
-/* ---------- MODALS / DROPDOWNS ---------- */
 body.aapi-site-dark [role="dialog"],
 body.aapi-site-dark .modal,
 body.aapi-site-dark .dropdown-menu,
 body.aapi-site-dark [class*="modal"],
-body.aapi-site-dark [class*="dropdown"]{
-  background:#181c19!important;
-  color:#edf4f0!important;
-  border-color:#294238!important;
-}
+body.aapi-site-dark [class*="dropdown"]{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 
-/* ---------- BUTTONS ---------- */
-body.aapi-site-dark button:not(.aapi-site-theme-toggle){
-  border-color:#294238;
-}
+body.aapi-site-dark button:not(.aapi-site-theme-toggle){border-color:#294238}
 body.aapi-site-dark .btn,
-body.aapi-site-dark [class*="button"]{
-  color:#edf4f0;
-}
+body.aapi-site-dark [class*="button"]{color:#edf4f0}
 body.aapi-site-dark .btn-primary,
 body.aapi-site-dark .primary-button,
-body.aapi-site-dark [class*="primary"]{
-  background:#087443;
-  color:#fff;
-  border-color:#087443;
-}
+body.aapi-site-dark [class*="primary"]{background:#087443;color:#fff;border-color:#087443}
 
-/* ---------- FOOTER ---------- */
 body.aapi-site-dark footer,
 body.aapi-site-dark .aapi-footer,
-body.aapi-site-dark [class*="footer"]{
-  background:#0b100d!important;
-  color:#aab8b1!important;
-  border-color:#294238!important;
-}
+body.aapi-site-dark [class*="footer"]{background:#0b100d!important;color:#aab8b1!important;border-color:#294238!important}
 body.aapi-site-dark footer h1,
 body.aapi-site-dark footer h2,
 body.aapi-site-dark footer h3,
 body.aapi-site-dark footer strong{color:#edf4f0!important}
-
-/* ---------- IMAGES / OVERLAYS ---------- */
 body.aapi-site-dark [class*="overlay"]{background:rgba(0,0,0,.38)}
 
-@media(max-width:900px){
-  .aapi-site-theme-toggle{width:38px;height:38px;margin-inline-start:6px}
-}
+@media(max-width:900px){.aapi-site-theme-toggle{width:38px;height:38px;margin-inline-start:6px}}
