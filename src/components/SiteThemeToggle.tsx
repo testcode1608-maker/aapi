@@ -38,6 +38,7 @@ function SiteThemeToggle() {
 
     return () => {
       button.remove();
+      document.body.classList.remove("aapi-site-dark");
     };
   }, []);
 
