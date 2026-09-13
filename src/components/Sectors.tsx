@@ -1,156 +1,36 @@
-
 import { Link } from "react-router-dom";
+import { useTranslation } from "../i18n/I18nProvider";
 
 function Sectors() {
+  const { t } = useTranslation();
   const sectors = [
-    {
-      icon: "bi-buildings",
-      number: "01",
-      title: "الصناعة",
-      text: "فرص استثمارية متنوعة في مختلف الأنشطة الصناعية، مع إمكانات واسعة للتطوير والإنتاج.",
-    },
-    {
-      icon: "bi-tree",
-      number: "02",
-      title: "الفلاحة",
-      text: "إمكانات كبيرة للاستثمار في الفلاحة، الصناعات الغذائية، وتثمين المنتجات الزراعية.",
-    },
-    {
-      icon: "bi-lightning-charge",
-      number: "03",
-      title: "الطاقات",
-      text: "مشاريع استثمارية في الطاقة والطاقات المتجددة والحلول المستدامة.",
-    },
-    {
-      icon: "bi-cpu",
-      number: "04",
-      title: "التكنولوجيا",
-      text: "فرص في التكنولوجيا والابتكار والتحول الرقمي وتطوير الحلول الحديثة.",
-    },
-    {
-      icon: "bi-water",
-      number: "05",
-      title: "السياحة",
-      text: "مؤهلات سياحية متنوعة تفتح المجال أمام مشاريع جديدة في مختلف مناطق الجزائر.",
-    },
-    {
-      icon: "bi-truck",
-      number: "06",
-      title: "النقل واللوجستيك",
-      text: "فرص استثمارية في النقل والخدمات اللوجستية وسلاسل التوريد.",
-    },
+    { icon:"bi-buildings", number:"01", title:t("sectors.industry"), text:t("sectors.industryText") },
+    { icon:"bi-tree", number:"02", title:t("sectors.agriculture"), text:t("sectors.agricultureText") },
+    { icon:"bi-lightning-charge", number:"03", title:t("sectors.energy"), text:t("sectors.energyText") },
+    { icon:"bi-cpu", number:"04", title:t("sectors.technology"), text:t("sectors.technologyText") },
+    { icon:"bi-water", number:"05", title:t("sectors.tourism"), text:t("sectors.tourismText") },
+    { icon:"bi-truck", number:"06", title:t("sectors.logistics"), text:t("sectors.logisticsText") },
   ];
-
   return (
-    <section
-      className="sectors-section"
-      id="investment"
-    >
+    <section className="sectors-section" id="investment">
       <div className="container">
-
-        {/* ========================================================
-            SECTION HEADER
-           ======================================================== */}
-
         <div className="aapi-section-header centered">
-
-          <span className="section-overline">
-            قطاعات الاستثمار
-          </span>
-
-          <h2>
-            اكتشف إمكانات
-            <strong> الاستثمار في الجزائر</strong>
-          </h2>
-
-          <p>
-            مجموعة متنوعة من القطاعات توفر فرصًا واعدة للمستثمرين
-            المحليين والأجانب.
-          </p>
-
+          <span className="section-overline">{t("sectors.overline")}</span>
+          <h2>{t("sectors.title")} <strong>{t("sectors.titleStrong")}</strong></h2>
+          <p>{t("sectors.description")}</p>
         </div>
-
-        {/* ========================================================
-            SECTORS
-           ======================================================== */}
-
         <div className="row g-0 sectors-grid">
-
-          {sectors.map((sector) => (
-            <div
-              className="col-xl-4 col-lg-4 col-md-6"
-              key={sector.number}
-            >
-              <article className="sector-card">
-
-                <div className="sector-card-number">
-                  {sector.number}
-                </div>
-
-                <div className="sector-icon">
-                  <i
-                    className={`bi ${sector.icon}`}
-                    aria-hidden="true"
-                  ></i>
-                </div>
-
-                <div className="sector-content">
-
-                  <h3>
-                    {sector.title}
-                  </h3>
-
-                  <p>
-                    {sector.text}
-                  </p>
-
-                  <Link
-                    to="/sectors"
-                    className="sector-link"
-                  >
-                    <span>
-                      اكتشف المزيد
-                    </span>
-
-                    <i
-                      className="bi bi-arrow-left"
-                      aria-hidden="true"
-                    ></i>
-                  </Link>
-
-                </div>
-
-              </article>
-            </div>
-          ))}
-
+          {sectors.map(sector => <div className="col-xl-4 col-lg-4 col-md-6" key={sector.number}>
+            <article className="sector-card">
+              <div className="sector-card-number">{sector.number}</div>
+              <div className="sector-icon"><i className={`bi ${sector.icon}`} aria-hidden="true"></i></div>
+              <div className="sector-content"><h3>{sector.title}</h3><p>{sector.text}</p><Link to="/sectors" className="sector-link"><span>{t("common.discover")}</span><i className="bi bi-arrow-left" aria-hidden="true"></i></Link></div>
+            </article>
+          </div>)}
         </div>
-
-        {/* ========================================================
-            ALL SECTORS BUTTON
-           ======================================================== */}
-
-        <div className="sectors-button-wrapper">
-
-          <Link
-            to="/sectors"
-            className="green-outline-button"
-          >
-            <span>
-              جميع قطاعات الاستثمار
-            </span>
-
-            <i
-              className="bi bi-arrow-left"
-              aria-hidden="true"
-            ></i>
-          </Link>
-
-        </div>
-
+        <div className="sectors-button-wrapper"><Link to="/sectors" className="green-outline-button"><span>{t("common.allSectors")}</span><i className="bi bi-arrow-left" aria-hidden="true"></i></Link></div>
       </div>
     </section>
   );
 }
-
 export default Sectors;
