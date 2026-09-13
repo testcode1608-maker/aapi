@@ -6,23 +6,23 @@ interface Props { investments: DashboardInvestment[]; }
 
 export default function InvestorInvestmentsSection({ investments }: Props) {
   const { t } = useTranslation();
-  const tr = (key: string) => t(`investorDashboard.investments.${key}`);
+  const tr = (key: string) => t(`investorDashboard.${key}`);
 
   return (
     <section className="investor-dashboard-section">
-      <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">{tr("overline")}</span><h1>{tr("title")}</h1><p>{tr("description")}</p></div></div>
+      <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">{tr("overview.investments")}</span><h1>{tr("investmentsTitle")}</h1><p>{tr("investmentsDescription")}</p></div></div>
       <div className="investor-dashboard-grid">
         {investments.map((investment) => {
           const status = getInvestmentStatus(investment.statut);
           return (
             <div className="investor-dashboard-card investor-dashboard-projects-card" key={investment.id}>
-              <div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{tr("investment")}</span><h2>{investment.projet_titre || tr("investment")}</h2></div><span className={status.className}>{status.label}</span></div>
-              <div className="investor-dashboard-investment-total"><span>{tr("amount")}</span><strong>{formatAmount(investment.montant)}</strong></div>
-              <div className="investor-dashboard-investment-items"><div><span>{tr("reference")}</span><strong>{investment.reference || "—"}</strong></div><div><span>{tr("date")}</span><strong>{formatDate(investment.date_investissement)}</strong></div></div>
+              <div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{tr("projectList.investment")}</span><h2>{investment.projet_titre || tr("projectList.investment")}</h2></div><span className={status.className}>{status.label}</span></div>
+              <div className="investor-dashboard-investment-total"><span>{tr("investmentForm.amount")}</span><strong>{formatAmount(investment.montant)}</strong></div>
+              <div className="investor-dashboard-investment-items"><div><span>ID</span><strong>{investment.reference || "—"}</strong></div><div><span>{tr("investmentForm.date")}</span><strong>{formatDate(investment.date_investissement)}</strong></div></div>
             </div>
           );
         })}
-        {investments.length === 0 && <div className="investor-dashboard-card investor-dashboard-projects-card"><div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{tr("overline")}</span><h2>{tr("empty")}</h2></div></div></div>}
+        {investments.length === 0 && <div className="investor-dashboard-card investor-dashboard-projects-card"><div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{tr("overview.investments")}</span><h2>{tr("overview.investmentSummary")}</h2></div></div></div>}
       </div>
     </section>
   );
