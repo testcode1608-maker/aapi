@@ -1,0 +1,5 @@
+export const newsTranslations = {
+  ar:{newsDetails:{media:"المركز الإعلامي",details:"تفاصيل الخبر",notFound:"الخبر غير موجود",notFoundText:"عذرًا، لم نتمكن من العثور على الخبر الذي تبحث عنه.",back:"العودة إلى الأخبار",agencyNews:"أخبار الوكالة",share:"مشاركة الخبر",facebook:"مشاركة عبر فيسبوك",x:"مشاركة عبر X",linkedin:"مشاركة عبر لينكدإن",latest:"آخر المستجدات",read:"قراءة الخبر"}},
+  fr:{newsDetails:{media:"Centre média",details:"Détails de l'actualité",notFound:"Actualité introuvable",notFoundText:"Désolé, nous n'avons pas trouvé l'actualité recherchée.",back:"Retour aux actualités",agencyNews:"Actualités de l'agence",share:"Partager l'actualité",facebook:"Partager sur Facebook",x:"Partager sur X",linkedin:"Partager sur LinkedIn",latest:"Dernières actualités",read:"Lire l'actualité"}},
+  en:{newsDetails:{media:"Media center",details:"News details",notFound:"News not found",notFoundText:"Sorry, we could not find the news article you are looking for.",back:"Back to news",agencyNews:"Agency news",share:"Share this news",facebook:"Share on Facebook",x:"Share on X",linkedin:"Share on LinkedIn",latest:"Latest updates",read:"Read news"}}
+} as const;
