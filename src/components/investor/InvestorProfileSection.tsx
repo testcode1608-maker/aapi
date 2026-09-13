@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import type { DashboardProfile, DashboardUser } from "../../types/investorDashboard";
 import { API_BASE_URL, getUserPhotoUrl } from "../../utils/investorDashboard";
 import "../../styles/investor-dashboard.css";
+import "../../styles/investor-profile.css";
 
 interface Props { user: DashboardUser | null; profile: DashboardProfile | null; fullName: string; userPhotoUrl: string; }
 
