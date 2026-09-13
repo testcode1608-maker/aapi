@@ -45,16 +45,16 @@ export function useInvestorDashboard(): UseInvestorDashboardResult {
     try {
       const response = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ user_id: userId }) });
       const contentType = response.headers.get("content-type") || "";
-      if (!contentType.toLowerCase().includes("application/json")) throw new Error(t("investorDashboard.error.invalidResponse"));
+      if (!contentType.toLowerCase().includes("application/json")) throw new Error(t("investorDashboard.errorTitle"));
       const data: DashboardResponse = await response.json();
-      if (!response.ok || !data?.success) throw new Error(data?.message || t("investorDashboard.error.loadFailed"));
+      if (!response.ok || !data?.success) throw new Error(data?.message || t("investorDashboard.errorTitle"));
       setUser(data.user || null); setProfile(data.profile || null); setStats(data.stats || null);
       setProjects(normalizeProjects(data.projects)); setInvestments(normalizeInvestments(data.investments)); setRequests(normalizeRequests(data.requests));
       setDocuments(normalizeDocuments(data.documents)); setMessages(normalizeMessages(data.messages)); setNotifications(normalizeNotifications(data.notifications));
       setActivities(Array.isArray(data.activities) ? data.activities : []);
       if (data.user) localStorage.setItem("aapi_user", JSON.stringify(data.user));
     } catch (requestError) {
-      setError(requestError instanceof Error && requestError.message ? requestError.message : t("investorDashboard.error.connection"));
+      setError(requestError instanceof Error && requestError.message ? requestError.message : t("investorDashboard.errorTitle"));
     } finally { setLoading(false); }
   }, [navigate, t]);
 
