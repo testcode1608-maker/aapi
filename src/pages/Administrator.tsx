@@ -5,6 +5,7 @@ import { BarChart3, BriefcaseBusiness, Building2, ClipboardList, FileCheck2, Fol
 import "../styles/main.css";
 import "../styles/admin-quick-theme.css";
 import "../styles/admin-theme.css";
+import "../styles/admin-toolbar.css";
 
 
 const API="http://localhost/aapi-api/auth/admin/admin.php"; type R=Record<string,any>; type Section="dashboard"|"users"|"investors"|"projects"|"investments"|"requests"|"messages"|"documents";
