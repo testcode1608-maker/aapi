@@ -4,6 +4,7 @@ import { formatDate, getRequestStatus } from "../../utils/investorDashboard";
 import { useInvestorDashboard } from "../../hooks/useInvestorDashboard";
 import { useCreateInvestorRequest } from "../../hooks/useCreateInvestorRequest";
 import InvestorRequestCreateForm from "./InvestorRequestCreateForm";
+import "../../styles/investor-requests.css";
 
 interface Props { requests: DashboardRequest[]; }
 
@@ -25,19 +26,7 @@ export default function InvestorRequestsSection({ requests }: Props) {
         </button>
       </div>
 
-      {showForm && (
-        <InvestorRequestCreateForm
-          form={createRequest.form}
-          setForm={createRequest.setForm}
-          setDocuments={createRequest.setDocuments}
-          projects={createRequest.eligibleProjects}
-          creating={createRequest.creating}
-          error={createRequest.error}
-          success={createRequest.success}
-          onSubmit={createRequest.submit}
-          onReset={createRequest.resetForm}
-        />
-      )}
+      {showForm && <InvestorRequestCreateForm form={createRequest.form} setForm={createRequest.setForm} setDocuments={createRequest.setDocuments} projects={createRequest.eligibleProjects} creating={createRequest.creating} error={createRequest.error} success={createRequest.success} onSubmit={createRequest.submit} onReset={createRequest.resetForm} />}
 
       <div className="investor-dashboard-grid">
         {requests.map(request => {
@@ -51,11 +40,7 @@ export default function InvestorRequestsSection({ requests }: Props) {
               <div className="investor-dashboard-project-list">
                 <div className="investor-dashboard-project-item">
                   <div className="investor-dashboard-project-icon"><i className="bi bi-file-earmark-text" /></div>
-                  <div className="investor-dashboard-project-info">
-                    <strong>{request.projet_titre || "بدون مشروع مرتبط"}</strong>
-                    <span>{request.wilaya || "الولاية غير محددة"}</span>
-                    <small>{request.created_at ? formatDate(request.created_at) : "—"}</small>
-                  </div>
+                  <div className="investor-dashboard-project-info"><strong>{request.projet_titre || "بدون مشروع مرتبط"}</strong><span>{request.wilaya || "الولاية غير محددة"}</span><small>{request.created_at ? formatDate(request.created_at) : "—"}</small></div>
                 </div>
                 {request.description && <p className="investor-request-description">{request.description}</p>}
                 {request.reponse && <div className="investor-request-response"><strong>رد الإدارة:</strong><span>{request.reponse}</span></div>}
@@ -63,12 +48,7 @@ export default function InvestorRequestsSection({ requests }: Props) {
             </div>
           );
         })}
-        {requests.length === 0 && (
-          <div className="investor-dashboard-card investor-dashboard-projects-card">
-            <div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">الطلبات</span><h2>لا توجد طلبات بعد</h2></div></div>
-            <p>أرسل أول طلب استثماري من النموذج أعلاه.</p>
-          </div>
-        )}
+        {requests.length === 0 && <div className="investor-dashboard-card investor-dashboard-projects-card"><div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">الطلبات</span><h2>لا توجد طلبات بعد</h2></div></div><p>أرسل أول طلب استثماري من النموذج أعلاه.</p></div>}
       </div>
     </section>
   );
