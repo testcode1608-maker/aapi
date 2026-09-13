@@ -8,6 +8,7 @@ interface RegistrationResponse { success:boolean; message:string; user?:{id:numb
 function InvestorRegistration(){
   const { language } = useTranslation();
   const t = registrationTranslations[language];
+  const direction = language === "ar" ? "rtl" : "ltr";
   const [submitted,setSubmitted]=useState(false),[loading,setLoading]=useState(false),[error,setError]=useState("");
   const handleSubmit=async(e:FormEvent<HTMLFormElement>)=>{
     e.preventDefault();setError("");const form=e.currentTarget,fd=new FormData(form);
@@ -17,10 +18,11 @@ function InvestorRegistration(){
     try{const response=await fetch("http://127.0.0.1/aapi-api/auth/register.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nom:lastName,prenom:firstName,email,telephone:phone,type_investisseur:investorType,secteur_activite:activity,wilaya,nom_entreprise:projectName||null,description:projectDescription||null,password,confirm_password:confirmPassword})});const text=await response.text();let data:RegistrationResponse;try{data=JSON.parse(text);}catch{throw new Error(t.invalidResponse);}if(!response.ok||!data.success)throw new Error(data.message||t.registerError);setSubmitted(true);form.reset();}catch(err){if(err instanceof TypeError&&err.message==="Failed to fetch")setError(t.connection);else if(err instanceof Error)setError(err.message);else setError(t.server);}finally{setLoading(false);}
   };
   const sections=[{n:"01",title:t.personal,text:t.personalText},{n:"02",title:t.investor,text:t.investorText},{n:"03",title:t.account,text:t.accountText}];
-  return <section className="investor-registration-section"><div className="container"><div className="row justify-content-center"><div className="col-xl-9 col-lg-10"><div className="investor-registration-card">
+  return <section className={`investor-registration-section investor-registration-${language}`} dir={direction} style={{direction}}>
+    <div className="container"><div className="row justify-content-center"><div className="col-xl-9 col-lg-10"><div className="investor-registration-card">
     <div className="investor-registration-header"><div className="investor-registration-icon"><i className="bi bi-person-plus" aria-hidden="true"></i></div><div><span className="section-overline">{t.create}</span><h2>{t.title}<strong>{t.strong}</strong></h2><p>{t.intro}</p></div></div>
     {submitted?<div className="investor-registration-success"><div className="investor-registration-success-icon"><i className="bi bi-check-lg" aria-hidden="true"></i></div><h3>{t.success}</h3><p>{t.successText}</p><div className="investor-registration-success-actions"><Link to="/login" className="aapi-primary-button">{t.login}<i className="bi bi-arrow-left" aria-hidden="true"></i></Link><Link to="/investor" className="aapi-secondary-button">{t.backInvestor}<i className="bi bi-arrow-left" aria-hidden="true"></i></Link></div></div>:<form className="investor-registration-form" onSubmit={handleSubmit}>
-      {error&&<div role="alert" style={{marginBottom:"24px",padding:"14px 18px",borderRadius:"10px",background:"#fff1f2",color:"#b42318",border:"1px solid #fecdca"}}><i className="bi bi-exclamation-circle" style={{marginLeft:"8px"}}></i>{error}</div>}
+      {error&&<div role="alert" style={{marginBottom:"24px",padding:"14px 18px",borderRadius:"10px",background:"#fff1f2",color:"#b42318",border:"1px solid #fecdca"}}><i className="bi bi-exclamation-circle" style={{marginInlineEnd:"8px"}}></i>{error}</div>}
       <div className="investor-registration-block"><div className="investor-registration-block-title"><span>{sections[0].n}</span><div><h3>{sections[0].title}</h3><p>{sections[0].text}</p></div></div><div className="row g-4">
         <div className="col-md-6"><label htmlFor="firstName">{t.firstName} <span>*</span></label><div className="investor-registration-input"><i className="bi bi-person" aria-hidden="true"></i><input id="firstName" name="firstName" type="text" placeholder={t.firstNamePlaceholder} autoComplete="given-name" required/></div></div>
         <div className="col-md-6"><label htmlFor="lastName">{t.lastName} <span>*</span></label><div className="investor-registration-input"><i className="bi bi-person" aria-hidden="true"></i><input id="lastName" name="lastName" type="text" placeholder={t.lastNamePlaceholder} autoComplete="family-name" required/></div></div>
