@@ -1,0 +1,6 @@
+.aapi-language-switcher{position:fixed;top:14px;right:18px;z-index:2000;display:flex;gap:3px;padding:4px;border:1px solid rgba(8,116,67,.22);border-radius:999px;background:rgba(255,255,255,.96);box-shadow:0 5px 18px rgba(20,34,27,.12);backdrop-filter:blur(8px)}
+.aapi-language-switcher button{border:0;background:transparent;color:#087443;font-size:12px;font-weight:700;padding:5px 8px;border-radius:999px;cursor:pointer;transition:.2s}
+.aapi-language-switcher button:hover{background:#eaf6f0}
+.aapi-language-switcher button.active{background:#087443;color:#fff}
+html[dir="rtl"] .aapi-language-switcher{right:auto;left:18px}
+@media(max-width:768px){.aapi-language-switcher{top:10px;right:10px}.aapi-language-switcher button{padding:4px 7px;font-size:11px}html[dir="rtl"] .aapi-language-switcher{left:10px;right:auto}}
