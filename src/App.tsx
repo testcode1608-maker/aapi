@@ -17,6 +17,8 @@ import Administrator from "./pages/Administrator";
 import AdminSettings from "./pages/AdminSettings";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import SiteThemeToggle from "./components/SiteThemeToggle";
+import "./styles/site-theme.css";
 
 interface CurrentUser { id: number; role?: string; statut?: string; [key: string]: unknown; }
 
@@ -67,7 +69,12 @@ function AppContent() {
 
   return (
     <>
-      {!hideGlobalLayout && <Header />}
+      {!hideGlobalLayout && (
+        <>
+          <Header />
+          <SiteThemeToggle />
+        </>
+      )}
       <main style={{ minHeight: hideGlobalLayout ? "100vh" : "calc(100vh - 200px)" }}>
         <Routes>
           <Route path="/" element={<Home />} />
