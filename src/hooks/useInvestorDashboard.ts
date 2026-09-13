@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "../i18n/I18nProvider";
 import { API_URL, LOGIN_ROUTE } from "../utils/investorDashboard";
 import { getCompletedInvestments, getDashboardActivities, getProjectCompletion, normalizeDocuments, normalizeInvestments, normalizeMessages, normalizeNotifications, normalizeProjects, normalizeRequests } from "../utils/investorDashboardData";
 import type { DashboardActivity, DashboardDocument, DashboardInvestment, DashboardMessage, DashboardNotification, DashboardProfile, DashboardProject, DashboardRequest, DashboardResponse, DashboardStats, DashboardUser } from "../types/investorDashboard";
@@ -23,6 +24,7 @@ function getStoredUserId(): number | null {
 
 export function useInvestorDashboard(): UseInvestorDashboardResult {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [user, setUser] = useState<DashboardUser | null>(null);
   const [profile, setProfile] = useState<DashboardProfile | null>(null);
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -43,18 +45,18 @@ export function useInvestorDashboard(): UseInvestorDashboardResult {
     try {
       const response = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ user_id: userId }) });
       const contentType = response.headers.get("content-type") || "";
-      if (!contentType.toLowerCase().includes("application/json")) throw new Error("Le serveur a retourné une réponse invalide. Vérifiez l'API PHP.");
+      if (!contentType.toLowerCase().includes("application/json")) throw new Error(t("investorDashboard.error.invalidResponse"));
       const data: DashboardResponse = await response.json();
-      if (!response.ok || !data?.success) throw new Error(data?.message || "Impossible de charger les données du tableau de bord.");
+      if (!response.ok || !data?.success) throw new Error(data?.message || t("investorDashboard.error.loadFailed"));
       setUser(data.user || null); setProfile(data.profile || null); setStats(data.stats || null);
       setProjects(normalizeProjects(data.projects)); setInvestments(normalizeInvestments(data.investments)); setRequests(normalizeRequests(data.requests));
       setDocuments(normalizeDocuments(data.documents)); setMessages(normalizeMessages(data.messages)); setNotifications(normalizeNotifications(data.notifications));
       setActivities(Array.isArray(data.activities) ? data.activities : []);
       if (data.user) localStorage.setItem("aapi_user", JSON.stringify(data.user));
     } catch (requestError) {
-      setError(requestError instanceof Error && requestError.message ? requestError.message : "تعذر الاتصال بالخادم.");
+      setError(requestError instanceof Error && requestError.message ? requestError.message : t("investorDashboard.error.connection"));
     } finally { setLoading(false); }
-  }, [navigate]);
+  }, [navigate, t]);
 
   useEffect(() => { void reload(); }, [reload]);
   const projectCompletion = getProjectCompletion(stats);
