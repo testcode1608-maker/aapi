@@ -1,28 +1,15 @@
+import { useEffect, useState, type FormEvent } from "react";
 import type { DashboardProfile, DashboardUser } from "../../types/investorDashboard";
+import { API_BASE_URL, getUserPhotoUrl } from "../../utils/investorDashboard";
+import "../../styles/investor-dashboard.css";
 
 interface Props { user: DashboardUser | null; profile: DashboardProfile | null; fullName: string; userPhotoUrl: string; }
 
 export default function InvestorProfileSection({ user, profile, fullName, userPhotoUrl }: Props) {
-  const location = `${profile?.wilaya || "—"}${profile?.commune ? ` · ${profile.commune}` : ""}`;
-  return (
-    <section className="investor-dashboard-section">
-      <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الحساب</span><h1>ملفي الشخصي</h1><p>معلومات المستثمر المسجلة في قاعدة البيانات.</p></div></div>
-      <div className="investor-dashboard-card investor-dashboard-profile">
-        <div className="investor-dashboard-profile-avatar">{userPhotoUrl ? <img src={userPhotoUrl} alt={fullName} /> : fullName.charAt(0)}</div>
-        <div className="investor-dashboard-profile-info"><h2>{fullName}</h2><span>{user?.email || "—"}</span><span>{user?.telephone || "لا يوجد رقم هاتف"}</span><span>{profile?.nom_entreprise || "مستثمر فردي"}</span><span>{location}</span></div>
-      </div>
-      <div className="investor-dashboard-grid">
-        <InfoCard title="معلومات المستثمر" overline="البيانات الشخصية" items={[
-          ["bi-person", "الاسم الكامل", fullName], ["bi-envelope", "البريد الإلكتروني", user?.email || "—"], ["bi-telephone", "الهاتف", user?.telephone || "—"]
-        ]} />
-        <InfoCard title="معلومات النشاط" overline="الشركة" items={[
-          ["bi-building", "المؤسسة", profile?.nom_entreprise || "—"], ["bi-briefcase", "النشاط", profile?.secteur_activite || "—"], ["bi-geo-alt", "الموقع", location]
-        ]} />
-      </div>
-    </section>
-  );
-}
-
-function InfoCard({ title, overline, items }: { title: string; overline: string; items: string[][] }) {
-  return <div className="investor-dashboard-card"><div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{overline}</span><h2>{title}</h2></div></div><div className="investor-dashboard-settings-list">{items.map(([icon, label, value]) => <div className="investor-dashboard-setting-item" key={label}><div className="investor-dashboard-setting-icon"><i className={`bi ${icon}`} /></div><div><strong>{label}</strong><span>{value}</span></div></div>)}</div></div>;
+  const [email,setEmail]=useState(user?.email||""); const [telephone,setTelephone]=useState(user?.telephone||""); const [photo,setPhoto]=useState(userPhotoUrl); const [photoData,setPhotoData]=useState(""); const [saving,setSaving]=useState(false); const [message,setMessage]=useState(""); const [error,setError]=useState("");
+  useEffect(()=>{setEmail(user?.email||"");setTelephone(user?.telephone||"");setPhoto(getUserPhotoUrl(user)||userPhotoUrl)},[user,userPhotoUrl]);
+  const location=`${profile?.wilaya||"—"}${profile?.commune?` · ${profile.commune}`:""}`;
+  const choosePhoto=(file?:File)=>{if(!file)return;if(!/^image\/(jpeg|png|webp)$/.test(file.type)){setError("الصورة يجب أن تكون JPG أو PNG أو WEBP.");return}if(file.size>5242880){setError("حجم الصورة يجب ألا يتجاوز 5 ميغابايت.");return}const r=new FileReader();r.onload=()=>{const v=String(r.result||"");setPhoto(v);setPhotoData(v);setError("")};r.readAsDataURL(file)};
+  const save=async(e:FormEvent)=>{e.preventDefault();const raw=localStorage.getItem("aapi_user");const id=raw?Number((JSON.parse(raw) as {id?:number}).id):0;if(!id){setError("انتهت جلسة المستثمر. أعد تسجيل الدخول.");return}setSaving(true);setError("");setMessage("");try{const r=await fetch(`${API_BASE_URL}/auth/investor/update-profile.php`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id:id,email,telephone,photo:photoData})});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.message||"تعذر تحديث الملف الشخصي.");if(d.user)localStorage.setItem("aapi_user",JSON.stringify(d.user));setMessage(d.message||"تم تحديث الملف الشخصي بنجاح.");setPhotoData("")}catch(x){setError(x instanceof Error?x.message:"تعذر تحديث الملف الشخصي.")}finally{setSaving(false)}};
+  return <section className="investor-dashboard-section"><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الحساب</span><h1>ملفي الشخصي</h1><p>تعديل البريد الإلكتروني ورقم الهاتف والصورة الشخصية.</p></div></div><div className="investor-dashboard-card investor-dashboard-profile"><div className="investor-dashboard-profile-avatar">{photo?<img src={photo} alt={fullName}/>:fullName.charAt(0)}</div><div className="investor-dashboard-profile-info"><h2>{fullName}</h2><span>{email||"—"}</span><span>{telephone||"لا يوجد رقم هاتف"}</span><span>{profile?.nom_entreprise||"مستثمر فردي"}</span><span>{location}</span><label className="investor-profile-photo-input"><span>تغيير الصورة</span><input type="file" accept="image/jpeg,image/png,image/webp" onChange={e=>choosePhoto(e.target.files?.[0])}/></label></div></div><form className="investor-dashboard-card investor-profile-form" onSubmit={save}><div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">البيانات الشخصية</span><h2>تعديل معلومات الاتصال</h2></div></div><label><span>البريد الإلكتروني</span><input type="email" value={email} onChange={e=>setEmail(e.target.value)} required/></label><label><span>رقم الهاتف</span><input type="tel" value={telephone} onChange={e=>setTelephone(e.target.value)}/></label>{error&&<div className="investor-profile-alert error">{error}</div>}{message&&<div className="investor-profile-alert success">{message}</div>}<button className="investor-dashboard-primary-btn" type="submit" disabled={saving}>{saving?"جاري الحفظ...":"حفظ التعديلات"}</button></form></section>;
 }
