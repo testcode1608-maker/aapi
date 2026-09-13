@@ -20,6 +20,7 @@ import Footer from "./components/Footer";
 import SiteThemeToggle from "./components/SiteThemeToggle";
 import "./styles/site-theme.css";
 import "./styles/aapi-all-pages-theme.css";
+import "./styles/inscription-dark.css";
 
 interface CurrentUser { id: number; role?: string; statut?: string; [key: string]: unknown; }
 
