@@ -1,0 +1,26 @@
+/* AAPI inscription textarea — dark mode */
+body.aapi-site-dark .investor-registration-textarea,
+html.aapi-site-dark-root .investor-registration-textarea{
+  background:#101613!important;
+  color:#edf4f0!important;
+  border:1px solid #294238!important;
+  caret-color:#8de0b5!important;
+}
+body.aapi-site-dark .investor-registration-textarea::placeholder,
+html.aapi-site-dark-root .investor-registration-textarea::placeholder{
+  color:#6f8178!important;
+  opacity:1!important;
+}
+body.aapi-site-dark .investor-registration-textarea:focus,
+html.aapi-site-dark-root .investor-registration-textarea:focus{
+  background:#101613!important;
+  color:#edf4f0!important;
+  border-color:#087443!important;
+  outline:none!important;
+  box-shadow:0 0 0 3px rgba(8,116,67,.16)!important;
+}
+body.aapi-site-dark .investor-registration-textarea:disabled,
+html.aapi-site-dark-root .investor-registration-textarea:disabled{
+  background:#151a17!important;
+  color:#7f9088!important;
+}
