@@ -44,14 +44,10 @@ html.aapi-site-dark-root .card,html.aapi-site-dark-root [class*="card"],html.aap
 html.aapi-site-dark-root .text-dark,html.aapi-site-dark-root .text-body,html.aapi-site-dark-root .text-black{color:#edf4f0!important}
 html.aapi-site-dark-root .text-muted{color:#aab8b1!important}
 
-/* AGENCY PAGE — exact classes used by Agency.tsx */
-body.aapi-site-dark .agency-page,
-body.aapi-site-dark .agency-page main,
-body.aapi-site-dark .agency-introduction,
-body.aapi-site-dark .agency-mission,
-body.aapi-site-dark .agency-values{background:#0e1210!important;color:#edf4f0!important}
+/* AGENCY PAGE */
+body.aapi-site-dark .agency-page,body.aapi-site-dark .agency-page main,body.aapi-site-dark .agency-introduction,body.aapi-site-dark .agency-mission,body.aapi-site-dark .agency-values{background:#0e1210!important;color:#edf4f0!important}
 body.aapi-site-dark .agency-hero{background:#0b2b1d!important;color:#fff!important}
-body.aapi-site-dark .agency-hero h1,body.aapi-site-dark .agency-hero h1 strong,body.aapi-site-dark .agency-hero p,body.aapi-site-dark .agency-hero .agency-overline,body.aapi-site-dark .agency-hero .agency-breadcrumb,body.aapi-site-dark .agency-hero .agency-breadcrumb a{color:#fff!important}
+body.aapi-site-dark .agency-hero h1,body.aapi-site-dark .agency-hero h1 strong,body.aapi-site-dark .agency-hero p,body.aapi-site-dark .agency-overline,body.aapi-site-dark .agency-breadcrumb,body.aapi-site-dark .agency-breadcrumb a{color:#fff!important}
 body.aapi-site-dark .agency-section-heading h2,body.aapi-site-dark .agency-centered-heading h2,body.aapi-site-dark .agency-values-title,body.aapi-site-dark .agency-intro-card h3,body.aapi-site-dark .agency-service-card h3,body.aapi-site-dark .agency-value-item h3{color:#edf4f0!important}
 body.aapi-site-dark .agency-section-heading h2 strong,body.aapi-site-dark .agency-centered-heading h2 strong,body.aapi-site-dark .agency-values-title strong{color:#8de0b5!important}
 body.aapi-site-dark .agency-section-overline{color:#8de0b5!important}
@@ -66,7 +62,123 @@ body.aapi-site-dark .agency-final-cta{background:#0b2b1d!important;color:#fff!im
 body.aapi-site-dark .agency-final-cta h2,body.aapi-site-dark .agency-final-cta span,body.aapi-site-dark .agency-final-cta p{color:#fff!important}
 body.aapi-site-dark .agency-final-button,body.aapi-site-dark .agency-primary-button{background:#087443!important;color:#fff!important;border-color:#087443!important}
 
-/* Dashboard dark-mode coverage when their own theme classes are active. */
+/* INVESTOR PUBLIC PAGE — exact classes used by Investor.tsx */
+body.aapi-site-dark .investor-intro,body.aapi-site-dark .investor-services,body.aapi-site-dark .investor-steps,body.aapi-site-dark .investor-documents,body.aapi-site-dark .investor-faq{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark .investor-main-title,body.aapi-site-dark .investor-steps-title,body.aapi-site-dark .investor-intro .aapi-section-header h2,body.aapi-site-dark .investor-faq h2,body.aapi-site-dark .investor-documents h2{color:#edf4f0!important}
+body.aapi-site-dark .investor-main-title strong,body.aapi-site-dark .investor-steps-title strong,body.aapi-site-dark .investor-intro .aapi-section-header h2 strong,body.aapi-site-dark .investor-faq h2 strong,body.aapi-site-dark .investor-documents h2 strong{color:#8de0b5!important}
+body.aapi-site-dark .investor-main-text,body.aapi-site-dark .investor-steps-intro,body.aapi-site-dark .investor-intro .aapi-section-header p,body.aapi-site-dark .investor-documents .aapi-section-header p,body.aapi-site-dark .investor-faq .aapi-section-header p{color:#aab8b1!important}
+body.aapi-site-dark .investor-intro-card,body.aapi-site-dark .investor-service-card,body.aapi-site-dark .investor-step-card,body.aapi-site-dark .investor-document-card,body.aapi-site-dark .investor-accordion .accordion-item{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .investor-intro-card span,body.aapi-site-dark .investor-intro-card p,body.aapi-site-dark .investor-document-content p,body.aapi-site-dark .investor-service-card p,body.aapi-site-dark .investor-step-content p{color:#aab8b1!important}
+body.aapi-site-dark .investor-intro-card strong,body.aapi-site-dark .investor-service-card h3,body.aapi-site-dark .investor-step-content h3,body.aapi-site-dark .investor-document-content h3{color:#edf4f0!important}
+body.aapi-site-dark .investor-intro-card-icon,body.aapi-site-dark .investor-service-icon,body.aapi-site-dark .investor-step-icon,body.aapi-site-dark .investor-document-icon{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .investor-service-top>span,body.aapi-site-dark .investor-step-number{color:#52665d!important}
+body.aapi-site-dark .investor-service-card a,body.aapi-site-dark .investor-document-content a{color:#8de0b5!important}
+body.aapi-site-dark .investor-card-decoration{color:#8de0b5!important}
+body.aapi-site-dark .investor-accordion .accordion-button{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .investor-accordion .accordion-button:not(.collapsed){background:#123d2a!important;color:#fff!important}
+body.aapi-site-dark .investor-accordion .accordion-body{background:#101613!important;color:#aab8b1!important;border-color:#294238!important}
+
+/* OPPORTUNITIES PAGE */
+body.aapi-site-dark .opportunities-content,body.aapi-site-dark .opportunities-cta,body.aapi-site-dark .opportunities-search,body.aapi-site-dark .opportunities-filters{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark .opportunities-title,body.aapi-site-dark .opportunities-results-header strong,body.aapi-site-dark .opportunities-filter-title,body.aapi-site-dark .opportunities-results-header span{color:#edf4f0!important}
+body.aapi-site-dark .opportunities-title strong{color:#8de0b5!important}
+body.aapi-site-dark .opportunities-content p,body.aapi-site-dark .opportunities-search input,body.aapi-site-dark .opportunities-results-header p{color:#aab8b1!important}
+body.aapi-site-dark .opportunities-search{border-color:#294238!important;background:#181c19!important}
+body.aapi-site-dark .opportunities-search input{background:#181c19!important;color:#edf4f0!important;border:0!important}
+body.aapi-site-dark .opportunities-filter-buttons button{background:#181c19!important;color:#aab8b1!important;border-color:#294238!important}
+body.aapi-site-dark .opportunities-filter-buttons button.active{background:#087443!important;color:#fff!important;border-color:#087443!important}
+body.aapi-site-dark .opportunity-card{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important;box-shadow:0 12px 35px rgba(0,0,0,.24)!important}
+body.aapi-site-dark .opportunity-card h3{color:#edf4f0!important}
+body.aapi-site-dark .opportunity-card p,body.aapi-site-dark .opportunity-location span,body.aapi-site-dark .opportunity-meta span{color:#aab8b1!important}
+body.aapi-site-dark .opportunity-meta{border-color:#294238!important}
+body.aapi-site-dark .opportunity-meta strong{color:#8de0b5!important}
+body.aapi-site-dark .opportunity-icon{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .opportunity-sector{color:#8de0b5!important;background:#123d2a!important}
+body.aapi-site-dark .opportunity-button{background:#087443!important;color:#fff!important;border-color:#087443!important}
+body.aapi-site-dark .opportunities-empty{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .opportunities-empty h3{color:#edf4f0!important}
+body.aapi-site-dark .opportunities-empty p{color:#aab8b1!important}
+body.aapi-site-dark .opportunities-empty button{background:#087443!important;color:#fff!important}
+body.aapi-site-dark .opportunities-cta-box{background:#0b2b1d!important;color:#fff!important}
+body.aapi-site-dark .opportunities-cta-box h2,body.aapi-site-dark .opportunities-cta-box p,body.aapi-site-dark .opportunities-cta-box span{color:#fff!important}
+body.aapi-site-dark .opportunities-cta-button{background:#c9a227!important;color:#14221b!important}
+
+/* SECTORS PAGE */
+body.aapi-site-dark .sectors-page-intro,body.aapi-site-dark .sectors-mini-stats,body.aapi-site-dark .sectors-page-content,body.aapi-site-dark .why-algeria,body.aapi-site-dark .sectors-page-cta{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark .sectors-page-title,body.aapi-site-dark .why-algeria-title,body.aapi-site-dark .sectors-page-cta h2{color:#edf4f0!important}
+body.aapi-site-dark .sectors-page-title strong,body.aapi-site-dark .why-algeria-title strong,body.aapi-site-dark .sectors-page-cta h2 strong{color:#8de0b5!important}
+body.aapi-site-dark .sectors-page-description,body.aapi-site-dark .why-algeria-text{color:#aab8b1!important}
+body.aapi-site-dark .sector-mini-stat,body.aapi-site-dark .sector-page-card,body.aapi-site-dark .why-algeria-card{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .sector-mini-stat strong,body.aapi-site-dark .sector-page-card h3,body.aapi-site-dark .why-algeria-card strong{color:#edf4f0!important}
+body.aapi-site-dark .sector-mini-stat span,body.aapi-site-dark .sector-page-card p,body.aapi-site-dark .sector-page-opportunity span,body.aapi-site-dark .why-algeria-card span{color:#aab8b1!important}
+body.aapi-site-dark .sector-page-icon{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .sector-page-card-top>span{color:#52665d!important}
+body.aapi-site-dark .sector-page-opportunity{border-color:#294238!important;color:#8de0b5!important}
+body.aapi-site-dark .sector-page-card a{color:#8de0b5!important}
+body.aapi-site-dark .why-algeria-circle{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .why-algeria-list>div{color:#aab8b1!important}
+body.aapi-site-dark .why-algeria-list i{color:#8de0b5!important}
+body.aapi-site-dark .sectors-cta-box{background:#0b2b1d!important;color:#fff!important}
+body.aapi-site-dark .sectors-cta-box h2,body.aapi-site-dark .sectors-cta-box p,body.aapi-site-dark .sectors-cta-box span{color:#fff!important}
+body.aapi-site-dark .sectors-cta-button{background:#c9a227!important;color:#14221b!important}
+
+/* ANNOUNCEMENTS PAGE */
+body.aapi-site-dark .announcements-intro,body.aapi-site-dark .announcements-page-section{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark .announcements-title{color:#edf4f0!important}
+body.aapi-site-dark .announcements-title strong{color:#8de0b5!important}
+body.aapi-site-dark .announcements-text{color:#aab8b1!important}
+body.aapi-site-dark .announcements-info-box{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .announcements-info-box strong{color:#edf4f0!important}
+body.aapi-site-dark .announcements-info-box span{color:#aab8b1!important}
+body.aapi-site-dark .announcements-info-icon{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .announcements-search{background:#181c19!important;border-color:#294238!important}
+body.aapi-site-dark .announcements-search input{background:#181c19!important;color:#edf4f0!important;border:0!important}
+body.aapi-site-dark .announcements-filters button{background:#181c19!important;color:#aab8b1!important;border-color:#294238!important}
+body.aapi-site-dark .announcements-filters button.active{background:#087443!important;color:#fff!important;border-color:#087443!important}
+body.aapi-site-dark .announcements-results{color:#aab8b1!important}
+body.aapi-site-dark .announcements-results strong{color:#8de0b5!important}
+body.aapi-site-dark .announcement-card{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .announcement-card h3{color:#edf4f0!important}
+body.aapi-site-dark .announcement-card p,body.aapi-site-dark .announcement-date{color:#aab8b1!important}
+body.aapi-site-dark .announcement-icon{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .announcement-category{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .announcement-important{background:#c9a227!important;color:#14221b!important}
+body.aapi-site-dark .announcement-read-more{color:#8de0b5!important}
+body.aapi-site-dark .announcements-empty{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .announcements-empty h3{color:#edf4f0!important}
+body.aapi-site-dark .announcements-empty p{color:#aab8b1!important}
+body.aapi-site-dark .announcements-empty-icon{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .announcements-cta{background:#0b2b1d!important;color:#fff!important}
+body.aapi-site-dark .announcements-cta-inner,body.aapi-site-dark .announcements-cta-content h2,body.aapi-site-dark .announcements-cta-content p,body.aapi-site-dark .announcements-cta-content span{color:#fff!important}
+body.aapi-site-dark .announcements-cta-icon{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .aapi-white-button{background:#fff!important;color:#087443!important}
+
+/* CONTACT PAGE */
+body.aapi-site-dark .contact-intro,body.aapi-site-dark .contact-main-section,body.aapi-site-dark .contact-location-section{background:#0e1210!important;color:#edf4f0!important}
+body.aapi-site-dark .contact-hero-content span,body.aapi-site-dark .contact-hero-content h1,body.aapi-site-dark .contact-breadcrumb,body.aapi-site-dark .contact-breadcrumb a,body.aapi-site-dark .contact-breadcrumb strong{color:#fff!important}
+body.aapi-site-dark .contact-intro h2,body.aapi-site-dark .contact-section-heading h2,body.aapi-site-dark .contact-info-header h2,body.aapi-site-dark .contact-form-header h2{color:#edf4f0!important}
+body.aapi-site-dark .contact-intro h2 strong,body.aapi-site-dark .contact-section-heading h2 strong,body.aapi-site-dark .contact-info-header h2 strong,body.aapi-site-dark .contact-form-header h2 strong{color:#8de0b5!important}
+body.aapi-site-dark .contact-intro p,body.aapi-site-dark .contact-section-heading p,body.aapi-site-dark .contact-info-header p,body.aapi-site-dark .contact-info-text p{color:#aab8b1!important}
+body.aapi-site-dark .contact-information,body.aapi-site-dark .contact-form-card,body.aapi-site-dark .contact-map-wrapper{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .contact-info-item{border-color:#294238!important}
+body.aapi-site-dark .contact-info-icon,body.aapi-site-dark .contact-form-header-icon,body.aapi-site-dark .contact-map-pin{background:#123d2a!important;color:#8de0b5!important}
+body.aapi-site-dark .contact-info-text span,body.aapi-site-dark .contact-social>span,body.aapi-site-dark .contact-form-header span{color:#8de0b5!important}
+body.aapi-site-dark .contact-info-text strong{color:#edf4f0!important}
+body.aapi-site-dark .contact-social-links a{background:#101613!important;color:#8de0b5!important;border-color:#294238!important}
+body.aapi-site-dark .contact-input-wrapper{background:#101613!important;border-color:#294238!important}
+body.aapi-site-dark .contact-input-wrapper input,body.aapi-site-dark .contact-input-wrapper select,body.aapi-site-dark .contact-input-wrapper textarea{background:#101613!important;color:#edf4f0!important;border-color:transparent!important}
+body.aapi-site-dark .contact-input-wrapper i{color:#8de0b5!important}
+body.aapi-site-dark .contact-form-card label,body.aapi-site-dark .contact-consent label{color:#aab8b1!important}
+body.aapi-site-dark .contact-success-message{background:#123d2a!important;color:#edf4f0!important;border-color:#294238!important}
+body.aapi-site-dark .contact-submit-button,body.aapi-site-dark .contact-map-button{background:#087443!important;color:#fff!important;border-color:#087443!important}
+body.aapi-site-dark .contact-map-placeholder{background:#101613!important;border-color:#294238!important}
+body.aapi-site-dark .contact-map-content h3{color:#edf4f0!important}
+body.aapi-site-dark .contact-map-content p{color:#aab8b1!important}
+body.aapi-site-dark .contact-cta{background:#0b2b1d!important;color:#fff!important}
+body.aapi-site-dark .contact-cta-content h2,body.aapi-site-dark .contact-cta-content p,body.aapi-site-dark .contact-cta-content span{color:#fff!important}
+body.aapi-site-dark .contact-cta-button{background:#c9a227!important;color:#14221b!important}
+
+/* Dashboard */
 body.aapi-investor-dark .investor-dashboard-page,body.aapi-investor-dark .investor-dashboard-page main{background:#0e1210!important;color:#edf4f0!important}
 body.aapi-investor-dark .investor-dashboard-page [class*="card"],body.aapi-investor-dark .investor-dashboard-page [class*="panel"],body.aapi-investor-dark .investor-dashboard-page [class*="section"]{border-color:#294238!important}
 body.aapi-admin-light .admin-dashboard,body.aapi-admin-light .admin-projects-page,body.aapi-admin-light .admin-requests-page,body.aapi-admin-light .admin-users-page,body.aapi-admin-light .admin-investments-page,body.aapi-admin-light .admin-investors-page,body.aapi-admin-light .admin-messages-page,body.aapi-admin-light .admin-documents-page{color:#14221b!important}
