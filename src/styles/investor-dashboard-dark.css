@@ -38,6 +38,18 @@
 .aapi-investor-dark .investor-dashboard-error h2{color:#edf4f0}
 .aapi-investor-dark .investor-dashboard-main input,.aapi-investor-dark .investor-dashboard-main select,.aapi-investor-dark .investor-dashboard-main textarea{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 
+/* Add project button — dark mode */
+body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-primary-btn{
+  background:#c9a227!important;
+  color:#14221b!important;
+  border-color:#c9a227!important;
+}
+body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-primary-btn:hover{
+  background:#e2c85f!important;
+  color:#14221b!important;
+  border-color:#e2c85f!important;
+}
+
 /* Keep every investment-total amount identical to light mode */
 body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-investment-total{
   border-bottom-color:#dfe8e3!important;
