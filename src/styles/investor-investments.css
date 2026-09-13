@@ -1,0 +1,16 @@
+/* AAPI — Investor Investments */
+.investor-investment-create-card{margin-bottom:20px}
+.investor-investment-create-card .investor-dashboard-card-header>i{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:var(--id-light-green);color:var(--id-green);font-size:18px}
+.investor-investment-form-message{display:flex;align-items:center;gap:8px;width:100%;margin-bottom:14px}
+.investor-investment-empty-form{display:flex;align-items:center;gap:10px;padding:15px;border:1px dashed var(--id-border);border-radius:12px;background:var(--id-light);color:var(--id-gray);font-size:12px}
+.investor-investment-empty-form i{color:var(--id-gold);font-size:18px}
+.investor-investment-empty-form p{margin:0}
+.investor-investment-create-card .investor-project-form-grid{margin-top:4px}
+.investor-investment-create-card .investor-project-form-actions{margin-top:2px}
+.investor-investment-create-card .investor-project-form-field input[readonly]{background:var(--id-light);font-weight:700;color:var(--id-green);cursor:default}
+.investor-investment-create-card .investor-project-form-field select{cursor:pointer}
+body.aapi-investor-dark .investor-investment-empty-form{background:#121614;color:#aab8b1;border-color:#294238}
+body.aapi-investor-dark .investor-investment-create-card .investor-project-form-field input[readonly]{background:#121614;color:#8de0b5}
+body.aapi-investor-dark .investor-investment-create-card .investor-dashboard-card-header h2,
+body.aapi-investor-dark .investor-investment-create-card .investor-project-form-field label{color:#fff!important}
+@media(max-width:760px){.investor-investment-empty-form{align-items:flex-start}}
