@@ -1,135 +1,56 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "../i18n/I18nProvider";
 
 function Footer() {
+  const { t } = useTranslation();
+  const year = new Date().getFullYear();
+
   return (
     <footer className="aapi-footer">
       <div className="container">
         <div className="footer-main">
-
           <div className="footer-brand">
-
-            {/* LOGO */}
             <div className="footer-logo">
-              <img
-                src="public/logo.png"
-                alt="الوكالة الجزائرية لترقية الاستثمار"
-                className="footer-logo-image"
-              />
+              <img src="/logo.png" alt={t("footer.agency")} className="footer-logo-image" />
             </div>
-
-            <h3>
-              الوكالة الجزائرية
-              <br />
-              لترقية الاستثمار
-            </h3>
-
-            <p>
-              مرافقة المستثمرين وتسهيل الإجراءات وترقية الاستثمارات المنتجة عبر كامل التراب الوطني.
-            </p>
-
+            <h3>{t("header.agencyName")}<br />{t("header.agencyPromotion")}</h3>
+            <p>{t("footer.description")}</p>
             <div className="footer-social">
-              <a href="#" aria-label="Facebook">
-                <i className="bi bi-facebook" />
-              </a>
-
-              <a href="#" aria-label="LinkedIn">
-                <i className="bi bi-linkedin" />
-              </a>
-
-              <a href="#" aria-label="YouTube">
-                <i className="bi bi-youtube" />
-              </a>
-
-              <a href="#" aria-label="Instagram">
-                <i className="bi bi-instagram" />
-              </a>
+              <a href="#" aria-label="Facebook"><i className="bi bi-facebook" /></a>
+              <a href="#" aria-label="LinkedIn"><i className="bi bi-linkedin" /></a>
+              <a href="#" aria-label="YouTube"><i className="bi bi-youtube" /></a>
+              <a href="#" aria-label="Instagram"><i className="bi bi-instagram" /></a>
             </div>
-
           </div>
 
           <div className="footer-column">
-            <h4>الوكالة</h4>
-
-            <Link to="/agency">
-              تقديم الوكالة
-            </Link>
-
-            <Link to="/agency#missions">
-              مهام الوكالة
-            </Link>
-
-            <Link to="/agency#values">
-              مبادئ الوكالة
-            </Link>
-
-            <Link to="/agency#journey">
-              مسار الاستثمار
-            </Link>
+            <h4>{t("footer.agencyLinks")}</h4>
+            <Link to="/agency">{t("agency.presentation")}</Link>
+            <Link to="/agency#missions">{t("agency.missions")}</Link>
+            <Link to="/agency#values">{t("agency.values")}</Link>
+            <Link to="/agency#journey">{t("agency.journey")}</Link>
           </div>
 
           <div className="footer-column">
-            <h4>المستثمر</h4>
-
-            <Link to="/investor">
-              فضاء المستثمر
-            </Link>
-
-            <Link to="/opportunities">
-              فرص الاستثمار
-            </Link>
-
-            <Link to="/sectors">
-              قطاعات الاستثمار
-            </Link>
-
-            <Link to="/investor#investor-faq">
-              الأسئلة الشائعة
-            </Link>
+            <h4>{t("footer.investorLinks")}</h4>
+            <Link to="/investor">{t("investor.space")}</Link>
+            <Link to="/opportunities">{t("investment.opportunities")}</Link>
+            <Link to="/sectors">{t("investment.sectors")}</Link>
+            <Link to="/investor#investor-faq">{t("investor.faq")}</Link>
           </div>
 
           <div className="footer-column">
-            <h4>تواصل معنا</h4>
-
-            <div className="footer-contact">
-              <i className="bi bi-geo-alt" />
-              <span>
-                الجزائر العاصمة، الجزائر
-              </span>
-            </div>
-
-            <div className="footer-contact">
-              <i className="bi bi-envelope" />
-              <span>
-                contact@aapi.dz
-              </span>
-            </div>
-
-            <div className="footer-contact">
-              <i className="bi bi-telephone" />
-              <span>
-                +213 21 00 00 00
-              </span>
-            </div>
+            <h4>{t("footer.contact")}</h4>
+            <div className="footer-contact"><i className="bi bi-geo-alt" /><span>{t("footer.address")}</span></div>
+            <div className="footer-contact"><i className="bi bi-envelope" /><span>contact@aapi.dz</span></div>
+            <div className="footer-contact"><i className="bi bi-telephone" /><span>+213 21 00 00 00</span></div>
           </div>
-
         </div>
 
         <div className="footer-bottom">
-          <span>
-            © 2026 الوكالة الجزائرية لترقية الاستثمار. جميع الحقوق محفوظة.
-          </span>
-
-          <div>
-            <Link to="/contact">
-              سياسة الخصوصية
-            </Link>
-
-            <Link to="/contact">
-              شروط الاستخدام
-            </Link>
-          </div>
+          <span>© {year} {t("footer.copyright")}. {t("footer.rights")}</span>
+          <div><Link to="/contact">{t("footer.privacy")}</Link><Link to="/contact">{t("footer.terms")}</Link></div>
         </div>
-
       </div>
     </footer>
   );
