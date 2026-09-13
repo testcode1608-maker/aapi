@@ -38,6 +38,20 @@
 .aapi-investor-dark .investor-dashboard-error h2{color:#edf4f0}
 .aapi-investor-dark .investor-dashboard-main input,.aapi-investor-dark .investor-dashboard-main select,.aapi-investor-dark .investor-dashboard-main textarea{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 
+/* Investor statistics — keep strong values visible in dark mode */
+body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-stats .investor-dashboard-stat-content > strong{
+  color:#8de0b5!important;
+  opacity:1!important;
+  visibility:visible!important;
+  text-shadow:0 0 12px rgba(141,224,181,.08);
+}
+body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-stats .investor-dashboard-stat-content > span{
+  color:#aab8b1!important;
+}
+body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-stats .investor-dashboard-stat-content > small{
+  color:#8f9e96!important;
+}
+
 /* Investor projects page — labels and headings in dark mode */
 body.aapi-investor-dark .investor-project-create-form .investor-dashboard-card-header h2,
 body.aapi-investor-dark .investor-project-form-field label{
