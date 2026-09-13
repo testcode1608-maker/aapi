@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { FormEvent } from "react";
 import type { CreateInvestmentForm, DashboardInvestment, DashboardProject } from "../types/investorDashboard";
 import { API_BASE_URL } from "../utils/investorDashboard";
 
@@ -11,20 +12,15 @@ export const EMPTY_INVESTMENT_FORM: CreateInvestmentForm = {
   notes: "",
 };
 
-export function useCreateInvestorInvestment(
-  projects: DashboardProject[],
-  reload: () => Promise<void>,
-) {
+export function useCreateInvestorInvestment(projects: DashboardProject[], reload: () => Promise<void>) {
   const [form, setForm] = useState<CreateInvestmentForm>(EMPTY_INVESTMENT_FORM);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const eligibleProjects = projects.filter((project) =>
-    ["approuve", "en_cours"].includes(project.statut),
-  );
+  const eligibleProjects = projects.filter((project) => ["approuve", "en_cours"].includes(project.statut));
 
-  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     setSuccess("");
@@ -37,15 +33,8 @@ export function useCreateInvestorInvestment(
       userId = 0;
     }
 
-    if (!userId) {
-      setError("انتهت جلسة المستثمر. أعد تسجيل الدخول.");
-      return;
-    }
-
-    if (!form.project_id || Number(form.montant) <= 0) {
-      setError("اختر المشروع وأدخل مبلغ استثمار صحيح.");
-      return;
-    }
+    if (!userId) return setError("انتهت جلسة المستثمر. أعد تسجيل الدخول.");
+    if (!form.project_id || Number(form.montant) <= 0) return setError("اختر المشروع وأدخل مبلغ استثمار صحيح.");
 
     setCreating(true);
     try {
@@ -54,16 +43,8 @@ export function useCreateInvestorInvestment(
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({ user_id: userId, ...form, montant: Number(form.montant) }),
       });
-      const data = (await response.json()) as {
-        success?: boolean;
-        message?: string;
-        investment?: DashboardInvestment;
-      };
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || "تعذر إضافة الاستثمار.");
-      }
-
+      const data = (await response.json()) as { success?: boolean; message?: string; investment?: DashboardInvestment };
+      if (!response.ok || !data.success) throw new Error(data.message || "تعذر إضافة الاستثمار.");
       setSuccess(data.message || "تمت إضافة الاستثمار بنجاح.");
       setForm({ ...EMPTY_INVESTMENT_FORM, date_investissement: new Date().toISOString().slice(0, 10) });
       await reload();
