@@ -1,14 +1,15 @@
+import type { Dispatch, FormEvent, SetStateAction } from "react";
 import type { CreateInvestmentForm, DashboardProject } from "../../types/investorDashboard";
 import { formatAmount } from "../../utils/investorDashboard";
 
 interface Props {
   form: CreateInvestmentForm;
-  setForm: React.Dispatch<React.SetStateAction<CreateInvestmentForm>>;
+  setForm: Dispatch<SetStateAction<CreateInvestmentForm>>;
   projects: DashboardProject[];
   creating: boolean;
   error: string;
   success: string;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onReset: () => void;
 }
 
