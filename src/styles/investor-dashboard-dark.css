@@ -38,6 +38,15 @@
 .aapi-investor-dark .investor-dashboard-error h2{color:#edf4f0}
 .aapi-investor-dark .investor-dashboard-main input,.aapi-investor-dark .investor-dashboard-main select,.aapi-investor-dark .investor-dashboard-main textarea{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
 
+/* Investor projects page — labels and headings in dark mode */
+body.aapi-investor-dark .investor-project-create-form .investor-dashboard-card-header h2,
+body.aapi-investor-dark .investor-project-form-field label{
+  color:#ffffff!important;
+}
+body.aapi-investor-dark .investor-project-form-field label span{
+  color:#c9a227!important;
+}
+
 /* Add project button — white in dark mode */
 body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-primary-btn{
   background:#ffffff!important;
