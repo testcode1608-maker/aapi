@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/main.css";
 import "../styles/investor-dashboard.css";
@@ -29,6 +30,8 @@ export default function InvestorDashboardRefactored() {
   const { user, profile, stats, projects, investments, requests, documents, messages, notifications, activities, projectCompletion, completedInvestments, loading, error, reload } = useInvestorDashboard();
   const createProject = useCreateInvestorProject(reload);
   const createInvestment = useCreateInvestorInvestment(projects, reload);
+  const [showProjectForm, setShowProjectForm] = useState(true);
+  const [showInvestmentForm, setShowInvestmentForm] = useState(true);
   const section = location.pathname.split("/")[3] || "dashboard";
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
@@ -41,8 +44,30 @@ export default function InvestorDashboardRefactored() {
 
   let content;
   switch (section) {
-    case "projects": content = <><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الاستثمار</span><h1>مشاريعي الاستثمارية</h1><p>إنشاء ومتابعة المشاريع المرسلة إلى الإدارة.</p></div></div><InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} /><InvestorProjectList projects={projects} /></>; break;
-    case "investments": content = <><InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} /><InvestorInvestmentsSection investments={investments} /></>; break;
+    case "projects":
+      content = <section className="investor-dashboard-section">
+        <div className="investor-dashboard-page-header">
+          <div><span className="investor-dashboard-overline">الاستثمار</span><h1>مشاريعي الاستثمارية</h1><p>إنشاء ومتابعة المشاريع المرسلة إلى الإدارة.</p></div>
+          <button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowProjectForm(v => !v)}>
+            <i className={showProjectForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showProjectForm ? "إخفاء النموذج" : "مشروع جديد"}
+          </button>
+        </div>
+        {showProjectForm && <InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} />}
+        <InvestorProjectList projects={projects} />
+      </section>;
+      break;
+    case "investments":
+      content = <section className="investor-dashboard-section">
+        <div className="investor-dashboard-page-header">
+          <div><span className="investor-dashboard-overline">الاستثمارات</span><h1>إضافة ومتابعة الاستثمارات</h1><p>إنشاء استثمار جديد ومتابعة جميع عمليات الاستثمار المرتبطة بحسابك.</p></div>
+          <button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowInvestmentForm(v => !v)}>
+            <i className={showInvestmentForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showInvestmentForm ? "إخفاء النموذج" : "استثمار جديد"}
+          </button>
+        </div>
+        {showInvestmentForm && <InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} />}
+        <InvestorInvestmentsSection investments={investments} />
+      </section>;
+      break;
     case "requests": content = <InvestorRequestsSection requests={requests} />; break;
     case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
     case "messages": content = <InvestorMessagesSection messages={messages} />; break;
