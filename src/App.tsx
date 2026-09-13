@@ -18,6 +18,8 @@ import AdminSettings from "./pages/AdminSettings";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import SiteThemeToggle from "./components/SiteThemeToggle";
+import LanguageSwitcher from "./components/LanguageSwitcher";
+import { I18nProvider } from "./i18n/I18nProvider";
 import "./styles/site-theme.css";
 import "./styles/aapi-all-pages-theme.css";
 import "./styles/inscription-dark.css";
@@ -75,9 +77,11 @@ function AppContent() {
       {!hideGlobalLayout && (
         <>
           <Header />
+          <LanguageSwitcher />
           <SiteThemeToggle />
         </>
       )}
+      {hideGlobalLayout && <LanguageSwitcher />}
       <main style={{ minHeight: hideGlobalLayout ? "100vh" : "calc(100vh - 200px)" }}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -110,8 +114,10 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <AppContent />
+      <I18nProvider>
+        <ScrollToTop />
+        <AppContent />
+      </I18nProvider>
     </BrowserRouter>
   );
 }
