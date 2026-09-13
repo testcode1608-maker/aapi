@@ -1,0 +1,319 @@
+/* ==========================================================
+   AAPI Investor Notifications
+   Premium RTL notification center
+   ========================================================== */
+
+.investor-dashboard-page .investor-notifications-card {
+  overflow: hidden;
+  padding: 0;
+  background: var(--id-white);
+  border: 1px solid var(--id-border);
+  border-radius: var(--id-radius);
+  box-shadow: var(--id-shadow);
+}
+
+.investor-notifications-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px;
+  background: linear-gradient(135deg, var(--id-white), var(--id-light-green));
+  border-bottom: 1px solid var(--id-border);
+}
+
+.investor-notifications-header-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.investor-notifications-header-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--id-green);
+  color: #fff;
+  font-size: 19px;
+  box-shadow: 0 8px 20px rgba(8, 116, 67, .18);
+}
+
+.investor-notifications-header h2 {
+  margin: 0;
+  color: var(--id-dark);
+  font-size: 20px;
+  font-weight: 850;
+}
+
+.investor-notifications-header p {
+  margin: 4px 0 0;
+  color: var(--id-gray);
+  font-size: 12px;
+}
+
+.investor-notifications-count {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--id-green);
+  border: 1px solid rgba(8, 116, 67, .16);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.investor-notifications-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.investor-notification-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+  padding: 18px 22px;
+  background: var(--id-white);
+  border-bottom: 1px solid var(--id-border);
+  transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.investor-notification-item:last-child {
+  border-bottom: 0;
+}
+
+.investor-notification-item:hover {
+  background: var(--id-light-green);
+  transform: translateX(-2px);
+}
+
+.investor-notification-item.unread {
+  background: linear-gradient(90deg, rgba(8,116,67,.045), var(--id-white));
+}
+
+.investor-notification-item.unread::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  right: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+  background: var(--id-green);
+}
+
+.investor-notification-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: var(--id-light-green);
+  color: var(--id-green);
+  font-size: 18px;
+  border: 1px solid rgba(8,116,67,.12);
+}
+
+.investor-notification-item.type-message .investor-notification-icon {
+  background: #edf5fb;
+  color: #2676b8;
+  border-color: #d8e9f6;
+}
+
+.investor-notification-item.type-document .investor-notification-icon,
+.investor-notification-item.type-demande .investor-notification-icon {
+  background: #fbf5df;
+  color: var(--id-gold);
+  border-color: #eee2b7;
+}
+
+.investor-notification-item.type-projet .investor-notification-icon {
+  background: #eaf6f0;
+  color: var(--id-green);
+}
+
+.investor-notification-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.investor-notification-title {
+  color: var(--id-dark);
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1.45;
+}
+
+.investor-notification-message {
+  color: var(--id-gray);
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.investor-notification-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: max-content;
+  color: var(--id-gray);
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.investor-notification-time i {
+  color: var(--id-gold);
+}
+
+.investor-notification-new {
+  align-self: start;
+  margin-top: 2px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--id-green);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.investor-notifications-empty {
+  min-height: 270px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.investor-notifications-empty-icon {
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: var(--id-light-green);
+  color: var(--id-green);
+  font-size: 27px;
+}
+
+.investor-notifications-empty strong {
+  color: var(--id-dark);
+  font-size: 16px;
+}
+
+.investor-notifications-empty span {
+  color: var(--id-gray);
+  font-size: 12px;
+}
+
+/* Dark mode */
+body.aapi-investor-dark .investor-dashboard-page .investor-notifications-card {
+  background: var(--id-white);
+  border-color: var(--id-border);
+}
+
+body.aapi-investor-dark .investor-notifications-header {
+  background: linear-gradient(135deg, #181c19, #123d2a);
+  border-color: var(--id-border);
+}
+
+body.aapi-investor-dark .investor-notifications-count {
+  background: #181c19;
+  color: #7ed0a7;
+  border-color: #294238;
+}
+
+body.aapi-investor-dark .investor-notification-item {
+  background: var(--id-white);
+  border-color: var(--id-border);
+}
+
+body.aapi-investor-dark .investor-notification-item:hover {
+  background: #123d2a;
+}
+
+body.aapi-investor-dark .investor-notification-item.unread {
+  background: linear-gradient(90deg, rgba(126,208,167,.07), var(--id-white));
+}
+
+body.aapi-investor-dark .investor-notification-icon {
+  background: #123d2a;
+  color: #7ed0a7;
+  border-color: #294238;
+}
+
+body.aapi-investor-dark .investor-notification-item.type-message .investor-notification-icon {
+  background: #162b3a;
+  color: #79b8e5;
+  border-color: #29465b;
+}
+
+body.aapi-investor-dark .investor-notification-item.type-document .investor-notification-icon,
+body.aapi-investor-dark .investor-notification-item.type-demande .investor-notification-icon {
+  background: #302b18;
+  color: #e0c96c;
+  border-color: #514a2a;
+}
+
+body.aapi-investor-dark .investor-notifications-empty-icon {
+  background: #123d2a;
+  color: #7ed0a7;
+}
+
+@media (max-width: 760px) {
+  .investor-notifications-header {
+    padding: 18px;
+  }
+
+  .investor-notification-item {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .investor-notification-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .investor-notification-new {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 460px) {
+  .investor-notifications-header-title {
+    gap: 10px;
+  }
+
+  .investor-notifications-header-icon {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .investor-notifications-header h2 {
+    font-size: 18px;
+  }
+
+  .investor-notification-title {
+    font-size: 13px;
+  }
+}
