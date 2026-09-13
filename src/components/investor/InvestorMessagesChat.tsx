@@ -2,11 +2,17 @@ import { useInvestorMessages } from "../../hooks/useInvestorMessages";
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/investor-messages.css";
 
+function getCurrentUserId() {
+  const stored = localStorage.getItem("aapi_user");
+  if (!stored) return 0;
+  try { return Number((JSON.parse(stored) as { id?: number | string }).id) || 0; }
+  catch { return 0; }
+}
+
 export default function InvestorMessagesChat() {
   const { t } = useTranslation();
   const chat = useInvestorMessages();
-  const stored = localStorage.getItem("aapi_user");
-  const userId = stored ? Number((JSON.parse(stored) as { id?: number }).id) : 0;
+  const userId = getCurrentUserId();
 
   return (
     <section className="investor-dashboard-section">
