@@ -1,0 +1,49 @@
+/* AAPI Investor Dashboard — dark mode */
+.aapi-investor-dark .investor-dashboard-page{
+  --id-light:#121614;
+  --id-white:#181c19;
+  --id-light-green:#123d2a;
+  --id-border:#294238;
+  --id-gray:#aab8b1;
+  --id-dark:#edf4f0;
+  --id-dark-green:#7ed0a7;
+  --id-shadow:0 12px 35px rgba(0,0,0,.28);
+  background:#0e1210;
+  color:var(--id-dark);
+}
+.aapi-investor-dark .investor-dashboard-topbar{background:#151a17;border-color:#294238;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+.aapi-investor-dark .investor-dashboard-brand-text strong{color:#7ed0a7}
+.aapi-investor-dark .investor-dashboard-brand-text span,.aapi-investor-dark .investor-dashboard-user-info span{color:#aab8b1}
+.aapi-investor-dark .investor-dashboard-notification{background:#123d2a;color:#8de0b5}
+.aapi-investor-dark .investor-dashboard-notification:hover{background:#18543a}
+.aapi-investor-dark .investor-dashboard-notification-badge{border-color:#151a17}
+.aapi-investor-dark .investor-dashboard-user-info strong{color:#edf4f0}
+.aapi-investor-dark .investor-dashboard-theme-toggle{background:#123d2a;color:#c9a227;border-color:#087443}
+.aapi-investor-dark .investor-dashboard-theme-toggle:hover{background:#18543a}
+.aapi-investor-dark .investor-dashboard-card,.aapi-investor-dark .investor-dashboard-stat-card,.aapi-investor-dark .investor-dashboard-profile{background:#181c19;border-color:#294238;box-shadow:var(--id-shadow)}
+.aapi-investor-dark .investor-dashboard-section h1,.aapi-investor-dark .investor-dashboard-page-header h1,.aapi-investor-dark .investor-dashboard-card-header h2,.aapi-investor-dark .investor-dashboard-project-info strong,.aapi-investor-dark .investor-dashboard-activity-content strong,.aapi-investor-dark .investor-dashboard-profile-info h2{color:#edf4f0}
+.aapi-investor-dark .investor-dashboard-section-header p,.aapi-investor-dark .investor-dashboard-page-header p,.aapi-investor-dark .investor-dashboard-project-info span,.aapi-investor-dark .investor-dashboard-activity-content span,.aapi-investor-dark .investor-dashboard-project-info small,.aapi-investor-dark .investor-dashboard-activity-content small,.aapi-investor-dark .investor-dashboard-profile-info span{color:#aab8b1}
+.aapi-investor-dark .investor-dashboard-project-item,.aapi-investor-dark .investor-dashboard-activity-item{border-color:#294238}
+.aapi-investor-dark .investor-dashboard-investment-items div{background:#121614}
+.aapi-investor-dark .investor-dashboard-setting-item{background:#181c19!important;border-color:#294238!important}
+.aapi-investor-dark .investor-dashboard-setting-item strong{color:#edf4f0}
+.aapi-investor-dark .investor-dashboard-setting-item span{color:#aab8b1}
+.aapi-investor-dark .investor-dashboard-progress-bar{background:#25362e}
+.aapi-investor-dark .investor-dashboard-status.success{color:#8de0b5;background:#123d2a}
+.aapi-investor-dark .investor-dashboard-status.warning{color:#e2c85f;background:#403815}
+.aapi-investor-dark .investor-dashboard-status.danger{color:#f0a0a0;background:#401d1d}
+.aapi-investor-dark .investor-dashboard-status.info{color:#9cc9ba;background:#19332b}
+.aapi-investor-dark .investor-dashboard-stat-icon,.aapi-investor-dark .investor-dashboard-project-icon,.aapi-investor-dark .investor-dashboard-activity-icon{background:#123d2a;color:#8de0b5}
+.aapi-investor-dark .investor-dashboard-loading,.aapi-investor-dark .investor-dashboard-error{background:#0e1210;color:#edf4f0}
+.aapi-investor-dark .investor-dashboard-error h2{color:#edf4f0}
+.aapi-investor-dark .investor-dashboard-main input,.aapi-investor-dark .investor-dashboard-main select,.aapi-investor-dark .investor-dashboard-main textarea{background:#181c19!important;color:#edf4f0!important;border-color:#294238!important}
+
+.investor-dashboard-theme-toggle{
+  width:42px;height:42px;border:1px solid var(--id-border);border-radius:12px;
+  display:grid;place-items:center;cursor:pointer;background:var(--id-light-green);
+  color:var(--id-dark-green);font:inherit;font-size:16px;transition:.18s ease;
+}
+.investor-dashboard-theme-toggle:hover{transform:translateY(-1px);background:#dff1e8}
+.investor-dashboard-theme-toggle:focus-visible{outline:3px solid rgba(201,162,39,.35);outline-offset:2px}
+
+@media(max-width:460px){.investor-dashboard-theme-toggle{width:38px;height:38px}.investor-dashboard-topbar-actions{gap:7px}}
