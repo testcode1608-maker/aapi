@@ -70,7 +70,7 @@ export default function InvestorDashboardRefactored() {
       break;
     case "requests": content = <InvestorRequestsSection requests={requests} />; break;
     case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
-    case "messages": content = <InvestorMessagesSection messages={messages} />; break;
+    case "messages": content = <InvestorMessagesSection />; break;
     case "notifications": content = <InvestorNotificationsSection notifications={notifications} />; break;
     case "profile": content = <InvestorProfileSection user={user} profile={profile} fullName={fullName} userPhotoUrl={userPhotoUrl} />; break;
     case "settings": content = <InvestorSettingsSection user={user} />; break;
