@@ -23,11 +23,19 @@ import { useInvestorDashboard } from "../hooks/useInvestorDashboard";
 import { useCreateInvestorProject } from "../hooks/useCreateInvestorProject";
 import { useCreateInvestorInvestment } from "../hooks/useCreateInvestorInvestment";
 import { getUserFullName, getUserPhotoUrl } from "../utils/investorDashboard";
+import { useTranslation } from "../i18n/I18nProvider";
+
+const paths: Record<string, string> = {
+  dashboard: "/investor/dashboard", projects: "/investor/dashboard/projects", investments: "/investor/dashboard/investments",
+  requests: "/investor/dashboard/requests", documents: "/investor/dashboard/documents", messages: "/investor/dashboard/messages",
+  notifications: "/investor/dashboard/notifications", profile: "/investor/dashboard/profile", settings: "/investor/dashboard/settings",
+};
 
 export default function InvestorDashboardRefactored() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, profile, stats, projects, investments, requests, documents, messages, notifications, activities, projectCompletion, completedInvestments, loading, error, reload } = useInvestorDashboard();
+  const { t } = useTranslation();
+  const { user, profile, stats, projects, investments, requests, documents, notifications, activities, projectCompletion, completedInvestments, loading, error, reload } = useInvestorDashboard();
   const createProject = useCreateInvestorProject(reload);
   const createInvestment = useCreateInvestorInvestment(projects, reload);
   const [showProjectForm, setShowProjectForm] = useState(true);
@@ -35,39 +43,16 @@ export default function InvestorDashboardRefactored() {
   const section = location.pathname.split("/")[3] || "dashboard";
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
-  const paths: Record<string, string> = { dashboard: "/investor/dashboard", projects: "/investor/dashboard/projects", investments: "/investor/dashboard/investments", requests: "/investor/dashboard/requests", documents: "/investor/dashboard/documents", messages: "/investor/dashboard/messages", notifications: "/investor/dashboard/notifications", profile: "/investor/dashboard/profile", settings: "/investor/dashboard/settings" };
   const navClass = (name: string) => location.pathname === paths[name] ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
   const logout = () => { localStorage.removeItem("aapi_user"); navigate("/login", { replace: true }); };
 
-  if (loading) return <div className="investor-dashboard-loading"><div className="investor-dashboard-loading-spinner"/><p>جاري تحميل لوحة المستثمر...</p></div>;
-  if (error) return <div className="investor-dashboard-error"><i className="bi bi-exclamation-triangle"/><h2>تعذر تحميل لوحة المستثمر</h2><p>{error}</p><button className="investor-dashboard-primary-btn" onClick={() => void reload()}>إعادة المحاولة</button></div>;
+  if (loading) return <div className="investor-dashboard-loading"><div className="investor-dashboard-loading-spinner" /><p>{t("investorDashboard.loading")}</p></div>;
+  if (error) return <div className="investor-dashboard-error"><i className="bi bi-exclamation-triangle" /><h2>{t("investorDashboard.errorTitle")}</h2><p>{error}</p><button className="investor-dashboard-primary-btn" onClick={() => void reload()}>{t("investorDashboard.retry")}</button></div>;
 
   let content;
   switch (section) {
-    case "projects":
-      content = <section className="investor-dashboard-section">
-        <div className="investor-dashboard-page-header">
-          <div><span className="investor-dashboard-overline">الاستثمار</span><h1>مشاريعي الاستثمارية</h1><p>إنشاء ومتابعة المشاريع المرسلة إلى الإدارة.</p></div>
-          <button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowProjectForm(v => !v)}>
-            <i className={showProjectForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showProjectForm ? "إخفاء النموذج" : "مشروع جديد"}
-          </button>
-        </div>
-        {showProjectForm && <InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} />}
-        <InvestorProjectList projects={projects} />
-      </section>;
-      break;
-    case "investments":
-      content = <section className="investor-dashboard-section">
-        <div className="investor-dashboard-page-header">
-          <div><span className="investor-dashboard-overline">الاستثمارات</span><h1>إضافة ومتابعة الاستثمارات</h1><p>إنشاء استثمار جديد ومتابعة جميع عمليات الاستثمار المرتبطة بحسابك.</p></div>
-          <button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowInvestmentForm(v => !v)}>
-            <i className={showInvestmentForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showInvestmentForm ? "إخفاء النموذج" : "استثمار جديد"}
-          </button>
-        </div>
-        {showInvestmentForm && <InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} />}
-        <InvestorInvestmentsSection investments={investments} />
-      </section>;
-      break;
+    case "projects": content = <section className="investor-dashboard-section"><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">{t("investorDashboard.projectsOverline")}</span><h1>{t("investorDashboard.projectsTitle")}</h1><p>{t("investorDashboard.projectsDescription")}</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowProjectForm(v => !v)}><i className={showProjectForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showProjectForm ? t("investorDashboard.hideForm") : t("investorDashboard.newProject")}</button></div>{showProjectForm && <InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} />}<InvestorProjectList projects={projects} /></section>; break;
+    case "investments": content = <section className="investor-dashboard-section"><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">{t("investorDashboard.investmentsOverline")}</span><h1>{t("investorDashboard.investmentsTitle")}</h1><p>{t("investorDashboard.investmentsDescription")}</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowInvestmentForm(v => !v)}><i className={showInvestmentForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showInvestmentForm ? t("investorDashboard.hideForm") : t("investorDashboard.newInvestment")}</button></div>{showInvestmentForm && <InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} />}<InvestorInvestmentsSection investments={investments} /></section>; break;
     case "requests": content = <InvestorRequestsSection requests={requests} />; break;
     case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
     case "messages": content = <InvestorMessagesSection />; break;
