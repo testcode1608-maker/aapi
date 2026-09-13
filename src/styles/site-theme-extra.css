@@ -1,0 +1,114 @@
+/* AAPI PUBLIC SITE — extra dark-mode coverage */
+body.aapi-site-dark .services-aapi,
+body.aapi-site-dark .sectors-section,
+body.aapi-site-dark .opportunities-section,
+body.aapi-site-dark .statistics-section,
+body.aapi-site-dark .events-section,
+body.aapi-site-dark .news-section,
+body.aapi-site-dark .announcements-section,
+body.aapi-site-dark .contact-section{
+  background:#0e1210!important;
+  color:#edf4f0!important;
+}
+
+body.aapi-site-dark .statistics-background,
+body.aapi-site-dark .services-aapi .container,
+body.aapi-site-dark .sectors-section .container,
+body.aapi-site-dark .opportunities-section .container,
+body.aapi-site-dark .statistics-section .container,
+body.aapi-site-dark .events-section .container{
+  background:transparent!important;
+}
+
+body.aapi-site-dark .aapi-section-header,
+body.aapi-site-dark .statistics-header,
+body.aapi-site-dark .opportunities-header,
+body.aapi-site-dark .events-header{
+  color:#edf4f0!important;
+}
+
+body.aapi-site-dark .aapi-section-header h2,
+body.aapi-site-dark .statistics-header h2,
+body.aapi-site-dark .opportunities-header h2,
+body.aapi-site-dark .events-header h2,
+body.aapi-site-dark .aapi-service-card h3,
+body.aapi-site-dark .sector-card h3,
+body.aapi-site-dark .opportunity-card h3,
+body.aapi-site-dark .event-item h3{
+  color:#edf4f0!important;
+}
+
+body.aapi-site-dark .aapi-service-card,
+body.aapi-site-dark .sector-card,
+body.aapi-site-dark .statistic-card,
+body.aapi-site-dark .opportunity-card,
+body.aapi-site-dark .event-item{
+  background:#181c19!important;
+  color:#edf4f0!important;
+  border-color:#294238!important;
+}
+
+body.aapi-site-dark .aapi-service-card p,
+body.aapi-site-dark .sector-card p,
+body.aapi-site-dark .statistic-card p,
+body.aapi-site-dark .opportunity-detail,
+body.aapi-site-dark .opportunity-footer span,
+body.aapi-site-dark .events-header p,
+body.aapi-site-dark .event-info,
+body.aapi-site-dark .opportunities-intro p{
+  color:#aab8b1!important;
+}
+
+body.aapi-site-dark .statistics-overline,
+body.aapi-site-dark .section-overline,
+body.aapi-site-dark .statistics-header strong,
+body.aapi-site-dark .opportunities-title strong,
+body.aapi-site-dark .events-header strong{
+  color:#8de0b5!important;
+}
+
+body.aapi-site-dark .statistic-value,
+body.aapi-site-dark .statistic-value span{
+  color:#8de0b5!important;
+}
+
+body.aapi-site-dark .statistic-icon,
+body.aapi-site-dark .sector-icon,
+body.aapi-site-dark .service-card-icon{
+  background:#123d2a!important;
+  color:#8de0b5!important;
+  border-color:#294238!important;
+}
+
+body.aapi-site-dark .event-date{
+  background:#123d2a!important;
+  color:#edf4f0!important;
+  border-color:#294238!important;
+}
+
+body.aapi-site-dark .event-type,
+body.aapi-site-dark .opportunity-category{
+  color:#c9a227!important;
+}
+
+body.aapi-site-dark .green-outline-button,
+body.aapi-site-dark .opportunities-header-link,
+body.aapi-site-dark .events-all-link,
+body.aapi-site-dark .sector-link{
+  color:#8de0b5!important;
+  border-color:#087443!important;
+}
+
+body.aapi-site-dark .opportunity-content,
+body.aapi-site-dark .opportunity-details,
+body.aapi-site-dark .opportunity-footer{
+  background:#181c19!important;
+  color:#edf4f0!important;
+  border-color:#294238!important;
+}
+
+body.aapi-site-dark .statistics-grid,
+body.aapi-site-dark .sectors-grid,
+body.aapi-site-dark .events-list{
+  background:transparent!important;
+}
