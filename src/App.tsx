@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Agency from "./pages/Agency";
@@ -26,26 +27,40 @@ import "./styles/inscription-dark.css";
 import "./styles/inscription-textarea-dark.css";
 import "./styles/language-switcher.css";
 
-interface CurrentUser { id: number; role?: string; statut?: string; [key: string]: unknown; }
+interface CurrentUser {
+  id: number;
+  role?: string;
+  statut?: string;
+  [key: string]: unknown;
+}
 
 function getCurrentUser(): CurrentUser | null {
   try {
     const raw = localStorage.getItem("aapi_user");
     if (!raw) return null;
-    const user = JSON.parse(raw);
+    const user: unknown = JSON.parse(raw);
     return user && typeof user === "object" ? (user as CurrentUser) : null;
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 }
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  void pathname;
-  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname]);
+
   return null;
 }
 
 function isActiveAdmin(user: CurrentUser | null) {
-  return !!user && String(user.role).toLowerCase() === "admin" && (!user.statut || String(user.statut).toLowerCase() === "actif");
+  return (
+    !!user &&
+    String(user.role).toLowerCase() === "admin" &&
+    (!user.statut || String(user.statut).toLowerCase() === "actif")
+  );
 }
 
 function AdminRoute() {
@@ -65,13 +80,16 @@ function AdminSettingsRoute() {
 function InvestorRoute() {
   const user = getCurrentUser();
   if (!user) return <Navigate to="/login" replace />;
-  if (user.role !== "investisseur" && user.role !== "investor") return <Navigate to="/" replace />;
+  if (user.role !== "investisseur" && user.role !== "investor") {
+    return <Navigate to="/" replace />;
+  }
   return <InvestorDashboard />;
 }
 
 function AppContent() {
   const { pathname } = useLocation();
-  const hideGlobalLayout = pathname.startsWith("/admin") || pathname.startsWith("/investor/dashboard");
+  const hideGlobalLayout =
+    pathname.startsWith("/admin") || pathname.startsWith("/investor/dashboard");
 
   return (
     <>
@@ -83,7 +101,12 @@ function AppContent() {
         </>
       )}
       {hideGlobalLayout && <LanguageSwitcher />}
-      <main style={{ minHeight: hideGlobalLayout ? "100vh" : "calc(100vh - 200px)" }}>
+
+      <main
+        style={{
+          minHeight: hideGlobalLayout ? "100vh" : "calc(100vh - 200px)",
+        }}
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/agency" element={<Agency />} />
@@ -107,6 +130,7 @@ function AppContent() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+
       {!hideGlobalLayout && <Footer />}
     </>
   );
