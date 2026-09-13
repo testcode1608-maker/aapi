@@ -1,1 +1,23 @@
-.investor-profile-form{display:flex;flex-direction:column;gap:16px}.investor-profile-form label{display:flex;flex-direction:column;gap:7px}.investor-profile-form input{min-height:48px;border:1px solid var(--id-border);border-radius:12px;padding:0 14px;background:var(--id-light);color:var(--id-dark)}.investor-profile-photo-input{display:inline-flex!important;width:max-content!important;padding:10px 14px;background:var(--id-light-green);border-radius:12px;color:var(--id-dark-green);cursor:pointer}.investor-profile-photo-input input{display:none}.investor-profile-alert{padding:10px;border-radius:10px}.investor-profile-alert.error{background:#fbe9e9;color:#8b3030}.investor-profile-alert.success{background:var(--id-light-green);color:var(--id-dark-green)}
+.investor-profile-form{display:flex;flex-direction:column;gap:20px;padding:24px}
+.investor-profile-form .investor-dashboard-card-header{margin-bottom:2px}
+.investor-profile-form .investor-dashboard-card-overline{display:block;margin-bottom:6px;color:var(--id-green);font-size:13px;font-weight:700}
+.investor-profile-form .investor-dashboard-card-header h2{margin:0;color:var(--id-dark);font-size:22px;font-weight:800}
+.investor-profile-form label{display:flex;flex-direction:column;gap:8px;width:100%}
+.investor-profile-form label>span{color:var(--id-dark);font-size:14px;font-weight:700}
+.investor-profile-form input[type=email],.investor-profile-form input[type=tel]{width:100%;min-height:50px;border:1px solid var(--id-border);border-radius:12px;padding:0 15px;background:var(--id-light);color:var(--id-dark);outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
+.investor-profile-form input[type=email]:focus,.investor-profile-form input[type=tel]:focus{border-color:var(--id-green);background:var(--id-white);box-shadow:0 0 0 3px rgba(8,116,67,.10)}
+.investor-profile-photo-input{display:inline-flex!important;align-items:center;justify-content:center;width:max-content!important;margin-top:8px;padding:10px 16px;background:var(--id-light-green);border:1px solid rgba(8,116,67,.16);border-radius:12px;color:var(--id-dark-green);cursor:pointer;font-size:14px;font-weight:700;transition:.2s}
+.investor-profile-photo-input:hover{background:#dcefe5;transform:translateY(-1px)}
+.investor-profile-photo-input input{display:none!important}
+.investor-profile-form .investor-dashboard-primary-btn{width:100%;min-height:50px;margin-top:4px;border-radius:12px;font-weight:800;cursor:pointer}
+.investor-profile-form .investor-dashboard-primary-btn:disabled{opacity:.6;cursor:not-allowed}
+.investor-profile-alert{padding:12px 14px;border-radius:10px;font-size:14px;font-weight:600}
+.investor-profile-alert.error{background:#fbe9e9;color:#8b3030;border:1px solid #efcaca}
+.investor-profile-alert.success{background:var(--id-light-green);color:var(--id-dark-green);border:1px solid #c9e5d5}
+body.aapi-investor-dark .investor-profile-form .investor-dashboard-card-overline{color:var(--id-dark-green)}
+body.aapi-investor-dark .investor-profile-form .investor-dashboard-card-header h2,body.aapi-investor-dark .investor-profile-form label>span{color:var(--id-dark)}
+body.aapi-investor-dark .investor-profile-form input[type=email],body.aapi-investor-dark .investor-profile-form input[type=tel]{background:#121614;color:var(--id-dark);border-color:var(--id-border)}
+body.aapi-investor-dark .investor-profile-form input[type=email]:focus,body.aapi-investor-dark .investor-profile-form input[type=tel]:focus{background:#181c19;border-color:var(--id-dark-green);box-shadow:0 0 0 3px rgba(126,208,167,.12)}
+body.aapi-investor-dark .investor-profile-photo-input{background:#123d2a;color:#7ed0a7;border-color:#294238}
+body.aapi-investor-dark .investor-profile-photo-input:hover{background:#174b34}
+@media (max-width:640px){.investor-profile-form{padding:18px}.investor-profile-form .investor-dashboard-card-header h2{font-size:19px}.investor-profile-form input[type=email],.investor-profile-form input[type=tel]{min-height:48px}}
