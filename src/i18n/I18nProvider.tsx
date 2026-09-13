@@ -13,6 +13,7 @@ import { extraTranslations } from "./extraTranslations";
 import { newsTranslations } from "./newsTranslations";
 import { uiTranslations } from "./uiTranslations";
 import { registrationTranslations } from "./registrationTranslations";
+import { investorDashboardTranslations } from "./investorDashboardTranslations";
 
 type I18nContextValue = {
   language: Language;
@@ -47,6 +48,7 @@ function getSources(language: Language) {
     newsTranslations[language],
     uiTranslations[language],
     { registrationPage: registrationTranslations[language] },
+    { investorDashboard: investorDashboardTranslations[language] },
   ];
 }
 
