@@ -1,6 +1,7 @@
 /* AAPI — Global styles entry point */
 @import "./base.css";
 @import "./site-header.css";
+@import "./site-footer.css";
 @import "../../index.css";
 @import "../site-theme.css";
 @import "../aapi-all-pages-theme.css";
