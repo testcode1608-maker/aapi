@@ -1,4 +1,4 @@
-/* AAPI — registration form follows the active language direction */
+/* AAPI — Registration page: full RTL / LTR mirroring */
 
 .investor-registration-section[dir="rtl"],
 .investor-registration-section[dir="rtl"] * {
@@ -10,28 +10,59 @@
   direction: ltr;
 }
 
+/* Every registration grid follows the selected language direction. */
+.investor-registration-section[dir="rtl"] .row {
+  direction: rtl !important;
+}
+
+.investor-registration-section[dir="ltr"] .row {
+  direction: ltr !important;
+}
+
+.investor-registration-section[dir="rtl"] [class*="col-"] {
+  text-align: right !important;
+}
+
+.investor-registration-section[dir="ltr"] [class*="col-"] {
+  text-align: left !important;
+}
+
+/* Labels really move their text to the correct side. */
 .investor-registration-section[dir="rtl"] label {
   display: block;
   width: 100%;
-  text-align: right !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   direction: rtl !important;
+  text-align: right !important;
 }
 
 .investor-registration-section[dir="ltr"] label {
   display: block;
   width: 100%;
-  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   direction: ltr !important;
+  text-align: left !important;
 }
 
+/* Input wrappers mirror the icon + field position. */
 .investor-registration-section[dir="rtl"] .investor-registration-input,
 .investor-registration-section[dir="rtl"] .investor-registration-textarea {
   direction: rtl !important;
+  text-align: right !important;
+  flex-direction: row-reverse !important;
 }
 
 .investor-registration-section[dir="ltr"] .investor-registration-input,
 .investor-registration-section[dir="ltr"] .investor-registration-textarea {
   direction: ltr !important;
+  text-align: left !important;
+  flex-direction: row !important;
 }
 
 .investor-registration-section[dir="rtl"] input,
@@ -48,11 +79,14 @@
   text-align: left !important;
 }
 
+/* Section headings. */
 .investor-registration-section[dir="rtl"] .investor-registration-block-title,
 .investor-registration-section[dir="rtl"] .investor-registration-header,
 .investor-registration-section[dir="rtl"] .investor-registration-actions,
 .investor-registration-section[dir="rtl"] .investor-registration-success-actions {
   direction: rtl !important;
+  flex-direction: row !important;
+  text-align: right !important;
 }
 
 .investor-registration-section[dir="ltr"] .investor-registration-block-title,
@@ -60,12 +94,44 @@
 .investor-registration-section[dir="ltr"] .investor-registration-actions,
 .investor-registration-section[dir="ltr"] .investor-registration-success-actions {
   direction: ltr !important;
+  flex-direction: row !important;
+  text-align: left !important;
 }
 
+.investor-registration-section[dir="rtl"] .investor-registration-header-content,
+.investor-registration-section[dir="rtl"] .investor-registration-block-title > div,
+.investor-registration-section[dir="rtl"] .investor-registration-success {
+  text-align: right !important;
+}
+
+.investor-registration-section[dir="ltr"] .investor-registration-header-content,
+.investor-registration-section[dir="ltr"] .investor-registration-block-title > div,
+.investor-registration-section[dir="ltr"] .investor-registration-success {
+  text-align: left !important;
+}
+
+/* Consent checkbox and text mirror too. */
 .investor-registration-section[dir="rtl"] .investor-registration-consent label {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row !important;
   text-align: right !important;
 }
 
 .investor-registration-section[dir="ltr"] .investor-registration-consent label {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row !important;
   text-align: left !important;
+}
+
+/* Action buttons follow the language side. */
+.investor-registration-section[dir="rtl"] .investor-registration-actions,
+.investor-registration-section[dir="rtl"] .investor-registration-success-actions {
+  justify-content: flex-start !important;
+}
+
+.investor-registration-section[dir="ltr"] .investor-registration-actions,
+.investor-registration-section[dir="ltr"] .investor-registration-success-actions {
+  justify-content: flex-start !important;
 }
