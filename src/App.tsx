@@ -27,6 +27,7 @@ import "./styles/inscription-dark.css";
 import "./styles/inscription-textarea-dark.css";
 import "./styles/language-switcher.css";
 import "./styles/global-direction.css";
+import "./styles/registration-direction.css";
 
 interface CurrentUser {
   id: number;
