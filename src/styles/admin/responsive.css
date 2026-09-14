@@ -1,0 +1,66 @@
+/* AAPI ADMIN — Responsive layer
+   Keeps the Admin SaaS layout usable on tablets and phones.
+*/
+
+@media (max-width: 1180px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .admin-navbar {
+    width: 250px;
+  }
+
+  .admin-dashboard-main,
+  .admin-projects-content,
+  .admin-requests-content,
+  .admin-users-content,
+  .admin-investments-content,
+  .admin-investors-content,
+  .admin-messages-content,
+  .admin-documents-content {
+    margin-right: 0;
+    padding: 24px 20px 40px;
+  }
+
+  .admin-dashboard-header {
+    margin-right: 0;
+    padding: 24px 20px 10px;
+  }
+}
+
+@media (max-width: 680px) {
+  .admin-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard-header-content,
+  .table-card-header,
+  .admin-panel-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-dashboard-welcome h1 {
+    font-size: 22px;
+  }
+
+  .admin-circular-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-project-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .project-search {
+    min-width: 0;
+  }
+}
