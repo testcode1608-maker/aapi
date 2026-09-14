@@ -1,4 +1,4 @@
-/* AAPI — Registration page: forced RTL / LTR visual mirroring */
+/* AAPI — Registration page: global RTL / LTR direction */
 
 .investor-registration-section[dir="rtl"] {
   direction: rtl !important;
@@ -31,7 +31,7 @@
   text-align: left !important;
 }
 
-/* Labels */
+/* All registration labels */
 .investor-registration-section[dir="rtl"] .investor-registration-form label {
   display: block !important;
   width: 100% !important;
@@ -50,7 +50,7 @@
   text-align: left !important;
 }
 
-/* Input wrappers */
+/* All registration input groups */
 .investor-registration-section[dir="rtl"] .investor-registration-input {
   direction: rtl !important;
   flex-direction: row-reverse !important;
@@ -63,7 +63,7 @@
   text-align: left !important;
 }
 
-/* Text inputs */
+/* All text inputs */
 .investor-registration-section[dir="rtl"] .investor-registration-input input {
   direction: rtl !important;
   text-align: right !important;
@@ -74,37 +74,62 @@
   text-align: left !important;
 }
 
-/* SELECT — force the physical side of text and native arrow */
-.investor-registration-section[dir="rtl"] .investor-registration-input select {
+/* ==========================================================
+   ALL SELECTS ON INSCRIPTION
+   Arabic  = icon right / text right / native arrow left
+   French  = icon left  / text left  / native arrow right
+   English = icon left  / text left  / native arrow right
+   ========================================================== */
+
+.investor-registration-section .investor-registration-input select,
+.investor-registration-section select {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  writing-mode: horizontal-tb !important;
+  unicode-bidi: plaintext !important;
+}
+
+.investor-registration-section[dir="rtl"] .investor-registration-input select,
+.investor-registration-section[dir="rtl"] select {
   direction: rtl !important;
   text-align: right !important;
   text-align-last: right !important;
   unicode-bidi: plaintext !important;
+  writing-mode: horizontal-tb !important;
 }
 
-.investor-registration-section[dir="ltr"] .investor-registration-input select {
+.investor-registration-section[dir="ltr"] .investor-registration-input select,
+.investor-registration-section[dir="ltr"] select {
   direction: ltr !important;
   text-align: left !important;
   text-align-last: left !important;
   unicode-bidi: plaintext !important;
+  writing-mode: horizontal-tb !important;
 }
 
-/* Make the select occupy the full remaining input area. */
-.investor-registration-section .investor-registration-input select {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-  width: 100% !important;
-}
-
-/* Select options follow the active language direction. */
-.investor-registration-section[dir="rtl"] .investor-registration-input select option {
+/* Every option follows the selected language direction. */
+.investor-registration-section[dir="rtl"] select option {
   direction: rtl !important;
   text-align: right !important;
 }
 
-.investor-registration-section[dir="ltr"] .investor-registration-input select option {
+.investor-registration-section[dir="ltr"] select option {
   direction: ltr !important;
   text-align: left !important;
+}
+
+/* Keep the native select arrow on the language side.
+   Do NOT use appearance:none: the normal browser arrow remains visible. */
+.investor-registration-section[dir="rtl"] select {
+  direction: rtl !important;
+}
+
+.investor-registration-section[dir="ltr"] select {
+  direction: ltr !important;
 }
 
 /* Textarea */
