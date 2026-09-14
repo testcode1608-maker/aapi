@@ -1,4 +1,14 @@
-/* AAPI Investor Dashboard — language-aware shell direction */
+/* ==========================================================
+   AAPI Investor Dashboard — Professional RTL / LTR layout
+   The whole dashboard mirrors with the selected language.
+   Text, icons, sidebar and topbar all keep a stable visual rhythm.
+   ========================================================== */
+
+/* ---------- RTL ---------- */
+.investor-dashboard-page.investor-dashboard-rtl {
+  direction: rtl;
+}
+
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-layout {
   grid-template-columns: minmax(0, 1fr) 264px !important;
 }
@@ -11,6 +21,53 @@
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-main {
   grid-column: 1;
   grid-row: 1;
+}
+
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar {
+  direction: rtl;
+}
+
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-brand {
+  flex-direction: row;
+}
+
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar-actions {
+  flex-direction: row;
+}
+
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user {
+  flex-direction: row;
+}
+
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user-info {
+  direction: rtl;
+  text-align: right;
+  align-items: flex-start;
+}
+
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user-info span {
+  direction: ltr;
+  text-align: right;
+  unicode-bidi: plaintext;
+}
+
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-notification-badge {
+  left: -5px;
+  right: auto;
+}
+
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-nav-link .investor-dashboard-nav-badge {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-nav-link.active {
+  box-shadow: inset -3px 0 0 var(--id-gold);
+}
+
+/* ---------- LTR ---------- */
+.investor-dashboard-page.investor-dashboard-ltr {
+  direction: ltr;
 }
 
 .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-layout {
@@ -27,9 +84,56 @@
   grid-row: 1;
 }
 
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar {
+  direction: ltr;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-brand {
+  flex-direction: row;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar-actions {
+  flex-direction: row;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user {
+  flex-direction: row;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user-info {
+  direction: ltr;
+  text-align: left;
+  align-items: flex-start;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user-info span {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: plaintext;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-notification-badge {
+  right: -5px;
+  left: auto;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-nav-link .investor-dashboard-nav-badge {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-nav-link.active {
+  box-shadow: inset 3px 0 0 var(--id-gold);
+}
+
+/* ---------- Responsive ---------- */
 @media (max-width: 1000px) {
   .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-layout {
     grid-template-columns: minmax(0, 1fr) 220px !important;
+  }
+
+  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-layout {
+    grid-template-columns: 220px minmax(0, 1fr) !important;
   }
 }
 
@@ -40,5 +144,31 @@
   .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-main {
     grid-column: auto;
     grid-row: auto;
+  }
+
+  .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar,
+  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar {
+    gap: 12px;
+    padding-inline: 16px;
+  }
+
+  .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar-actions,
+  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar-actions {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-brand-text span,
+  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-brand-text span {
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user-info,
+  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user-info {
+    display: none;
   }
 }
