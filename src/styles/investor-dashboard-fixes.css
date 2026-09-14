@@ -1,22 +1,264 @@
-/* AAPI Investor Dashboard — final layout normalization */
-.investor-dashboard-page{width:100%;max-width:100%;min-width:0;overflow-x:hidden;direction:rtl}
-.investor-dashboard-page,.investor-dashboard-page *{box-sizing:border-box}
-.investor-dashboard-layout{display:grid!important;grid-template-columns:264px minmax(0,1fr)!important;min-width:0!important;width:100%!important}
-.investor-dashboard-main{min-width:0!important;width:100%!important;max-width:none!important;padding:30px!important;overflow-x:hidden!important}
-.investor-dashboard-section{width:100%!important;max-width:1240px!important;margin-inline:auto!important;min-width:0!important}
-.investor-dashboard-topbar{width:100%!important;max-width:none!important}
-.investor-dashboard-stats{width:100%!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
-.investor-dashboard-grid{width:100%!important;min-width:0!important}
-.investor-dashboard-card,.investor-dashboard-stat-card{min-width:0!important;max-width:100%!important}
-.investor-dashboard-page-header{min-width:0!important}
-.investor-dashboard-page-header>div{min-width:0!important}
-.investor-dashboard-page-header h1,.investor-dashboard-page-header p{overflow-wrap:anywhere}
-.investor-dashboard-primary-btn{flex:0 0 auto;white-space:nowrap}
-.investor-dashboard-project-list,.investor-dashboard-activity-list{min-width:0}
-.investor-dashboard-project-item,.investor-dashboard-activity-item{min-width:0}
-.investor-dashboard-project-info,.investor-dashboard-activity-content{min-width:0!important}
-.investor-dashboard-project-info strong,.investor-dashboard-activity-content strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.investor-dashboard-sidebar{min-width:0!important;width:264px!important}
-@media (max-width:1100px){.investor-dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.investor-dashboard-grid{grid-template-columns:minmax(0,1fr)!important}.investor-dashboard-projects-card,.investor-dashboard-investment-summary,.investor-dashboard-activity-card{grid-column:auto!important}}
-@media (max-width:800px){.investor-dashboard-layout{display:flex!important;flex-direction:column!important}.investor-dashboard-sidebar{position:static!important;width:100%!important;height:auto!important;max-height:none!important;padding:12px!important}.investor-dashboard-main{width:100%!important;padding:20px 15px!important}.investor-dashboard-nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px!important;padding-top:0!important}.investor-dashboard-sidebar-header{display:none!important}.investor-dashboard-sidebar-footer{margin-top:8px!important}.investor-dashboard-page-header{flex-direction:column!important;align-items:stretch!important}.investor-dashboard-page-header .investor-dashboard-primary-btn{width:100%!important}}
-@media (max-width:520px){.investor-dashboard-main{padding:15px 10px!important}.investor-dashboard-stats{grid-template-columns:1fr!important}.investor-dashboard-nav{grid-template-columns:1fr!important}.investor-dashboard-brand-text,.investor-dashboard-user-info{display:none!important}.investor-dashboard-topbar{height:64px!important;padding:0 12px!important}.investor-dashboard-topbar-actions{gap:8px!important}.investor-dashboard-card,.investor-dashboard-stat-card{padding:15px!important}.investor-dashboard-investment-items{grid-template-columns:1fr!important}.investor-dashboard-project-item,.investor-dashboard-activity-item{align-items:flex-start!important}.investor-dashboard-status{font-size:9px!important}}
+/* ==========================================================
+   AAPI — Investor Dashboard
+   Translation / RTL-LTR layout normalization
+   ========================================================== */
+
+.investor-dashboard-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  overflow-x: clip;
+  direction: rtl;
+}
+
+.investor-dashboard-page,
+.investor-dashboard-page * {
+  box-sizing: border-box;
+}
+
+/* Arabic */
+html[dir="rtl"] .investor-dashboard-page,
+body[dir="rtl"] .investor-dashboard-page {
+  direction: rtl;
+}
+
+/* French / English */
+html[dir="ltr"] .investor-dashboard-page,
+body[dir="ltr"] .investor-dashboard-page {
+  direction: ltr;
+}
+
+.investor-dashboard-layout {
+  display: grid !important;
+  grid-template-columns: 264px minmax(0, 1fr) !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.investor-dashboard-sidebar {
+  min-width: 0 !important;
+  width: 264px !important;
+  min-height: 0;
+}
+
+.investor-dashboard-main {
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  padding: 30px !important;
+  overflow-x: clip !important;
+}
+
+.investor-dashboard-section {
+  width: 100% !important;
+  max-width: 1240px !important;
+  margin-inline: auto !important;
+  min-width: 0 !important;
+}
+
+.investor-dashboard-topbar {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.investor-dashboard-stats {
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.investor-dashboard-grid {
+  width: 100%;
+  min-width: 0;
+}
+
+.investor-dashboard-card,
+.investor-dashboard-stat-card,
+.investor-dashboard-page-header,
+.investor-dashboard-section-header {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.investor-dashboard-page-header > div,
+.investor-dashboard-section-header > div,
+.investor-dashboard-card-header > div {
+  min-width: 0;
+}
+
+.investor-dashboard-page-header h1,
+.investor-dashboard-page-header p,
+.investor-dashboard-card-header h2 {
+  overflow-wrap: anywhere;
+}
+
+/* Use logical properties so RTL/LTR use the same layout rules. */
+.investor-dashboard-nav-link .investor-dashboard-nav-badge {
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+}
+
+.investor-dashboard-nav-link.active {
+  box-shadow: inset -3px 0 0 var(--id-gold);
+}
+
+html[dir="ltr"] .investor-dashboard-nav-link.active,
+body[dir="ltr"] .investor-dashboard-nav-link.active {
+  box-shadow: inset 3px 0 0 var(--id-gold);
+}
+
+.investor-dashboard-notification-badge {
+  inset-inline-start: -5px;
+  inset-inline-end: auto;
+}
+
+html[dir="ltr"] .investor-dashboard-notification-badge,
+body[dir="ltr"] .investor-dashboard-notification-badge {
+  inset-inline-start: auto;
+  inset-inline-end: -5px;
+}
+
+.investor-dashboard-primary-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.investor-dashboard-project-list,
+.investor-dashboard-activity-list,
+.investor-dashboard-project-item,
+.investor-dashboard-activity-item,
+.investor-dashboard-project-info,
+.investor-dashboard-activity-content {
+  min-width: 0;
+}
+
+.investor-dashboard-project-info,
+.investor-dashboard-activity-content {
+  flex: 1 1 auto;
+}
+
+.investor-dashboard-project-info strong,
+.investor-dashboard-activity-content strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Forms must never force the dashboard wider than the viewport. */
+.investor-dashboard-page input,
+.investor-dashboard-page textarea,
+.investor-dashboard-page select,
+.investor-dashboard-page button {
+  max-width: 100%;
+}
+
+/* Medium screens */
+@media (max-width: 1100px) {
+  .investor-dashboard-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .investor-dashboard-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .investor-dashboard-projects-card,
+  .investor-dashboard-investment-summary,
+  .investor-dashboard-activity-card {
+    grid-column: auto !important;
+  }
+}
+
+/* Tablet / mobile: sidebar becomes part of normal flow. */
+@media (max-width: 800px) {
+  .investor-dashboard-layout {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .investor-dashboard-sidebar {
+    position: static !important;
+    top: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 12px !important;
+  }
+
+  .investor-dashboard-main {
+    width: 100% !important;
+    padding: 20px 15px !important;
+  }
+
+  .investor-dashboard-nav {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px !important;
+    padding-top: 0 !important;
+  }
+
+  .investor-dashboard-sidebar-header {
+    display: none !important;
+  }
+
+  .investor-dashboard-sidebar-footer {
+    margin-top: 8px !important;
+  }
+
+  .investor-dashboard-page-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .investor-dashboard-page-header .investor-dashboard-primary-btn {
+    width: 100% !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 520px) {
+  .investor-dashboard-main {
+    padding: 15px 10px !important;
+  }
+
+  .investor-dashboard-stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  .investor-dashboard-nav {
+    grid-template-columns: 1fr !important;
+  }
+
+  .investor-dashboard-brand-text,
+  .investor-dashboard-user-info {
+    display: none !important;
+  }
+
+  .investor-dashboard-topbar {
+    height: 64px !important;
+    padding: 0 12px !important;
+  }
+
+  .investor-dashboard-topbar-actions {
+    gap: 8px !important;
+  }
+
+  .investor-dashboard-card,
+  .investor-dashboard-stat-card {
+    padding: 15px !important;
+  }
+
+  .investor-dashboard-investment-items {
+    grid-template-columns: 1fr !important;
+  }
+
+  .investor-dashboard-project-item,
+  .investor-dashboard-activity-item {
+    align-items: flex-start !important;
+  }
+
+  .investor-dashboard-status {
+    font-size: 9px !important;
+  }
+}
