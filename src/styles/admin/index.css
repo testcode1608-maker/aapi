@@ -1,0 +1,5 @@
+/* AAPI — Admin styles entry point */
+@import "../main.css";
+@import "../admin-theme.css";
+@import "../admin-quick-theme.css";
+@import "../admin-toolbar.css";
