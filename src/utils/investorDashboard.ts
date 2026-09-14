@@ -3,38 +3,42 @@ export const API_URL = `${API_BASE_URL}/auth/investor/dashboard.php`;
 export const CREATE_PROJECT_API_URL = `${API_BASE_URL}/auth/investor/create-project.php`;
 export const LOGIN_ROUTE = "/login";
 
-export const PROJECT_SECTORS = [
-  { id: 1, nom: "الزراعة" },
-  { id: 2, nom: "الصناعة" },
-  { id: 3, nom: "التكنولوجيا" },
-  { id: 4, nom: "السياحة" },
-  { id: 5, nom: "الطاقات" },
-  { id: 6, nom: "النقل" },
-  { id: 7, nom: "الصحة" },
-  { id: 8, nom: "الخدمات" },
-] as const;
+export type DashboardLanguage = "ar" | "fr" | "en";
+
+const projectSectors = {
+  ar: ["الزراعة", "الصناعة", "التكنولوجيا", "السياحة", "الطاقات", "النقل", "الصحة", "الخدمات"],
+  fr: ["Agriculture", "Industrie", "Technologie", "Tourisme", "Énergie", "Transport", "Santé", "Services"],
+  en: ["Agriculture", "Industry", "Technology", "Tourism", "Energy", "Transport", "Health", "Services"],
+} as const;
+
+export const PROJECT_SECTORS = projectSectors.ar.map((nom, index) => ({
+  id: index + 1,
+  nom,
+})) as ReadonlyArray<{ id: number; nom: string }>;
+
+export function getProjectSectors(language: DashboardLanguage = getLanguage()) {
+  return projectSectors[language].map((nom, index) => ({ id: index + 1, nom }));
+}
 
 export function toNumber(value: unknown): number {
   const number = Number(value);
   return Number.isFinite(number) ? number : 0;
 }
 
-export function formatAmount(value?: number | null): string {
-  return `${new Intl.NumberFormat("fr-DZ", { maximumFractionDigits: 0 }).format(toNumber(value))} DA`;
+export function formatAmount(value?: number | null, language: DashboardLanguage = getLanguage()): string {
+  const locale = language === "ar" ? "ar-DZ" : language === "en" ? "en-DZ" : "fr-DZ";
+  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(toNumber(value))} DA`;
 }
 
-export function formatDate(value?: string | null): string {
+export function formatDate(value?: string | null, language: DashboardLanguage = getLanguage()): string {
   if (!value) return "—";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("fr-DZ", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(date);
+  const locale = language === "ar" ? "ar-DZ" : language === "en" ? "en-DZ" : "fr-DZ";
+  return new Intl.DateTimeFormat(locale, { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
 }
 
-function getLanguage(): "ar" | "fr" | "en" {
+function getLanguage(): DashboardLanguage {
   if (typeof document === "undefined") return "ar";
   const language = document.documentElement.lang.toLowerCase();
   if (language.startsWith("fr")) return "fr";
@@ -67,26 +71,13 @@ export function formatRelativeTime(value?: string | null): string {
   return formatDate(value);
 }
 
-export interface StatusInfo {
-  className: string;
-  label: string;
-}
-
-const status = (tone: "success" | "warning" | "danger", label: string): StatusInfo => ({
-  className: `investor-dashboard-status ${tone}`,
-  label,
-});
+export interface StatusInfo { className: string; label: string; }
+const status = (tone: "success" | "warning" | "danger", label: string): StatusInfo => ({ className: `investor-dashboard-status ${tone}`, label });
 
 const statusLabels = {
-  ar: {
-    approved: "معتمد", inProgress: "قيد الإنجاز", completed: "مكتمل", underReview: "قيد الدراسة", submitted: "مقدم", draft: "مسودة", archived: "مؤرشف", rejected: "مرفوض", undefined: "غير محدد", pending: "قيد الانتظار", cancelled: "ملغى", accepted: "مقبول", processing: "قيد المعالجة", new: "جديدة", valid: "صحيحة", reviewing: "قيد المراجعة", invalid: "مرفوضة",
-  },
-  fr: {
-    approved: "Approuvé", inProgress: "En cours", completed: "Terminé", underReview: "À l'étude", submitted: "Soumis", draft: "Brouillon", archived: "Archivé", rejected: "Rejeté", undefined: "Non défini", pending: "En attente", cancelled: "Annulé", accepted: "Acceptée", processing: "En traitement", new: "Nouvelle", valid: "Valide", reviewing: "En révision", invalid: "Rejeté",
-  },
-  en: {
-    approved: "Approved", inProgress: "In progress", completed: "Completed", underReview: "Under review", submitted: "Submitted", draft: "Draft", archived: "Archived", rejected: "Rejected", undefined: "Not specified", pending: "Pending", cancelled: "Cancelled", accepted: "Accepted", processing: "Processing", new: "New", valid: "Valid", reviewing: "Under review", invalid: "Rejected",
-  },
+  ar: { approved: "معتمد", inProgress: "قيد الإنجاز", completed: "مكتمل", underReview: "قيد الدراسة", submitted: "مقدم", draft: "مسودة", archived: "مؤرشف", rejected: "مرفوض", undefined: "غير محدد", pending: "قيد الانتظار", cancelled: "ملغى", accepted: "مقبول", processing: "قيد المعالجة", new: "جديدة", valid: "صحيحة", reviewing: "قيد المراجعة", invalid: "مرفوضة" },
+  fr: { approved: "Approuvé", inProgress: "En cours", completed: "Terminé", underReview: "À l'étude", submitted: "Soumis", draft: "Brouillon", archived: "Archivé", rejected: "Rejeté", undefined: "Non défini", pending: "En attente", cancelled: "Annulé", accepted: "Acceptée", processing: "En traitement", new: "Nouvelle", valid: "Valide", reviewing: "En révision", invalid: "Rejeté" },
+  en: { approved: "Approved", inProgress: "In progress", completed: "Completed", underReview: "Under review", submitted: "Submitted", draft: "Draft", archived: "Archived", rejected: "Rejected", undefined: "Not specified", pending: "Pending", cancelled: "Cancelled", accepted: "Accepted", processing: "Processing", new: "New", valid: "Valid", reviewing: "Under review", invalid: "Rejected" },
 } as const;
 
 export function getProjectStatus(value?: string | null): StatusInfo {
@@ -153,13 +144,8 @@ export function getUserInitials(prenom?: string | null, nom?: string | null): st
   return `${first}${last}`.trim() || "م";
 }
 
-export function getUserFullName(
-  user?: { prenom?: string | null; nom?: string | null } | string | null,
-  nom?: string | null,
-): string {
-  if (typeof user === "string" || user == null) {
-    return `${user || ""} ${nom || ""}`.trim() || "المستثمر";
-  }
+export function getUserFullName(user?: { prenom?: string | null; nom?: string | null } | string | null, nom?: string | null): string {
+  if (typeof user === "string" || user == null) return `${user || ""} ${nom || ""}`.trim() || "المستثمر";
   return `${user.prenom || ""} ${user.nom || ""}`.trim() || "المستثمر";
 }
 
