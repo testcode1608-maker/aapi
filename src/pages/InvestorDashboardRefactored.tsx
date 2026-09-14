@@ -5,6 +5,7 @@ import "../styles/investor-dashboard.css";
 import "../styles/investor-dashboard-dark.css";
 import "../styles/investor-projects.css";
 import "../styles/investor-investments.css";
+import "../styles/investor-dashboard-extra.css";
 import "../styles/investor-dashboard-fixes.css";
 import InvestorDashboardSidebar from "../components/investor/InvestorDashboardSidebar";
 import InvestorDashboardTopbar from "../components/investor/InvestorDashboardTopbar";
