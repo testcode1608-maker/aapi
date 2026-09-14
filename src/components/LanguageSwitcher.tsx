@@ -6,7 +6,6 @@ type Position = { x: number; y: number };
 
 const STORAGE_KEY = "aapi-language-switcher-position";
 const DEFAULT_POSITION: Position = { x: 18, y: 14 };
-const DRAG_THRESHOLD = 4;
 
 function getInitialPosition(): Position {
   try {
@@ -35,8 +34,8 @@ function clampPosition(position: Position): Position {
   const width = 145;
   const height = 44;
   return {
-    x: Math.max(4, Math.min(position.x, window.innerWidth - width)),
-    y: Math.max(4, Math.min(position.y, window.innerHeight - height)),
+    x: Math.max(4, Math.min(position.x, Math.max(4, window.innerWidth - width))),
+    y: Math.max(4, Math.min(position.y, Math.max(4, window.innerHeight - height))),
   };
 }
 
@@ -58,22 +57,20 @@ export default function LanguageSwitcher() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(position));
   }, [position]);
 
-  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+  const handlePointerDown = (event: PointerEvent<HTMLSpanElement>) => {
     dragStart.current = { x: event.clientX, y: event.clientY };
     startPosition.current = position;
     dragged.current = false;
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+  const handlePointerMove = (event: PointerEvent<HTMLSpanElement>) => {
     if (!dragStart.current) return;
 
     const dx = event.clientX - dragStart.current.x;
     const dy = event.clientY - dragStart.current.y;
 
-    if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
-      dragged.current = true;
-    }
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragged.current = true;
 
     if (dragged.current) {
       setPosition(
@@ -85,12 +82,10 @@ export default function LanguageSwitcher() {
     }
   };
 
-  const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
-    if (dragStart.current) {
-      dragStart.current = null;
-      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-        event.currentTarget.releasePointerCapture(event.pointerId);
-      }
+  const handlePointerUp = (event: PointerEvent<HTMLSpanElement>) => {
+    dragStart.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
     }
   };
 
@@ -99,23 +94,25 @@ export default function LanguageSwitcher() {
       className={`aapi-language-switcher${dragged.current ? " is-dragging" : ""}`}
       aria-label={t("common.language")}
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
     >
-      <span className="aapi-language-drag-handle" aria-hidden="true" title={t("common.language")}>
+      <span
+        className="aapi-language-drag-handle"
+        aria-hidden="true"
+        title={t("common.language")}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
         <i className="bi bi-grip-vertical" />
       </span>
+
       {languages.map((item) => (
         <button
           key={item}
           type="button"
           className={item === language ? "active" : ""}
-          onClick={() => {
-            if (!dragged.current) setLanguage(item);
-            dragged.current = false;
-          }}
+          onClick={() => setLanguage(item)}
           aria-pressed={item === language}
           title={languageNames[item]}
         >
