@@ -2,9 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/main.css";
 import "../styles/investor-dashboard.css";
-import "../styles/investor-dashboard-extra.css";
 import "../styles/investor-dashboard-dark.css";
-import "../styles/investor-dashboard-fixes.css";
 import "../styles/investor-projects.css";
 import "../styles/investor-investments.css";
 import InvestorDashboardSidebar from "../components/investor/InvestorDashboardSidebar";
@@ -52,8 +50,12 @@ export default function InvestorDashboardRefactored() {
 
   let content;
   switch (section) {
-    case "projects": content = <section className="investor-dashboard-section"><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">{t("investorDashboard.projectsOverline")}</span><h1>{t("investorDashboard.projectsTitle")}</h1><p>{t("investorDashboard.projectsDescription")}</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowProjectForm(v => !v)}><i className={showProjectForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showProjectForm ? t("investorDashboard.hideForm") : t("investorDashboard.newProject")}</button></div>{showProjectForm && <InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} />}<InvestorProjectList projects={projects} /></section>; break;
-    case "investments": content = <section className="investor-dashboard-section"><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">{t("investorDashboard.investmentsOverline")}</span><h1>{t("investorDashboard.investmentsTitle")}</h1><p>{t("investorDashboard.investmentsDescription")}</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowInvestmentForm(v => !v)}><i className={showInvestmentForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showInvestmentForm ? t("investorDashboard.hideForm") : t("investorDashboard.newInvestment")}</button></div>{showInvestmentForm && <InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} />}<InvestorInvestmentsSection investments={investments} /></section>; break;
+    case "projects":
+      content = <section className="investor-dashboard-section"><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">{t("investorDashboard.projectsOverline")}</span><h1>{t("investorDashboard.projectsTitle")}</h1><p>{t("investorDashboard.projectsDescription")}</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowProjectForm(v => !v)}><i className={showProjectForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showProjectForm ? t("investorDashboard.hideForm") : t("investorDashboard.newProject")}</button></div>{showProjectForm && <InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} />}<InvestorProjectList projects={projects} /></section>;
+      break;
+    case "investments":
+      content = <section className="investor-dashboard-section"><div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">{t("investorDashboard.investmentsOverline")}</span><h1>{t("investorDashboard.investmentsTitle")}</h1><p>{t("investorDashboard.investmentsDescription")}</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowInvestmentForm(v => !v)}><i className={showInvestmentForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} /> {showInvestmentForm ? t("investorDashboard.hideForm") : t("investorDashboard.newInvestment")}</button></div>{showInvestmentForm && <InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} />}<InvestorInvestmentsSection investments={investments} /></section>;
+      break;
     case "requests": content = <InvestorRequestsSection requests={requests} />; break;
     case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
     case "messages": content = <InvestorMessagesSection />; break;
