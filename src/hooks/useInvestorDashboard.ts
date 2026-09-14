@@ -24,7 +24,7 @@ function getStoredUserId(): number | null {
 
 export function useInvestorDashboard(): UseInvestorDashboardResult {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { language, t } = useTranslation();
   const [user, setUser] = useState<DashboardUser | null>(null);
   const [profile, setProfile] = useState<DashboardProfile | null>(null);
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -61,7 +61,7 @@ export function useInvestorDashboard(): UseInvestorDashboardResult {
   useEffect(() => { void reload(); }, [reload]);
   const projectCompletion = getProjectCompletion(stats);
   const completedInvestments = getCompletedInvestments(investments, stats);
-  const dashboardActivities = getDashboardActivities(activities, notifications, documents, messages);
+  const dashboardActivities = getDashboardActivities(activities, notifications, documents, messages, language);
   return { user, profile, stats, projects, investments, requests, documents, messages, notifications, activities: dashboardActivities, projectCompletion, completedInvestments, loading, error, reload };
 }
 
