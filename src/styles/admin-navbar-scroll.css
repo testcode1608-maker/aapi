@@ -1,0 +1,17 @@
+/* AAPI Admin Navbar — green at top, gray while scrolling */
+.admin-navbar {
+  transition: background-color 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+}
+
+.admin-navbar.admin-navbar-scrolled {
+  background-color: #6b7280 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+.admin-navbar.admin-navbar-scrolled .admin-navbar-section-title,
+.admin-navbar.admin-navbar-scrolled .admin-navbar-brand-text,
+.admin-navbar.admin-navbar-scrolled .admin-navbar-user-info,
+.admin-navbar.admin-navbar-scrolled .admin-nav-label,
+.admin-navbar.admin-navbar-scrolled .admin-navbar-bottom-button {
+  transition: color 300ms ease;
+}
