@@ -1,7 +1,14 @@
 /* ==========================================================
    AAPI — Investor Dashboard
-   Translation / RTL-LTR layout normalization
+   FINAL RTL / LTR + RESPONSIVE NORMALIZATION
    ========================================================== */
+
+.investor-dashboard-page,
+.investor-dashboard-page *,
+.investor-dashboard-page *::before,
+.investor-dashboard-page *::after {
+  box-sizing: border-box;
+}
 
 .investor-dashboard-page {
   width: 100%;
@@ -12,14 +19,6 @@
   position: relative;
 }
 
-.investor-dashboard-page,
-.investor-dashboard-page *,
-.investor-dashboard-page *::before,
-.investor-dashboard-page *::after {
-  box-sizing: border-box;
-}
-
-/* The React dashboard explicitly adds one of these classes. */
 .investor-dashboard-page.investor-dashboard-rtl {
   direction: rtl;
   text-align: right;
@@ -30,7 +29,6 @@
   text-align: left;
 }
 
-/* Keep the dashboard independent from the global site's RTL rule. */
 html:has(.investor-dashboard-ltr),
 body:has(.investor-dashboard-ltr) {
   direction: ltr;
@@ -102,6 +100,8 @@ body:has(.investor-dashboard-rtl) {
 
 .investor-dashboard-page-header h1,
 .investor-dashboard-page-header p,
+.investor-dashboard-section-header h1,
+.investor-dashboard-section-header p,
 .investor-dashboard-card-header h2 {
   overflow-wrap: anywhere;
 }
@@ -172,6 +172,40 @@ body:has(.investor-dashboard-rtl) {
 .investor-dashboard-page select,
 .investor-dashboard-page button {
   max-width: 100%;
+}
+
+/* Investment circles: prevent overlap on translated labels. */
+.investor-investment-circles {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.investor-investment-circle-item {
+  min-width: 0;
+  text-align: center;
+}
+
+.investor-investment-circle-label,
+.investor-investment-circle-value {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.investor-dashboard-investment-table {
+  width: 100%;
+  min-width: 0;
+}
+
+.investor-investment-table-box {
+  min-width: 0;
+}
+
+.investor-investment-table-box span {
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 1100px) {
@@ -252,6 +286,10 @@ body:has(.investor-dashboard-rtl) {
   .investor-dashboard-page-header .investor-dashboard-primary-btn {
     width: 100% !important;
   }
+
+  .investor-investment-circles {
+    gap: 10px;
+  }
 }
 
 @media (max-width: 520px) {
@@ -290,9 +328,17 @@ body:has(.investor-dashboard-rtl) {
     grid-template-columns: 1fr !important;
   }
 
+  .investor-investment-circles {
+    grid-template-columns: 1fr !important;
+  }
+
   .investor-dashboard-project-item,
   .investor-dashboard-activity-item {
     align-items: flex-start !important;
+  }
+
+  .investor-dashboard-project-item {
+    flex-wrap: wrap;
   }
 
   .investor-dashboard-status {
