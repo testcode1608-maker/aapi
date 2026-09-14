@@ -8,6 +8,7 @@ import type {
   DashboardRequest,
   DashboardResponse,
 } from "../types/investorDashboard";
+import type { Language } from "../i18n/translations";
 import { toNumber } from "./investorDashboard";
 
 export function normalizeProjects(value: unknown): DashboardProject[] {
@@ -95,15 +96,49 @@ export function normalizeNotifications(value: unknown): DashboardNotification[] 
   });
 }
 
+function translateActivityText(value: string, language: Language): string {
+  if (language === "ar") return value;
+
+  const replacements: Array<[string, string, string]> = [
+    ["طلب استثمار جديد", "Nouvelle demande d’investissement", "New investment request"],
+    ["تحديث حالة المشروع", "Mise à jour du statut du projet", "Project status updated"],
+    ["طلب جديد", "Nouvelle demande", "New request"],
+    ["رسالة جديدة", "Nouveau message", "New message"],
+    ["تمت إضافة وثيقة جديدة", "Nouveau document ajouté", "New document added"],
+    ["إشعار جديد", "Nouvelle notification", "New notification"],
+  ];
+
+  let result = value;
+  for (const [arabic, french, english] of replacements) {
+    result = result.replaceAll(arabic, language === "fr" ? french : english);
+  }
+
+  result = result.replace(/^استثمار:\s*/u, language === "fr" ? "Investissement : " : "Investment: ");
+  result = result.replace(/^مشروع:\s*/u, language === "fr" ? "Projet : " : "Project: ");
+  result = result.replace(/^من\s+/u, language === "fr" ? "De " : "From ");
+
+  return result;
+}
+
+function normalizeActivity(activity: DashboardActivity, language: Language): DashboardActivity {
+  return {
+    ...activity,
+    title: translateActivityText(activity.title || "", language),
+    text: translateActivityText(activity.text || "", language),
+  };
+}
+
 export function getDashboardActivities(
   activities: DashboardActivity[],
   notifications: DashboardNotification[],
   documents: DashboardDocument[],
   messages: DashboardMessage[],
+  language: Language = "ar",
 ): DashboardActivity[] {
   if (activities.length > 0) {
     return activities
       .filter((activity) => activity && (activity.title || activity.text))
+      .map((activity) => normalizeActivity(activity, language))
       .slice(0, 10);
   }
 
@@ -151,6 +186,7 @@ export function getDashboardActivities(
       const second = b.date ? new Date(b.date).getTime() : 0;
       return second - first;
     })
+    .map((item) => normalizeActivity(item, language))
     .slice(0, 10);
 }
 
