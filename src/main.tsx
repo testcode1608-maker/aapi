@@ -4,9 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./index.css";
-import "./styles/admin-theme.css";
-import "./styles/admin-quick-theme.css";
-import "./styles/admin-toolbar.css";
+import "./styles/admin-styles.css";
 import App from "./App";
 
 const applyAdminTheme = (theme: "dark" | "light") => {
