@@ -42,10 +42,7 @@ export default function InvestorDashboardSidebar({
         </div>
       </div>
 
-      <nav
-        className="investor-dashboard-nav"
-        aria-label={t("investorDashboard.sidebar.menu")}
-      >
+      <nav className="investor-dashboard-nav" aria-label={t("investorDashboard.sidebar.menu")}>
         <Link to="/investor/dashboard" className={navClass("dashboard")}>
           <i className="bi bi-grid-1x2" />
           <span>{t("investorDashboard.sidebar.dashboard")}</span>
@@ -54,33 +51,25 @@ export default function InvestorDashboardSidebar({
         <Link to="/investor/dashboard/projects" className={navClass("projects")}>
           <i className="bi bi-building" />
           <span>{t("investorDashboard.sidebar.projects")}</span>
-          {projectsCount > 0 && (
-            <span className="investor-dashboard-nav-badge">{projectsCount}</span>
-          )}
+          {projectsCount > 0 && <span className="investor-dashboard-nav-badge">{projectsCount}</span>}
         </Link>
 
         <Link to="/investor/dashboard/investments" className={navClass("investments")}>
           <i className="bi bi-cash-stack" />
           <span>{t("investorDashboard.sidebar.investments")}</span>
-          {activeInvestments > 0 && (
-            <span className="investor-dashboard-nav-badge">{activeInvestments}</span>
-          )}
+          {activeInvestments > 0 && <span className="investor-dashboard-nav-badge">{activeInvestments}</span>}
         </Link>
 
         <Link to="/investor/dashboard/requests" className={navClass("requests")}>
           <i className="bi bi-file-earmark-text" />
           <span>{t("investorDashboard.sidebar.requests")}</span>
-          {pendingRequests > 0 && (
-            <span className="investor-dashboard-nav-badge">{pendingRequests}</span>
-          )}
+          {pendingRequests > 0 && <span className="investor-dashboard-nav-badge">{pendingRequests}</span>}
         </Link>
 
         <Link to="/investor/dashboard/documents" className={navClass("documents")}>
           <i className="bi bi-folder2-open" />
           <span>{t("investorDashboard.sidebar.documents")}</span>
-          {documentsTotal > 0 && (
-            <span className="investor-dashboard-nav-badge">{documentsTotal}</span>
-          )}
+          {documentsTotal > 0 && <span className="investor-dashboard-nav-badge">{documentsTotal}</span>}
         </Link>
 
         <div className="investor-dashboard-nav-divider" />
@@ -88,17 +77,13 @@ export default function InvestorDashboardSidebar({
         <Link to="/investor/dashboard/messages" className={navClass("messages")}>
           <i className="bi bi-chat-left-text" />
           <span>{t("investorDashboard.sidebar.messages")}</span>
-          {unreadMessages > 0 && (
-            <span className="investor-dashboard-nav-badge">{unreadMessages}</span>
-          )}
+          {unreadMessages > 0 && <span className="investor-dashboard-nav-badge">{unreadMessages}</span>}
         </Link>
 
         <Link to="/investor/dashboard/notifications" className={navClass("notifications")}>
           <i className="bi bi-bell" />
           <span>{t("investorDashboard.sidebar.notifications")}</span>
-          {unreadNotifications > 0 && (
-            <span className="investor-dashboard-nav-badge">{unreadNotifications}</span>
-          )}
+          {unreadNotifications > 0 && <span className="investor-dashboard-nav-badge">{unreadNotifications}</span>}
         </Link>
 
         <Link to="/investor/dashboard/profile" className={navClass("profile")}>
@@ -113,6 +98,10 @@ export default function InvestorDashboardSidebar({
       </nav>
 
       <div className="investor-dashboard-sidebar-footer">
+        <Link to="/" className="investor-dashboard-sidebar-site-link">
+          <i className="bi bi-buildings" />
+          <span>{t("investorDashboard.sidebar.publicSite")}</span>
+        </Link>
         <button type="button" className="investor-dashboard-logout" onClick={onLogout}>
           <i className="bi bi-box-arrow-right" />
           <span>{t("investorDashboard.sidebar.logout")}</span>
