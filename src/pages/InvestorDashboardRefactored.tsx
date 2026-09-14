@@ -34,7 +34,7 @@ const paths: Record<string, string> = {
 export default function InvestorDashboardRefactored() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { language, t } = useTranslation();
   const { user, profile, stats, projects, investments, requests, documents, notifications, activities, projectCompletion, completedInvestments, loading, error, reload } = useInvestorDashboard();
   const createProject = useCreateInvestorProject(reload);
   const createInvestment = useCreateInvestorInvestment(projects, reload);
@@ -45,9 +45,10 @@ export default function InvestorDashboardRefactored() {
   const userPhotoUrl = getUserPhotoUrl(user);
   const navClass = (name: string) => location.pathname === paths[name] ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
   const logout = () => { localStorage.removeItem("aapi_user"); navigate("/login", { replace: true }); };
+  const direction = language === "ar" ? "rtl" : "ltr";
 
-  if (loading) return <div className="investor-dashboard-loading"><div className="investor-dashboard-loading-spinner" /><p>{t("investorDashboard.loading")}</p></div>;
-  if (error) return <div className="investor-dashboard-error"><i className="bi bi-exclamation-triangle" /><h2>{t("investorDashboard.errorTitle")}</h2><p>{error}</p><button className="investor-dashboard-primary-btn" onClick={() => void reload()}>{t("investorDashboard.retry")}</button></div>;
+  if (loading) return <div className={`investor-dashboard-loading investor-dashboard-${direction}`} dir={direction}><div className="investor-dashboard-loading-spinner" /><p>{t("investorDashboard.loading")}</p></div>;
+  if (error) return <div className={`investor-dashboard-error investor-dashboard-${direction}`} dir={direction}><i className="bi bi-exclamation-triangle" /><h2>{t("investorDashboard.errorTitle")}</h2><p>{error}</p><button className="investor-dashboard-primary-btn" onClick={() => void reload()}>{t("investorDashboard.retry")}</button></div>;
 
   let content;
   switch (section) {
@@ -62,5 +63,5 @@ export default function InvestorDashboardRefactored() {
     default: content = <InvestorDashboardOverview stats={stats} projects={projects} investments={investments} activities={activities} projectCompletion={projectCompletion} completedInvestments={completedInvestments} />;
   }
 
-  return <div className="investor-dashboard-page"><InvestorDashboardTopbar user={user} stats={stats} userPhotoUrl={userPhotoUrl} /><div className="investor-dashboard-layout"><InvestorDashboardSidebar user={user} stats={stats} projectsCount={projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} /><main className="investor-dashboard-main">{content}</main></div></div>;
+  return <div className={`investor-dashboard-page investor-dashboard-${direction}`} dir={direction} data-language={language}><InvestorDashboardTopbar user={user} stats={stats} userPhotoUrl={userPhotoUrl} /><div className="investor-dashboard-layout"><InvestorDashboardSidebar user={user} stats={stats} projectsCount={projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} /><main className="investor-dashboard-main">{content}</main></div></div>;
 }
