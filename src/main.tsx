@@ -7,19 +7,16 @@ import "./styles/global/index.css";
 import "./styles/admin-styles.css";
 import App from "./App";
 
+const getAdminTheme = (): "dark" | "light" =>
+  localStorage.getItem("aapi-admin-theme") === "light" ? "light" : "dark";
+
 const applyAdminTheme = (theme: "dark" | "light") => {
   document.body.classList.toggle("aapi-admin-light", theme === "light");
   localStorage.setItem("aapi-admin-theme", theme);
   window.dispatchEvent(new CustomEvent("aapi-theme-change", { detail: theme }));
 };
 
-const savedAdminTheme = localStorage.getItem("aapi-admin-theme");
-if (savedAdminTheme === "light") document.body.classList.add("aapi-admin-light");
-
-window.addEventListener("aapi-theme-change", (event) => {
-  const theme = (event as CustomEvent<"dark" | "light">).detail;
-  document.body.classList.toggle("aapi-admin-light", theme === "light");
-});
+applyAdminTheme(getAdminTheme());
 
 const addQuickAdminThemeToggle = () => {
   const navbar = document.querySelector<HTMLElement>(".admin-navbar");
@@ -29,7 +26,6 @@ const addQuickAdminThemeToggle = () => {
   button.type = "button";
   button.className = "admin-quick-theme-toggle";
   button.setAttribute("aria-label", "تغيير وضع الألوان");
-  button.title = "تغيير الوضع";
 
   const updateIcon = () => {
     const isLight = document.body.classList.contains("aapi-admin-light");
@@ -38,9 +34,9 @@ const addQuickAdminThemeToggle = () => {
   };
 
   button.addEventListener("click", () => {
-    const nextTheme = document.body.classList.contains("aapi-admin-light") ? "dark" : "light";
-    applyAdminTheme(nextTheme);
-    updateIcon();
+    applyAdminTheme(
+      document.body.classList.contains("aapi-admin-light") ? "dark" : "light",
+    );
   });
 
   window.addEventListener("aapi-theme-change", updateIcon);
@@ -51,9 +47,9 @@ const addQuickAdminThemeToggle = () => {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 
-const adminThemeObserver = new MutationObserver(() => addQuickAdminThemeToggle());
+const adminThemeObserver = new MutationObserver(addQuickAdminThemeToggle);
 adminThemeObserver.observe(document.body, { childList: true, subtree: true });
 addQuickAdminThemeToggle();
