@@ -1,0 +1,76 @@
+/* AAPI — Public site header */
+
+.aapi-top-header {
+  width: 100%;
+  background: var(--aapi-dark-green);
+  color: #fff;
+  font-size: 13px;
+}
+
+.aapi-top-content {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.official-text {
+  opacity: .95;
+  font-weight: 500;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.top-actions a {
+  color: #fff;
+  transition: .25s ease;
+}
+
+.top-actions a:hover {
+  color: #d8eee3;
+}
+
+.separator {
+  opacity: .35;
+}
+
+.top-search {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+.top-search:hover {
+  transform: scale(1.08);
+}
+
+.aapi-main-header {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: relative;
+  z-index: 1000;
+}
+
+.aapi-header-content {
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.aapi-navigation {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
