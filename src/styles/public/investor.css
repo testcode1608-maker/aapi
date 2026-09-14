@@ -1,0 +1,39 @@
+/* AAPI — Public Investor page */
+.investor-inner-hero { background: linear-gradient(135deg,var(--aapi-dark-green),var(--aapi-green)); color:#fff; }
+.investor-intro,.investor-services,.investor-steps,.investor-documents,.investor-faq { padding:90px 0; }
+.investor-intro { background:#fff; }
+.investor-main-title,.investor-steps-title { color:var(--aapi-dark); line-height:1.45; }
+.investor-main-title strong,.investor-steps-title strong { display:block; color:var(--aapi-green); }
+.investor-main-text,.investor-steps-intro { color:var(--aapi-gray); line-height:2; }
+.investor-intro-actions,.investor-final-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:25px; }
+.investor-intro-card { position:relative; overflow:hidden; min-height:330px; padding:40px; border-radius:20px; background:var(--aapi-dark-green); color:#fff; box-shadow:0 18px 45px rgba(5,92,53,.16); }
+.investor-intro-card-icon { width:58px; height:58px; display:grid; place-items:center; margin-bottom:25px; border-radius:14px; background:rgba(255,255,255,.12); color:var(--aapi-gold); font-size:25px; }
+.investor-intro-card span { display:block; margin-bottom:10px; opacity:.75; }
+.investor-intro-card strong { display:block; font-size:27px; line-height:1.5; }
+.investor-intro-card p { margin-top:18px; color:rgba(255,255,255,.72); line-height:1.9; }
+.investor-service-card,.investor-step-card,.investor-document-card { height:100%; background:#fff; border:1px solid #e8eeeb; border-radius:16px; transition:.25s ease; }
+.investor-service-card { padding:28px; }
+.investor-service-card:hover,.investor-document-card:hover { transform:translateY(-5px); border-color:rgba(8,116,67,.3); box-shadow:0 16px 35px rgba(20,34,27,.08); }
+.investor-service-top { display:flex; justify-content:space-between; align-items:center; }
+.investor-service-top > span,.investor-step-number { color:var(--aapi-gold); font-weight:800; }
+.investor-service-icon,.investor-step-icon,.investor-document-icon { width:52px; height:52px; display:grid; place-items:center; border-radius:13px; background:var(--aapi-light-green); color:var(--aapi-green); font-size:21px; }
+.investor-service-card h3,.investor-step-card h3,.investor-document-card h3 { color:var(--aapi-dark); }
+.investor-service-card p,.investor-document-card p { color:var(--aapi-gray); line-height:1.9; }
+.investor-service-card a,.investor-document-card a { color:var(--aapi-green); font-weight:700; }
+.investor-steps { background:#f6f9f7; }
+.investor-steps-list { display:grid; gap:14px; }
+.investor-step-card { display:grid; grid-template-columns:45px 52px 1fr; align-items:center; gap:18px; padding:20px; }
+.investor-step-content p { margin:0; color:var(--aapi-gray); line-height:1.8; }
+.investor-document-card { display:flex; gap:20px; padding:25px; }
+.investor-document-content { flex:1; }
+.investor-document-content h3 { margin-top:0; }
+.investor-faq { background:#fff; }
+.investor-accordion .accordion-item { border:1px solid #e4ebe7; margin-bottom:10px; border-radius:10px; overflow:hidden; }
+.investor-accordion .accordion-button { font-weight:700; color:var(--aapi-dark); }
+.investor-accordion .accordion-button:not(.collapsed) { background:var(--aapi-light-green); color:var(--aapi-green); box-shadow:none; }
+.investor-accordion .accordion-body { color:var(--aapi-gray); line-height:1.9; }
+.investor-final-cta { padding:70px 0; background:linear-gradient(135deg,var(--aapi-dark-green),var(--aapi-green)); color:#fff; }
+.investor-final-cta-inner { display:flex; align-items:center; justify-content:space-between; gap:35px; }
+.investor-final-cta h2 { margin:8px 0; color:#fff; }
+.investor-final-cta p { margin:0; color:rgba(255,255,255,.75); }
+@media(max-width:767px){.investor-intro,.investor-services,.investor-steps,.investor-documents,.investor-faq{padding:65px 0}.investor-step-card{grid-template-columns:38px 48px 1fr}.investor-document-card{flex-direction:column}.investor-final-cta-inner{flex-direction:column;align-items:flex-start}.investor-intro-card strong{font-size:22px}}
