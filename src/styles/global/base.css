@@ -1,0 +1,72 @@
+/* AAPI — Global base and document typography */
+
+:root {
+  --aapi-green: #087443;
+  --aapi-dark-green: #055c35;
+  --aapi-light-green: #eaf6f0;
+  --aapi-gold: #c9a227;
+  --aapi-dark: #14221b;
+  --aapi-gray: #66736d;
+  --aapi-light: #f5f7f6;
+  --aapi-white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Tajawal", "Arial", sans-serif;
+  color: var(--aapi-dark);
+  background: #ffffff;
+}
+
+html[lang="ar"] body {
+  font-family: "Tajawal", "Noto Kufi Arabic", Arial, sans-serif;
+}
+
+html[lang="fr"] body,
+html[lang="en"] body {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+[dir="rtl"] .bi-arrow-left::before {
+  content: "\f12f";
+}
+
+[dir="rtl"] .aapi-top-content,
+[dir="rtl"] .aapi-header-content,
+[dir="rtl"] .footer-main {
+  text-align: right;
+}
+
+[dir="ltr"] .aapi-top-content,
+[dir="ltr"] .aapi-header-content,
+[dir="ltr"] .footer-main {
+  text-align: left;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+.aapi-site {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1320px;
+}
