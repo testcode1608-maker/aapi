@@ -1,12 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
-import "../styles/investor-dashboard.css";
-import "../styles/investor-dashboard-dark.css";
-import "../styles/investor-projects.css";
-import "../styles/investor-investments.css";
-import "../styles/investor-dashboard-extra.css";
-import "../styles/investor-dashboard-fixes.css";
-import "../styles/investor-dashboard-direction.css";
+import "../styles/investor/index.css";
 import InvestorDashboardSidebar from "../components/investor/InvestorDashboardSidebar";
 import InvestorDashboardTopbar from "../components/investor/InvestorDashboardTopbar";
 import InvestorDashboardOverview from "../components/investor/InvestorDashboardOverview";
@@ -43,20 +37,9 @@ export default function InvestorDashboardRefactored() {
   const navigate = useNavigate();
   const { language, t } = useTranslation();
   const {
-    user,
-    profile,
-    stats,
-    projects,
-    investments,
-    requests,
-    documents,
-    notifications,
-    activities,
-    projectCompletion,
-    completedInvestments,
-    loading,
-    error,
-    reload,
+    user, profile, stats, projects, investments, requests, documents,
+    notifications, activities, projectCompletion, completedInvestments,
+    loading, error, reload,
   } = useInvestorDashboard();
   const createProject = useCreateInvestorProject(reload);
   const createInvestment = useCreateInvestorInvestment(projects, reload);
@@ -64,124 +47,55 @@ export default function InvestorDashboardRefactored() {
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
   const direction = language === "ar" ? "rtl" : "ltr";
-  const navClass = (name: string) =>
-    location.pathname === paths[name]
-      ? "investor-dashboard-nav-link active"
-      : "investor-dashboard-nav-link";
+  const navClass = (name: string) => location.pathname === paths[name]
+    ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
   const logout = () => {
     localStorage.removeItem("aapi_user");
     navigate("/login", { replace: true });
   };
 
-  if (loading) {
-    return (
-      <div className={`investor-dashboard-loading investor-dashboard-${direction}`} dir={direction}>
-        <div className="investor-dashboard-loading-spinner" />
-        <p>{t("investorDashboard.loading")}</p>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className={`investor-dashboard-loading investor-dashboard-${direction}`} dir={direction}>
+      <div className="investor-dashboard-loading-spinner" />
+      <p>{t("investorDashboard.loading")}</p>
+    </div>
+  );
 
-  if (error) {
-    return (
-      <div className={`investor-dashboard-error-page investor-dashboard-${direction}`} dir={direction}>
-        <div className="investor-dashboard-error-card">
-          <i className="bi bi-exclamation-triangle" />
-          <h2>{t("investorDashboard.errorTitle")}</h2>
-          <p>{error}</p>
-          <button type="button" className="investor-dashboard-primary-btn" onClick={() => void reload()}>
-            {t("common.retry")}
-          </button>
-        </div>
+  if (error) return (
+    <div className={`investor-dashboard-error-page investor-dashboard-${direction}`} dir={direction}>
+      <div className="investor-dashboard-error-card">
+        <i className="bi bi-exclamation-triangle" />
+        <h2>{t("investorDashboard.errorTitle")}</h2>
+        <p>{error}</p>
+        <button type="button" className="investor-dashboard-primary-btn" onClick={() => void reload()}>{t("common.retry")}</button>
       </div>
-    );
-  }
+    </div>
+  );
 
   let content: ReactNode;
   switch (section) {
-    case "projects":
-      content = (
-        <>
-          <InvestorProjectCreateForm
-            form={createProject.form}
-            setForm={createProject.setForm}
-            creating={createProject.creating}
-            error={createProject.error}
-            success={createProject.success}
-            onSubmit={createProject.submit}
-            onReset={createProject.resetForm}
-          />
-          <InvestorProjectList projects={projects} />
-        </>
-      );
-      break;
-    case "investments":
-      content = (
-        <>
-          <InvestorInvestmentCreateForm
-            form={createInvestment.form}
-            setForm={createInvestment.setForm}
-            projects={createInvestment.eligibleProjects}
-            creating={createInvestment.creating}
-            error={createInvestment.error}
-            success={createInvestment.success}
-            onSubmit={createInvestment.submit}
-            onReset={createInvestment.resetForm}
-          />
-          <InvestorInvestmentsSection investments={investments} />
-        </>
-      );
-      break;
-    case "requests":
-      content = <InvestorRequestsSection requests={requests} projects={projects} reload={reload} />;
-      break;
-    case "documents":
-      content = <InvestorDocumentsSection documents={documents} />;
-      break;
-    case "messages":
-      content = <InvestorMessagesSection />;
-      break;
-    case "notifications":
-      content = <InvestorNotificationsSection notifications={notifications} />;
-      break;
-    case "profile":
-      content = (
-        <InvestorProfileSection
-          user={user}
-          profile={profile}
-          fullName={fullName}
-          userPhotoUrl={userPhotoUrl}
-        />
-      );
-      break;
-    case "settings":
-      content = <InvestorSettingsSection user={user} />;
-      break;
-    default:
-      content = (
-        <InvestorDashboardOverview
-          stats={stats}
-          projects={projects}
-          investments={investments}
-          activities={activities}
-          projectCompletion={projectCompletion}
-          completedInvestments={completedInvestments}
-        />
-      );
+    case "projects": content = <>
+      <InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} />
+      <InvestorProjectList projects={projects} />
+    </>; break;
+    case "investments": content = <>
+      <InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} />
+      <InvestorInvestmentsSection investments={investments} />
+    </>; break;
+    case "requests": content = <InvestorRequestsSection requests={requests} projects={projects} reload={reload} />; break;
+    case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
+    case "messages": content = <InvestorMessagesSection />; break;
+    case "notifications": content = <InvestorNotificationsSection notifications={notifications} />; break;
+    case "profile": content = <InvestorProfileSection user={user} profile={profile} fullName={fullName} userPhotoUrl={userPhotoUrl} />; break;
+    case "settings": content = <InvestorSettingsSection user={user} />; break;
+    default: content = <InvestorDashboardOverview stats={stats} projects={projects} investments={investments} activities={activities} projectCompletion={projectCompletion} completedInvestments={completedInvestments} />;
   }
 
   return (
     <div className={`investor-dashboard-page investor-dashboard-${direction}`} dir={direction} data-language={language}>
       <InvestorDashboardTopbar user={user} stats={stats} userPhotoUrl={userPhotoUrl} />
       <div className="investor-dashboard-layout">
-        <InvestorDashboardSidebar
-          user={user}
-          stats={stats}
-          projectsCount={projects.length}
-          userPhotoUrl={userPhotoUrl}
-          navClass={navClass}
-          onLogout={logout}
-        />
+        <InvestorDashboardSidebar user={user} stats={stats} projectsCount={projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} />
         <main className="investor-dashboard-main">{content}</main>
       </div>
     </div>
