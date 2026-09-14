@@ -43,12 +43,18 @@ function getCurrentUser(): CurrentUser | null {
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: "auto" }); }, [pathname]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname]);
   return null;
 }
 
+function normalizedRole(user: CurrentUser | null) {
+  return String(user?.role ?? "").trim().toLowerCase();
+}
+
 function isActiveAdmin(user: CurrentUser | null) {
-  return !!user && String(user.role).toLowerCase() === "admin" && (!user.statut || String(user.statut).toLowerCase() === "actif");
+  return normalizedRole(user) === "admin" && (!user?.statut || String(user.statut).toLowerCase() === "actif");
 }
 
 function AdminRoute() {
@@ -67,8 +73,9 @@ function AdminSettingsRoute() {
 
 function InvestorRoute() {
   const user = getCurrentUser();
+  const role = normalizedRole(user);
   if (!user) return <Navigate to="/login" replace />;
-  if (user.role !== "investisseur" && user.role !== "investor") return <Navigate to="/" replace />;
+  if (role !== "investisseur" && role !== "investor") return <Navigate to="/" replace />;
   return <InvestorDashboard />;
 }
 
