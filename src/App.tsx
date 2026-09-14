@@ -28,6 +28,7 @@ import "./styles/inscription-textarea-dark.css";
 import "./styles/language-switcher.css";
 import "./styles/global-direction.css";
 import "./styles/registration-direction.css";
+import "./styles/home/index.css";
 
 interface CurrentUser {
   id: number;
@@ -76,45 +77,4 @@ function InvestorRoute() {
   if (!user) return <Navigate to="/login" replace />;
   if (user.role !== "investisseur" && user.role !== "investor") return <Navigate to="/" replace />;
   return <InvestorDashboard />;
-}
-
-function AppContent() {
-  const { pathname } = useLocation();
-  const hideGlobalLayout = pathname.startsWith("/admin") || pathname.startsWith("/investor/dashboard");
-
-  return (
-    <>
-      {!hideGlobalLayout && <><Header /><LanguageSwitcher /><SiteThemeToggle /></>}
-      {hideGlobalLayout && <LanguageSwitcher />}
-      <main style={{ minHeight: hideGlobalLayout ? "100vh" : "calc(100vh - 200px)" }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/agency" element={<Agency />} />
-          <Route path="/investor" element={<Investor />} />
-          <Route path="/opportunities" element={<OpportunitiesPage />} />
-          <Route path="/sectors" element={<SectorsPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/announcements" element={<AnnouncementsPage />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/news/:id" element={<NewsDetails />} />
-          <Route path="/announcements/:id" element={<AnnouncementsDetails />} />
-          <Route path="/inscription" element={<InvestorRegistration />} />
-          <Route path="/investor/register" element={<InvestorRegistration />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/investor/dashboard" element={<InvestorRoute />} />
-          <Route path="/investor/dashboard/*" element={<InvestorRoute />} />
-          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-          <Route path="/admin/settings" element={<AdminSettingsRoute />} />
-          <Route path="/admin/*" element={<AdminRoute />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </main>
-      {!hideGlobalLayout && <Footer />}
-    </>
-  );
-}
-
-export default function App() {
-  return <BrowserRouter><I18nProvider><ScrollToTop /><AppContent /></I18nProvider></BrowserRouter>;
 }
