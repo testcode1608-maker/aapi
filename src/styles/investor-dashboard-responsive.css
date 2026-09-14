@@ -1,4 +1,4 @@
-/* AAPI — Investor Dashboard responsive normalization */
+/* AAPI — Investor Dashboard responsive layer */
 
 .investor-dashboard-page {
   width: 100%;
@@ -13,14 +13,24 @@
 .investor-dashboard-stat-card { min-width: 0; }
 
 .investor-dashboard-main { overflow-x: hidden; }
-.investor-dashboard-page img { max-width: 100%; }
+.investor-dashboard-page img { max-width: 100%; height: auto; }
 .investor-dashboard-page input,
 .investor-dashboard-page select,
-.investor-dashboard-page textarea { max-width: 100%; }
+.investor-dashboard-page textarea,
+.investor-dashboard-page button { max-width: 100%; }
 
 @media (max-width: 1100px) {
   .investor-dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   .investor-dashboard-grid { grid-template-columns: 1fr !important; }
+  .investor-dashboard-projects-card,
+  .investor-dashboard-investment-summary,
+  .investor-dashboard-activity-card { grid-column: auto !important; }
+}
+
+@media (max-width: 1000px) {
+  .investor-dashboard-layout { grid-template-columns: 220px minmax(0, 1fr) !important; }
+  .investor-dashboard-sidebar { width: 220px !important; }
+  .investor-dashboard-main { padding: 22px !important; }
 }
 
 @media (max-width: 800px) {
@@ -32,9 +42,13 @@
 
   .investor-dashboard-sidebar {
     position: static !important;
+    top: auto !important;
     width: 100% !important;
     height: auto !important;
-    padding: 12px !important;
+    max-height: none !important;
+    padding: 10px !important;
+    overflow: visible !important;
+    border-bottom: 1px solid rgba(255,255,255,.12);
   }
 
   .investor-dashboard-sidebar-header { display: none !important; }
@@ -47,13 +61,47 @@
     padding-top: 0 !important;
   }
 
+  .investor-dashboard-nav-link {
+    min-width: 0;
+    min-height: 42px;
+    padding-inline: 10px;
+    gap: 8px;
+  }
+
+  .investor-dashboard-nav-link span:not(.investor-dashboard-nav-badge) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .investor-dashboard-nav-divider {
+    grid-column: 1 / -1;
+    margin: 2px 4px;
+  }
+
+  .investor-dashboard-sidebar-footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 0;
+  }
+
   .investor-dashboard-page-header,
   .investor-dashboard-section-header {
     flex-direction: column !important;
     align-items: stretch !important;
+    gap: 12px !important;
   }
 
-  .investor-dashboard-page-header .investor-dashboard-primary-btn { width: 100% !important; }
+  .investor-dashboard-page-header .investor-dashboard-primary-btn,
+  .investor-dashboard-page-header button { width: 100% !important; }
+
+  .investor-dashboard-card-header {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
 }
 
 @media (max-width: 620px) {
@@ -65,20 +113,25 @@
   .investor-dashboard-status {
     grid-column: 2;
     justify-self: start;
+    margin-top: 2px;
   }
 
   .investor-dashboard-rtl .investor-dashboard-status { justify-self: end; }
+  .investor-dashboard-ltr .investor-dashboard-status { justify-self: start; }
+
+  .investor-dashboard-project-info strong { white-space: normal; }
 }
 
 @media (max-width: 520px) {
   .investor-dashboard-main { padding: 15px 10px !important; }
   .investor-dashboard-stats { grid-template-columns: 1fr !important; }
   .investor-dashboard-nav { grid-template-columns: 1fr !important; }
-  .investor-dashboard-brand-text,
-  .investor-dashboard-user-info { display: none !important; }
-  .investor-dashboard-topbar { height: 64px !important; padding-inline: 12px !important; }
+  .investor-dashboard-sidebar-footer { grid-template-columns: 1fr; }
+  .investor-dashboard-topbar { height: 64px !important; padding-inline: 10px !important; }
+  .investor-dashboard-topbar-actions { gap: 6px !important; }
   .investor-dashboard-card,
   .investor-dashboard-stat-card { padding: 15px !important; }
+  .investor-dashboard-investment-items { grid-template-columns: 1fr !important; }
   .investor-investment-circles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
   .investor-investment-circle { width: 72px; height: 72px; }
   .investor-investment-circle-inner { width: 58px; height: 58px; }
@@ -90,4 +143,8 @@
   .investor-dashboard-main { padding: 12px 8px !important; }
   .investor-dashboard-card,
   .investor-dashboard-stat-card { padding: 13px !important; }
+  .investor-dashboard-topbar { gap: 6px !important; }
+  .investor-investment-circles { gap: 2px; }
+  .investor-investment-circle { width: 66px; height: 66px; }
+  .investor-investment-circle-inner { width: 54px; height: 54px; }
 }
