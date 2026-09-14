@@ -1,6 +1,5 @@
-import { useState } from "react";
-import type { ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import type { ReactNode } from "react";
 import "../styles/investor-dashboard.css";
 import "../styles/investor-dashboard-dark.css";
 import "../styles/investor-projects.css";
@@ -38,8 +37,6 @@ export default function InvestorDashboardRefactored() {
   const { user, profile, stats, projects, investments, requests, documents, notifications, activities, projectCompletion, completedInvestments, loading, error, reload } = useInvestorDashboard();
   const createProject = useCreateInvestorProject(reload);
   const createInvestment = useCreateInvestorInvestment(projects, reload);
-  const [showProjectForm] = useState(true);
-  const [showInvestmentForm] = useState(true);
   const section = location.pathname.split("/")[3] || "dashboard";
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
