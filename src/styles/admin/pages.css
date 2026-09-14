@@ -1,0 +1,70 @@
+/* AAPI Admin — Shared page-level layout */
+
+.admin-projects-page,
+.admin-requests-page,
+.admin-users-page,
+.admin-investments-page,
+.admin-investors-page,
+.admin-messages-page,
+.admin-documents-page {
+  direction: rtl;
+}
+
+.admin-projects-content,
+.admin-requests-content,
+.admin-users-content,
+.admin-investments-content,
+.admin-investors-content,
+.admin-messages-content,
+.admin-documents-content {
+  min-width: 0;
+}
+
+.admin-page-header,
+.admin-content-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.admin-page-header h1,
+.admin-content-header h1 {
+  margin: 0;
+  line-height: 1.35;
+}
+
+.admin-page-header p,
+.admin-content-header p {
+  margin: 6px 0 0;
+}
+
+.admin-panel,
+.admin-project-table-card {
+  min-width: 0;
+}
+
+.admin-empty-state {
+  text-align: center;
+}
+
+.admin-page-actions,
+.admin-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .admin-page-header,
+  .admin-content-header {
+    align-items: stretch;
+  }
+
+  .admin-page-actions,
+  .admin-toolbar-actions {
+    width: 100%;
+  }
+}
