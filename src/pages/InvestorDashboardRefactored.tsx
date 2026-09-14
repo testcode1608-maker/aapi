@@ -42,20 +42,9 @@ export default function InvestorDashboardRefactored() {
   const navigate = useNavigate();
   const { language, t } = useTranslation();
   const {
-    user,
-    profile,
-    stats,
-    projects,
-    investments,
-    requests,
-    documents,
-    notifications,
-    activities,
-    projectCompletion,
-    completedInvestments,
-    loading,
-    error,
-    reload,
+    user, profile, stats, projects, investments, requests, documents,
+    notifications, activities, projectCompletion, completedInvestments,
+    loading, error, reload,
   } = useInvestorDashboard();
 
   const createProject = useCreateInvestorProject(reload);
@@ -88,11 +77,16 @@ export default function InvestorDashboardRefactored() {
   }
 
   if (error) {
+    const errorMessage =
+      error === "INVALID_RESPONSE" || error === "DASHBOARD_REQUEST_FAILED"
+        ? t("investorDashboard.errorTitle")
+        : error;
+
     return (
       <div className={`investor-dashboard-error investor-dashboard-${direction}`} dir={direction}>
         <i className="bi bi-exclamation-triangle" />
         <h2>{t("investorDashboard.errorTitle")}</h2>
-        <p>{error}</p>
+        <p>{errorMessage}</p>
         <button className="investor-dashboard-primary-btn" onClick={() => void reload()}>
           {t("investorDashboard.retry")}
         </button>
@@ -108,24 +102,15 @@ export default function InvestorDashboardRefactored() {
         <section className="investor-dashboard-section">
           <div className="investor-dashboard-page-header">
             <div>
-              <span className="investor-dashboard-overline">
-                {t("investorDashboard.projectsOverline")}
-              </span>
+              <span className="investor-dashboard-overline">{t("investorDashboard.projectsOverline")}</span>
               <h1>{t("investorDashboard.projectsTitle")}</h1>
               <p>{t("investorDashboard.projectsDescription")}</p>
             </div>
-            <button
-              type="button"
-              className="investor-dashboard-primary-btn"
-              onClick={() => setShowProjectForm((value) => !value)}
-            >
+            <button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowProjectForm((value) => !value)}>
               <i className={showProjectForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} />
-              {showProjectForm
-                ? t("investorDashboard.hideForm")
-                : t("investorDashboard.newProject")}
+              {showProjectForm ? t("investorDashboard.hideForm") : t("investorDashboard.newProject")}
             </button>
           </div>
-
           {showProjectForm && (
             <InvestorProjectCreateForm
               form={createProject.form}
@@ -147,24 +132,15 @@ export default function InvestorDashboardRefactored() {
         <section className="investor-dashboard-section">
           <div className="investor-dashboard-page-header">
             <div>
-              <span className="investor-dashboard-overline">
-                {t("investorDashboard.investmentsOverline")}
-              </span>
+              <span className="investor-dashboard-overline">{t("investorDashboard.investmentsOverline")}</span>
               <h1>{t("investorDashboard.investmentsTitle")}</h1>
               <p>{t("investorDashboard.investmentsDescription")}</p>
             </div>
-            <button
-              type="button"
-              className="investor-dashboard-primary-btn"
-              onClick={() => setShowInvestmentForm((value) => !value)}
-            >
+            <button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowInvestmentForm((value) => !value)}>
               <i className={showInvestmentForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} />
-              {showInvestmentForm
-                ? t("investorDashboard.hideForm")
-                : t("investorDashboard.newInvestment")}
+              {showInvestmentForm ? t("investorDashboard.hideForm") : t("investorDashboard.newInvestment")}
             </button>
           </div>
-
           {showInvestmentForm && (
             <InvestorInvestmentCreateForm
               form={createInvestment.form}
@@ -183,7 +159,7 @@ export default function InvestorDashboardRefactored() {
       break;
 
     case "requests":
-      content = <InvestorRequestsSection requests={requests} />;
+      content = <InvestorRequestsSection requests={requests} projects={projects} reload={reload} />;
       break;
     case "documents":
       content = <InvestorDocumentsSection documents={documents} />;
@@ -195,14 +171,7 @@ export default function InvestorDashboardRefactored() {
       content = <InvestorNotificationsSection notifications={notifications} />;
       break;
     case "profile":
-      content = (
-        <InvestorProfileSection
-          user={user}
-          profile={profile}
-          fullName={fullName}
-          userPhotoUrl={userPhotoUrl}
-        />
-      );
+      content = <InvestorProfileSection user={user} profile={profile} fullName={fullName} userPhotoUrl={userPhotoUrl} />;
       break;
     case "settings":
       content = <InvestorSettingsSection user={user} />;
@@ -221,26 +190,10 @@ export default function InvestorDashboardRefactored() {
   }
 
   return (
-    <div
-      className={`investor-dashboard-page investor-dashboard-${direction}`}
-      dir={direction}
-      data-language={language}
-    >
-      <InvestorDashboardTopbar
-        user={user}
-        stats={stats}
-        userPhotoUrl={userPhotoUrl}
-      />
-
+    <div className={`investor-dashboard-page investor-dashboard-${direction}`} dir={direction} data-language={language}>
+      <InvestorDashboardTopbar user={user} stats={stats} userPhotoUrl={userPhotoUrl} />
       <div className="investor-dashboard-layout">
-        <InvestorDashboardSidebar
-          user={user}
-          stats={stats}
-          projectsCount={projects.length}
-          userPhotoUrl={userPhotoUrl}
-          navClass={navClass}
-          onLogout={logout}
-        />
+        <InvestorDashboardSidebar user={user} stats={stats} projectsCount={projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} />
         <main className="investor-dashboard-main">{content}</main>
       </div>
     </div>
