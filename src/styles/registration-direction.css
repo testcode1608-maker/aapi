@@ -10,7 +10,7 @@
   text-align: left !important;
 }
 
-/* Force the Bootstrap grid itself to change visual side. */
+/* Bootstrap grid */
 .investor-registration-section[dir="rtl"] .row.g-4 {
   direction: rtl !important;
   flex-direction: row-reverse !important;
@@ -31,11 +31,11 @@
   text-align: left !important;
 }
 
-/* Labels: always attach to the correct physical side. */
+/* Labels */
 .investor-registration-section[dir="rtl"] .investor-registration-form label {
   display: block !important;
   width: 100% !important;
-  margin: 0 0 8px 0 !important;
+  margin: 0 0 8px !important;
   padding: 0 !important;
   direction: rtl !important;
   text-align: right !important;
@@ -44,13 +44,13 @@
 .investor-registration-section[dir="ltr"] .investor-registration-form label {
   display: block !important;
   width: 100% !important;
-  margin: 0 0 8px 0 !important;
+  margin: 0 0 8px !important;
   padding: 0 !important;
   direction: ltr !important;
   text-align: left !important;
 }
 
-/* Input group and icon position. */
+/* Input wrappers */
 .investor-registration-section[dir="rtl"] .investor-registration-input {
   direction: rtl !important;
   flex-direction: row-reverse !important;
@@ -63,38 +63,69 @@
   text-align: left !important;
 }
 
-.investor-registration-section[dir="rtl"] .investor-registration-input input,
-.investor-registration-section[dir="rtl"] .investor-registration-input select,
+/* Text inputs */
+.investor-registration-section[dir="rtl"] .investor-registration-input input {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.investor-registration-section[dir="ltr"] .investor-registration-input input {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* SELECT — force the physical side of text and native arrow */
+.investor-registration-section[dir="rtl"] .investor-registration-input select {
+  direction: rtl !important;
+  text-align: right !important;
+  text-align-last: right !important;
+  unicode-bidi: plaintext !important;
+}
+
+.investor-registration-section[dir="ltr"] .investor-registration-input select {
+  direction: ltr !important;
+  text-align: left !important;
+  text-align-last: left !important;
+  unicode-bidi: plaintext !important;
+}
+
+/* Make the select occupy the full remaining input area. */
+.investor-registration-section .investor-registration-input select {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+/* Select options follow the active language direction. */
+.investor-registration-section[dir="rtl"] .investor-registration-input select option {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.investor-registration-section[dir="ltr"] .investor-registration-input select option {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Textarea */
+.investor-registration-section[dir="rtl"] .investor-registration-textarea,
 .investor-registration-section[dir="rtl"] .investor-registration-textarea textarea {
   direction: rtl !important;
   text-align: right !important;
 }
 
-.investor-registration-section[dir="ltr"] .investor-registration-input input,
-.investor-registration-section[dir="ltr"] .investor-registration-input select,
+.investor-registration-section[dir="ltr"] .investor-registration-textarea,
 .investor-registration-section[dir="ltr"] .investor-registration-textarea textarea {
   direction: ltr !important;
   text-align: left !important;
 }
 
-/* Textarea wrapper follows the same side. */
-.investor-registration-section[dir="rtl"] .investor-registration-textarea {
-  direction: rtl !important;
-  text-align: right !important;
-}
-
-.investor-registration-section[dir="ltr"] .investor-registration-textarea {
-  direction: ltr !important;
-  text-align: left !important;
-}
-
-/* Section header blocks. */
+/* Section headers */
 .investor-registration-section[dir="rtl"] .investor-registration-header,
 .investor-registration-section[dir="rtl"] .investor-registration-block-title,
 .investor-registration-section[dir="rtl"] .investor-registration-actions,
 .investor-registration-section[dir="rtl"] .investor-registration-success-actions {
   direction: rtl !important;
-  flex-direction: row !important;
   text-align: right !important;
 }
 
@@ -103,7 +134,6 @@
 .investor-registration-section[dir="ltr"] .investor-registration-actions,
 .investor-registration-section[dir="ltr"] .investor-registration-success-actions {
   direction: ltr !important;
-  flex-direction: row !important;
   text-align: left !important;
 }
 
@@ -119,7 +149,7 @@
   text-align: left !important;
 }
 
-/* Consent: checkbox and text move together. */
+/* Consent */
 .investor-registration-section[dir="rtl"] .investor-registration-consent label {
   display: flex !important;
   flex-direction: row-reverse !important;
@@ -136,10 +166,8 @@
   text-align: left !important;
 }
 
-/* Actions: keep buttons grouped on the language side. */
-.investor-registration-section[dir="rtl"] .investor-registration-actions,
-.investor-registration-section[dir="rtl"] .investor-registration-success-actions,
-.investor-registration-section[dir="ltr"] .investor-registration-actions,
-.investor-registration-section[dir="ltr"] .investor-registration-success-actions {
+/* Actions */
+.investor-registration-section .investor-registration-actions,
+.investor-registration-section .investor-registration-success-actions {
   display: flex !important;
 }
