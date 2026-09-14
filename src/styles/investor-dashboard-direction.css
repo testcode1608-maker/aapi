@@ -1,8 +1,13 @@
 /* ==========================================================
    AAPI Investor Dashboard — Professional RTL / LTR layout
    The whole dashboard mirrors with the selected language.
-   Text, icons, sidebar and topbar all keep a stable visual rhythm.
    ========================================================== */
+
+.investor-dashboard-page.investor-dashboard-rtl,
+.investor-dashboard-page.investor-dashboard-ltr {
+  width: 100%;
+  overflow-x: hidden;
+}
 
 /* ---------- RTL ---------- */
 .investor-dashboard-page.investor-dashboard-rtl {
@@ -29,14 +34,20 @@
 
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-brand {
   flex-direction: row;
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar-actions {
   flex-direction: row;
+  flex: 0 0 auto;
+  min-width: max-content;
+  margin-inline-start: auto;
 }
 
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user {
   flex-direction: row;
+  flex: 0 0 auto;
 }
 
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user-info {
@@ -90,14 +101,20 @@
 
 .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-brand {
   flex-direction: row;
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar-actions {
   flex-direction: row;
+  flex: 0 0 auto;
+  min-width: max-content;
+  margin-inline-start: auto;
 }
 
 .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user {
   flex-direction: row;
+  flex: 0 0 auto;
 }
 
 .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user-info {
@@ -150,11 +167,14 @@
   .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar {
     gap: 12px;
     padding-inline: 16px;
+    width: 100%;
+    overflow: visible;
   }
 
   .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar-actions,
   .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar-actions {
     gap: 10px;
+    min-width: 0;
   }
 }
 
