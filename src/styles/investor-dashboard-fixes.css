@@ -39,6 +39,7 @@ body:has(.investor-dashboard-rtl) {
   direction: rtl;
 }
 
+/* Main shell */
 .investor-dashboard-layout {
   display: grid !important;
   grid-template-columns: 264px minmax(0, 1fr) !important;
@@ -72,6 +73,47 @@ body:has(.investor-dashboard-rtl) {
   max-width: none !important;
 }
 
+/* Translation-safe headers */
+.investor-dashboard-page .investor-dashboard-section-header,
+.investor-dashboard-page .investor-dashboard-page-header {
+  width: 100%;
+  min-width: 0;
+  direction: inherit;
+}
+
+.investor-dashboard-rtl .investor-dashboard-section-header,
+.investor-dashboard-rtl .investor-dashboard-page-header,
+.investor-dashboard-rtl .investor-dashboard-section-header > div,
+.investor-dashboard-rtl .investor-dashboard-page-header > div {
+  direction: rtl;
+  text-align: right;
+}
+
+.investor-dashboard-ltr .investor-dashboard-section-header,
+.investor-dashboard-ltr .investor-dashboard-page-header,
+.investor-dashboard-ltr .investor-dashboard-section-header > div,
+.investor-dashboard-ltr .investor-dashboard-page-header > div {
+  direction: ltr;
+  text-align: left;
+}
+
+.investor-dashboard-page-header > div,
+.investor-dashboard-section-header > div,
+.investor-dashboard-card-header > div {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.investor-dashboard-page-header h1,
+.investor-dashboard-page-header p,
+.investor-dashboard-section-header h1,
+.investor-dashboard-section-header p,
+.investor-dashboard-card-header h2 {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* Stats and content grids */
 .investor-dashboard-stats {
   width: 100%;
   min-width: 0;
@@ -92,32 +134,25 @@ body:has(.investor-dashboard-rtl) {
   max-width: 100%;
 }
 
-.investor-dashboard-page-header > div,
-.investor-dashboard-section-header > div,
-.investor-dashboard-card-header > div {
-  min-width: 0;
+.investor-dashboard-stat-content,
+.investor-dashboard-card-header,
+.investor-dashboard-card-header > div,
+.investor-dashboard-project-info,
+.investor-dashboard-activity-content {
+  min-width: 0 !important;
+  max-width: 100%;
 }
 
-.investor-dashboard-page-header h1,
-.investor-dashboard-page-header p,
-.investor-dashboard-section-header h1,
-.investor-dashboard-section-header p,
-.investor-dashboard-card-header h2 {
+.investor-dashboard-stat-content > span,
+.investor-dashboard-stat-content > small,
+.investor-dashboard-project-info span,
+.investor-dashboard-project-info small,
+.investor-dashboard-activity-content span,
+.investor-dashboard-activity-content small {
   overflow-wrap: anywhere;
 }
 
-.investor-dashboard-ltr .investor-dashboard-page-header,
-.investor-dashboard-ltr .investor-dashboard-section-header,
-.investor-dashboard-ltr .investor-dashboard-page-header > div,
-.investor-dashboard-ltr .investor-dashboard-section-header > div {
-  text-align: left;
-}
-
-.investor-dashboard-ltr .investor-dashboard-user-info span,
-.investor-dashboard-ltr .investor-dashboard-profile-info span:first-of-type {
-  text-align: left;
-}
-
+/* Direction-safe navigation */
 .investor-dashboard-nav-link .investor-dashboard-nav-badge {
   margin-inline-start: auto;
   margin-inline-end: 0;
@@ -143,10 +178,11 @@ body:has(.investor-dashboard-rtl) {
 
 .investor-dashboard-primary-btn {
   flex: 0 0 auto;
-  white-space: nowrap;
+  white-space: normal;
   max-width: 100%;
 }
 
+/* Lists */
 .investor-dashboard-project-list,
 .investor-dashboard-activity-list,
 .investor-dashboard-project-item,
@@ -174,25 +210,46 @@ body:has(.investor-dashboard-rtl) {
   max-width: 100%;
 }
 
-/* Investment circles: prevent overlap on translated labels. */
+/* Investment circles — translation-safe */
 .investor-investment-circles {
   width: 100%;
   min-width: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 12px;
+  align-items: start;
 }
 
 .investor-investment-circle-item {
   min-width: 0;
+  width: 100%;
   text-align: center;
+  overflow: hidden;
+}
+
+.investor-investment-circle {
+  width: min(96px, 100%);
+  height: min(96px, 100%);
+  margin-inline: auto;
+}
+
+.investor-investment-circle-inner {
+  width: 76px;
+  height: 76px;
 }
 
 .investor-investment-circle-label,
 .investor-investment-circle-value {
   display: block;
+  width: 100%;
   max-width: 100%;
   overflow-wrap: anywhere;
+  white-space: normal !important;
+  line-height: 1.35;
+}
+
+.investor-investment-circle-value {
+  margin-top: 2px;
 }
 
 .investor-dashboard-investment-table {
@@ -205,9 +262,27 @@ body:has(.investor-dashboard-rtl) {
 }
 
 .investor-investment-table-box span {
+  max-width: 100%;
   overflow-wrap: anywhere;
+  white-space: normal !important;
 }
 
+/* Forms */
+.investor-dashboard-page form,
+.investor-dashboard-page .row,
+.investor-dashboard-page [class*="col-"] {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.investor-dashboard-page form input,
+.investor-dashboard-page form select,
+.investor-dashboard-page form textarea {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Tablet */
 @media (max-width: 1100px) {
   .investor-dashboard-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -242,6 +317,7 @@ body:has(.investor-dashboard-rtl) {
   }
 }
 
+/* Mobile */
 @media (max-width: 800px) {
   .investor-dashboard-layout {
     display: flex !important;
@@ -278,7 +354,8 @@ body:has(.investor-dashboard-rtl) {
     margin-top: 8px !important;
   }
 
-  .investor-dashboard-page-header {
+  .investor-dashboard-page-header,
+  .investor-dashboard-section-header {
     flex-direction: column !important;
     align-items: stretch !important;
   }
@@ -288,7 +365,17 @@ body:has(.investor-dashboard-rtl) {
   }
 
   .investor-investment-circles {
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .investor-investment-circle {
+    width: 84px;
+    height: 84px;
+  }
+
+  .investor-investment-circle-inner {
+    width: 68px;
+    height: 68px;
   }
 }
 
@@ -329,7 +416,26 @@ body:has(.investor-dashboard-rtl) {
   }
 
   .investor-investment-circles {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .investor-investment-circle {
+    width: 72px;
+    height: 72px;
+  }
+
+  .investor-investment-circle-inner {
+    width: 58px;
+    height: 58px;
+  }
+
+  .investor-investment-circle-inner strong {
+    font-size: 14px;
+  }
+
+  .investor-investment-circle-label {
+    font-size: 9px;
   }
 
   .investor-dashboard-project-item,
