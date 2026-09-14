@@ -1,0 +1,110 @@
+/* AAPI — Global language direction
+   Arabic  = RTL
+   French/English = LTR
+   Direction comes from <html dir="rtl|ltr"> set by I18nProvider.
+   Use logical CSS properties so the same layout works in both directions. */
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+html[dir="rtl"],
+html[dir="ltr"],
+html[dir="rtl"] body,
+html[dir="ltr"] body {
+  direction: inherit;
+}
+
+/* Text and form controls follow the active language. */
+[dir="rtl"] :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,label,legend,td,th,input,textarea,select),
+[dir="ltr"] :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,label,legend,td,th,input,textarea,select) {
+  text-align: start;
+}
+
+/* Flex/grid rows naturally follow CSS direction. */
+[dir="rtl"] :where(.aapi-header-content,.aapi-top-content,.aapi-navigation,.hero-actions,.aapi-section-header,.service-card-top,.sector-card,.top-actions),
+[dir="ltr"] :where(.aapi-header-content,.aapi-top-content,.aapi-navigation,.hero-actions,.aapi-section-header,.service-card-top,.sector-card,.top-actions) {
+  direction: inherit;
+}
+
+/* Public AAPI navigation/dropdowns. */
+.aapi-navigation > a::after,
+.aapi-nav-dropdown > button::after {
+  inset-inline-start: 14px;
+  inset-inline-end: 14px;
+  right: auto;
+  left: auto;
+}
+
+.aapi-dropdown-menu {
+  inset-inline-end: 0;
+  right: auto;
+  left: auto;
+}
+
+.aapi-dropdown-menu a:hover {
+  padding-inline-end: 23px;
+  padding-right: 18px;
+}
+
+/* Hero decorations and scroll control use logical edges. */
+.aapi-hero::before {
+  inset-inline-end: -250px;
+  right: auto;
+}
+
+.aapi-hero::after {
+  inset-inline-end: -100px;
+  right: auto;
+}
+
+.hero-scroll {
+  inset-inline-start: 40px;
+  left: auto;
+}
+
+/* Cards/borders should switch sides with the language. */
+.aapi-service-card::before {
+  inset-inline-end: 0;
+  right: auto;
+}
+
+/* Centering should remain direction-independent. */
+.aapi-section-header.centered {
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Forms: placeholders and controls follow the active writing direction. */
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select,
+[dir="ltr"] input,
+[dir="ltr"] textarea,
+[dir="ltr"] select {
+  direction: inherit;
+}
+
+/* Prevent Bootstrap/legacy physical alignment from breaking the page. */
+[dir="rtl"] .text-start { text-align: right !important; }
+[dir="rtl"] .text-end { text-align: left !important; }
+[dir="ltr"] .text-start { text-align: left !important; }
+[dir="ltr"] .text-end { text-align: right !important; }
+
+/* Keep media/content sizing independent of writing direction. */
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+/* Explicitly mirror common positioned utility classes when they exist. */
+[dir="rtl"] .position-start { inset-inline-start: 0; right: auto; }
+[dir="ltr"] .position-start { inset-inline-start: 0; left: auto; }
+[dir="rtl"] .position-end { inset-inline-end: 0; left: auto; }
+[dir="ltr"] .position-end { inset-inline-end: 0; right: auto; }
