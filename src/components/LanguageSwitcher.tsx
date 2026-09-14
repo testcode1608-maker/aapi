@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { languageNames, type Language } from "../i18n/translations";
 import { useTranslation } from "../i18n/I18nProvider";
 
@@ -49,14 +49,14 @@ export default function LanguageSwitcher() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(position));
   }, [position]);
 
-  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
     dragStart.current = { x: event.clientX, y: event.clientY };
     startPosition.current = position;
     dragged.current = false;
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
-  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     if (!dragStart.current) return;
 
     const dx = event.clientX - dragStart.current.x;
@@ -76,7 +76,7 @@ export default function LanguageSwitcher() {
     }
   };
 
-  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+  const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
     if (dragStart.current) {
       dragStart.current = null;
       if (event.currentTarget.hasPointerCapture(event.pointerId)) {
