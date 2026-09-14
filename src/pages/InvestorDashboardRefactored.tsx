@@ -102,7 +102,15 @@ export default function InvestorDashboardRefactored() {
     case "projects":
       content = (
         <>
-          <InvestorProjectCreateForm {...createProject} />
+          <InvestorProjectCreateForm
+            form={createProject.form}
+            setForm={createProject.setForm}
+            creating={createProject.creating}
+            error={createProject.error}
+            success={createProject.success}
+            onSubmit={createProject.submit}
+            onReset={createProject.resetForm}
+          />
           <InvestorProjectList projects={projects} />
         </>
       );
@@ -110,7 +118,16 @@ export default function InvestorDashboardRefactored() {
     case "investments":
       content = (
         <>
-          <InvestorInvestmentCreateForm {...createInvestment} />
+          <InvestorInvestmentCreateForm
+            form={createInvestment.form}
+            setForm={createInvestment.setForm}
+            projects={createInvestment.eligibleProjects}
+            creating={createInvestment.creating}
+            error={createInvestment.error}
+            success={createInvestment.success}
+            onSubmit={createInvestment.submit}
+            onReset={createInvestment.resetForm}
+          />
           <InvestorInvestmentsSection investments={investments} />
         </>
       );
