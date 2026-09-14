@@ -47,25 +47,21 @@ export default function InvestorDashboardSidebar({
           <i className="bi bi-grid-1x2" />
           <span>{t("investorDashboard.sidebar.dashboard")}</span>
         </Link>
-
         <Link to="/investor/dashboard/projects" className={navClass("projects")}>
           <i className="bi bi-building" />
           <span>{t("investorDashboard.sidebar.projects")}</span>
           {projectsCount > 0 && <span className="investor-dashboard-nav-badge">{projectsCount}</span>}
         </Link>
-
         <Link to="/investor/dashboard/investments" className={navClass("investments")}>
           <i className="bi bi-cash-stack" />
           <span>{t("investorDashboard.sidebar.investments")}</span>
           {activeInvestments > 0 && <span className="investor-dashboard-nav-badge">{activeInvestments}</span>}
         </Link>
-
         <Link to="/investor/dashboard/requests" className={navClass("requests")}>
           <i className="bi bi-file-earmark-text" />
           <span>{t("investorDashboard.sidebar.requests")}</span>
           {pendingRequests > 0 && <span className="investor-dashboard-nav-badge">{pendingRequests}</span>}
         </Link>
-
         <Link to="/investor/dashboard/documents" className={navClass("documents")}>
           <i className="bi bi-folder2-open" />
           <span>{t("investorDashboard.sidebar.documents")}</span>
@@ -79,18 +75,15 @@ export default function InvestorDashboardSidebar({
           <span>{t("investorDashboard.sidebar.messages")}</span>
           {unreadMessages > 0 && <span className="investor-dashboard-nav-badge">{unreadMessages}</span>}
         </Link>
-
         <Link to="/investor/dashboard/notifications" className={navClass("notifications")}>
           <i className="bi bi-bell" />
           <span>{t("investorDashboard.sidebar.notifications")}</span>
           {unreadNotifications > 0 && <span className="investor-dashboard-nav-badge">{unreadNotifications}</span>}
         </Link>
-
         <Link to="/investor/dashboard/profile" className={navClass("profile")}>
           <i className="bi bi-person" />
           <span>{t("investorDashboard.sidebar.profile")}</span>
         </Link>
-
         <Link to="/investor/dashboard/settings" className={navClass("settings")}>
           <i className="bi bi-gear" />
           <span>{t("investorDashboard.sidebar.settings")}</span>
@@ -98,7 +91,7 @@ export default function InvestorDashboardSidebar({
       </nav>
 
       <div className="investor-dashboard-sidebar-footer">
-        <Link to="/" className="investor-dashboard-sidebar-site-link">
+        <Link to="/" className="investor-dashboard-logout">
           <i className="bi bi-buildings" />
           <span>الموقع العام</span>
         </Link>
