@@ -1,0 +1,44 @@
+/* AAPI Admin — Dashboard layer
+   Dashboard-specific hooks and visual normalization.
+   The legacy main.css remains loaded for compatibility.
+*/
+
+.admin-dashboard {
+  --admin-dashboard-gap: 14px;
+}
+
+.admin-dashboard .admin-kpi-grid,
+.admin-dashboard .admin-analytics-grid {
+  width: 100%;
+}
+
+.admin-dashboard .admin-kpi-card,
+.admin-dashboard .admin-panel,
+.admin-dashboard .admin-recent-projects,
+.admin-dashboard .admin-project-table-card {
+  min-width: 0;
+}
+
+.admin-dashboard .admin-panel-header,
+.admin-dashboard .table-card-header {
+  direction: rtl;
+}
+
+.admin-dashboard .admin-kpi-content strong,
+.admin-dashboard .admin-dashboard-welcome h1,
+.admin-dashboard .admin-panel-header h2,
+.admin-dashboard .table-card-header h2 {
+  line-height: 1.35;
+}
+
+.admin-dashboard .admin-project-table-wrapper {
+  scrollbar-width: thin;
+}
+
+.admin-dashboard .admin-project-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-dashboard .admin-empty-state {
+  border-radius: 0 0 var(--aapi-radius-lg) var(--aapi-radius-lg);
+}
