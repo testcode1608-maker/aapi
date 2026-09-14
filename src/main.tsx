@@ -7,6 +7,7 @@ import "./index.css";
 import "./styles/admin-theme.css";
 import "./styles/admin-quick-theme.css";
 import "./styles/admin-toolbar.css";
+import "./styles/responsive-auto.css";
 import App from "./App";
 
 const applyAdminTheme = (theme: "dark" | "light") => {
