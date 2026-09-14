@@ -1,8 +1,7 @@
 /* AAPI — Global language direction
-   Arabic  = RTL
-   French/English = LTR
-   Direction comes from <html dir="rtl|ltr"> set by I18nProvider.
-   Use logical CSS properties so the same layout works in both directions. */
+   Arabic = RTL
+   French / English = LTR
+   The active direction is controlled by I18nProvider. */
 
 html,
 body,
@@ -11,26 +10,87 @@ body,
   min-height: 100%;
 }
 
-html[dir="rtl"],
-html[dir="ltr"],
+/* IMPORTANT: do not use direction: inherit on html.
+   The html[dir] attribute is the single source of truth. */
+html[dir="rtl"] { direction: rtl; }
+html[dir="ltr"] { direction: ltr; }
 html[dir="rtl"] body,
-html[dir="ltr"] body {
-  direction: inherit;
-}
+html[dir="rtl"] #root { direction: rtl; }
+html[dir="ltr"] body,
+html[dir="ltr"] #root { direction: ltr; }
 
-/* Text and form controls follow the active language. */
+/* All text/form controls follow the active writing direction. */
 [dir="rtl"] :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,label,legend,td,th,input,textarea,select),
 [dir="ltr"] :where(h1,h2,h3,h4,h5,h6,p,li,dt,dd,label,legend,td,th,input,textarea,select) {
   text-align: start;
 }
 
-/* Flex/grid rows naturally follow CSS direction. */
-[dir="rtl"] :where(.aapi-header-content,.aapi-top-content,.aapi-navigation,.hero-actions,.aapi-section-header,.service-card-top,.sector-card,.top-actions),
-[dir="ltr"] :where(.aapi-header-content,.aapi-top-content,.aapi-navigation,.hero-actions,.aapi-section-header,.service-card-top,.sector-card,.top-actions) {
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select,
+[dir="ltr"] input,
+[dir="ltr"] textarea,
+[dir="ltr"] select {
   direction: inherit;
 }
 
-/* Public AAPI navigation/dropdowns. */
+/* Bootstrap alignment utilities follow the active language. */
+[dir="rtl"] .text-start { text-align: right !important; }
+[dir="rtl"] .text-end { text-align: left !important; }
+[dir="ltr"] .text-start { text-align: left !important; }
+[dir="ltr"] .text-end { text-align: right !important; }
+
+/* Flex rows use the language direction automatically. */
+[dir="rtl"] :where(.aapi-header-content,.aapi-top-content,.aapi-navigation,.hero-actions,.aapi-section-header,.service-card-top,.sector-card,.top-actions,.investor-registration-header,.investor-registration-block-title,.investor-registration-actions,.investor-registration-success-actions) {
+  direction: rtl;
+}
+[dir="ltr"] :where(.aapi-header-content,.aapi-top-content,.aapi-navigation,.hero-actions,.aapi-section-header,.service-card-top,.sector-card,.top-actions,.investor-registration-header,.investor-registration-block-title,.investor-registration-actions,.investor-registration-success-actions) {
+  direction: ltr;
+}
+
+/* Registration page: the whole form mirrors, not only its text. */
+.investor-registration-section,
+.investor-registration-section .container,
+.investor-registration-section .investor-registration-card,
+.investor-registration-section .investor-registration-form,
+.investor-registration-section .investor-registration-block,
+.investor-registration-section .investor-registration-consent {
+  direction: inherit;
+}
+
+.investor-registration-header,
+.investor-registration-block-title,
+.investor-registration-actions,
+.investor-registration-success-actions {
+  flex-direction: row;
+}
+
+.investor-registration-header-content,
+.investor-registration-block-title > div,
+.investor-registration-success {
+  text-align: start !important;
+}
+
+.investor-registration-input {
+  direction: inherit;
+}
+
+.investor-registration-input input,
+.investor-registration-input select,
+.investor-registration-textarea textarea {
+  direction: inherit;
+  text-align: start !important;
+}
+
+.investor-registration-consent label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  direction: inherit;
+  text-align: start !important;
+}
+
+/* Public navigation/dropdowns. */
 .aapi-navigation > a::after,
 .aapi-nav-dropdown > button::after {
   inset-inline-start: 14px;
@@ -50,29 +110,24 @@ html[dir="ltr"] body {
   padding-right: 18px;
 }
 
-/* Hero decorations and scroll control use logical edges. */
+/* Hero decorations and controls. */
 .aapi-hero::before {
   inset-inline-end: -250px;
   right: auto;
 }
-
 .aapi-hero::after {
   inset-inline-end: -100px;
   right: auto;
 }
-
 .hero-scroll {
   inset-inline-start: 40px;
   left: auto;
 }
-
-/* Cards/borders should switch sides with the language. */
 .aapi-service-card::before {
   inset-inline-end: 0;
   right: auto;
 }
 
-/* Centering should remain direction-independent. */
 .aapi-section-header.centered {
   margin-inline-start: auto;
   margin-inline-end: auto;
@@ -80,30 +135,13 @@ html[dir="ltr"] body {
   margin-right: auto;
 }
 
-/* Forms: placeholders and controls follow the active writing direction. */
-[dir="rtl"] input,
-[dir="rtl"] textarea,
-[dir="rtl"] select,
-[dir="ltr"] input,
-[dir="ltr"] textarea,
-[dir="ltr"] select {
-  direction: inherit;
-}
-
-/* Prevent Bootstrap/legacy physical alignment from breaking the page. */
-[dir="rtl"] .text-start { text-align: right !important; }
-[dir="rtl"] .text-end { text-align: left !important; }
-[dir="ltr"] .text-start { text-align: left !important; }
-[dir="ltr"] .text-end { text-align: right !important; }
-
-/* Keep media/content sizing independent of writing direction. */
 img,
 svg,
 video {
   max-width: 100%;
 }
 
-/* Explicitly mirror common positioned utility classes when they exist. */
+/* Generic logical helpers for legacy components. */
 [dir="rtl"] .position-start { inset-inline-start: 0; right: auto; }
 [dir="ltr"] .position-start { inset-inline-start: 0; left: auto; }
 [dir="rtl"] .position-end { inset-inline-end: 0; left: auto; }
