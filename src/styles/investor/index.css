@@ -1,0 +1,8 @@
+/* AAPI — Investor styles entry point */
+@import "../investor-dashboard.css";
+@import "../investor-dashboard-dark.css";
+@import "../investor-projects.css";
+@import "../investor-investments.css";
+@import "../investor-dashboard-extra.css";
+@import "../investor-dashboard-fixes.css";
+@import "../investor-dashboard-direction.css";
