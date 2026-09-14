@@ -12,13 +12,22 @@ function getInitialPosition(): Position {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return DEFAULT_POSITION;
-    const parsed = JSON.parse(saved) as Partial<Position>;
-    if (typeof parsed.x === "number" && typeof parsed.y === "number") {
-      return parsed;
+    const parsed = JSON.parse(saved) as unknown;
+
+    if (
+      typeof parsed === "object" &&
+      parsed !== null &&
+      "x" in parsed &&
+      "y" in parsed &&
+      typeof parsed.x === "number" &&
+      typeof parsed.y === "number"
+    ) {
+      return { x: parsed.x, y: parsed.y };
     }
   } catch {
     // Use the default position when localStorage contains invalid data.
   }
+
   return DEFAULT_POSITION;
 }
 
