@@ -2,6 +2,7 @@
 @import "./base.css";
 @import "./site-header.css";
 @import "./site-footer.css";
+@import "../public/agency.css";
 @import "../public/investor.css";
 @import "../public/opportunities.css";
 @import "../public/sectors.css";
