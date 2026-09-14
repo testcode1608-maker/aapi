@@ -1,19 +1,14 @@
 /* ==========================================================
    AAPI Investor Dashboard — Professional RTL / LTR layout
-   The whole dashboard mirrors with the selected language.
+   Stable spacing, alignment and responsive rhythm.
    ========================================================== */
 
 .investor-dashboard-page.investor-dashboard-rtl,
 .investor-dashboard-page.investor-dashboard-ltr {
-  width: 100%;
-  overflow-x: hidden;
+  direction: inherit;
 }
 
-/* ---------- RTL ---------- */
-.investor-dashboard-page.investor-dashboard-rtl {
-  direction: rtl;
-}
-
+/* ---------- Main layout ---------- */
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-layout {
   grid-template-columns: minmax(0, 1fr) 264px !important;
 }
@@ -28,26 +23,65 @@
   grid-row: 1;
 }
 
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-layout {
+  grid-template-columns: 264px minmax(0, 1fr) !important;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-sidebar {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-main {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* ---------- Topbar spacing ---------- */
+.investor-dashboard-page .investor-dashboard-topbar {
+  min-width: 0;
+  gap: 28px;
+  padding-inline: 28px;
+}
+
+.investor-dashboard-page .investor-dashboard-brand {
+  flex: 0 0 auto;
+  min-width: 0;
+  gap: 12px;
+}
+
+.investor-dashboard-page .investor-dashboard-topbar-actions {
+  flex: 0 0 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.investor-dashboard-page .investor-dashboard-user {
+  flex: 0 1 auto;
+  min-width: 0;
+  gap: 10px;
+}
+
+.investor-dashboard-page .investor-dashboard-user-info {
+  min-width: 0;
+  max-width: 240px;
+}
+
+/* ---------- RTL ---------- */
+.investor-dashboard-page.investor-dashboard-rtl {
+  direction: rtl;
+}
+
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar {
   direction: rtl;
 }
 
-.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-brand {
-  flex-direction: row;
-  flex: 0 0 auto;
-  min-width: 0;
-}
-
-.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar-actions {
-  flex-direction: row;
-  flex: 0 0 auto;
-  min-width: max-content;
-  margin-inline-start: auto;
-}
-
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-brand,
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar-actions,
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user {
   flex-direction: row;
-  flex: 0 0 auto;
 }
 
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user-info {
@@ -81,40 +115,14 @@
   direction: ltr;
 }
 
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-layout {
-  grid-template-columns: 264px minmax(0, 1fr) !important;
-}
-
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-sidebar {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-main {
-  grid-column: 2;
-  grid-row: 1;
-}
-
 .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar {
   direction: ltr;
 }
 
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-brand {
-  flex-direction: row;
-  flex: 0 0 auto;
-  min-width: 0;
-}
-
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar-actions {
-  flex-direction: row;
-  flex: 0 0 auto;
-  min-width: max-content;
-  margin-inline-start: auto;
-}
-
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-brand,
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar-actions,
 .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user {
   flex-direction: row;
-  flex: 0 0 auto;
 }
 
 .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user-info {
@@ -143,8 +151,85 @@
   box-shadow: inset 3px 0 0 var(--id-gold);
 }
 
+/* ---------- Professional dashboard spacing ---------- */
+.investor-dashboard-page .investor-dashboard-main {
+  padding: 30px;
+}
+
+.investor-dashboard-page .investor-dashboard-section {
+  width: min(1240px, 100%);
+  margin-inline: auto;
+}
+
+.investor-dashboard-page .investor-dashboard-section-header,
+.investor-dashboard-page .investor-dashboard-page-header {
+  margin-bottom: 24px;
+}
+
+.investor-dashboard-page .investor-dashboard-stats {
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.investor-dashboard-page .investor-dashboard-grid {
+  gap: 18px;
+}
+
+.investor-dashboard-page .investor-dashboard-card {
+  padding: 21px;
+}
+
+.investor-dashboard-page .investor-dashboard-card-header {
+  margin-bottom: 18px;
+}
+
+.investor-dashboard-page .investor-dashboard-project-item,
+.investor-dashboard-page .investor-dashboard-activity-item {
+  gap: 12px;
+  padding-block: 13px;
+}
+
+/* Keep dashboard elements from touching the sidebar or viewport edge. */
+.investor-dashboard-page .investor-dashboard-main > * {
+  max-width: 100%;
+}
+
 /* ---------- Responsive ---------- */
+@media (max-width: 1200px) {
+  .investor-dashboard-page .investor-dashboard-main {
+    padding: 26px;
+  }
+
+  .investor-dashboard-page .investor-dashboard-topbar {
+    padding-inline: 22px;
+  }
+
+  .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-layout {
+    grid-template-columns: minmax(0, 1fr) 240px !important;
+  }
+
+  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-layout {
+    grid-template-columns: 240px minmax(0, 1fr) !important;
+  }
+}
+
 @media (max-width: 1000px) {
+  .investor-dashboard-page .investor-dashboard-topbar {
+    gap: 18px;
+  }
+
+  .investor-dashboard-page .investor-dashboard-topbar-actions {
+    gap: 10px;
+  }
+
+  .investor-dashboard-page .investor-dashboard-user-info {
+    max-width: 180px;
+  }
+
+  .investor-dashboard-page .investor-dashboard-main {
+    padding: 22px;
+  }
+
   .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-layout {
     grid-template-columns: minmax(0, 1fr) 220px !important;
   }
@@ -155,6 +240,16 @@
 }
 
 @media (max-width: 800px) {
+  .investor-dashboard-page .investor-dashboard-topbar {
+    height: 68px;
+    gap: 10px;
+    padding-inline: 14px;
+  }
+
+  .investor-dashboard-page .investor-dashboard-main {
+    padding: 18px 14px;
+  }
+
   .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-sidebar,
   .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-main,
   .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-sidebar,
@@ -163,32 +258,46 @@
     grid-row: auto;
   }
 
-  .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar,
-  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar {
-    gap: 12px;
-    padding-inline: 16px;
-    width: 100%;
-    overflow: visible;
+  .investor-dashboard-page .investor-dashboard-topbar-actions {
+    gap: 7px;
   }
 
-  .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar-actions,
-  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar-actions {
-    gap: 10px;
-    min-width: 0;
+  .investor-dashboard-page .investor-dashboard-user-info {
+    max-width: 130px;
   }
 }
 
 @media (max-width: 600px) {
-  .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-brand-text span,
-  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-brand-text span {
-    max-width: 110px;
+  .investor-dashboard-page .investor-dashboard-topbar {
+    padding-inline: 10px;
+  }
+
+  .investor-dashboard-page .investor-dashboard-brand {
+    gap: 8px;
+  }
+
+  .investor-dashboard-page .investor-dashboard-brand-mark {
+    width: 38px;
+    height: 38px;
+  }
+
+  .investor-dashboard-page .investor-dashboard-brand-text span {
+    max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user-info,
-  .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user-info {
+  .investor-dashboard-page .investor-dashboard-user-info {
     display: none;
+  }
+
+  .investor-dashboard-page .investor-dashboard-main {
+    padding: 16px 10px;
+  }
+
+  .investor-dashboard-page .investor-dashboard-stats,
+  .investor-dashboard-page .investor-dashboard-grid {
+    gap: 12px;
   }
 }
