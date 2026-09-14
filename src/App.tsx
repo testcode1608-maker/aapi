@@ -21,13 +21,6 @@ import Footer from "./components/Footer";
 import SiteThemeToggle from "./components/SiteThemeToggle";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import { I18nProvider } from "./i18n/I18nProvider";
-import "./styles/site-theme.css";
-import "./styles/aapi-all-pages-theme.css";
-import "./styles/inscription-dark.css";
-import "./styles/inscription-textarea-dark.css";
-import "./styles/language-switcher.css";
-import "./styles/global-direction.css";
-import "./styles/registration-direction.css";
 import "./styles/home/index.css";
 
 interface CurrentUser {
