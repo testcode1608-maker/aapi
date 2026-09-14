@@ -4,4 +4,5 @@
 @import "../admin-quick-theme.css";
 @import "../admin-toolbar.css";
 @import "./dashboard.css";
+@import "./tables.css";
 @import "./responsive.css";
