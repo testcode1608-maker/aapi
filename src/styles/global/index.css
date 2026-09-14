@@ -3,6 +3,7 @@
 @import "./site-header.css";
 @import "./site-footer.css";
 @import "../public/investor.css";
+@import "../public/opportunities.css";
 @import "../../index.css";
 @import "../site-theme.css";
 @import "../aapi-all-pages-theme.css";
