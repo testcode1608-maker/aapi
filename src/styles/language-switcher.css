@@ -1,6 +1,8 @@
-.aapi-language-switcher{position:fixed;top:14px;right:18px;z-index:2000;display:flex;gap:3px;padding:4px;border:1px solid rgba(8,116,67,.22);border-radius:999px;background:rgba(255,255,255,.96);box-shadow:0 5px 18px rgba(20,34,27,.12);backdrop-filter:blur(8px)}
+.aapi-language-switcher{position:fixed;z-index:2000;display:flex;align-items:center;gap:3px;padding:4px;border:1px solid rgba(8,116,67,.22);border-radius:999px;background:rgba(255,255,255,.96);box-shadow:0 5px 18px rgba(20,34,27,.12);backdrop-filter:blur(8px);user-select:none;touch-action:none;cursor:grab}
+.aapi-language-switcher.is-dragging{cursor:grabbing;box-shadow:0 10px 28px rgba(20,34,27,.2)}
+.aapi-language-drag-handle{display:flex;align-items:center;justify-content:center;width:16px;height:28px;color:#087443;opacity:.55;cursor:grab}
+.aapi-language-switcher.is-dragging .aapi-language-drag-handle{cursor:grabbing}
 .aapi-language-switcher button{border:0;background:transparent;color:#087443;font-size:12px;font-weight:700;padding:5px 8px;border-radius:999px;cursor:pointer;transition:.2s}
 .aapi-language-switcher button:hover{background:#eaf6f0}
 .aapi-language-switcher button.active{background:#087443;color:#fff}
-html[dir="rtl"] .aapi-language-switcher{right:auto;left:18px}
-@media(max-width:768px){.aapi-language-switcher{top:10px;right:10px}.aapi-language-switcher button{padding:4px 7px;font-size:11px}html[dir="rtl"] .aapi-language-switcher{left:10px;right:auto}}
+@media(max-width:768px){.aapi-language-switcher{padding:3px;gap:2px}.aapi-language-drag-handle{width:14px;height:26px}.aapi-language-switcher button{padding:4px 7px;font-size:11px}}
