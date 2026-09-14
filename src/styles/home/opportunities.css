@@ -1,0 +1,116 @@
+.opportunities-section {
+  padding: 105px 0;
+  background: #ffffff;
+}
+
+.opportunities-intro {
+  display: grid;
+  grid-template-columns: 0.8fr 1.5fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.opportunities-intro h2 {
+  margin: 0 0 20px;
+  font-size: 44px;
+  font-weight: 400;
+}
+
+.opportunities-intro h2 strong {
+  color: var(--aapi-green);
+  font-weight: 800;
+}
+
+.opportunities-intro p {
+  color: var(--aapi-gray);
+  line-height: 2;
+  font-size: 15px;
+  max-width: 450px;
+}
+
+.opportunity-button {
+  margin-top: 20px;
+  background: var(--aapi-green);
+  color: #ffffff;
+}
+
+.opportunity-button:hover {
+  background: var(--aapi-dark-green);
+  color: #ffffff;
+}
+
+.opportunities-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.opportunity-card {
+  min-height: 300px;
+  padding: 27px;
+  border: 1px solid #e3e9e5;
+  transition: 0.3s ease;
+}
+
+.opportunity-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border-color: var(--aapi-green);
+}
+
+.opportunity-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--aapi-light-green);
+  color: var(--aapi-green);
+  font-size: 23px;
+  margin-bottom: 30px;
+}
+
+.opportunity-card > span {
+  color: var(--aapi-green);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.opportunity-card h3 {
+  margin: 10px 0 15px;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.opportunity-card p {
+  margin: 0 0 22px;
+  font-size: 13px;
+}
+
+.opportunity-card p i {
+  color: var(--aapi-green);
+  margin-left: 6px;
+}
+
+.opportunity-card a {
+  color: var(--aapi-green);
+  font-size: 13px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 991px) {
+  .opportunities-intro {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+  .opportunities-cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 767px) {
+  .opportunities-intro h2 { font-size: 34px; }
+  .opportunities-cards { grid-template-columns: 1fr; }
+}
