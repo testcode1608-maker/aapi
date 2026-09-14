@@ -100,7 +100,7 @@ export default function InvestorDashboardSidebar({
       <div className="investor-dashboard-sidebar-footer">
         <Link to="/" className="investor-dashboard-sidebar-site-link">
           <i className="bi bi-buildings" />
-          <span>{t("investorDashboard.sidebar.publicSite")}</span>
+          <span>الموقع العام</span>
         </Link>
         <button type="button" className="investor-dashboard-logout" onClick={onLogout}>
           <i className="bi bi-box-arrow-right" />
