@@ -4,6 +4,7 @@
 .admin-table-wrapper,
 .admin-data-table-wrapper {
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   direction: rtl;
@@ -30,7 +31,7 @@
 
 .admin-project-table tbody tr,
 .admin-data-table tbody tr {
-  transition: background-color 160ms ease;
+  transition: background-color 160ms ease, opacity 160ms ease;
 }
 
 .admin-project-table tbody tr:last-child td,
@@ -38,26 +39,87 @@
   border-bottom: 0;
 }
 
-.status-select:focus,
+.admin-project-table input,
+.admin-project-table select,
+.admin-data-table input,
+.admin-data-table select,
+.status-select {
+  max-width: 100%;
+  font: inherit;
+}
+
+.admin-project-table select,
+.admin-data-table select,
+.status-select {
+  min-width: 120px;
+}
+
+.admin-project-table input:focus,
+.admin-project-table select:focus,
 .admin-data-table select:focus,
-.admin-data-table input:focus {
-  outline: none;
+.admin-data-table input:focus,
+.status-select:focus {
+  outline: 2px solid rgba(8, 116, 67, 0.25);
+  outline-offset: 1px;
 }
 
 .admin-table-message-preview {
   max-width: 360px;
   white-space: normal !important;
   line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 
 .admin-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   white-space: nowrap;
 }
 
-.admin-project-filters {
+.admin-project-filters,
+.admin-toolbar {
   flex-wrap: wrap;
 }
 
 .project-search {
   min-width: 180px;
+  max-width: 100%;
+}
+
+.admin-read-toggle {
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.admin-read-toggle:disabled,
+.status-select:disabled,
+.admin-project-table button:disabled,
+.admin-data-table button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+@media (max-width: 800px) {
+  .admin-project-table,
+  .admin-data-table {
+    min-width: 680px;
+  }
+
+  .admin-table-message-preview {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-project-table,
+  .admin-data-table {
+    min-width: 620px;
+  }
+
+  .admin-project-table select,
+  .admin-data-table select,
+  .status-select {
+    min-width: 110px;
+  }
 }
