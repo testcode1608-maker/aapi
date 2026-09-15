@@ -24,21 +24,9 @@ export default function SiteThemeToggle() {
     button.type = "button";
     button.className = "aapi-site-theme-toggle";
     Object.assign(button.style, {
-      position: "fixed",
-      left: "18px",
-      bottom: "18px",
-      width: "44px",
-      height: "44px",
-      border: "0",
-      borderRadius: "50%",
-      display: "grid",
-      placeItems: "center",
-      zIndex: "99999",
-      cursor: "pointer",
-      background: "#087443",
-      color: "#fff",
-      boxShadow: "0 8px 24px rgba(0,0,0,.22)",
-      fontSize: "18px",
+      position: "fixed", left: "18px", bottom: "18px", width: "44px", height: "44px",
+      border: "0", borderRadius: "50%", display: "grid", placeItems: "center", zIndex: "99999",
+      cursor: "pointer", background: "#087443", color: "#fff", boxShadow: "0 8px 24px rgba(0,0,0,.22)", fontSize: "18px",
     });
 
     const updateButton = () => {
@@ -48,20 +36,17 @@ export default function SiteThemeToggle() {
       button.title = dark ? "الوضع النهاري" : "الوضع الليلي";
     };
 
-    const handleThemeChange = () => updateButton();
-
     button.addEventListener("click", () => {
       const dark = !document.documentElement.classList.contains(DARK_HTML_CLASS);
       applyTheme(dark);
       updateButton();
     });
-
-    window.addEventListener(EVENT_NAME, handleThemeChange);
+    window.addEventListener(EVENT_NAME, updateButton);
     document.body.appendChild(button);
     updateButton();
 
     return () => {
-      window.removeEventListener(EVENT_NAME, handleThemeChange);
+      window.removeEventListener(EVENT_NAME, updateButton);
       button.remove();
     };
   }, []);
