@@ -85,8 +85,9 @@ function AppContent() {
 
   return (
     <>
-      {!hideGlobalLayout && <><Header /><LanguageSwitcher /><SiteThemeToggle /></>}
+      {!hideGlobalLayout && <><Header /><LanguageSwitcher /></>}
       {hideGlobalLayout && <LanguageSwitcher />}
+      <SiteThemeToggle />
       <main style={{ minHeight: hideGlobalLayout ? "100vh" : "calc(100vh - 200px)" }}>
         <Routes>
           <Route path="/" element={<Home />} />
