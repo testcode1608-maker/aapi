@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import type { ReactNode, CSSProperties } from "react";
 import type { DashboardActivity, DashboardInvestment, DashboardProject, DashboardStats } from "../../types/investorDashboard";
 import { formatAmount, formatRelativeTime, getProjectStatus, toNumber } from "../../utils/investorDashboard";
 import { useTranslation } from "../../i18n/I18nProvider";
 
-interface InvestorDashboardOverviewProps {
+interface Props {
   stats: DashboardStats | null;
   projects: DashboardProject[];
   investments: DashboardInvestment[];
@@ -13,58 +12,93 @@ interface InvestorDashboardOverviewProps {
   completedInvestments: number;
 }
 
-function StatCard({ icon, label, value, detail }: { icon: string; label: string; value: number; detail: ReactNode }) {
-  return <div className="investor-dashboard-stat-card"><div className="investor-dashboard-stat-icon"><i className={icon} /></div><div className="investor-dashboard-stat-content"><span>{label}</span><strong>{value}</strong><small>{detail}</small></div></div>;
+function Kpi({ icon, label, value, note }: { icon: string; label: string; value: string | number; note: string }) {
+  return (
+    <article className="soft-investor-kpi">
+      <div className="soft-investor-kpi-icon"><i className={icon} /></div>
+      <div className="soft-investor-kpi-body"><span>{label}</span><strong>{value}</strong><small>{note}</small></div>
+    </article>
+  );
 }
 
-function InvestmentCircle({ label, value, total, tone, icon }: { label: string; value: number; total: number; tone: "green" | "gold" | "blue"; icon: string }) {
-  const safeTotal = Math.max(total, 0);
-  const percentage = safeTotal > 0 ? Math.min(100, Math.round((value / safeTotal) * 100)) : 0;
-  const style = { "--circle-progress": `${percentage * 3.6}deg` } as CSSProperties;
-  return <div className={`investor-investment-circle-item ${tone}`}><div className={`investor-investment-circle ${tone}`} style={style}><div className="investor-investment-circle-inner"><strong>{percentage}%</strong><span><i className={icon} /></span></div></div><strong className="investor-investment-circle-value">{value}</strong><span className="investor-investment-circle-label">{label}</span></div>;
-}
-
-export default function InvestorDashboardOverview({ stats, projects, investments, activities, projectCompletion, completedInvestments }: InvestorDashboardOverviewProps) {
+export default function InvestorDashboardOverview({ stats, projects, investments, activities, projectCompletion, completedInvestments }: Props) {
   const { t } = useTranslation();
-  const latestProjects = projects.slice(0, 3);
+  const totalProjects = toNumber(stats?.projects_total);
+  const activeProjects = toNumber(stats?.projects_active);
   const totalInvestments = toNumber(stats?.investments_total ?? investments.length);
   const activeInvestments = toNumber(stats?.investments_active);
-  const investmentCompletion = totalInvestments > 0 ? Math.min(100, Math.round((completedInvestments / totalInvestments) * 100)) : 0;
-  const projectProgress = Math.min(100, Math.max(0, projectCompletion));
-  const statsItems = [
-    { icon: "bi bi-building", label: t("investorDashboard.overview.totalProjects"), value: toNumber(stats?.projects_total), detail: `${toNumber(stats?.projects_active)} ${t("investorDashboard.overview.activeProjects")}` },
-    { icon: "bi bi-cash-stack", label: t("investorDashboard.overview.activeInvestments"), value: activeInvestments, detail: formatAmount(stats?.total_investment) },
-    { icon: "bi bi-file-earmark-text", label: t("investorDashboard.overview.pendingRequests"), value: toNumber(stats?.requests_pending), detail: `${t("investorDashboard.overview.totalRequests")} ${toNumber(stats?.requests_total)}` },
-    { icon: "bi bi-folder2-open", label: t("investorDashboard.overview.documents"), value: toNumber(stats?.documents_total), detail: t("investorDashboard.overview.registeredDocument") },
-  ];
+  const pendingRequests = toNumber(stats?.requests_pending);
+  const documents = toNumber(stats?.documents_total);
+  const investmentRate = totalInvestments ? Math.round((completedInvestments / totalInvestments) * 100) : 0;
+  const projectRate = Math.min(100, Math.max(0, Math.round(projectCompletion)));
+  const recentProjects = projects.slice(0, 5);
+  const recentActivities = activities.slice(0, 5);
 
-  return <section className="investor-dashboard-section">
-    <div className="investor-dashboard-section-header"><div><span className="investor-dashboard-overline">{t("investorDashboard.overview.overline")}</span><h1>{t("investorDashboard.overview.welcome")}</h1><p>{t("investorDashboard.overview.description")}</p></div></div>
-    <div className="investor-dashboard-stats">{statsItems.map((item) => <StatCard key={item.label} {...item} />)}</div>
-
-    <div className="investor-dashboard-grid">
-      <div className="investor-dashboard-card investor-dashboard-projects-card">
-        <div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{t("investorDashboard.overview.projects")}</span><h2>{t("investorDashboard.overview.latestProjects")}</h2></div><Link to="/investor/dashboard/projects">{t("investorDashboard.overview.viewAll")}</Link></div>
-        <div className="investor-dashboard-project-list">
-          {latestProjects.map((project) => { const status = getProjectStatus(project.statut); return <div className="investor-dashboard-project-item" key={project.id}><div className="investor-dashboard-project-icon"><i className="bi bi-building" /></div><div className="investor-dashboard-project-info"><strong>{project.titre}</strong><span>{project.secteurs || t("investorDashboard.overview.investmentSector")}</span><small>{formatAmount(project.montant_investissement)} · {project.nombre_emplois} {t("investorDashboard.overview.positions")}</small></div><span className={status.className}>{status.label}</span></div>; })}
-          {projects.length === 0 && <div className="investor-dashboard-project-item"><div className="investor-dashboard-project-icon"><i className="bi bi-building" /></div><div className="investor-dashboard-project-info"><strong>{t("investorDashboard.overview.noProjects")}</strong><span>{t("investorDashboard.overview.addProject")}</span></div></div>}
+  return (
+    <section className="soft-investor-dashboard">
+      <div className="soft-investor-page-head">
+        <div>
+          <span className="soft-investor-eyebrow">AAPI · INVESTOR PORTAL</span>
+          <h1>{t("investorDashboard.overview.welcome")}</h1>
+          <p>{t("investorDashboard.overview.description")}</p>
         </div>
+        <Link className="soft-investor-primary" to="/investor/dashboard/projects"><i className="bi bi-plus-lg" /> {t("investorDashboard.sidebar.projects")}</Link>
       </div>
 
-      <div className="investor-dashboard-card investor-dashboard-investment-summary">
-        <div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{t("investorDashboard.overview.investments")}</span><h2>{t("investorDashboard.overview.investmentSummary")}</h2></div></div>
-        <div className="investor-dashboard-investment-total"><span>{t("investorDashboard.overview.totalInvestments")}</span><strong>{formatAmount(stats?.total_investment)}</strong></div>
-        <div className="investor-investment-circles"><InvestmentCircle label={t("investorDashboard.overview.active")} value={activeInvestments} total={totalInvestments} tone="green" icon="bi bi-lightning-charge-fill" /><InvestmentCircle label={t("investorDashboard.overview.completed")} value={completedInvestments} total={totalInvestments} tone="gold" icon="bi bi-check2-circle" /><InvestmentCircle label={t("investorDashboard.overview.projectProgress")} value={projectProgress} total={100} tone="blue" icon="bi bi-graph-up-arrow" /></div>
-        <div className="investor-dashboard-investment-table"><div className="investor-investment-table-box"><span>{t("investorDashboard.overview.totalOperations")}</span><strong>{totalInvestments}</strong></div><div className="investor-investment-table-box"><span>{t("investorDashboard.overview.activeInvestments")}</span><strong>{activeInvestments}</strong></div><div className="investor-investment-table-box"><span>{t("investorDashboard.overview.completionRate")}</span><strong>{investmentCompletion}%</strong></div></div>
+      <div className="soft-investor-kpi-grid">
+        <Kpi icon="bi bi-building" label={t("investorDashboard.overview.totalProjects")} value={totalProjects} note={`${activeProjects} ${t("investorDashboard.overview.activeProjects")}`} />
+        <Kpi icon="bi bi-wallet2" label={t("investorDashboard.overview.activeInvestments")} value={activeInvestments} note={formatAmount(stats?.total_investment)} />
+        <Kpi icon="bi bi-file-earmark-text" label={t("investorDashboard.overview.pendingRequests")} value={pendingRequests} note={`${toNumber(stats?.requests_total)} ${t("investorDashboard.overview.totalRequests")}`} />
+        <Kpi icon="bi bi-folder2-open" label={t("investorDashboard.overview.documents")} value={documents} note={t("investorDashboard.overview.registeredDocument")} />
       </div>
 
-      <div className="investor-dashboard-card investor-dashboard-activity-card">
-        <div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{t("investorDashboard.overview.activity")}</span><h2>{t("investorDashboard.overview.latestActivities")}</h2></div></div>
-        <div className="investor-dashboard-activity-list">
-          {activities.map((activity, index) => <div className="investor-dashboard-activity-item" key={`${activity.title}-${activity.date || ""}-${index}`}><div className="investor-dashboard-activity-icon"><i className={`bi ${activity.icon || "bi-clock-history"}`} /></div><div className="investor-dashboard-activity-content"><strong>{activity.title}</strong><span>{activity.text}</span><small>{formatRelativeTime(activity.date)}</small></div></div>)}
-          {activities.length === 0 && <div className="investor-dashboard-activity-item"><div className="investor-dashboard-activity-icon"><i className="bi bi-clock-history" /></div><div className="investor-dashboard-activity-content"><strong>{t("investorDashboard.overview.noActivities")}</strong><span>{t("investorDashboard.overview.activityDescription")}</span></div></div>}
-        </div>
+      <div className="soft-investor-main-grid">
+        <article className="soft-investor-card soft-investor-project-card">
+          <div className="soft-investor-card-head">
+            <div><span>{t("investorDashboard.overview.projects")}</span><h2>{t("investorDashboard.overview.latestProjects")}</h2></div>
+            <Link to="/investor/dashboard/projects">{t("investorDashboard.overview.viewAll")}</Link>
+          </div>
+          <div className="soft-investor-table-wrap">
+            <table className="soft-investor-table">
+              <thead><tr><th>{t("investorDashboard.overview.projects")}</th><th>{t("investorDashboard.overview.investmentSector")}</th><th>{t("investorDashboard.overview.totalInvestments")}</th><th>{t("investorDashboard.overview.projectProgress")}</th></tr></thead>
+              <tbody>
+                {recentProjects.map((project) => {
+                  const status = getProjectStatus(project.statut);
+                  return <tr key={project.id}>
+                    <td><div className="soft-investor-project-name"><span><i className="bi bi-buildings" /></span><div><strong>{project.titre}</strong><small>{project.nombre_emplois} {t("investorDashboard.overview.positions")}</small></div></div></td>
+                    <td>{project.secteurs || t("investorDashboard.overview.investmentSector")}</td>
+                    <td>{formatAmount(project.montant_investissement)}</td>
+                    <td><div className="soft-investor-progress"><span>{status.label}</span><div><i style={{ width: `${project.statut === "realise" ? 100 : project.statut === "en_cours" ? 70 : project.statut === "approuve" ? 50 : 25}%` }} /></div></div></td>
+                  </tr>;
+                })}
+                {!recentProjects.length && <tr><td colSpan={4} className="soft-investor-empty">{t("investorDashboard.overview.noProjects")}</td></tr>}
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article className="soft-investor-card soft-investor-progress-card">
+          <div className="soft-investor-card-head"><div><span>{t("investorDashboard.overview.investments")}</span><h2>{t("investorDashboard.overview.investmentSummary")}</h2></div></div>
+          <div className="soft-investor-big-number"><small>{t("investorDashboard.overview.totalInvestments")}</small><strong>{formatAmount(stats?.total_investment)}</strong></div>
+          <div className="soft-investor-progress-row"><div className="soft-investor-ring green"><b>{investmentRate}%</b></div><div><strong>{t("investorDashboard.overview.completed")}</strong><span>{completedInvestments} / {totalInvestments}</span></div></div>
+          <div className="soft-investor-progress-row"><div className="soft-investor-ring gold"><b>{projectRate}%</b></div><div><strong>{t("investorDashboard.overview.projectProgress")}</strong><span>{activeProjects} {t("investorDashboard.overview.activeProjects")}</span></div></div>
+          <div className="soft-investor-mini-stats"><div><span>{t("investorDashboard.overview.totalOperations")}</span><b>{totalInvestments}</b></div><div><span>{t("investorDashboard.overview.activeInvestments")}</span><b>{activeInvestments}</b></div></div>
+        </article>
+
+        <article className="soft-investor-card soft-investor-orders-card">
+          <div className="soft-investor-card-head"><div><span>{t("investorDashboard.overview.activity")}</span><h2>{t("investorDashboard.overview.latestActivities")}</h2></div><Link to="/investor/dashboard/notifications">{t("investorDashboard.overview.viewAll")}</Link></div>
+          <div className="soft-investor-orders">
+            {recentActivities.map((activity, index) => <div className="soft-investor-order" key={`${activity.title}-${index}`}><span className="soft-investor-order-icon"><i className={`bi ${activity.icon || "bi-clock-history"}`} /></span><div><strong>{activity.title}</strong><p>{activity.text}</p><small>{formatRelativeTime(activity.date)}</small></div></div>)}
+            {!recentActivities.length && <div className="soft-investor-empty">{t("investorDashboard.overview.noActivities")}</div>}
+          </div>
+        </article>
+
+        <article className="soft-investor-card soft-investor-analytics-card">
+          <div className="soft-investor-card-head"><div><span>AAPI</span><h2>{t("investorDashboard.overview.projectProgress")}</h2></div><span className="soft-investor-growth">+{projectRate}%</span></div>
+          <div className="soft-investor-bars" aria-hidden="true"><i style={{ height: "38%" }} /><i style={{ height: "52%" }} /><i style={{ height: "44%" }} /><i style={{ height: "68%" }} /><i style={{ height: "58%" }} /><i style={{ height: `${Math.max(20, projectRate)}%` }} /><i style={{ height: "82%" }} /></div>
+          <div className="soft-investor-chart-labels"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span></div>
+        </article>
       </div>
-    </div>
-  </section>;
+    </section>
+  );
 }
