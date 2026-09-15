@@ -28,12 +28,12 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
 .administrator-shell .soft-admin-profile{flex:0 0 auto;min-width:0}
 .administrator-shell .soft-admin-icon-button{flex:0 0 auto}
 
-/* Data toolbar: one exact spacing system for search, filter and reset in RTL. */
-.administrator-shell .soft-data-toolbar{display:grid!important;grid-template-columns:minmax(0,1fr) 170px 118px!important;direction:rtl!important;align-items:center!important;column-gap:16px!important;row-gap:12px!important;width:calc(100% - 48px)!important;max-width:none!important;margin:0 24px 18px!important;padding:0!important;box-sizing:border-box!important}
+/* Data toolbar — fixed 42px controls and one identical 12px spacing system. */
+.administrator-shell .soft-data-toolbar{display:grid!important;grid-template-columns:minmax(0,1fr) 170px 118px!important;direction:rtl!important;align-items:center!important;column-gap:12px!important;row-gap:12px!important;width:calc(100% - 48px)!important;max-width:none!important;margin:0 24px 18px!important;padding:0!important;box-sizing:border-box!important}
 .administrator-shell .soft-data-toolbar .soft-data-search{grid-column:auto!important;width:100%!important;min-width:0!important;max-width:none!important;height:42px!important;flex:none!important;margin:0!important}
-.administrator-shell .soft-data-toolbar .soft-data-filter{grid-column:auto!important;width:170px!important;min-width:170px!important;max-width:170px!important;height:42px!important;flex:none!important;margin:0!important;padding:0!important}
+.administrator-shell .soft-data-toolbar .soft-data-filter{grid-column:auto!important;width:170px!important;min-width:170px!important;max-width:170px!important;height:42px!important;min-height:42px!important;flex:none!important;margin:0!important;padding:0!important}
 .administrator-shell .soft-data-toolbar .soft-data-filter select,.administrator-shell .soft-data-toolbar select{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:42px!important;min-height:42px!important;margin:0!important;padding:0 12px!important;box-sizing:border-box!important}
-.administrator-shell .soft-data-toolbar .soft-data-filter-button{grid-column:auto!important;width:118px!important;min-width:118px!important;max-width:118px!important;height:42px!important;flex:none!important;margin:0!important;box-sizing:border-box!important}
+.administrator-shell .soft-data-toolbar .soft-data-filter-button{grid-column:auto!important;width:118px!important;min-width:118px!important;max-width:118px!important;height:42px!important;min-height:42px!important;flex:none!important;margin:0!important;box-sizing:border-box!important}
 
 @media (max-width:1200px){
  .administrator-shell .admin-navbar{width:250px!important}
