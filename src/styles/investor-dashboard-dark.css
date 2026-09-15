@@ -61,5 +61,3 @@ body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-primary-btn
 body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-investment-total{border-bottom-color:#dfe8e3!important}
 body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-investment-total span{color:#66736d!important}
 body.aapi-investor-dark .investor-dashboard-page .investor-dashboard-investment-total strong{color:#087443!important}
-
-@media(max-width:460px){.aapi-investor-dark .investor-dashboard-topbar-actions{gap:7px}}
