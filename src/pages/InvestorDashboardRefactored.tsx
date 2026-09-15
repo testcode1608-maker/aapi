@@ -23,6 +23,7 @@ import InvestorMessagesSection from "../components/investor/InvestorMessagesSect
 import InvestorNotificationsSection from "../components/investor/InvestorNotificationsSection";
 import InvestorProfileSection from "../components/investor/InvestorProfileSection";
 import InvestorSettingsSection from "../components/investor/InvestorSettingsSection";
+import InvestorFormModal from "../components/investor/InvestorFormModal";
 import { useInvestorDashboard } from "../hooks/useInvestorDashboard";
 import { useCreateInvestorProject } from "../hooks/useCreateInvestorProject";
 import { useCreateInvestorInvestment } from "../hooks/useCreateInvestorInvestment";
@@ -40,6 +41,8 @@ export default function InvestorDashboardRefactored() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [projectFormOpen, setProjectFormOpen] = useState(false);
+  const [investmentFormOpen, setInvestmentFormOpen] = useState(false);
   const { user, profile, stats, projects, investments, requests, documents, notifications, activities, projectCompletion, completedInvestments, loading, error, reload } = useInvestorDashboard();
   const createProject = useCreateInvestorProject(reload);
   const createInvestment = useCreateInvestorInvestment(projects, reload);
@@ -54,8 +57,20 @@ export default function InvestorDashboardRefactored() {
 
   let content: ReactNode;
   switch (section) {
-    case "projects": content = <><InvestorProjectList projects={projects} /><InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} /></>; break;
-    case "investments": content = <><InvestorInvestmentsSection investments={investments} /><InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} /></>; break;
+    case "projects":
+      content = <>
+        <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">المشاريع</span><h1>مشاريعي الاستثمارية</h1><p>إدارة ومتابعة مشاريعك الاستثمارية.</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setProjectFormOpen(true)}><i className="bi bi-plus-circle" /> إضافة مشروع</button></div>
+        <InvestorProjectList projects={projects} />
+        <InvestorFormModal open={projectFormOpen} onClose={() => setProjectFormOpen(false)}><InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} /></InvestorFormModal>
+      </>;
+      break;
+    case "investments":
+      content = <>
+        <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الاستثمارات</span><h1>استثماراتي</h1><p>متابعة استثماراتك وتسجيل عمليات استثمار جديدة.</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setInvestmentFormOpen(true)}><i className="bi bi-plus-circle" /> إضافة استثمار</button></div>
+        <InvestorInvestmentsSection investments={investments} />
+        <InvestorFormModal open={investmentFormOpen} onClose={() => setInvestmentFormOpen(false)}><InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} /></InvestorFormModal>
+      </>;
+      break;
     case "requests": content = <InvestorRequestsSection requests={requests} projects={projects} reload={reload} />; break;
     case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
     case "messages": content = <InvestorMessagesSection />; break;
