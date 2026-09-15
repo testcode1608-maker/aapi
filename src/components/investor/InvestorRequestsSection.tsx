@@ -3,6 +3,7 @@ import type { DashboardProject, DashboardRequest } from "../../types/investorDas
 import { formatDate, getRequestStatus } from "../../utils/investorDashboard";
 import { useCreateInvestorRequest } from "../../hooks/useCreateInvestorRequest";
 import InvestorRequestCreateForm from "./InvestorRequestCreateForm";
+import InvestorFormModal from "./InvestorFormModal";
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/investor-requests.css";
 
@@ -15,7 +16,7 @@ interface Props {
 export default function InvestorRequestsSection({ requests, projects, reload }: Props) {
   const { t } = useTranslation();
   const createRequest = useCreateInvestorRequest(projects, reload);
-  const [showForm, setShowForm] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const tr = (key: string) => t(`investorDashboard.requests.${key}`);
 
   return (
@@ -26,9 +27,9 @@ export default function InvestorRequestsSection({ requests, projects, reload }: 
           <h1>{tr("title")}</h1>
           <p>{tr("description")}</p>
         </div>
-        <button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowForm((value) => !value)}>
-          <i className={showForm ? "bi bi-dash-circle" : "bi bi-plus-circle"} />
-          {showForm ? tr("hideForm") : tr("newRequest")}
+        <button type="button" className="investor-dashboard-primary-btn" onClick={() => setShowForm(true)}>
+          <i className="bi bi-plus-circle" />
+          {tr("newRequest")}
         </button>
       </div>
 
@@ -54,28 +55,15 @@ export default function InvestorRequestsSection({ requests, projects, reload }: 
                   </div>
                 </div>
                 {request.description && <p className="investor-request-description">{request.description}</p>}
-                {request.reponse && (
-                  <div className="investor-request-response">
-                    <strong>{tr("adminResponse")}</strong>
-                    <span>{request.reponse}</span>
-                  </div>
-                )}
+                {request.reponse && <div className="investor-request-response"><strong>{tr("adminResponse")}</strong><span>{request.reponse}</span></div>}
               </div>
             </div>
           );
         })}
-
-        {requests.length === 0 && (
-          <div className="investor-dashboard-card investor-dashboard-projects-card">
-            <div className="investor-dashboard-card-header">
-              <div><span className="investor-dashboard-card-overline">{tr("list")}</span><h2>{tr("empty")}</h2></div>
-            </div>
-            <p>{tr("emptyDescription")}</p>
-          </div>
-        )}
+        {requests.length === 0 && <div className="investor-dashboard-card investor-dashboard-projects-card"><div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{tr("list")}</span><h2>{tr("empty")}</h2></div></div><p>{tr("emptyDescription")}</p></div>}
       </div>
 
-      {showForm && (
+      <InvestorFormModal open={showForm} onClose={() => setShowForm(false)}>
         <InvestorRequestCreateForm
           form={createRequest.form}
           setForm={createRequest.setForm}
@@ -87,7 +75,7 @@ export default function InvestorRequestsSection({ requests, projects, reload }: 
           onSubmit={createRequest.submit}
           onReset={createRequest.resetForm}
         />
-      )}
+      </InvestorFormModal>
     </section>
   );
 }
