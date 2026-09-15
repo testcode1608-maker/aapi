@@ -32,20 +32,6 @@ export default function InvestorRequestsSection({ requests, projects, reload }: 
         </button>
       </div>
 
-      {showForm && (
-        <InvestorRequestCreateForm
-          form={createRequest.form}
-          setForm={createRequest.setForm}
-          setDocuments={createRequest.setDocuments}
-          projects={createRequest.eligibleProjects}
-          creating={createRequest.creating}
-          error={createRequest.error}
-          success={createRequest.success}
-          onSubmit={createRequest.submit}
-          onReset={createRequest.resetForm}
-        />
-      )}
-
       <div className="investor-dashboard-grid">
         {requests.map((request) => {
           const status = getRequestStatus(request.statut);
@@ -88,6 +74,20 @@ export default function InvestorRequestsSection({ requests, projects, reload }: 
           </div>
         )}
       </div>
+
+      {showForm && (
+        <InvestorRequestCreateForm
+          form={createRequest.form}
+          setForm={createRequest.setForm}
+          setDocuments={createRequest.setDocuments}
+          projects={createRequest.eligibleProjects}
+          creating={createRequest.creating}
+          error={createRequest.error}
+          success={createRequest.success}
+          onSubmit={createRequest.submit}
+          onReset={createRequest.resetForm}
+        />
+      )}
     </section>
   );
 }
