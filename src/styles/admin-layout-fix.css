@@ -1,46 +1,68 @@
-/* AAPI Admin — Soft UI layout / zoom alignment fixes */
-html,body,#root{width:100%;min-width:0;overflow-x:hidden}
-.administrator-shell{position:relative;display:block;width:100%;min-height:100vh;overflow-x:clip}
+/* AAPI Admin — Soft UI layout / browser-zoom stability */
+html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
+.administrator-shell{position:relative;display:block;width:100%;min-height:100vh;min-width:0;overflow-x:clip}
+.administrator-shell *{box-sizing:border-box}
+.administrator-shell img,.administrator-shell svg{max-width:100%}
+
+/* Fixed RTL sidebar + fluid content. Using minmax(0,1fr) prevents zoom from pushing cards sideways. */
 .administrator-shell .admin-navbar{position:fixed!important;top:0;right:0;bottom:0;left:auto;width:264px!important;height:100vh;z-index:100;box-sizing:border-box}
-.administrator-shell .admin-main-content{width:calc(100% - 264px);margin-right:264px;margin-left:0;min-width:0;max-width:none;box-sizing:border-box}
-.administrator-shell .soft-admin-topbar{width:100%;box-sizing:border-box;margin:0;min-width:0}
+.administrator-shell .admin-main-content{display:block;width:calc(100% - 264px);margin-right:264px;margin-left:0;min-width:0;max-width:none;box-sizing:border-box}
+.administrator-shell .soft-admin-topbar{display:flex;width:100%;min-width:0;margin:0;padding-inline:clamp(16px,2vw,30px);box-sizing:border-box}
+.administrator-shell .soft-admin-topbar-actions{display:flex;align-items:center;justify-content:flex-start;gap:clamp(8px,1vw,14px);min-width:0;flex:1}
+.administrator-shell .soft-admin-breadcrumb{flex:1 1 auto;min-width:0;overflow:hidden}
+.administrator-shell .soft-admin-search{flex:0 1 clamp(190px,22vw,300px);min-width:150px;box-sizing:border-box}
 .administrator-shell .soft-ui-dashboard{width:100%;min-width:0;box-sizing:border-box}
-/* The topbar is owned by Administrator.tsx; prevent the dashboard component from creating a second offset bar. */
+/* Administrator.tsx owns the topbar; prevent a dashboard child topbar from adding a second offset. */
 .administrator-shell .soft-ui-dashboard>.soft-admin-topbar{display:none!important}
-.administrator-shell .admin-dashboard-header,.administrator-shell .admin-dashboard-main{width:100%;box-sizing:border-box;min-width:0}
-.administrator-shell .admin-dashboard-main{max-width:1600px;margin-inline:auto}
-.administrator-shell .admin-kpi-grid,.administrator-shell .soft-ui-summary-grid,.administrator-shell .admin-analytics-grid{min-width:0}
-.administrator-shell .soft-ui-summary-grid{grid-template-columns:minmax(0,1.45fr) minmax(300px,.9fr)}
-.administrator-shell .admin-analytics-grid{grid-template-columns:minmax(0,1.35fr) minmax(280px,.85fr)}
-.administrator-shell .soft-ui-kpi,.administrator-shell .admin-panel,.administrator-shell .soft-ui-table-card,.administrator-shell .soft-ui-orders{min-width:0;box-sizing:border-box}
-.administrator-shell .admin-project-table-wrapper,.administrator-shell .admin-data-table-wrapper,.administrator-shell .soft-data-table-wrap{width:100%;max-width:100%;overflow-x:auto}
-.administrator-shell table{max-width:100%}
-.administrator-shell .soft-admin-topbar-actions{min-width:0;flex-wrap:nowrap}
-.administrator-shell .soft-admin-breadcrumb{flex:1;min-width:0}
-.administrator-shell .soft-admin-search{flex:0 1 260px;min-width:160px;box-sizing:border-box}
+
+/* Fluid dashboard container */
+.administrator-shell .admin-dashboard-header,.administrator-shell .admin-dashboard-main{width:100%;min-width:0;box-sizing:border-box}
+.administrator-shell .admin-dashboard-main{max-width:1600px;margin-inline:auto;padding-inline:clamp(12px,2vw,30px)}
+.administrator-shell .admin-dashboard-header-content{min-width:0}
+.administrator-shell .admin-dashboard-header-content>*{min-width:0;max-width:100%}
+
+/* Cards never acquire a fixed minimum width at browser zoom. */
+.administrator-shell .admin-kpi-grid,.administrator-shell .soft-ui-kpi-grid,.administrator-shell .soft-ui-summary-grid,.administrator-shell .admin-analytics-grid,.administrator-shell .soft-data-stat-grid{min-width:0}
+.administrator-shell .soft-ui-kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.administrator-shell .soft-ui-summary-grid{grid-template-columns:minmax(0,1.45fr) minmax(260px,.9fr);gap:clamp(12px,1.5vw,20px)}
+.administrator-shell .admin-analytics-grid{grid-template-columns:minmax(0,1.35fr) minmax(260px,.85fr);gap:clamp(12px,1.5vw,20px)}
+.administrator-shell .soft-ui-kpi,.administrator-shell .admin-panel,.administrator-shell .soft-ui-chart-card,.administrator-shell .soft-ui-overview-card,.administrator-shell .soft-ui-health,.administrator-shell .soft-ui-table-card,.administrator-shell .soft-ui-orders{min-width:0;max-width:100%;box-sizing:border-box}
+
+/* Tables scroll inside their own card instead of moving the whole page. */
+.administrator-shell .admin-project-table-wrapper,.administrator-shell .admin-data-table-wrapper,.administrator-shell .soft-data-table-wrap{display:block;width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.administrator-shell table{width:100%;max-width:100%;border-collapse:collapse}
+.administrator-shell th,.administrator-shell td{max-width:280px;overflow:hidden;text-overflow:ellipsis}
+
+/* Dashboard chart areas stay proportional instead of growing with content. */
+.administrator-shell .soft-ui-chart{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+.administrator-shell .soft-ui-bars,.administrator-shell .soft-ui-bar-wrap{min-width:0}
+
+/* Topbar controls remain aligned while the viewport becomes narrower through zoom. */
+.administrator-shell .soft-admin-profile{flex:0 0 auto;min-width:0}
+.administrator-shell .soft-admin-icon-button{flex:0 0 auto}
+
 @media (max-width:1200px){
- .administrator-shell .admin-dashboard-main{padding-inline:20px}
- .administrator-shell .soft-ui-summary-grid{grid-template-columns:minmax(0,1.2fr) minmax(270px,.8fr)}
- .administrator-shell .soft-admin-topbar{padding-inline:20px}
-}
-@media (max-width:1000px){
  .administrator-shell .admin-navbar{width:250px!important}
  .administrator-shell .admin-main-content{width:calc(100% - 250px);margin-right:250px}
- .administrator-shell .soft-ui-summary-grid,.administrator-shell .admin-analytics-grid{grid-template-columns:1fr}
- .administrator-shell .soft-admin-search{width:190px}
+ .administrator-shell .soft-ui-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .administrator-shell .soft-ui-summary-grid,.administrator-shell .admin-analytics-grid{grid-template-columns:minmax(0,1fr)}
+ .administrator-shell .soft-admin-topbar{padding-inline:20px}
 }
+
 @media (max-width:800px){
  .administrator-shell .admin-navbar{transform:translateX(110%);transition:transform .25s ease;width:min(290px,86vw)!important}
  .administrator-shell.admin-sidebar-open .admin-navbar{transform:translateX(0)}
- .administrator-shell .admin-main-content{width:100%;margin-right:0}
+ .administrator-shell .admin-main-content{width:100%;margin-right:0;padding-top:58px}
  .administrator-shell .admin-dashboard-main{padding-inline:16px}
  .administrator-shell .soft-admin-topbar{min-height:64px;padding:10px 16px;gap:12px}
  .administrator-shell .soft-admin-breadcrumb{display:none}
  .administrator-shell .soft-admin-topbar-actions{width:100%;justify-content:flex-end}
- .administrator-shell .soft-admin-search{flex:1;width:auto;min-width:0}
+ .administrator-shell .soft-admin-search{flex:1 1 auto;width:auto;min-width:0;max-width:none}
  .administrator-shell .soft-admin-profile div{display:none}
  .administrator-shell .soft-ui-kpi-grid,.administrator-shell .soft-data-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .administrator-shell .admin-toolbar{max-width:100%}
 }
+
 @media (max-width:520px){
  .administrator-shell .admin-dashboard-main{padding-inline:12px}
  .administrator-shell .soft-ui-kpi-grid,.administrator-shell .soft-data-stat-grid{grid-template-columns:1fr}
@@ -49,7 +71,11 @@ html,body,#root{width:100%;min-width:0;overflow-x:hidden}
  .administrator-shell .soft-admin-icon-button{width:36px;height:36px}
  .administrator-shell .soft-admin-profile>span{width:32px;height:32px}
  .administrator-shell .admin-dashboard-header-content{gap:12px;flex-wrap:wrap}
+ .administrator-shell th,.administrator-shell td{max-width:180px}
 }
-/* Browser zoom safety: never let cards/table content force the page wider. */
-.administrator-shell *{box-sizing:border-box}
-.administrator-shell img,.administrator-shell svg{max-width:100%}
+
+/* Browser zoom safety: text can wrap, but cards/layout must not create horizontal drift. */
+@media (min-width:801px){
+ .administrator-shell .admin-dashboard-header-content{display:flex;align-items:flex-start;justify-content:space-between;gap:clamp(16px,2vw,28px)}
+ .administrator-shell .admin-dashboard-header-content>*{flex:0 1 auto}
+}
