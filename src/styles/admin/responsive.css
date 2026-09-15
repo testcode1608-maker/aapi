@@ -110,10 +110,6 @@
     min-width: 0;
     width: 100%;
   }
-
-  .administrator-shell .admin-project-table {
-    min-width: 700px;
-  }
 }
 
 @media (max-width: 480px) {
@@ -167,10 +163,6 @@
   .administrator-shell .admin-recent-projects,
   .administrator-shell .admin-project-table-card {
     border-radius: 14px;
-  }
-
-  .administrator-shell .admin-project-table {
-    min-width: 620px;
   }
 
   .administrator-shell .admin-status-badge {
