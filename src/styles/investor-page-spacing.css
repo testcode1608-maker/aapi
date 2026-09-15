@@ -1,0 +1,28 @@
+/* AAPI Investor — consistent vertical spacing between lists and forms */
+.investor-admin-copy .investor-dashboard-grid + .investor-project-create-form,
+.investor-admin-copy .investor-dashboard-grid + .investor-request-create-card,
+.investor-admin-copy .investor-dashboard-grid + .investor-investment-create-form,
+.investor-admin-copy .investor-dashboard-grid + section[class*="create"],
+.investor-admin-copy .investor-dashboard-grid + div[class*="create"] {
+  margin-top: 28px !important;
+}
+
+.investor-admin-copy .investor-dashboard-grid {
+  row-gap: 20px !important;
+}
+
+.investor-admin-copy .investor-request-create-card,
+.investor-admin-copy .investor-project-create-form,
+.investor-admin-copy .investor-investment-create-form {
+  margin-bottom: 28px !important;
+}
+
+@media (max-width: 760px) {
+  .investor-admin-copy .investor-dashboard-grid + .investor-project-create-form,
+  .investor-admin-copy .investor-dashboard-grid + .investor-request-create-card,
+  .investor-admin-copy .investor-dashboard-grid + .investor-investment-create-form,
+  .investor-admin-copy .investor-dashboard-grid + section[class*="create"],
+  .investor-admin-copy .investor-dashboard-grid + div[class*="create"] {
+    margin-top: 20px !important;
+  }
+}
