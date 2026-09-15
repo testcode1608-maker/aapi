@@ -1,0 +1,94 @@
+/* AAPI — Investor dashboard uses the exact same global colors as Admin */
+.investor-admin-copy{
+  --aapi-bg:#090a0c;
+  --aapi-surface:#111317;
+  --aapi-surface-2:#15181c;
+  --aapi-border:#252930;
+  --aapi-border-soft:#1d2026;
+  --aapi-text:#f3f5f4;
+  --aapi-muted:#7f8791;
+  --aapi-green:#087443;
+  background:var(--aapi-bg)!important;
+  color:var(--aapi-text)!important;
+}
+.investor-admin-copy .soft-investor-kpi,
+.investor-admin-copy .soft-investor-card{
+  background:var(--aapi-surface)!important;
+  border-color:var(--aapi-border)!important;
+  color:var(--aapi-text)!important;
+}
+.investor-admin-copy .soft-investor-card-head{border-bottom-color:var(--aapi-border-soft)!important}
+.investor-admin-copy .soft-investor-page-head h1,
+.investor-admin-copy .soft-investor-card-head h2,
+.investor-admin-copy .soft-investor-kpi-body strong,
+.investor-admin-copy .soft-investor-project-name strong,
+.investor-admin-copy .soft-investor-progress-row strong,
+.investor-admin-copy .soft-investor-mini-stats b,
+.investor-admin-copy .soft-investor-order strong,
+.investor-admin-copy .soft-investor-big-number strong{color:var(--aapi-text)!important}
+.investor-admin-copy .soft-investor-page-head p,
+.investor-admin-copy .soft-investor-eyebrow,
+.investor-admin-copy .soft-investor-card-head span,
+.investor-admin-copy .soft-investor-kpi-body span,
+.investor-admin-copy .soft-investor-kpi-body small,
+.investor-admin-copy .soft-investor-progress>span,
+.investor-admin-copy .soft-investor-progress-row span,
+.investor-admin-copy .soft-investor-mini-stats span,
+.investor-admin-copy .soft-investor-order p,
+.investor-admin-copy .soft-investor-order small,
+.investor-admin-copy .soft-investor-big-number small,
+.investor-admin-copy .soft-investor-chart-labels{color:var(--aapi-muted)!important}
+.investor-admin-copy .soft-investor-table th{background:var(--aapi-surface-2)!important;color:var(--aapi-muted)!important;border-bottom-color:var(--aapi-border)!important}
+.investor-admin-copy .soft-investor-table td{background:var(--aapi-surface)!important;color:#b9c0bd!important;border-bottom-color:var(--aapi-border-soft)!important}
+.investor-admin-copy .soft-investor-progress>div{background:#252930!important}
+.investor-admin-copy .soft-investor-mini-stats{border-color:var(--aapi-border)!important}
+.investor-admin-copy .soft-investor-mini-stats div+div{border-right-color:var(--aapi-border)!important}
+.investor-admin-copy .soft-investor-order{border-bottom-color:var(--aapi-border-soft)!important}
+.investor-admin-copy .soft-investor-ring:after{background:var(--aapi-surface)!important}
+.investor-admin-copy .soft-investor-ring{background:conic-gradient(#087443 0 70%,#252930 70%)!important}
+.investor-admin-copy .soft-investor-ring.gold{background:conic-gradient(#c9a227 0 55%,#252930 55%)!important}
+
+/* LIGHT — same AAPI light palette used by Admin */
+body.aapi-admin-light .investor-admin-copy{
+  --aapi-bg:#f3f6f4;
+  --aapi-surface:#fff;
+  --aapi-surface-2:#f8faf9;
+  --aapi-border:#dce5df;
+  --aapi-border-soft:#e7ece9;
+  --aapi-text:#17241d;
+  --aapi-muted:#68766e;
+  background:radial-gradient(circle at 72% 0,rgba(8,116,67,.06),transparent 28%),var(--aapi-bg)!important;
+  color:var(--aapi-text)!important;
+}
+body.aapi-admin-light .investor-admin-copy .soft-investor-kpi,
+body.aapi-admin-light .investor-admin-copy .soft-investor-card{background:var(--aapi-surface)!important;border-color:var(--aapi-border)!important;box-shadow:0 10px 28px rgba(25,70,48,.06)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-card-head{border-bottom-color:var(--aapi-border-soft)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-page-head h1,
+body.aapi-admin-light .investor-admin-copy .soft-investor-card-head h2,
+body.aapi-admin-light .investor-admin-copy .soft-investor-kpi-body strong,
+body.aapi-admin-light .investor-admin-copy .soft-investor-project-name strong,
+body.aapi-admin-light .investor-admin-copy .soft-investor-progress-row strong,
+body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats b,
+body.aapi-admin-light .investor-admin-copy .soft-investor-order strong,
+body.aapi-admin-light .investor-admin-copy .soft-investor-big-number strong{color:var(--aapi-text)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-page-head p,
+body.aapi-admin-light .investor-admin-copy .soft-investor-eyebrow,
+body.aapi-admin-light .investor-admin-copy .soft-investor-card-head span,
+body.aapi-admin-light .investor-admin-copy .soft-investor-kpi-body span,
+body.aapi-admin-light .investor-admin-copy .soft-investor-kpi-body small,
+body.aapi-admin-light .investor-admin-copy .soft-investor-progress>span,
+body.aapi-admin-light .investor-admin-copy .soft-investor-progress-row span,
+body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats span,
+body.aapi-admin-light .investor-admin-copy .soft-investor-order p,
+body.aapi-admin-light .investor-admin-copy .soft-investor-order small,
+body.aapi-admin-light .investor-admin-copy .soft-investor-big-number small,
+body.aapi-admin-light .investor-admin-copy .soft-investor-chart-labels{color:var(--aapi-muted)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-table th{background:#f3f7f5!important;color:#68766e!important;border-bottom-color:var(--aapi-border)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-table td{background:#fff!important;color:#506057!important;border-bottom-color:var(--aapi-border-soft)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-progress>div{background:#e1e9e4!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats{border-color:var(--aapi-border)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats div+div{border-right-color:var(--aapi-border)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-order{border-bottom-color:var(--aapi-border-soft)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-ring:after{background:#fff!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-ring{background:conic-gradient(#087443 0 70%,#dfe8e2 70%)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-ring.gold{background:conic-gradient(#c9a227 0 55%,#dfe8e2 55%)!important}
