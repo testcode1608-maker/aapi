@@ -1,0 +1,87 @@
+/* AAPI Admin — Soft UI visual refinement */
+/* Inspired by the Soft UI layout language, with AAPI colors and original styling. */
+
+.administrator-shell .soft-ui-dashboard{background:radial-gradient(circle at 82% -8%,rgba(8,116,67,.14),transparent 34%),#090a0c!important}
+.administrator-shell .admin-dashboard-main{padding-top:24px;padding-bottom:44px}
+
+/* Header: compact, balanced, and resistant to zoom-induced wrapping. */
+.administrator-shell .admin-dashboard-header{margin-bottom:22px}
+.administrator-shell .admin-dashboard-header-content{padding:0 2px}
+.administrator-shell .admin-dashboard-welcome{min-width:0}
+.administrator-shell .admin-dashboard-welcome h1{margin:0 0 6px;font-size:clamp(22px,2.1vw,30px);line-height:1.2;letter-spacing:-.5px}
+.administrator-shell .admin-dashboard-eyebrow{margin:0 0 7px;font-size:9px;font-weight:800;letter-spacing:1.1px;color:#75807a}
+.administrator-shell .admin-dashboard-welcome p{max-width:620px;margin:0;color:#69737b;font-size:10px;line-height:1.8}
+
+/* KPI row — equal columns and consistent vertical rhythm. */
+.administrator-shell .soft-ui-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:20px}
+.administrator-shell .soft-ui-kpi{position:relative;min-height:154px;padding:20px;border:1px solid rgba(255,255,255,.055);overflow:hidden}
+.administrator-shell .soft-ui-kpi::after{content:"";position:absolute;width:100px;height:100px;left:-38px;bottom:-52px;border-radius:50%;background:rgba(201,162,39,.035);pointer-events:none}
+.administrator-shell .soft-ui-kpi .admin-kpi-content{min-width:0}
+.administrator-shell .soft-ui-kpi .admin-kpi-content span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.administrator-shell .soft-ui-kpi .admin-kpi-content strong{display:block;margin-top:2px;font-size:clamp(20px,2vw,27px);line-height:1.15}
+
+/* Main analytics split. */
+.administrator-shell .soft-ui-summary-grid{display:grid;grid-template-columns:minmax(0,1.48fr) minmax(290px,.92fr);gap:16px;margin-bottom:16px}
+.administrator-shell .soft-ui-chart-card,.administrator-shell .soft-ui-overview-card{min-height:318px;border:1px solid rgba(255,255,255,.055);border-radius:18px;overflow:hidden}
+.administrator-shell .soft-ui-chart-card .admin-panel-header,.administrator-shell .soft-ui-overview-card .admin-panel-header{padding:19px 20px}
+.administrator-shell .soft-ui-chart{height:232px;margin:0 18px 18px;padding:18px 10px 4px}
+.administrator-shell .soft-ui-bars{gap:clamp(7px,1vw,13px)}
+.administrator-shell .soft-ui-bar-wrap{gap:8px}
+.administrator-shell .soft-ui-bar{width:min(38px,58%);border-radius:8px 8px 3px 3px}
+
+/* Circular project overview remains centered at every width. */
+.administrator-shell .soft-ui-overview-card .admin-circular-stats{min-width:0;display:flex;align-items:center;justify-content:center;padding:34px 18px;gap:18px}
+.administrator-shell .soft-ui-overview-card .admin-circular-progress{flex:0 0 126px}
+.administrator-shell .soft-ui-overview-card .admin-circular-info{min-width:0;max-width:150px}
+
+/* Health + recent projects use the same card language. */
+.administrator-shell .soft-ui-health{margin-bottom:16px;border:1px solid rgba(255,255,255,.055);border-radius:18px;overflow:hidden}
+.administrator-shell .soft-ui-health-item{min-width:0;padding:15px 18px}
+.administrator-shell .soft-ui-health-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.administrator-shell .soft-ui-table-card,.administrator-shell .soft-ui-orders{border:1px solid rgba(255,255,255,.055)}
+.administrator-shell .soft-ui-table-card{overflow:hidden}
+.administrator-shell .soft-ui-table-card>header,.administrator-shell .soft-ui-orders-head{min-height:62px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.administrator-shell .soft-ui-table-card>header>*,.administrator-shell .soft-ui-orders-head>*{min-width:0}
+
+/* Orders / operations rows: stable columns at zoom. */
+.administrator-shell .soft-ui-order{min-width:0}
+.administrator-shell .soft-ui-order time{flex:0 0 auto}
+
+/* Do not let data-management pages inherit excessive dashboard spacing. */
+.administrator-shell .soft-data-main{padding-bottom:44px!important}
+.administrator-shell .soft-data-stat-grid{gap:16px}
+.administrator-shell .soft-data-panel{border-radius:18px}
+
+/* Tablet. */
+@media(max-width:1200px){
+ .administrator-shell .soft-ui-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .administrator-shell .soft-ui-summary-grid{grid-template-columns:1fr}
+ .administrator-shell .soft-ui-chart-card,.administrator-shell .soft-ui-overview-card{min-height:300px}
+}
+
+/* Mobile. */
+@media(max-width:800px){
+ .administrator-shell .admin-dashboard-main{padding-top:18px;padding-bottom:32px}
+ .administrator-shell .admin-dashboard-header{margin-bottom:18px}
+ .administrator-shell .admin-dashboard-welcome h1{font-size:24px}
+ .administrator-shell .soft-ui-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .administrator-shell .soft-ui-kpi{min-height:138px;padding:16px}
+ .administrator-shell .soft-ui-summary-grid{gap:12px}
+ .administrator-shell .soft-ui-chart-card,.administrator-shell .soft-ui-overview-card{min-height:280px}
+ .administrator-shell .soft-ui-chart{height:200px;margin-inline:12px}
+ .administrator-shell .soft-ui-overview-card .admin-circular-stats{padding:28px 14px}
+}
+
+@media(max-width:520px){
+ .administrator-shell .soft-ui-kpi-grid{grid-template-columns:1fr}
+ .administrator-shell .soft-ui-kpi{min-height:128px}
+ .administrator-shell .soft-ui-chart-card,.administrator-shell .soft-ui-overview-card{min-height:260px}
+ .administrator-shell .soft-ui-chart{height:178px}
+ .administrator-shell .soft-ui-overview-card .admin-circular-stats{flex-direction:column;text-align:center;padding:24px 12px}
+ .administrator-shell .soft-ui-overview-card .admin-circular-info{max-width:220px}
+ .administrator-shell .soft-ui-health-item{grid-template-columns:minmax(0,1fr) auto auto}
+}
+
+/* Light theme keeps the same geometry. */
+body.aapi-admin-light .administrator-shell .soft-ui-kpi,body.aapi-admin-light .administrator-shell .soft-ui-chart-card,body.aapi-admin-light .administrator-shell .soft-ui-overview-card,body.aapi-admin-light .administrator-shell .soft-ui-health,body.aapi-admin-light .administrator-shell .soft-ui-table-card,body.aapi-admin-light .administrator-shell .soft-ui-orders{border-color:#dce5df}
