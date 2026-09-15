@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
 import { Bell, Search } from "lucide-react";
@@ -28,18 +29,6 @@ import { useCreateInvestorInvestment } from "../hooks/useCreateInvestorInvestmen
 import { getUserFullName, getUserPhotoUrl } from "../utils/investorDashboard";
 import { useTranslation } from "../i18n/I18nProvider";
 
-const paths: Record<string, string> = {
-  dashboard: "/investor/dashboard",
-  projects: "/investor/dashboard/projects",
-  investments: "/investor/dashboard/investments",
-  requests: "/investor/dashboard/requests",
-  documents: "/investor/dashboard/documents",
-  messages: "/investor/dashboard/messages",
-  notifications: "/investor/dashboard/notifications",
-  profile: "/investor/dashboard/profile",
-  settings: "/investor/dashboard/settings",
-};
-
 const sectionNames: Record<string, string> = {
   dashboard: "لوحة التحكم",
   projects: "المشاريع",
@@ -56,7 +45,7 @@ export default function InvestorDashboardRefactored() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const {
     user, profile, stats, projects, investments, requests, documents,
@@ -69,9 +58,6 @@ export default function InvestorDashboardRefactored() {
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
   const current = sectionNames[section] ?? "لوحة التحكم";
-
-  const navClass = (name: string) => location.pathname === paths[name]
-    ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
 
   if (loading) return (
     <div className="administrator-shell investor-admin-copy" dir="rtl">
