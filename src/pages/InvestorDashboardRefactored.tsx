@@ -1,8 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
+import "../styles/main.css";
+import "../styles/admin-quick-theme.css";
+import "../styles/admin-theme.css";
+import "../styles/admin-soft-ui.css";
+import "../styles/admin-layout-fix.css";
+import "../styles/admin-navbar-overrides.css";
+import "../styles/admin-chart-canvas.css";
 import "../styles/investor/index.css";
-import InvestorDashboardSidebar from "../components/investor/InvestorDashboardSidebar";
-import InvestorDashboardTopbar from "../components/investor/InvestorDashboardTopbar";
+import "../styles/investor-admin-copy.css";
+import InvestorAdminNavbar from "../components/investor/InvestorAdminNavbar";
 import InvestorDashboardOverview from "../components/investor/InvestorDashboardOverview";
 import InvestorProjectCreateForm from "../components/investor/InvestorProjectCreateForm";
 import InvestorProjectList from "../components/investor/InvestorProjectList";
@@ -32,10 +39,23 @@ const paths: Record<string, string> = {
   settings: "/investor/dashboard/settings",
 };
 
+const sectionNames: Record<string, string> = {
+  dashboard: "لوحة التحكم",
+  projects: "المشاريع",
+  investments: "الاستثمارات",
+  requests: "الطلبات",
+  documents: "الوثائق",
+  messages: "الرسائل",
+  notifications: "الإشعارات",
+  profile: "الملف الشخصي",
+  settings: "الإعدادات",
+};
+
 export default function InvestorDashboardRefactored() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [sidebarOpen, setSidebarOpen] = [false, () => undefined] as const;
   const {
     user, profile, stats, projects, investments, requests, documents,
     notifications, activities, projectCompletion, completedInvestments,
@@ -46,27 +66,28 @@ export default function InvestorDashboardRefactored() {
   const section = location.pathname.split("/")[3] || "dashboard";
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
+  const current = sectionNames[section] ?? "لوحة التحكم";
   const navClass = (name: string) => location.pathname === paths[name]
     ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
-  const logout = () => {
-    localStorage.removeItem("aapi_user");
-    navigate("/login", { replace: true });
-  };
 
   if (loading) return (
-    <div className="investor-dashboard-loading investor-dashboard-rtl" dir="rtl">
-      <div className="investor-dashboard-loading-spinner" />
-      <p>{t("investorDashboard.loading")}</p>
+    <div className="administrator-shell investor-admin-copy" dir="rtl">
+      <div className="investor-dashboard-loading investor-dashboard-rtl" dir="rtl">
+        <div className="investor-dashboard-loading-spinner" />
+        <p>{t("investorDashboard.loading")}</p>
+      </div>
     </div>
   );
 
   if (error) return (
-    <div className="investor-dashboard-error-page investor-dashboard-rtl" dir="rtl">
-      <div className="investor-dashboard-error-card">
-        <i className="bi bi-exclamation-triangle" />
-        <h2>{t("investorDashboard.errorTitle")}</h2>
-        <p>{error}</p>
-        <button type="button" className="investor-dashboard-primary-btn" onClick={() => void reload()}>{t("common.retry")}</button>
+    <div className="administrator-shell investor-admin-copy" dir="rtl">
+      <div className="investor-dashboard-error-page investor-dashboard-rtl" dir="rtl">
+        <div className="investor-dashboard-error-card">
+          <i className="bi bi-exclamation-triangle" />
+          <h2>{t("investorDashboard.errorTitle")}</h2>
+          <p>{error}</p>
+          <button type="button" className="investor-dashboard-primary-btn" onClick={() => void reload()}>{t("common.retry")}</button>
+        </div>
       </div>
     </div>
   );
@@ -91,11 +112,25 @@ export default function InvestorDashboardRefactored() {
   }
 
   return (
-    <div className="investor-dashboard-page investor-dashboard-rtl" dir="rtl" data-language="ar">
-      <InvestorDashboardTopbar user={user} stats={stats} userPhotoUrl={userPhotoUrl} />
-      <div className="investor-dashboard-layout">
-        <InvestorDashboardSidebar user={user} stats={stats} projectsCount={projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} />
-        <main className="investor-dashboard-main">{content}</main>
+    <div className="administrator-shell investor-admin-copy" dir="rtl">
+      <InvestorAdminNavbar onToggle={() => undefined} />
+      <div className="admin-main-content">
+        <header className="soft-admin-topbar">
+          <div className="soft-admin-breadcrumb">
+            <span>الوكالة الجزائرية لترقية الاستثمار</span><b>/</b><strong>{current}</strong>
+          </div>
+          <div className="soft-admin-topbar-actions">
+            <label className="soft-admin-search"><i className="bi bi-search" /><input placeholder="اكتب هنا للبحث..." aria-label="بحث المستثمر" /></label>
+            <button className="soft-admin-icon-button" aria-label="الإشعارات" onClick={() => navigate("/investor/dashboard/notifications")}><i className="bi bi-bell" /></button>
+            <div className="soft-admin-profile">
+              <span>{String(user?.prenom ?? user?.nom ?? "A").slice(0, 1).toUpperCase()}</span>
+              <div><strong>{fullName || "مستثمر"}</strong><small>المستثمر</small></div>
+            </div>
+          </div>
+        </header>
+        <main className="admin-dashboard-main investor-dashboard-admin-main">
+          {content}
+        </main>
       </div>
     </div>
   );
