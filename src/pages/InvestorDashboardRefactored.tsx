@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
+import { Bell, Moon, Search, Sun } from "lucide-react";
 import "../styles/main.css";
 import "../styles/admin-quick-theme.css";
 import "../styles/admin-theme.css";
@@ -28,6 +29,18 @@ import { useCreateInvestorInvestment } from "../hooks/useCreateInvestorInvestmen
 import { getUserFullName, getUserPhotoUrl } from "../utils/investorDashboard";
 import { useTranslation } from "../i18n/I18nProvider";
 
+const paths: Record<string, string> = {
+  dashboard: "/investor/dashboard",
+  projects: "/investor/dashboard/projects",
+  investments: "/investor/dashboard/investments",
+  requests: "/investor/dashboard/requests",
+  documents: "/investor/dashboard/documents",
+  messages: "/investor/dashboard/messages",
+  notifications: "/investor/dashboard/notifications",
+  profile: "/investor/dashboard/profile",
+  settings: "/investor/dashboard/settings",
+};
+
 const sectionNames: Record<string, string> = {
   dashboard: "لوحة التحكم",
   projects: "المشاريع",
@@ -40,11 +53,21 @@ const sectionNames: Record<string, string> = {
   settings: "الإعدادات",
 };
 
+const getInitialLightMode = () => {
+  try {
+    return localStorage.getItem("aapi-dashboard-theme") === "light";
+  } catch {
+    return false;
+  }
+};
+
 export default function InvestorDashboardRefactored() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { t } = useTranslation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [lightMode, setLightMode] = useState(getInitialLightMode);
+
   const {
     user, profile, stats, projects, investments, requests, documents,
     notifications, activities, projectCompletion, completedInvestments,
@@ -56,6 +79,24 @@ export default function InvestorDashboardRefactored() {
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
   const current = sectionNames[section] ?? "لوحة التحكم";
+
+  useEffect(() => {
+    document.body.classList.toggle("aapi-admin-light", lightMode);
+    try {
+      localStorage.setItem("aapi-dashboard-theme", lightMode ? "light" : "dark");
+    } catch {
+      // Ignore storage errors.
+    }
+
+    return () => {
+      document.body.classList.remove("aapi-admin-light");
+    };
+  }, [lightMode]);
+
+  const toggleTheme = () => setLightMode(value => !value);
+
+  const navClass = (name: string) => location.pathname === paths[name]
+    ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
 
   if (loading) return (
     <div className="administrator-shell investor-admin-copy" dir="rtl">
@@ -99,7 +140,7 @@ export default function InvestorDashboardRefactored() {
   }
 
   return (
-    <div className={`administrator-shell investor-admin-copy ${sidebarOpen ? "admin-sidebar-open" : ""}`} dir="rtl">
+    <div className="administrator-shell investor-admin-copy" dir="rtl">
       <InvestorAdminNavbar onToggle={() => setSidebarOpen(value => !value)} />
       {sidebarOpen && <button className="admin-navbar-overlay" aria-label="إغلاق القائمة" onClick={() => setSidebarOpen(false)} />}
       <div className="admin-main-content">
@@ -108,15 +149,20 @@ export default function InvestorDashboardRefactored() {
             <span>الوكالة الجزائرية لترقية الاستثمار</span><b>/</b><strong>{current}</strong>
           </div>
           <div className="soft-admin-topbar-actions">
-            <label className="soft-admin-search"><i className="bi bi-search" /><input placeholder="اكتب هنا للبحث..." aria-label="بحث المستثمر" /></label>
-            <button className="soft-admin-icon-button" aria-label="الإشعارات" onClick={() => navigate("/investor/dashboard/notifications")}><i className="bi bi-bell" /></button>
+            <label className="soft-admin-search"><Search size={15} /><input placeholder="اكتب هنا للبحث..." aria-label="بحث المستثمر" /></label>
+            <button className="soft-admin-icon-button" type="button" aria-label={lightMode ? "الوضع الداكن" : "الوضع الفاتح"} title={lightMode ? "الوضع الداكن" : "الوضع الفاتح"} onClick={toggleTheme}>
+              {lightMode ? <Moon size={17} /> : <Sun size={17} />}
+            </button>
+            <button className="soft-admin-icon-button" type="button" aria-label="الإشعارات" onClick={() => navigate("/investor/dashboard/notifications")}><Bell size={17} /></button>
             <div className="soft-admin-profile">
               <span>{String(user?.prenom ?? user?.nom ?? "A").slice(0, 1).toUpperCase()}</span>
               <div><strong>{fullName || "مستثمر"}</strong><small>المستثمر</small></div>
             </div>
           </div>
         </header>
-        <main className="admin-dashboard-main investor-dashboard-admin-main">{content}</main>
+        <main className="admin-dashboard-main investor-dashboard-admin-main">
+          {content}
+        </main>
       </div>
     </div>
   );
