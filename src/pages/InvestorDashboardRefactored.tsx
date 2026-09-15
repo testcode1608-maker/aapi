@@ -30,15 +30,9 @@ import { getUserFullName, getUserPhotoUrl } from "../utils/investorDashboard";
 import { useTranslation } from "../i18n/I18nProvider";
 
 const sectionNames: Record<string, string> = {
-  dashboard: "لوحة التحكم",
-  projects: "المشاريع",
-  investments: "الاستثمارات",
-  requests: "الطلبات",
-  documents: "الوثائق",
-  messages: "الرسائل",
-  notifications: "الإشعارات",
-  profile: "الملف الشخصي",
-  settings: "الإعدادات",
+  dashboard: "لوحة التحكم", projects: "المشاريع", investments: "الاستثمارات",
+  requests: "الطلبات", documents: "الوثائق", messages: "الرسائل",
+  notifications: "الإشعارات", profile: "الملف الشخصي", settings: "الإعدادات",
 };
 
 export default function InvestorDashboardRefactored() {
@@ -46,12 +40,7 @@ export default function InvestorDashboardRefactored() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const {
-    user, profile, stats, projects, investments, requests, documents,
-    notifications, activities, projectCompletion, completedInvestments,
-    loading, error, reload,
-  } = useInvestorDashboard();
+  const { user, profile, stats, projects, investments, requests, documents, notifications, activities, projectCompletion, completedInvestments, loading, error, reload } = useInvestorDashboard();
   const createProject = useCreateInvestorProject(reload);
   const createInvestment = useCreateInvestorInvestment(projects, reload);
   const section = location.pathname.split("/")[3] || "dashboard";
@@ -59,38 +48,18 @@ export default function InvestorDashboardRefactored() {
   const userPhotoUrl = getUserPhotoUrl(user);
   const current = sectionNames[section] ?? "لوحة التحكم";
 
-  if (loading) return (
-    <div className="administrator-shell investor-admin-copy" dir="rtl">
-      <div className="investor-dashboard-loading investor-dashboard-rtl" dir="rtl">
-        <div className="investor-dashboard-loading-spinner" />
-        <p>{t("investorDashboard.loading")}</p>
-      </div>
-    </div>
-  );
-
-  if (error) return (
-    <div className="administrator-shell investor-admin-copy" dir="rtl">
-      <div className="investor-dashboard-error-page investor-dashboard-rtl" dir="rtl">
-        <div className="investor-dashboard-error-card">
-          <i className="bi bi-exclamation-triangle" />
-          <h2>{t("investorDashboard.errorTitle")}</h2>
-          <p>{error}</p>
-          <button type="button" className="investor-dashboard-primary-btn" onClick={() => void reload()}>{t("common.retry")}</button>
-        </div>
-      </div>
-    </div>
-  );
+  if (loading) return <div className="administrator-shell investor-admin-copy" dir="rtl"><div className="investor-dashboard-loading investor-dashboard-rtl" dir="rtl"><div className="investor-dashboard-loading-spinner" /><p>{t("investorDashboard.loading")}</p></div></div>;
+  if (error) return <div className="administrator-shell investor-admin-copy" dir="rtl"><div className="investor-dashboard-error-page investor-dashboard-rtl" dir="rtl"><div className="investor-dashboard-error-card"><i className="bi bi-exclamation-triangle" /><h2>{t("investorDashboard.errorTitle")}</h2><p>{error}</p><button type="button" className="investor-dashboard-primary-btn" onClick={() => void reload()}>{t("common.retry")}</button></div></div></div>;
 
   let content: ReactNode;
   switch (section) {
-    case "projects": content = <>
-      <InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} />
-      <InvestorProjectList projects={projects} />
-    </>; break;
-    case "investments": content = <>
-      <InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} />
-      <InvestorInvestmentsSection investments={investments} />
-    </>; break;
+    case "projects":
+      content = <>
+        <InvestorProjectList projects={projects} />
+        <InvestorProjectCreateForm form={createProject.form} setForm={createProject.setForm} creating={createProject.creating} error={createProject.error} success={createProject.success} onSubmit={createProject.submit} onReset={createProject.resetForm} />
+      </>;
+      break;
+    case "investments": content = <><InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} /><InvestorInvestmentsSection investments={investments} /></>; break;
     case "requests": content = <InvestorRequestsSection requests={requests} projects={projects} reload={reload} />; break;
     case "documents": content = <InvestorDocumentsSection documents={documents} />; break;
     case "messages": content = <InvestorMessagesSection />; break;
@@ -100,28 +69,12 @@ export default function InvestorDashboardRefactored() {
     default: content = <InvestorDashboardOverview stats={stats} projects={projects} investments={investments} activities={activities} projectCompletion={projectCompletion} completedInvestments={completedInvestments} />;
   }
 
-  return (
-    <div className="administrator-shell investor-admin-copy" dir="rtl">
-      <InvestorAdminNavbar onToggle={() => setSidebarOpen(value => !value)} />
-      {sidebarOpen && <button className="admin-navbar-overlay" aria-label="إغلاق القائمة" onClick={() => setSidebarOpen(false)} />}
-      <div className="admin-main-content">
-        <header className="soft-admin-topbar">
-          <div className="soft-admin-breadcrumb">
-            <span>الوكالة الجزائرية لترقية الاستثمار</span><b>/</b><strong>{current}</strong>
-          </div>
-          <div className="soft-admin-topbar-actions">
-            <label className="soft-admin-search"><Search size={15} /><input placeholder="اكتب هنا للبحث..." aria-label="بحث المستثمر" /></label>
-            <button className="soft-admin-icon-button" type="button" aria-label="الإشعارات" onClick={() => navigate("/investor/dashboard/notifications")}><Bell size={17} /></button>
-            <div className="soft-admin-profile">
-              <span>{String(user?.prenom ?? user?.nom ?? "A").slice(0, 1).toUpperCase()}</span>
-              <div><strong>{fullName || "مستثمر"}</strong><small>المستثمر</small></div>
-            </div>
-          </div>
-        </header>
-        <main className="admin-dashboard-main investor-dashboard-admin-main">
-          {content}
-        </main>
-      </div>
+  return <div className="administrator-shell investor-admin-copy" dir="rtl">
+    <InvestorAdminNavbar onToggle={() => setSidebarOpen(value => !value)} />
+    {sidebarOpen && <button className="admin-navbar-overlay" aria-label="إغلاق القائمة" onClick={() => setSidebarOpen(false)} />}
+    <div className="admin-main-content">
+      <header className="soft-admin-topbar"><div className="soft-admin-breadcrumb"><span>الوكالة الجزائرية لترقية الاستثمار</span><b>/</b><strong>{current}</strong></div><div className="soft-admin-topbar-actions"><label className="soft-admin-search"><Search size={15} /><input placeholder="اكتب هنا للبحث..." aria-label="بحث المستثمر" /></label><button className="soft-admin-icon-button" type="button" aria-label="الإشعارات" onClick={() => navigate("/investor/dashboard/notifications")}><Bell size={17} /></button><div className="soft-admin-profile"><span>{String(user?.prenom ?? user?.nom ?? "A").slice(0, 1).toUpperCase()}</span><div><strong>{fullName || "مستثمر"}</strong><small>المستثمر</small></div></div></div></header>
+      <main className="admin-dashboard-main investor-dashboard-admin-main">{content}</main>
     </div>
-  );
+  </div>;
 }
