@@ -131,36 +131,3 @@
   font: inherit; font-size: 13px; transition: .18s ease;
 }
 .investor-dashboard-logout:hover { background: rgba(255,255,255,.08); color: var(--id-white); }
-
-/* Header stability: keep controls compact and aligned on every direction. */
-.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar { direction: rtl; }
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar { direction: ltr; }
-.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-brand,
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-brand,
-.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-topbar-actions,
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-topbar-actions,
-.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user,
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user { flex-direction: row; }
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user-info span { text-align: left; }
-.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-notification-badge { left: -5px; right: auto; }
-.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-notification-badge { right: -5px; left: auto; }
-
-@media (max-width: 800px) {
-  .investor-dashboard-topbar { height: 68px; padding-inline: 14px; gap: 12px; }
-  .investor-dashboard-brand-text span { max-width: 150px; }
-  .investor-dashboard-topbar-actions { gap: 7px; }
-  .investor-dashboard-user { max-width: 180px; }
-  .investor-dashboard-user-info { max-width: 125px; }
-}
-
-@media (max-width: 560px) {
-  .investor-dashboard-topbar { height: 64px; padding-inline: 10px; gap: 8px; }
-  .investor-dashboard-brand { gap: 8px; }
-  .investor-dashboard-brand-mark { width: 38px; height: 38px; border-radius: 11px; font-size: 18px; }
-  .investor-dashboard-brand-text strong { font-size: 15px; }
-  .investor-dashboard-brand-text span { display: none; }
-  .investor-dashboard-theme-toggle,
-  .investor-dashboard-notification { width: 38px; height: 38px; border-radius: 11px; }
-  .investor-dashboard-user-info { display: none; }
-  .investor-dashboard-user-avatar { width: 38px; height: 38px; }
-}
