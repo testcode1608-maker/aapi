@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
 import "../styles/main.css";
@@ -27,18 +28,6 @@ import { useCreateInvestorInvestment } from "../hooks/useCreateInvestorInvestmen
 import { getUserFullName, getUserPhotoUrl } from "../utils/investorDashboard";
 import { useTranslation } from "../i18n/I18nProvider";
 
-const paths: Record<string, string> = {
-  dashboard: "/investor/dashboard",
-  projects: "/investor/dashboard/projects",
-  investments: "/investor/dashboard/investments",
-  requests: "/investor/dashboard/requests",
-  documents: "/investor/dashboard/documents",
-  messages: "/investor/dashboard/messages",
-  notifications: "/investor/dashboard/notifications",
-  profile: "/investor/dashboard/profile",
-  settings: "/investor/dashboard/settings",
-};
-
 const sectionNames: Record<string, string> = {
   dashboard: "لوحة التحكم",
   projects: "المشاريع",
@@ -54,8 +43,8 @@ const sectionNames: Record<string, string> = {
 export default function InvestorDashboardRefactored() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { t } = useTranslation();
-  const [sidebarOpen, setSidebarOpen] = [false, () => undefined] as const;
   const {
     user, profile, stats, projects, investments, requests, documents,
     notifications, activities, projectCompletion, completedInvestments,
@@ -67,8 +56,6 @@ export default function InvestorDashboardRefactored() {
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
   const current = sectionNames[section] ?? "لوحة التحكم";
-  const navClass = (name: string) => location.pathname === paths[name]
-    ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
 
   if (loading) return (
     <div className="administrator-shell investor-admin-copy" dir="rtl">
@@ -112,8 +99,9 @@ export default function InvestorDashboardRefactored() {
   }
 
   return (
-    <div className="administrator-shell investor-admin-copy" dir="rtl">
-      <InvestorAdminNavbar onToggle={() => undefined} />
+    <div className={`administrator-shell investor-admin-copy ${sidebarOpen ? "admin-sidebar-open" : ""}`} dir="rtl">
+      <InvestorAdminNavbar onToggle={() => setSidebarOpen(value => !value)} />
+      {sidebarOpen && <button className="admin-navbar-overlay" aria-label="إغلاق القائمة" onClick={() => setSidebarOpen(false)} />}
       <div className="admin-main-content">
         <header className="soft-admin-topbar">
           <div className="soft-admin-breadcrumb">
@@ -128,9 +116,7 @@ export default function InvestorDashboardRefactored() {
             </div>
           </div>
         </header>
-        <main className="admin-dashboard-main investor-dashboard-admin-main">
-          {content}
-        </main>
+        <main className="admin-dashboard-main investor-dashboard-admin-main">{content}</main>
       </div>
     </div>
   );
