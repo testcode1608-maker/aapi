@@ -1,0 +1,37 @@
+/* AAPI — Public Agency page */
+.agency-page{background:#fff;color:var(--aapi-dark)}
+.agency-hero{position:relative;overflow:hidden;padding:110px 0;background:linear-gradient(135deg,var(--aapi-dark-green),var(--aapi-green));color:#fff}
+.agency-hero-content{position:relative;z-index:1;max-width:900px}
+.agency-overline,.agency-section-overline{display:inline-block;margin-bottom:12px;color:var(--aapi-gold);font-size:13px;font-weight:800;letter-spacing:.04em}
+.agency-breadcrumb{margin-bottom:18px;color:rgba(255,255,255,.72);font-size:13px}
+.agency-introduction,.agency-mission,.agency-values{padding:90px 0}
+.agency-introduction{background:#fff}
+.agency-section-heading{max-width:780px;margin-bottom:35px}
+.agency-section-heading h2,.agency-centered-heading h2{margin:0;color:var(--aapi-dark);line-height:1.45}
+.agency-intro-text{color:var(--aapi-gray);line-height:2;font-size:16px}
+.agency-primary-button,.agency-final-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border:0;border-radius:10px;background:var(--aapi-green);color:#fff;font-weight:700;transition:.25s ease}
+.agency-primary-button:hover,.agency-final-button:hover{background:var(--aapi-dark-green);color:#fff;transform:translateY(-2px)}
+.agency-intro-card{height:100%;padding:35px;border-radius:18px;background:var(--aapi-dark-green);color:#fff;box-shadow:0 18px 45px rgba(5,92,53,.14)}
+.agency-intro-card-icon{width:56px;height:56px;display:grid;place-items:center;margin-bottom:22px;border-radius:14px;background:rgba(255,255,255,.1);color:var(--aapi-gold);font-size:24px}
+.agency-card-line{width:45px;height:3px;margin-bottom:20px;background:var(--aapi-gold)}
+.agency-card-number{display:block;margin-bottom:8px;font-size:34px;font-weight:800;color:#fff}
+.agency-mission{background:var(--aapi-light-green)}
+.agency-centered-heading{text-align:center;max-width:800px;margin:0 auto 45px}
+.agency-service-card{height:100%;padding:28px;border:1px solid #e2ebe6;border-radius:16px;background:#fff;transition:.25s ease}
+.agency-service-card:hover{transform:translateY(-5px);border-color:rgba(8,116,67,.3);box-shadow:0 16px 35px rgba(20,34,27,.08)}
+.agency-service-number{color:var(--aapi-gold);font-weight:800;font-size:13px}
+.agency-service-icon{width:52px;height:52px;display:grid;place-items:center;margin:16px 0;border-radius:13px;background:var(--aapi-light-green);color:var(--aapi-green);font-size:21px}
+.agency-service-card h3{color:var(--aapi-dark);line-height:1.5}
+.agency-service-card p{margin:0;color:var(--aapi-gray);line-height:1.9}
+.agency-values{background:#fff}
+.agency-values-title{margin:0 0 12px;color:var(--aapi-dark);line-height:1.5}
+.agency-values-text{color:var(--aapi-gray);line-height:1.9}
+.agency-value-item{height:100%;padding:25px;border-radius:15px;background:var(--aapi-light-green);border:1px solid #dcebe3}
+.agency-final-cta{padding:70px 0;background:linear-gradient(135deg,var(--aapi-dark-green),var(--aapi-green));color:#fff}
+.agency-final-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:30px}
+.agency-final-cta h2{margin:0 0 10px;color:#fff;line-height:1.5}
+.agency-final-cta p{margin:0;color:rgba(255,255,255,.75);line-height:1.8}
+.agency-final-button{background:var(--aapi-gold);color:#14221b}
+.agency-final-button:hover{background:#fff;color:var(--aapi-dark-green)}
+@media(max-width:991px){.agency-hero{padding:85px 0}.agency-introduction,.agency-mission,.agency-values{padding:70px 0}.agency-final-cta-inner{flex-direction:column;align-items:flex-start}}
+@media(max-width:767px){.agency-hero{padding:70px 0}.agency-introduction,.agency-mission,.agency-values{padding:55px 0}.agency-intro-card{margin-top:25px}.agency-final-cta{padding:55px 0}}
