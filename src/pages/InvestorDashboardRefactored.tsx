@@ -26,7 +26,7 @@ import InvestorSettingsSection from "../components/investor/InvestorSettingsSect
 import { useInvestorDashboard } from "../hooks/useInvestorDashboard";
 import { useCreateInvestorProject } from "../hooks/useCreateInvestorProject";
 import { useCreateInvestorInvestment } from "../hooks/useCreateInvestorInvestment";
-import { getUserFullName, getUserPhotoUrl } from "../utils/investorDashboard";
+import { getUserFullName, getUserInitials, getUserPhotoUrl } from "../utils/investorDashboard";
 import { useTranslation } from "../i18n/I18nProvider";
 
 const sectionNames: Record<string, string> = {
@@ -46,6 +46,7 @@ export default function InvestorDashboardRefactored() {
   const section = location.pathname.split("/")[3] || "dashboard";
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
+  const userInitials = getUserInitials(user?.prenom, user?.nom);
   const current = sectionNames[section] ?? "لوحة التحكم";
 
   if (loading) return <div className="administrator-shell investor-admin-copy" dir="rtl"><div className="investor-dashboard-loading investor-dashboard-rtl" dir="rtl"><div className="investor-dashboard-loading-spinner" /><p>{t("investorDashboard.loading")}</p></div></div>;
@@ -64,5 +65,5 @@ export default function InvestorDashboardRefactored() {
     default: content = <InvestorDashboardOverview stats={stats} projects={projects} investments={investments} activities={activities} projectCompletion={projectCompletion} completedInvestments={completedInvestments} />;
   }
 
-  return <div className="administrator-shell investor-admin-copy" dir="rtl"><InvestorAdminNavbar onToggle={() => setSidebarOpen(value => !value)} />{sidebarOpen && <button className="admin-navbar-overlay" aria-label="إغلاق القائمة" onClick={() => setSidebarOpen(false)} />}<div className="admin-main-content"><header className="soft-admin-topbar"><div className="soft-admin-breadcrumb"><span>الوكالة الجزائرية لترقية الاستثمار</span><b>/</b><strong>{current}</strong></div><div className="soft-admin-topbar-actions"><label className="soft-admin-search"><Search size={15} /><input placeholder="اكتب هنا للبحث..." aria-label="بحث المستثمر" /></label><button className="soft-admin-icon-button" type="button" aria-label="الإشعارات" onClick={() => navigate("/investor/dashboard/notifications")}><Bell size={17} /></button><div className="soft-admin-profile"><span>{String(user?.prenom ?? user?.nom ?? "A").slice(0, 1).toUpperCase()}</span><div><strong>{fullName || "مستثمر"}</strong><small>المستثمر</small></div></div></div></header><main className="admin-dashboard-main investor-dashboard-admin-main">{content}</main></div></div>;
+  return <div className="administrator-shell investor-admin-copy" dir="rtl"><InvestorAdminNavbar onToggle={() => setSidebarOpen(value => !value)} />{sidebarOpen && <button className="admin-navbar-overlay" aria-label="إغلاق القائمة" onClick={() => setSidebarOpen(false)} />}<div className="admin-main-content"><header className="soft-admin-topbar"><div className="soft-admin-breadcrumb"><span>الوكالة الجزائرية لترقية الاستثمار</span><b>/</b><strong>{current}</strong></div><div className="soft-admin-topbar-actions"><label className="soft-admin-search"><Search size={15} /><input placeholder="اكتب هنا للبحث..." aria-label="بحث المستثمر" /></label><button className="soft-admin-icon-button" type="button" aria-label="الإشعارات" onClick={() => navigate("/investor/dashboard/notifications")}><Bell size={17} /></button><div className="soft-admin-profile">{userPhotoUrl ? <img src={userPhotoUrl} alt={fullName || "صورة المستثمر"} style={{ width: 42, height: 42, borderRadius: "50%", objectFit: "cover", display: "block", border: "2px solid #087443", flexShrink: 0 }} onError={(event) => { event.currentTarget.style.display = "none"; const fallback = event.currentTarget.nextElementSibling as HTMLElement | null; if (fallback) fallback.style.display = "grid"; }} /> : null}<span style={{ width: 42, height: 42, borderRadius: "50%", display: userPhotoUrl ? "none" : "grid", placeItems: "center", background: "#087443", color: "#fff", fontWeight: 800, flexShrink: 0 }}>{userInitials}</span><div><strong>{fullName || "مستثمر"}</strong><small>المستثمر</small></div></div></div></header><main className="admin-dashboard-main investor-dashboard-admin-main">{content}</main></div></div>;
 }
