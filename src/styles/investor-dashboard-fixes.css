@@ -15,6 +15,14 @@
 .investor-dashboard-section{width:100%;max-width:1240px;min-width:0;margin-inline:auto}
 .investor-dashboard-topbar{width:100%;max-width:none}
 
+/* Direction and grid placement */
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-sidebar{justify-self:end;grid-column:2;grid-row:1}
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-sidebar{justify-self:start;grid-column:1;grid-row:1}
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-main{grid-column:1;grid-row:1}
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-main{grid-column:2;grid-row:1}
+.investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-user-info{direction:rtl;text-align:right}
+.investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-user-info{direction:ltr;text-align:left}
+
 .investor-dashboard-page-header,.investor-dashboard-section-header,.investor-dashboard-card-header{min-width:0;max-width:100%;direction:inherit}
 .investor-dashboard-page-header>div,.investor-dashboard-section-header>div,.investor-dashboard-card-header>div{min-width:0;max-width:100%}
 .investor-dashboard-page-header h1,.investor-dashboard-page-header p,.investor-dashboard-section-header h1,.investor-dashboard-section-header p,.investor-dashboard-card-header h2{max-width:100%;overflow-wrap:anywhere;word-break:normal}
