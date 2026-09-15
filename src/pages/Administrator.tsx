@@ -6,6 +6,7 @@ import "../styles/admin-quick-theme.css";
 import "../styles/admin-theme.css";
 import "../styles/admin-toolbar.css";
 import "../styles/admin-soft-ui.css";
+import "../styles/admin-layout-fix.css";
 import AdminNavbar from "../components/admin/AdminNavbar";
 import AdminDashboardOverview from "../components/admin/AdminDashboardOverview";
 import AdminDataPage from "../components/admin/AdminDataPage";
