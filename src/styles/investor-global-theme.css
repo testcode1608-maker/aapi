@@ -1,4 +1,5 @@
-/* AAPI — Investor dashboard uses the exact same global colors as Admin */
+/* AAPI — ONE COLOR SYSTEM FOR INVESTOR + ADMIN */
+
 .investor-admin-copy{
   --aapi-bg:#090a0c;
   --aapi-surface:#111317;
@@ -8,16 +9,53 @@
   --aapi-text:#f3f5f4;
   --aapi-muted:#7f8791;
   --aapi-green:#087443;
-  background:var(--aapi-bg)!important;
-  color:var(--aapi-text)!important;
+  --aapi-green-2:#0b8750;
+  --aapi-gold:#c9a227;
+  background:#090a0c!important;
+  color:#f3f5f4!important;
+  min-height:100vh;
 }
+
+/* Shell */
+.investor-admin-copy.administrator-shell,
+.investor-admin-copy .admin-main-content,
+.investor-admin-copy .admin-dashboard-main,
+.investor-admin-copy .investor-dashboard-admin-main{
+  background:#090a0c!important;
+  color:#f3f5f4!important;
+}
+
+/* Topbar */
+.investor-admin-copy .soft-admin-topbar{
+  background:rgba(9,10,12,.94)!important;
+  border-bottom:1px solid #252930!important;
+}
+.investor-admin-copy .soft-admin-breadcrumb{color:#68717b!important}
+.investor-admin-copy .soft-admin-breadcrumb b{color:#343a41!important}
+.investor-admin-copy .soft-admin-breadcrumb strong{color:#cbd0ce!important}
+.investor-admin-copy .soft-admin-search,
+.investor-admin-copy .soft-admin-icon-button{
+  background:#111317!important;
+  border-color:#252930!important;
+  color:#7f8791!important;
+}
+.investor-admin-copy .soft-admin-search input{color:#e5e9e7!important}
+.investor-admin-copy .soft-admin-search input::placeholder{color:#5b646d!important}
+.investor-admin-copy .soft-admin-profile strong{color:#d9dedb!important}
+.investor-admin-copy .soft-admin-profile small{color:#68717b!important}
+
+/* Cards / KPI */
 .investor-admin-copy .soft-investor-kpi,
 .investor-admin-copy .soft-investor-card{
-  background:var(--aapi-surface)!important;
-  border-color:var(--aapi-border)!important;
-  color:var(--aapi-text)!important;
+  background:#111317!important;
+  border:1px solid #252930!important;
+  color:#f3f5f4!important;
+  box-shadow:0 12px 32px rgba(0,0,0,.14)!important;
 }
-.investor-admin-copy .soft-investor-card-head{border-bottom-color:var(--aapi-border-soft)!important}
+.investor-admin-copy .soft-investor-kpi:hover{border-color:rgba(8,116,67,.35)!important}
+.investor-admin-copy .soft-investor-card-head{border-bottom-color:#1d2026!important}
+
+/* Text */
 .investor-admin-copy .soft-investor-page-head h1,
 .investor-admin-copy .soft-investor-card-head h2,
 .investor-admin-copy .soft-investor-kpi-body strong,
@@ -25,7 +63,8 @@
 .investor-admin-copy .soft-investor-progress-row strong,
 .investor-admin-copy .soft-investor-mini-stats b,
 .investor-admin-copy .soft-investor-order strong,
-.investor-admin-copy .soft-investor-big-number strong{color:var(--aapi-text)!important}
+.investor-admin-copy .soft-investor-big-number strong{color:#f3f5f4!important}
+
 .investor-admin-copy .soft-investor-page-head p,
 .investor-admin-copy .soft-investor-eyebrow,
 .investor-admin-copy .soft-investor-card-head span,
@@ -37,19 +76,42 @@
 .investor-admin-copy .soft-investor-order p,
 .investor-admin-copy .soft-investor-order small,
 .investor-admin-copy .soft-investor-big-number small,
-.investor-admin-copy .soft-investor-chart-labels{color:var(--aapi-muted)!important}
-.investor-admin-copy .soft-investor-table th{background:var(--aapi-surface-2)!important;color:var(--aapi-muted)!important;border-bottom-color:var(--aapi-border)!important}
-.investor-admin-copy .soft-investor-table td{background:var(--aapi-surface)!important;color:#b9c0bd!important;border-bottom-color:var(--aapi-border-soft)!important}
+.investor-admin-copy .soft-investor-chart-labels,
+.investor-admin-copy .soft-investor-project-name small{color:#7f8791!important}
+
+/* AAPI green + gold only */
+.investor-admin-copy .soft-investor-primary,
+.investor-admin-copy .soft-investor-kpi-icon,
+.investor-admin-copy .soft-investor-project-name>span,
+.investor-admin-copy .soft-investor-order-icon{
+  color:#fff!important;
+}
+.investor-admin-copy .soft-investor-primary{background:#087443!important}
+.investor-admin-copy .soft-investor-kpi-icon{background:linear-gradient(145deg,#0b8750,#055c35)!important}
+.investor-admin-copy .soft-investor-project-name>span,
+.investor-admin-copy .soft-investor-order-icon{background:rgba(8,116,67,.12)!important;color:#79d9a4!important}
+.investor-admin-copy .soft-investor-progress i{background:linear-gradient(90deg,#087443,#0b8750)!important}
+.investor-admin-copy .soft-investor-growth{color:#79d9a4!important}
+
+/* Tables */
+.investor-admin-copy .soft-investor-table th{background:#15181c!important;color:#7f8791!important;border-bottom-color:#252930!important}
+.investor-admin-copy .soft-investor-table td{background:#111317!important;color:#b9c0bd!important;border-bottom-color:#1d2026!important}
+.investor-admin-copy .soft-investor-table tr:hover{background:rgba(8,116,67,.045)!important}
 .investor-admin-copy .soft-investor-progress>div{background:#252930!important}
-.investor-admin-copy .soft-investor-mini-stats{border-color:var(--aapi-border)!important}
-.investor-admin-copy .soft-investor-mini-stats div+div{border-right-color:var(--aapi-border)!important}
-.investor-admin-copy .soft-investor-order{border-bottom-color:var(--aapi-border-soft)!important}
-.investor-admin-copy .soft-investor-ring:after{background:var(--aapi-surface)!important}
+.investor-admin-copy .soft-investor-mini-stats{border-color:#252930!important}
+.investor-admin-copy .soft-investor-mini-stats div+div{border-right-color:#252930!important}
+.investor-admin-copy .soft-investor-order{border-bottom-color:#1d2026!important}
 .investor-admin-copy .soft-investor-ring{background:conic-gradient(#087443 0 70%,#252930 70%)!important}
 .investor-admin-copy .soft-investor-ring.gold{background:conic-gradient(#c9a227 0 55%,#252930 55%)!important}
+.investor-admin-copy .soft-investor-ring:after{background:#111317!important}
+.investor-admin-copy .soft-investor-ring b{color:#f3f5f4!important}
 
-/* LIGHT — same AAPI light palette used by Admin */
-body.aapi-admin-light .investor-admin-copy{
+/* LIGHT MODE — exact Admin light palette */
+body.aapi-admin-light .investor-admin-copy,
+body.aapi-admin-light .investor-admin-copy.administrator-shell,
+body.aapi-admin-light .investor-admin-copy .admin-main-content,
+body.aapi-admin-light .investor-admin-copy .admin-dashboard-main,
+body.aapi-admin-light .investor-admin-copy .investor-dashboard-admin-main{
   --aapi-bg:#f3f6f4;
   --aapi-surface:#fff;
   --aapi-surface-2:#f8faf9;
@@ -57,12 +119,23 @@ body.aapi-admin-light .investor-admin-copy{
   --aapi-border-soft:#e7ece9;
   --aapi-text:#17241d;
   --aapi-muted:#68766e;
-  background:radial-gradient(circle at 72% 0,rgba(8,116,67,.06),transparent 28%),var(--aapi-bg)!important;
-  color:var(--aapi-text)!important;
+  background:#f3f6f4!important;
+  color:#17241d!important;
 }
+body.aapi-admin-light .investor-admin-copy .soft-admin-topbar{background:rgba(243,246,244,.96)!important;border-bottom-color:#dce5df!important}
+body.aapi-admin-light .investor-admin-copy .soft-admin-breadcrumb{color:#68766e!important}
+body.aapi-admin-light .investor-admin-copy .soft-admin-breadcrumb b{color:#a1aaa5!important}
+body.aapi-admin-light .investor-admin-copy .soft-admin-breadcrumb strong{color:#17241d!important}
+body.aapi-admin-light .investor-admin-copy .soft-admin-search,
+body.aapi-admin-light .investor-admin-copy .soft-admin-icon-button{background:#fff!important;border-color:#dce5df!important;color:#68766e!important}
+body.aapi-admin-light .investor-admin-copy .soft-admin-search input{color:#17241d!important}
+body.aapi-admin-light .investor-admin-copy .soft-admin-search input::placeholder{color:#8a9690!important}
+body.aapi-admin-light .investor-admin-copy .soft-admin-profile strong{color:#17241d!important}
+body.aapi-admin-light .investor-admin-copy .soft-admin-profile small{color:#68766e!important}
+
 body.aapi-admin-light .investor-admin-copy .soft-investor-kpi,
-body.aapi-admin-light .investor-admin-copy .soft-investor-card{background:var(--aapi-surface)!important;border-color:var(--aapi-border)!important;box-shadow:0 10px 28px rgba(25,70,48,.06)!important}
-body.aapi-admin-light .investor-admin-copy .soft-investor-card-head{border-bottom-color:var(--aapi-border-soft)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-card{background:#fff!important;border-color:#dce5df!important;box-shadow:0 10px 28px rgba(25,70,48,.06)!important;color:#17241d!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-card-head{border-bottom-color:#e7ece9!important}
 body.aapi-admin-light .investor-admin-copy .soft-investor-page-head h1,
 body.aapi-admin-light .investor-admin-copy .soft-investor-card-head h2,
 body.aapi-admin-light .investor-admin-copy .soft-investor-kpi-body strong,
@@ -70,7 +143,7 @@ body.aapi-admin-light .investor-admin-copy .soft-investor-project-name strong,
 body.aapi-admin-light .investor-admin-copy .soft-investor-progress-row strong,
 body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats b,
 body.aapi-admin-light .investor-admin-copy .soft-investor-order strong,
-body.aapi-admin-light .investor-admin-copy .soft-investor-big-number strong{color:var(--aapi-text)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-big-number strong{color:#17241d!important}
 body.aapi-admin-light .investor-admin-copy .soft-investor-page-head p,
 body.aapi-admin-light .investor-admin-copy .soft-investor-eyebrow,
 body.aapi-admin-light .investor-admin-copy .soft-investor-card-head span,
@@ -82,13 +155,15 @@ body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats span,
 body.aapi-admin-light .investor-admin-copy .soft-investor-order p,
 body.aapi-admin-light .investor-admin-copy .soft-investor-order small,
 body.aapi-admin-light .investor-admin-copy .soft-investor-big-number small,
-body.aapi-admin-light .investor-admin-copy .soft-investor-chart-labels{color:var(--aapi-muted)!important}
-body.aapi-admin-light .investor-admin-copy .soft-investor-table th{background:#f3f7f5!important;color:#68766e!important;border-bottom-color:var(--aapi-border)!important}
-body.aapi-admin-light .investor-admin-copy .soft-investor-table td{background:#fff!important;color:#506057!important;border-bottom-color:var(--aapi-border-soft)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-chart-labels,
+body.aapi-admin-light .investor-admin-copy .soft-investor-project-name small{color:#68766e!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-table th{background:#f8faf9!important;color:#68766e!important;border-bottom-color:#dce5df!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-table td{background:#fff!important;color:#425149!important;border-bottom-color:#e7ece9!important}
 body.aapi-admin-light .investor-admin-copy .soft-investor-progress>div{background:#e1e9e4!important}
-body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats{border-color:var(--aapi-border)!important}
-body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats div+div{border-right-color:var(--aapi-border)!important}
-body.aapi-admin-light .investor-admin-copy .soft-investor-order{border-bottom-color:var(--aapi-border-soft)!important}
-body.aapi-admin-light .investor-admin-copy .soft-investor-ring:after{background:#fff!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats{border-color:#dce5df!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats div+div{border-right-color:#dce5df!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-order{border-bottom-color:#e7ece9!important}
 body.aapi-admin-light .investor-admin-copy .soft-investor-ring{background:conic-gradient(#087443 0 70%,#dfe8e2 70%)!important}
 body.aapi-admin-light .investor-admin-copy .soft-investor-ring.gold{background:conic-gradient(#c9a227 0 55%,#dfe8e2 55%)!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-ring:after{background:#fff!important}
+body.aapi-admin-light .investor-admin-copy .soft-investor-ring b{color:#17241d!important}
