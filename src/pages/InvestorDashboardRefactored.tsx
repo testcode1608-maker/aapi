@@ -35,7 +35,7 @@ const paths: Record<string, string> = {
 export default function InvestorDashboardRefactored() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { language, t } = useTranslation();
+  const { t } = useTranslation();
   const {
     user, profile, stats, projects, investments, requests, documents,
     notifications, activities, projectCompletion, completedInvestments,
@@ -46,7 +46,6 @@ export default function InvestorDashboardRefactored() {
   const section = location.pathname.split("/")[3] || "dashboard";
   const fullName = getUserFullName(user);
   const userPhotoUrl = getUserPhotoUrl(user);
-  const direction = language === "ar" ? "rtl" : "ltr";
   const navClass = (name: string) => location.pathname === paths[name]
     ? "investor-dashboard-nav-link active" : "investor-dashboard-nav-link";
   const logout = () => {
@@ -55,14 +54,14 @@ export default function InvestorDashboardRefactored() {
   };
 
   if (loading) return (
-    <div className={`investor-dashboard-loading investor-dashboard-${direction}`} dir={direction}>
+    <div className="investor-dashboard-loading investor-dashboard-rtl" dir="rtl">
       <div className="investor-dashboard-loading-spinner" />
       <p>{t("investorDashboard.loading")}</p>
     </div>
   );
 
   if (error) return (
-    <div className={`investor-dashboard-error-page investor-dashboard-${direction}`} dir={direction}>
+    <div className="investor-dashboard-error-page investor-dashboard-rtl" dir="rtl">
       <div className="investor-dashboard-error-card">
         <i className="bi bi-exclamation-triangle" />
         <h2>{t("investorDashboard.errorTitle")}</h2>
@@ -92,7 +91,7 @@ export default function InvestorDashboardRefactored() {
   }
 
   return (
-    <div className={`investor-dashboard-page investor-dashboard-${direction}`} dir={direction} data-language={language}>
+    <div className="investor-dashboard-page investor-dashboard-rtl" dir="rtl" data-language="ar">
       <InvestorDashboardTopbar user={user} stats={stats} userPhotoUrl={userPhotoUrl} />
       <div className="investor-dashboard-layout">
         <InvestorDashboardSidebar user={user} stats={stats} projectsCount={projects.length} userPhotoUrl={userPhotoUrl} navClass={navClass} onLogout={logout} />
