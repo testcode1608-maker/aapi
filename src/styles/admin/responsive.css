@@ -1,5 +1,196 @@
 /* AAPI ADMIN — Responsive layer */
-@media (max-width:1180px){.admin-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-analytics-grid{grid-template-columns:1fr}}
-@media (max-width:900px){.admin-navbar{width:250px}.admin-mobile-header{display:flex}.admin-dashboard-main,.admin-projects-content,.admin-requests-content,.admin-users-content,.admin-investments-content,.admin-investors-content,.admin-messages-content,.admin-documents-content{margin-right:0;padding:24px 20px 40px}.admin-dashboard-header{margin-right:0;padding:24px 20px 10px}.admin-navbar-mobile-close{display:grid;place-items:center;position:absolute;left:10px;top:10px;width:34px;height:34px;border:1px solid var(--aapi-border);border-radius:8px;background:#15181c;color:#fff;cursor:pointer}}
-@media (max-width:680px){.admin-kpi-grid{grid-template-columns:1fr}.admin-dashboard-header-content,.table-card-header,.admin-panel-header{align-items:flex-start;flex-direction:column}.admin-dashboard-welcome h1{font-size:22px}.admin-circular-stats{grid-template-columns:1fr}.admin-project-filters{align-items:stretch;flex-direction:column}.project-search{min-width:0}.admin-dashboard-main,.admin-projects-content,.admin-requests-content,.admin-users-content,.admin-investments-content,.admin-investors-content,.admin-messages-content,.admin-documents-content{padding:18px 14px 32px}.admin-dashboard-header{padding:18px 14px 8px}.admin-project-table{min-width:850px}.admin-panel,.admin-recent-projects,.admin-project-table-card{border-radius:14px}.admin-kpi-card{padding:15px}.admin-kpi-content strong{font-size:22px}.admin-refresh-button{width:100%}}
-@media (max-width:420px){.admin-mobile-header{height:54px;padding:0 12px}.admin-dashboard-welcome p{font-size:11px}.admin-panel-header,.table-card-header{padding:13px 14px}.admin-circular-stats,.admin-progress-list{padding:15px}.admin-project-table th,.admin-project-table td{padding:11px 12px}.admin-status-badge{font-size:8px}}
+
+.admin-dashboard-main,
+.admin-projects-content,
+.admin-requests-content,
+.admin-users-content,
+.admin-investments-content,
+.admin-investors-content,
+.admin-messages-content,
+.admin-documents-content,
+.admin-dashboard-header {
+  min-width: 0;
+}
+
+.admin-project-table-wrapper,
+.admin-table-wrapper,
+.admin-data-table-wrapper {
+  max-width: 100%;
+}
+
+@media (max-width: 1180px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .administrator-shell .admin-navbar {
+    width: 240px;
+  }
+
+  .administrator-shell .admin-dashboard-header,
+  .administrator-shell .admin-dashboard-main,
+  .administrator-shell .admin-projects-content,
+  .administrator-shell .admin-requests-content,
+  .administrator-shell .admin-users-content,
+  .administrator-shell .admin-investments-content,
+  .administrator-shell .admin-investors-content,
+  .administrator-shell .admin-messages-content,
+  .administrator-shell .admin-documents-content {
+    margin-right: 240px;
+  }
+}
+
+@media (max-width: 800px) {
+  .administrator-shell .admin-navbar {
+    width: min(84vw, 310px);
+  }
+
+  .administrator-shell .admin-dashboard-header,
+  .administrator-shell .admin-dashboard-main,
+  .administrator-shell .admin-projects-content,
+  .administrator-shell .admin-requests-content,
+  .administrator-shell .admin-users-content,
+  .administrator-shell .admin-investments-content,
+  .administrator-shell .admin-investors-content,
+  .administrator-shell .admin-messages-content,
+  .administrator-shell .admin-documents-content {
+    margin-right: 0;
+  }
+
+  .administrator-shell .admin-mobile-header {
+    display: flex;
+  }
+
+  .administrator-shell .admin-dashboard-main,
+  .administrator-shell .admin-projects-content,
+  .administrator-shell .admin-requests-content,
+  .administrator-shell .admin-users-content,
+  .administrator-shell .admin-investments-content,
+  .administrator-shell .admin-investors-content,
+  .administrator-shell .admin-messages-content,
+  .administrator-shell .admin-documents-content {
+    padding: 20px 16px 36px;
+  }
+
+  .administrator-shell .admin-dashboard-header {
+    padding: 70px 16px 12px;
+  }
+
+  .administrator-shell .admin-kpi-grid,
+  .administrator-shell .admin-analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .administrator-shell .admin-circular-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .administrator-shell .admin-dashboard-header-content,
+  .administrator-shell .table-card-header,
+  .administrator-shell .admin-panel-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .administrator-shell .admin-refresh-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .administrator-shell .admin-project-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .administrator-shell .project-search {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .administrator-shell .admin-project-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 480px) {
+  .administrator-shell .admin-mobile-header {
+    height: 54px;
+    padding: 0 12px;
+  }
+
+  .administrator-shell .admin-dashboard-main,
+  .administrator-shell .admin-projects-content,
+  .administrator-shell .admin-requests-content,
+  .administrator-shell .admin-users-content,
+  .administrator-shell .admin-investments-content,
+  .administrator-shell .admin-investors-content,
+  .administrator-shell .admin-messages-content,
+  .administrator-shell .admin-documents-content {
+    padding: 16px 12px 30px;
+  }
+
+  .administrator-shell .admin-dashboard-header {
+    padding: 68px 12px 10px;
+  }
+
+  .administrator-shell .admin-kpi-card {
+    padding: 14px;
+  }
+
+  .administrator-shell .admin-kpi-content strong {
+    font-size: 21px;
+  }
+
+  .administrator-shell .admin-circular-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .administrator-shell .admin-circular-progress {
+    width: 96px;
+    height: 96px;
+  }
+
+  .administrator-shell .admin-circular-inner {
+    width: 74px;
+    height: 74px;
+  }
+
+  .administrator-shell .admin-dashboard-welcome h1 {
+    font-size: 24px;
+  }
+
+  .administrator-shell .admin-panel,
+  .administrator-shell .admin-recent-projects,
+  .administrator-shell .admin-project-table-card {
+    border-radius: 14px;
+  }
+
+  .administrator-shell .admin-project-table {
+    min-width: 620px;
+  }
+
+  .administrator-shell .admin-status-badge {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 360px) {
+  .administrator-shell .admin-dashboard-main,
+  .administrator-shell .admin-projects-content,
+  .administrator-shell .admin-requests-content,
+  .administrator-shell .admin-users-content,
+  .administrator-shell .admin-investments-content,
+  .administrator-shell .admin-investors-content,
+  .administrator-shell .admin-messages-content,
+  .administrator-shell .admin-documents-content {
+    padding-inline: 9px;
+  }
+
+  .administrator-shell .admin-kpi-card {
+    padding: 12px;
+  }
+}
