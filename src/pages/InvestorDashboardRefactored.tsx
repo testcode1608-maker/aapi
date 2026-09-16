@@ -11,6 +11,7 @@ import "../styles/admin-navbar-overrides.css";
 import "../styles/admin-chart-canvas.css";
 import "../styles/investor/index.css";
 import "../styles/investor-admin-copy.css";
+import "../styles/investor-page-header-theme.css";
 import InvestorAdminNavbar from "../components/investor/InvestorAdminNavbar";
 import InvestorDashboardOverview from "../components/investor/InvestorDashboardOverview";
 import InvestorProjectCreateForm from "../components/investor/InvestorProjectCreateForm";
@@ -66,7 +67,7 @@ export default function InvestorDashboardRefactored() {
       break;
     case "investments":
       content = <>
-        <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الاستثمارات</span><h1>استثماراتي</h1><p>متابعة استثماراتك وتسجيل عمليات استثمار جديدة.</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setInvestmentFormOpen(true)}><i className="bi bi-plus-circle" /> إضافة استثمار</button></div>
+        <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">الاستثمارات</span><h1>إضافة ومتابعة الاستثمارات</h1><p>متابعة استثماراتك وتسجيل عمليات استثمار جديدة.</p></div><button type="button" className="investor-dashboard-primary-btn" onClick={() => setInvestmentFormOpen(true)}><i className="bi bi-plus-circle" /> إضافة استثمار</button></div>
         <InvestorInvestmentsSection investments={investments} />
         <InvestorFormModal open={investmentFormOpen} onClose={() => setInvestmentFormOpen(false)}><InvestorInvestmentCreateForm form={createInvestment.form} setForm={createInvestment.setForm} projects={createInvestment.eligibleProjects} creating={createInvestment.creating} error={createInvestment.error} success={createInvestment.success} onSubmit={createInvestment.submit} onReset={createInvestment.resetForm} /></InvestorFormModal>
       </>;
