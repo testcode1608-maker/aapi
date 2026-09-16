@@ -9,9 +9,8 @@ export default function InvestorInvestmentsSection({ investments }: Props) {
   const tr = (key: string) => t(`investorDashboard.${key}`);
 
   return (
-    <section className="investor-dashboard-section">
-      <div className="investor-dashboard-page-header"><div><span className="investor-dashboard-overline">{tr("overview.investments")}</span><h1>{tr("investmentsTitle")}</h1><p>{tr("investmentsDescription")}</p></div></div>
-      <div className="investor-dashboard-grid">
+    <section className="investor-dashboard-section investor-investments-section">
+      <div className="investor-dashboard-grid investor-investments-grid">
         {investments.map((investment) => {
           const status = getInvestmentStatus(investment.statut);
           return (
@@ -42,7 +41,16 @@ export default function InvestorInvestmentsSection({ investments }: Props) {
             </div>
           );
         })}
-        {investments.length === 0 && <div className="investor-dashboard-card investor-dashboard-projects-card"><div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{tr("overview.investments")}</span><h2>{tr("overview.investmentSummary")}</h2></div></div></div>}
+        {investments.length === 0 && (
+          <div className="investor-dashboard-card investor-dashboard-projects-card">
+            <div className="investor-dashboard-card-header">
+              <div>
+                <span className="investor-dashboard-card-overline">{tr("overview.investments")}</span>
+                <h2>{tr("overview.investmentSummary")}</h2>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
