@@ -43,6 +43,12 @@
 .administrator-shell .soft-admin-profile strong{font-size:9px;color:#dce4df;white-space:nowrap}
 .administrator-shell .soft-admin-profile small{font-size:8px;color:#69736d;white-space:nowrap}
 .administrator-shell .admin-navbar-overlay{position:fixed;inset:0;z-index:90;border:0;background:rgba(0,0,0,.48);backdrop-filter:blur(2px)}
+
+/* Dark mode: keep the الإدارة search field readable and visually consistent. */
+.administrator-shell input[placeholder="اكتب هنا للبحث..."]{color:#dce4df!important;background:transparent!important;caret-color:#63bd91!important}
+.administrator-shell input[placeholder="اكتب هنا للبحث..."]::placeholder{color:#7f8a86!important;opacity:1!important}
+.administrator-shell input[placeholder="اكتب هنا للبحث..."]:focus{color:#f2f6f3!important;outline:0!important}
+
 @media(max-width:800px){
  .administrator-shell .admin-navbar{z-index:1000;width:min(300px,84vw)!important}
  .administrator-shell .admin-main-content{position:relative;z-index:1}
@@ -68,3 +74,5 @@ body.aapi-admin-light .administrator-shell .soft-admin-breadcrumb strong{color:#
 body.aapi-admin-light .administrator-shell .soft-admin-search,body.aapi-admin-light .administrator-shell .soft-admin-icon-button{background:#f7faf8;border-color:#dce5df;color:#65736b}
 body.aapi-admin-light .administrator-shell .soft-admin-search input{color:#173125}
 body.aapi-admin-light .administrator-shell .soft-admin-profile strong{color:#173125}
+body.aapi-admin-light .administrator-shell input[placeholder="اكتب هنا للبحث..."]{color:#173125!important;background:transparent!important;caret-color:#087443!important}
+body.aapi-admin-light .administrator-shell input[placeholder="اكتب هنا للبحث..."]::placeholder{color:#7b8580!important;opacity:1!important}
