@@ -25,5 +25,45 @@
 .investor-dashboard-projects-card .investor-dashboard-project-info strong{font-size:13px}
 .investor-dashboard-projects-card .investor-dashboard-project-info small{font-weight:700;color:var(--id-dark-green)}
 .investor-dashboard-projects-card .investor-dashboard-status{margin-inline-start:auto}
+
+/* AAPI — clear input borders in light mode */
+body.aapi-admin-light .investor-project-form-field input,
+body.aapi-admin-light .investor-project-form-field textarea,
+body.aapi-admin-light .investor-project-form-field select,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field input,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field textarea,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field select{
+  border:1px solid #b9c9c1!important;
+  background:#ffffff!important;
+  color:#17241d!important;
+  box-shadow:inset 0 1px 2px rgba(23,36,29,.035)!important;
+}
+
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field input::placeholder,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field textarea::placeholder{
+  color:#87938d!important;
+  opacity:1!important;
+}
+
+body.aapi-admin-light .investor-project-form-field input:hover,
+body.aapi-admin-light .investor-project-form-field textarea:hover,
+body.aapi-admin-light .investor-project-form-field select:hover,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field input:hover,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field textarea:hover,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field select:hover{
+  border-color:#9fb2a8!important;
+}
+
+body.aapi-admin-light .investor-project-form-field input:focus,
+body.aapi-admin-light .investor-project-form-field textarea:focus,
+body.aapi-admin-light .investor-project-form-field select:focus,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field input:focus,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field textarea:focus,
+body.aapi-admin-light .investor-form-modal-panel .investor-project-form-field select:focus{
+  border-color:#087443!important;
+  box-shadow:0 0 0 3px rgba(8,116,67,.12)!important;
+  outline:none!important;
+}
+
 @media(max-width:760px){.investor-project-form-grid{grid-template-columns:1fr}.investor-project-form-field.full{grid-column:auto}.investor-project-create-form{padding:17px}.investor-project-form-actions{flex-direction:column;align-items:stretch}.investor-project-form-actions .investor-dashboard-primary-btn,.investor-project-form-actions .investor-dashboard-logout{width:100%}}
 @media(max-width:460px){.investor-project-create-form .investor-dashboard-card-header{gap:10px}.investor-project-create-form .investor-dashboard-card-header h2{font-size:15px}.investor-dashboard-projects-card .investor-dashboard-card-header{align-items:flex-start}.investor-dashboard-projects-card .investor-dashboard-status{margin-inline-start:0}.investor-dashboard-projects-card .investor-dashboard-project-item{align-items:flex-start}}
