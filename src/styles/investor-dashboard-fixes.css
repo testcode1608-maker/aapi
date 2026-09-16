@@ -15,7 +15,6 @@
 .investor-dashboard-section{width:100%;max-width:1240px;min-width:0;margin-inline:auto}
 .investor-dashboard-topbar{width:100%;max-width:none}
 
-/* Direction and grid placement */
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-sidebar{justify-self:end;grid-column:2;grid-row:1}
 .investor-dashboard-page.investor-dashboard-ltr .investor-dashboard-sidebar{justify-self:start;grid-column:1;grid-row:1}
 .investor-dashboard-page.investor-dashboard-rtl .investor-dashboard-main{grid-column:1;grid-row:1}
@@ -75,8 +74,18 @@
 .investor-dashboard-page form input,.investor-dashboard-page form select,.investor-dashboard-page form textarea{width:100%;min-width:0}
 .investor-dashboard-page button,.investor-dashboard-page a{max-width:100%}
 
-/* Alert normalization */
-.investor-dashboard-status.danger {
+/* Unified alerts — applies to all Investor Dashboard alert/status variants */
+.investor-dashboard-page [role="alert"],
+.investor-dashboard-page .investor-dashboard-alert,
+.investor-dashboard-page .investor-dashboard-status.danger,
+.investor-dashboard-page .investor-dashboard-status.error,
+.investor-dashboard-page .investor-dashboard-status.warning,
+.investor-dashboard-page .investor-dashboard-status.success,
+.investor-dashboard-page .investor-dashboard-status.info,
+.investor-dashboard-page .alert-danger,
+.investor-dashboard-page .alert-warning,
+.investor-dashboard-page .alert-success,
+.investor-dashboard-page .alert-info {
   display:flex;
   align-items:center;
   gap:10px;
@@ -87,9 +96,6 @@
   padding:11px 15px;
   margin:12px 0;
   border-radius:10px;
-  border:1px solid rgba(220,53,69,.25);
-  background:rgba(220,53,69,.08);
-  color:#dc3545;
   font-size:14px;
   font-weight:500;
   line-height:1.6;
@@ -99,7 +105,10 @@
   direction:rtl;
 }
 
-.investor-dashboard-status.danger i {
+.investor-dashboard-page [role="alert"] i,
+.investor-dashboard-page .investor-dashboard-alert i,
+.investor-dashboard-page .investor-dashboard-status i,
+.investor-dashboard-page [class*="alert-"] i {
   flex:0 0 auto;
   display:inline-flex;
   align-items:center;
@@ -111,11 +120,89 @@
   line-height:1;
 }
 
-/* Dark mode */
-.dark-mode .investor-dashboard-status.danger,
-[data-theme="dark"] .investor-dashboard-status.danger,
-body.dark .investor-dashboard-status.danger {
+/* Alert colors */
+.investor-dashboard-page .investor-dashboard-status.danger,
+.investor-dashboard-page .investor-dashboard-status.error,
+.investor-dashboard-page .alert-danger {
+  border:1px solid rgba(220,53,69,.25);
+  background:rgba(220,53,69,.08);
+  color:#dc3545;
+}
+
+.investor-dashboard-page .investor-dashboard-status.warning,
+.investor-dashboard-page .alert-warning {
+  border:1px solid rgba(245,158,11,.25);
+  background:rgba(245,158,11,.08);
+  color:#b77900;
+}
+
+.investor-dashboard-page .investor-dashboard-status.success,
+.investor-dashboard-page .alert-success {
+  border:1px solid rgba(25,135,84,.25);
+  background:rgba(25,135,84,.08);
+  color:#198754;
+}
+
+.investor-dashboard-page .investor-dashboard-status.info,
+.investor-dashboard-page .alert-info {
+  border:1px solid rgba(13,110,253,.25);
+  background:rgba(13,110,253,.08);
+  color:#0d6efd;
+}
+
+/* Dark mode — same dimensions, readable contrast */
+.dark-mode .investor-dashboard-page [role="alert"],
+.dark-mode .investor-dashboard-page .investor-dashboard-alert,
+[data-theme="dark"] .investor-dashboard-page [role="alert"],
+[data-theme="dark"] .investor-dashboard-page .investor-dashboard-alert,
+body.dark .investor-dashboard-page [role="alert"],
+body.dark .investor-dashboard-page .investor-dashboard-alert {
+  background:rgba(255,255,255,.04);
+}
+
+.dark-mode .investor-dashboard-page .investor-dashboard-status.danger,
+.dark-mode .investor-dashboard-page .investor-dashboard-status.error,
+.dark-mode .investor-dashboard-page .alert-danger,
+[data-theme="dark"] .investor-dashboard-page .investor-dashboard-status.danger,
+[data-theme="dark"] .investor-dashboard-page .investor-dashboard-status.error,
+[data-theme="dark"] .investor-dashboard-page .alert-danger,
+body.dark .investor-dashboard-page .investor-dashboard-status.danger,
+body.dark .investor-dashboard-page .investor-dashboard-status.error,
+body.dark .investor-dashboard-page .alert-danger {
   background:rgba(220,53,69,.12);
   border-color:rgba(255,107,122,.30);
   color:#ff6b7a;
+}
+
+.dark-mode .investor-dashboard-page .investor-dashboard-status.warning,
+.dark-mode .investor-dashboard-page .alert-warning,
+[data-theme="dark"] .investor-dashboard-page .investor-dashboard-status.warning,
+[data-theme="dark"] .investor-dashboard-page .alert-warning,
+body.dark .investor-dashboard-page .investor-dashboard-status.warning,
+body.dark .investor-dashboard-page .alert-warning {
+  background:rgba(245,158,11,.12);
+  border-color:rgba(245,180,70,.30);
+  color:#ffc857;
+}
+
+.dark-mode .investor-dashboard-page .investor-dashboard-status.success,
+.dark-mode .investor-dashboard-page .alert-success,
+[data-theme="dark"] .investor-dashboard-page .investor-dashboard-status.success,
+[data-theme="dark"] .investor-dashboard-page .alert-success,
+body.dark .investor-dashboard-page .investor-dashboard-status.success,
+body.dark .investor-dashboard-page .alert-success {
+  background:rgba(25,135,84,.12);
+  border-color:rgba(65,190,130,.30);
+  color:#57d99a;
+}
+
+.dark-mode .investor-dashboard-page .investor-dashboard-status.info,
+.dark-mode .investor-dashboard-page .alert-info,
+[data-theme="dark"] .investor-dashboard-page .investor-dashboard-status.info,
+[data-theme="dark"] .investor-dashboard-page .alert-info,
+body.dark .investor-dashboard-page .investor-dashboard-status.info,
+body.dark .investor-dashboard-page .alert-info {
+  background:rgba(13,110,253,.12);
+  border-color:rgba(90,160,255,.30);
+  color:#70adff;
 }
