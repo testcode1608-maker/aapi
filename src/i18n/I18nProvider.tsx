@@ -8,6 +8,7 @@ import { uiTranslations } from "./uiTranslations";
 import { registrationTranslations } from "./registrationTranslations";
 import { investorDashboardTranslations } from "./investorDashboardTranslations";
 import { investorFormsTranslations } from "./investorFormsTranslations";
+import { adminTranslations } from "./adminTranslations";
 
 type I18nContextValue = { language: Language; setLanguage: (language: Language) => void; t: (key: string) => string };
 const I18nContext = createContext<I18nContextValue | null>(null);
@@ -33,6 +34,7 @@ function getSources(language: Language) {
     { registrationPage: registrationTranslations[language] },
     { investorDashboard: investorDashboardTranslations[language] },
     { investorForms: investorFormsTranslations[language] },
+    { admin: adminTranslations[language] },
   ];
 }
 
