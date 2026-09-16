@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Search, RefreshCw, SlidersHorizontal, Database, CheckCircle2, Clock3, AlertCircle } from "lucide-react";
+import { Search, RefreshCw, Database, CheckCircle2, Clock3, AlertCircle } from "lucide-react";
 
 const API = "http://localhost/aapi-api/auth/admin/admin.php";
 type R = Record<string, any>;
@@ -153,7 +153,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
         </div>
         <div className="admin-toolbar soft-data-toolbar">
           <div className="soft-data-search"><Search size={16} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="ابحث في البيانات..." aria-label="بحث" /></div>
-          <div className="soft-data-filter"><SlidersHorizontal size={15} /><select value={filter} onChange={e => setFilter(e.target.value)} aria-label="تصفية حسب الحالة"><option value="all">كل الحالات</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select></div>
+          <div className="soft-data-filter"><select value={filter} onChange={e => setFilter(e.target.value)} aria-label="تصفية حسب الحالة"><option value="all">كل الحالات</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select></div>
           <button className="soft-data-filter-button" onClick={() => { setSearch(""); setFilter("all"); }}><RefreshCw size={14} /> إعادة ضبط</button>
         </div>
 
