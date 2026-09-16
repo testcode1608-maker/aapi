@@ -8,9 +8,7 @@
 .admin-investors-content,
 .admin-messages-content,
 .admin-documents-content,
-.admin-dashboard-header {
-  min-width: 0;
-}
+
 
 .admin-project-table-wrapper,
 .admin-table-wrapper,
@@ -31,7 +29,6 @@
     width: 240px;
   }
 
-  .administrator-shell .admin-dashboard-header,
   .administrator-shell .admin-dashboard-main,
   .administrator-shell .admin-projects-content,
   .administrator-shell .admin-requests-content,
@@ -49,7 +46,6 @@
     width: min(84vw, 310px);
   }
 
-  .administrator-shell .admin-dashboard-header,
   .administrator-shell .admin-dashboard-main,
   .administrator-shell .admin-projects-content,
   .administrator-shell .admin-requests-content,
@@ -76,9 +72,7 @@
     padding: 20px 16px 36px;
   }
 
-  .administrator-shell .admin-dashboard-header {
-    padding: 70px 16px 12px;
-  }
+  
 
   .administrator-shell .admin-kpi-grid,
   .administrator-shell .admin-analytics-grid {
@@ -129,9 +123,7 @@
     padding: 16px 12px 30px;
   }
 
-  .administrator-shell .admin-dashboard-header {
-    padding: 68px 12px 10px;
-  }
+  
 
   .administrator-shell .admin-kpi-card {
     padding: 14px;
