@@ -30,6 +30,7 @@ export default function Administrator() {
   const [open, setOpen] = useState(false);
   const user = getUser();
   const userId = Number(user?.id ?? 0);
+  const direction = language === "ar" ? "rtl" : "ltr";
   const name = loc.pathname.split("/")[2] as Section | undefined;
   const section: Section = name && ["users", "investors", "projects", "investments", "requests", "messages", "documents"].includes(name) ? name : "dashboard";
   const names: Record<string, string> = {
@@ -38,11 +39,11 @@ export default function Administrator() {
   };
   const current = names[name ?? "dashboard"] ?? t("admin.nav.dashboard");
 
-  return <div className={`administrator-shell ${open ? "admin-sidebar-open" : ""}`} dir={language === "ar" ? "rtl" : "ltr"} lang={language}>
+  return <div className={`administrator-shell ${open ? "admin-sidebar-open" : ""}`} dir={direction} lang={language}>
     <AdminNavbar onToggle={() => setOpen(v => !v)} />
     {open && <button className="admin-navbar-overlay" aria-label={t("admin.nav.closeMenu")} onClick={() => setOpen(false)} />}
-    <div className="admin-main-content">
-      <header className="soft-admin-topbar">
+    <div className="admin-main-content" dir={direction}>
+      <header className="soft-admin-topbar" dir={direction}>
         <div className="soft-admin-breadcrumb"><span>{t("admin.topbar.agency")}</span><b>/</b><strong>{current}</strong></div>
         <div className="soft-admin-topbar-actions">
           <label className="soft-admin-search"><Search size={15} /><input placeholder={t("admin.topbar.search")} aria-label={t("admin.topbar.searchAria")} /></label>
