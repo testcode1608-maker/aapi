@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import type { DashboardActivity, DashboardInvestment, DashboardProject, DashboardStats } from "../../types/investorDashboard";
 import { formatAmount, formatRelativeTime, getProjectStatus, toNumber } from "../../utils/investorDashboard";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -42,7 +41,6 @@ export default function InvestorDashboardOverview({ stats, projects, investments
           <h1>{t("investorDashboard.overview.welcome")}</h1>
           <p>{t("investorDashboard.overview.description")}</p>
         </div>
-        <Link className="soft-investor-primary" to="/investor/dashboard/projects"><i className="bi bi-plus-lg" /> {t("investorDashboard.sidebar.projects")}</Link>
       </div>
 
       <div className="soft-investor-kpi-grid">
@@ -56,7 +54,7 @@ export default function InvestorDashboardOverview({ stats, projects, investments
         <article className="soft-investor-card soft-investor-project-card">
           <div className="soft-investor-card-head">
             <div><span>{t("investorDashboard.overview.projects")}</span><h2>{t("investorDashboard.overview.latestProjects")}</h2></div>
-            <Link to="/investor/dashboard/projects">{t("investorDashboard.overview.viewAll")}</Link>
+            <a href="/investor/dashboard/projects">{t("investorDashboard.overview.viewAll")}</a>
           </div>
           <div className="soft-investor-table-wrap">
             <table className="soft-investor-table">
@@ -86,7 +84,7 @@ export default function InvestorDashboardOverview({ stats, projects, investments
         </article>
 
         <article className="soft-investor-card soft-investor-orders-card">
-          <div className="soft-investor-card-head"><div><span>{t("investorDashboard.overview.activity")}</span><h2>{t("investorDashboard.overview.latestActivities")}</h2></div><Link to="/investor/dashboard/notifications">{t("investorDashboard.overview.viewAll")}</Link></div>
+          <div className="soft-investor-card-head"><div><span>{t("investorDashboard.overview.activity")}</span><h2>{t("investorDashboard.overview.latestActivities")}</h2></div><a href="/investor/dashboard/notifications">{t("investorDashboard.overview.viewAll")}</a></div>
           <div className="soft-investor-orders">
             {recentActivities.map((activity, index) => <div className="soft-investor-order" key={`${activity.title}-${index}`}><span className="soft-investor-order-icon"><i className={`bi ${activity.icon || "bi-clock-history"}`} /></span><div><strong>{activity.title}</strong><p>{activity.text}</p><small>{formatRelativeTime(activity.date)}</small></div></div>)}
             {!recentActivities.length && <div className="soft-investor-empty">{t("investorDashboard.overview.noActivities")}</div>}
