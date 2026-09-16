@@ -35,6 +35,11 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
 .administrator-shell .soft-data-toolbar .soft-data-filter select,.administrator-shell .soft-data-toolbar select{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:42px!important;min-height:42px!important;margin:0!important;padding:0 12px!important;box-sizing:border-box!important}
 .administrator-shell .soft-data-toolbar .soft-data-filter-button{grid-column:auto!important;width:118px!important;min-width:118px!important;max-width:118px!important;height:42px!important;min-height:42px!important;flex:none!important;margin:0!important;box-sizing:border-box!important}
 
+/* Dashboard header — RTL: welcome starts on the right and refresh button sits on the left. */
+.administrator-shell .admin-dashboard-header-content{direction:rtl!important;text-align:right!important}
+.administrator-shell .admin-dashboard-header-content .admin-dashboard-welcome{order:1!important;text-align:right!important;direction:rtl!important}
+.administrator-shell .admin-dashboard-header-content .admin-refresh-button{order:2!important;margin-right:auto!important;margin-left:0!important;direction:rtl!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;white-space:nowrap!important}
+
 @media (max-width:1200px){
  .administrator-shell .admin-navbar{width:250px!important}
  .administrator-shell .admin-main-content{width:calc(100% - 250px);margin-right:250px}
