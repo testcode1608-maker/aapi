@@ -1,0 +1,13 @@
+.administrator-shell .soft-data-filter{position:relative!important;z-index:100!important;overflow:visible!important}
+.administrator-shell .soft-data-filter.is-open{border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.08)!important}
+.administrator-shell .soft-data-filter-trigger{width:100%;height:40px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 12px;border:0;border-radius:9px;background:transparent;color:#dce3df;font-size:11px;font-family:inherit;line-height:1;cursor:pointer;text-align:right;direction:rtl;box-sizing:border-box}
+.administrator-shell .soft-data-filter-trigger svg{flex:0 0 15px;transition:transform .18s ease}
+.administrator-shell .soft-data-filter.is-open .soft-data-filter-trigger svg{transform:rotate(180deg)}
+.administrator-shell .soft-data-filter-menu{position:absolute;top:calc(100% + 7px);right:0;left:0;display:flex;flex-direction:column;gap:3px;padding:7px;border:1px solid #2a3035;border-radius:11px;background:#111317;box-shadow:0 16px 34px rgba(0,0,0,.24);z-index:9999;box-sizing:border-box;direction:rtl;animation:softDataFilterDown .16s ease-out}
+.administrator-shell .soft-data-filter-menu button{width:100%;height:34px;border:0;border-radius:7px;background:transparent;color:#cfd7d3;font-size:10px;font-family:inherit;text-align:right;padding:0 10px;cursor:pointer;box-sizing:border-box}
+.administrator-shell .soft-data-filter-menu button:hover,.administrator-shell .soft-data-filter-menu button.is-selected{background:rgba(8,116,67,.13);color:#63bd91}
+@keyframes softDataFilterDown{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+body.aapi-admin-light .administrator-shell .soft-data-filter-trigger{background:#fff!important;color:#38433e!important}
+body.aapi-admin-light .administrator-shell .soft-data-filter-menu{background:#fff!important;border-color:#dce5df!important;box-shadow:0 16px 34px rgba(25,70,48,.12)!important}
+body.aapi-admin-light .administrator-shell .soft-data-filter-menu button{color:#38433e!important}
+body.aapi-admin-light .administrator-shell .soft-data-filter-menu button:hover,body.aapi-admin-light .administrator-shell .soft-data-filter-menu button.is-selected{background:#edf7f1!important;color:#087443!important}
