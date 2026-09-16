@@ -74,3 +74,48 @@
 .investor-dashboard-page form,.investor-dashboard-page .row,.investor-dashboard-page [class*="col-"]{min-width:0;max-width:100%}
 .investor-dashboard-page form input,.investor-dashboard-page form select,.investor-dashboard-page form textarea{width:100%;min-width:0}
 .investor-dashboard-page button,.investor-dashboard-page a{max-width:100%}
+
+/* Alert normalization */
+.investor-dashboard-status.danger {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  max-width:100%;
+  min-height:44px;
+  box-sizing:border-box;
+  padding:11px 15px;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid rgba(220,53,69,.25);
+  background:rgba(220,53,69,.08);
+  color:#dc3545;
+  font-size:14px;
+  font-weight:500;
+  line-height:1.6;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-align:right;
+  direction:rtl;
+}
+
+.investor-dashboard-status.danger i {
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:18px;
+  height:18px;
+  margin:0;
+  font-size:18px;
+  line-height:1;
+}
+
+/* Dark mode */
+.dark-mode .investor-dashboard-status.danger,
+[data-theme="dark"] .investor-dashboard-status.danger,
+body.dark .investor-dashboard-status.danger {
+  background:rgba(220,53,69,.12);
+  border-color:rgba(255,107,122,.30);
+  color:#ff6b7a;
+}
