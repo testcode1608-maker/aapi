@@ -15,10 +15,30 @@ export default function InvestorInvestmentsSection({ investments }: Props) {
         {investments.map((investment) => {
           const status = getInvestmentStatus(investment.statut);
           return (
-            <div className="investor-dashboard-card investor-dashboard-projects-card" key={investment.id}>
-              <div className="investor-dashboard-card-header"><div><span className="investor-dashboard-card-overline">{tr("projectList.investment")}</span><h2>{investment.projet_titre || tr("projectList.investment")}</h2></div><span className={status.className}>{status.label}</span></div>
-              <div className="investor-dashboard-investment-total"><span>{tr("investmentForm.amount")}</span><strong>{formatAmount(investment.montant)}</strong></div>
-              <div className="investor-dashboard-investment-items"><div><span>ID</span><strong>{investment.reference || "—"}</strong></div><div><span>{tr("investmentForm.date")}</span><strong>{formatDate(investment.date_investissement)}</strong></div></div>
+            <div className="investor-dashboard-card investor-dashboard-projects-card investor-soft-billing-card" key={investment.id}>
+              <div className="investor-soft-billing-icon-wrap">
+                <div className="investor-soft-billing-icon">
+                  <i className="bi bi-wallet2" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div className="investor-soft-billing-body">
+                <span className="investor-dashboard-card-overline">{tr("projectList.investment")}</span>
+                <h2>{investment.projet_titre || tr("projectList.investment")}</h2>
+                <span className={`investor-dashboard-status ${status.className}`}>{status.label}</span>
+                <hr className="investor-soft-billing-divider" />
+                <span className="investor-soft-billing-label">{tr("investmentForm.amount")}</span>
+                <strong className="investor-soft-billing-amount">{formatAmount(investment.montant)}</strong>
+                <div className="investor-soft-billing-meta">
+                  <div>
+                    <span>ID</span>
+                    <strong>{investment.reference || "—"}</strong>
+                  </div>
+                  <div>
+                    <span>{tr("investmentForm.date")}</span>
+                    <strong>{formatDate(investment.date_investissement)}</strong>
+                  </div>
+                </div>
+              </div>
             </div>
           );
         })}
