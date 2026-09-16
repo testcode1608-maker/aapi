@@ -10,13 +10,13 @@
 .investor-investment-create-card .investor-project-form-field input[readonly]{background:var(--id-light);font-weight:700;color:var(--id-green);cursor:default}
 .investor-investment-create-card .investor-project-form-field select{cursor:pointer}
 
-/* Auto spacing / auto height */
+/* Same spacing / distance as project cards */
 .investor-investments-section{width:100%}
 .investor-investments-grid{
   display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   gap:20px!important;
-  align-items:start!important;
+  align-items:stretch!important;
   width:100%!important;
   box-sizing:border-box!important;
 }
@@ -39,7 +39,7 @@
   display:flex!important;
   justify-content:center!important;
   align-items:center!important;
-  padding:16px 0 8px!important;
+  padding:12px 0 6px!important;
   flex:0 0 auto!important;
   box-sizing:border-box!important;
 }
@@ -58,7 +58,7 @@
 .investor-soft-billing-body{
   width:100%!important;
   box-sizing:border-box!important;
-  padding:8px 20px 18px!important;
+  padding:8px 20px 16px!important;
   text-align:center!important;
   display:flex!important;
   flex-direction:column!important;
@@ -101,7 +101,7 @@
   width:100%!important;
   height:1px!important;
   flex:0 0 1px!important;
-  margin:10px 0!important;
+  margin:8px 0!important;
   border:0!important;
   background:var(--id-border)!important;
   opacity:1!important;
@@ -130,7 +130,7 @@
   display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   gap:10px!important;
-  margin-top:12px!important;
+  margin-top:10px!important;
   box-sizing:border-box!important;
 }
 .investor-soft-billing-meta>div{
@@ -163,7 +163,7 @@
 .investor-soft-billing-meta>div:first-child strong{direction:ltr!important;color:var(--id-green)!important;font-family:"Segoe UI",Tahoma,Arial,sans-serif!important;letter-spacing:.01em!important}
 .investor-soft-billing-meta>div:nth-child(2) strong{direction:rtl!important;font-variant-numeric:tabular-nums!important}
 
-/* Prevent browser zoom from changing the card's internal proportions */
+/* Keep auto height and stable proportions on zoom */
 .investor-soft-billing-card,
 .investor-soft-billing-card *{box-sizing:border-box!important}
 .investor-soft-billing-card .investor-soft-billing-body h2,
