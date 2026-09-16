@@ -36,6 +36,9 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
 .administrator-shell .admin-dashboard-header-content .admin-dashboard-welcome{order:1!important;text-align:right!important;direction:rtl!important}
 .administrator-shell .admin-dashboard-header-content .admin-refresh-button{order:2!important;margin-right:auto!important;margin-left:0!important;direction:rtl!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;white-space:nowrap!important}
 
+/* Space between the topbar and the data-page header. */
+.administrator-shell .soft-data-main > .soft-data-header{margin-top:24px!important;margin-bottom:20px!important}
+
 /* Professional language direction — Arabic RTL, French/English LTR. */
 .administrator-shell[dir="ltr"]{direction:ltr!important;text-align:left}
 .administrator-shell[dir="ltr"] .admin-navbar{right:auto!important;left:0!important}
