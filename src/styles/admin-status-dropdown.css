@@ -11,3 +11,21 @@ body.aapi-admin-light .administrator-shell .soft-data-filter-trigger{background:
 body.aapi-admin-light .administrator-shell .soft-data-filter-menu{background:#fff!important;border-color:#dce5df!important;box-shadow:0 16px 34px rgba(25,70,48,.12)!important}
 body.aapi-admin-light .administrator-shell .soft-data-filter-menu button{color:#38433e!important}
 body.aapi-admin-light .administrator-shell .soft-data-filter-menu button:hover,body.aapi-admin-light .administrator-shell .soft-data-filter-menu button.is-selected{background:#edf7f1!important;color:#087443!important}
+
+/* Light mode: search results and data table must stay white instead of inheriting the dark Soft UI surface. */
+body.aapi-admin-light .administrator-shell .soft-data-panel{background:#fff!important;color:#20372c!important;box-shadow:0 12px 30px rgba(25,70,48,.06)!important}
+body.aapi-admin-light .administrator-shell .soft-data-toolbar{background:transparent!important;color:#38433e!important}
+body.aapi-admin-light .administrator-shell .soft-data-table-wrap{background:#fff!important}
+body.aapi-admin-light .administrator-shell table.soft-data-table{background:#fff!important;color:#38433e!important}
+body.aapi-admin-light .administrator-shell .soft-data-table thead{background:#fff!important}
+body.aapi-admin-light .administrator-shell .soft-data-table thead th{background:#fff!important;color:#68766f!important;border-bottom-color:#e1e8e4!important}
+body.aapi-admin-light .administrator-shell .soft-data-table tbody{background:#fff!important}
+body.aapi-admin-light .administrator-shell .soft-data-table tbody tr{background:#fff!important}
+body.aapi-admin-light .administrator-shell .soft-data-table tbody tr:hover{background:#f4f9f6!important}
+body.aapi-admin-light .administrator-shell .soft-data-table tbody td{background:#fff!important;color:#38433e!important;border-bottom-color:#e8eeeb!important}
+body.aapi-admin-light .administrator-shell .soft-data-table tbody td:first-child{color:#20372c!important}
+body.aapi-admin-light .administrator-shell .soft-data-empty{background:#fff!important;color:#52615a!important;border:1px solid #e1e8e4!important}
+body.aapi-admin-light .administrator-shell .soft-data-search input{background:transparent!important;color:#20372c!important}
+body.aapi-admin-light .administrator-shell .soft-data-search input::placeholder{color:#7b8580!important}
+body.aapi-admin-light .administrator-shell .soft-status-select{background:#fff!important;color:#38433e!important;border-color:#dce5df!important}
+body.aapi-admin-light .administrator-shell .soft-read-toggle{background:#fff!important;color:#52615a!important;border-color:#dce5df!important}
