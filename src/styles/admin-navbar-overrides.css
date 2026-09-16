@@ -44,10 +44,48 @@
 .administrator-shell .soft-admin-profile small{font-size:8px;color:#69736d;white-space:nowrap}
 .administrator-shell .admin-navbar-overlay{position:fixed;inset:0;z-index:90;border:0;background:rgba(0,0,0,.48);backdrop-filter:blur(2px)}
 
-/* Dark mode: keep the الإدارة search field readable and visually consistent. */
+/* Dark mode: keep the administration search field readable. */
 .administrator-shell input[placeholder="اكتب هنا للبحث..."]{color:#dce4df!important;background:transparent!important;caret-color:#63bd91!important}
 .administrator-shell input[placeholder="اكتب هنا للبحث..."]::placeholder{color:#7f8a86!important;opacity:1!important}
 .administrator-shell input[placeholder="اكتب هنا للبحث..."]:focus{color:#f2f6f3!important;outline:0!important}
+
+/* Language-aware direction: Arabic RTL, French/English LTR. */
+.administrator-shell[dir="ltr"]{direction:ltr!important}
+.administrator-shell[dir="ltr"] .admin-navbar{left:0;right:auto;border-left:0;border-right:1px solid rgba(255,255,255,.07)}
+.administrator-shell[dir="ltr"] .admin-navbar-brand-button{direction:ltr;text-align:left}
+.administrator-shell[dir="ltr"] .admin-navbar-user{direction:ltr}
+.administrator-shell[dir="ltr"] .admin-navbar-section-title{text-align:left}
+.administrator-shell[dir="ltr"] .admin-nav-link{direction:ltr;text-align:left}
+.administrator-shell[dir="ltr"] .admin-nav-link.active:before{right:auto;left:0}
+.administrator-shell[dir="ltr"] .admin-navbar-bottom-button{direction:ltr;justify-content:flex-start;text-align:left}
+.administrator-shell[dir="ltr"] .soft-admin-breadcrumb{direction:ltr;text-align:left}
+.administrator-shell[dir="ltr"] .soft-admin-topbar-actions{direction:ltr}
+.administrator-shell[dir="ltr"] .soft-admin-search{direction:ltr}
+.administrator-shell[dir="ltr"] .soft-admin-search input{text-align:left}
+.administrator-shell[dir="ltr"] .soft-admin-profile{direction:ltr;padding-right:0;padding-left:3px}
+.administrator-shell[dir="ltr"] .soft-admin-profile div{text-align:left}
+.administrator-shell[dir="ltr"] .admin-language-switcher{direction:ltr}
+.administrator-shell[dir="ltr"] .admin-dashboard-header-content,.administrator-shell[dir="ltr"] .admin-dashboard-welcome{text-align:left}
+.administrator-shell[dir="ltr"] .admin-refresh-button{direction:ltr}
+.administrator-shell[dir="ltr"] .soft-data-toolbar,.administrator-shell[dir="ltr"] .soft-data-panel-head{direction:ltr;text-align:left}
+.administrator-shell[dir="ltr"] .soft-data-table{direction:ltr}
+.administrator-shell[dir="ltr"] .soft-data-table th,.administrator-shell[dir="ltr"] .soft-data-table td{text-align:left}
+
+.administrator-shell[dir="rtl"]{direction:rtl!important}
+.administrator-shell[dir="rtl"] .admin-navbar{left:auto;right:0;border-right:0;border-left:1px solid rgba(255,255,255,.07)}
+.administrator-shell[dir="rtl"] .admin-navbar-brand-button{direction:rtl;text-align:right}
+.administrator-shell[dir="rtl"] .admin-navbar-user{direction:rtl}
+.administrator-shell[dir="rtl"] .admin-navbar-section-title{text-align:right}
+.administrator-shell[dir="rtl"] .admin-nav-link{direction:rtl;text-align:right}
+.administrator-shell[dir="rtl"] .admin-nav-link.active:before{right:0;left:auto}
+.administrator-shell[dir="rtl"] .admin-navbar-bottom-button{direction:rtl;justify-content:flex-start;text-align:right}
+.administrator-shell[dir="rtl"] .soft-admin-breadcrumb{direction:rtl;text-align:right}
+.administrator-shell[dir="rtl"] .soft-admin-topbar-actions{direction:rtl}
+.administrator-shell[dir="rtl"] .soft-admin-search{direction:rtl}
+.administrator-shell[dir="rtl"] .soft-admin-search input{text-align:right}
+.administrator-shell[dir="rtl"] .soft-admin-profile{direction:rtl;padding-right:3px;padding-left:0}
+.administrator-shell[dir="rtl"] .soft-admin-profile div{text-align:right}
+.administrator-shell[dir="rtl"] .admin-language-switcher{direction:rtl}
 
 @media(max-width:800px){
  .administrator-shell .admin-navbar{z-index:1000;width:min(300px,84vw)!important}
@@ -55,6 +93,10 @@
  .administrator-shell .soft-admin-topbar{min-height:58px}
  .administrator-shell .soft-admin-topbar-actions{gap:8px}
  .administrator-shell .admin-navbar-overlay{z-index:950}
+ .administrator-shell[dir="rtl"] .admin-navbar{transform:translateX(105%)}
+ .administrator-shell[dir="rtl"].admin-sidebar-open .admin-navbar{transform:translateX(0)}
+ .administrator-shell[dir="ltr"] .admin-navbar{transform:translateX(-105%)}
+ .administrator-shell[dir="ltr"].admin-sidebar-open .admin-navbar{transform:translateX(0)}
 }
 @media(max-width:520px){
  .administrator-shell .soft-admin-topbar-actions{gap:6px}
