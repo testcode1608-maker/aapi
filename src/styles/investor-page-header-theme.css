@@ -1,0 +1,38 @@
+/* AAPI — Investor dashboard page header theme fix */
+
+.investor-admin-copy .investor-dashboard-page-header h1 {
+  color: #17241d !important;
+}
+
+.investor-admin-copy .investor-dashboard-page-header p {
+  color: #68766e !important;
+}
+
+.investor-admin-copy .investor-dashboard-page-header .investor-dashboard-overline {
+  color: #087443 !important;
+}
+
+/* Dark mode */
+.aapi-site-dark .investor-admin-copy .investor-dashboard-page-header h1,
+body.aapi-site-dark .investor-admin-copy .investor-dashboard-page-header h1,
+.dark-mode .investor-admin-copy .investor-dashboard-page-header h1,
+body.dark .investor-admin-copy .investor-dashboard-page-header h1,
+[data-theme="dark"] .investor-admin-copy .investor-dashboard-page-header h1 {
+  color: #f3f5f4 !important;
+}
+
+.aapi-site-dark .investor-admin-copy .investor-dashboard-page-header p,
+body.aapi-site-dark .investor-admin-copy .investor-dashboard-page-header p,
+.dark-mode .investor-admin-copy .investor-dashboard-page-header p,
+body.dark .investor-admin-copy .investor-dashboard-page-header p,
+[data-theme="dark"] .investor-admin-copy .investor-dashboard-page-header p {
+  color: #7f8791 !important;
+}
+
+.aapi-site-dark .investor-admin-copy .investor-dashboard-page-header .investor-dashboard-overline,
+body.aapi-site-dark .investor-admin-copy .investor-dashboard-page-header .investor-dashboard-overline,
+.dark-mode .investor-admin-copy .investor-dashboard-page-header .investor-dashboard-overline,
+body.dark .investor-admin-copy .investor-dashboard-page-header .investor-dashboard-overline,
+[data-theme="dark"] .investor-admin-copy .investor-dashboard-page-header .investor-dashboard-overline {
+  color: #79d9a4 !important;
+}
