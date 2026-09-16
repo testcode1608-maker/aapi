@@ -37,13 +37,13 @@
 .administrator-shell .soft-data-main{padding-bottom:44px!important}
 .administrator-shell .soft-data-stat-grid{gap:16px}
 .administrator-shell .soft-data-panel{border-radius:18px!important;overflow:hidden;border:1px solid rgba(255,255,255,.055)}
-.administrator-shell .soft-data-panel-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;padding:22px 24px 16px!important;width:100%;text-align:right}
+.administrator-shell .soft-data-panel-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;padding:22px 24px 16px!important;width:100%;text-align:right;border-bottom:0!important;box-shadow:none!important}
 .administrator-shell .soft-data-panel-head>div:first-child{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;min-width:0;text-align:right}
 .administrator-shell .soft-data-panel-head .soft-ui-card-label{display:block;margin:0;padding:0;line-height:1.2;text-align:right;direction:ltr}
 .administrator-shell .soft-data-panel-head h2{margin:0!important;font-size:18px!important;font-weight:700;line-height:1.35;text-align:right}
 .administrator-shell .soft-data-panel-head p{margin:0!important;font-size:11px!important;color:#737b82;line-height:1.5;text-align:right}
 .administrator-shell .soft-data-count{flex:0 0 auto;margin-top:0;padding:7px 11px;border-radius:10px;background:rgba(8,116,67,.08);color:#63bd91;font-size:10px;font-weight:700;white-space:nowrap}
-.administrator-shell .soft-data-toolbar{display:flex!important;align-items:center!important;gap:12px!important;margin:0 24px 18px!important;padding:0!important;background:transparent!important;border:0!important;min-width:0;width:auto;box-sizing:border-box}
+.administrator-shell .soft-data-toolbar{display:flex!important;align-items:center!important;gap:12px!important;margin:0 24px 18px!important;padding:0!important;background:transparent!important;border:0!important;border-top:0!important;box-shadow:none!important;min-width:0;width:auto;box-sizing:border-box}
 .administrator-shell .soft-data-search{height:42px;display:flex;align-items:center;gap:9px;flex:1 1 340px;min-width:140px;padding:0 14px;border-radius:10px;border:1px solid #252a30;background:#111317;color:#7f8a86;box-sizing:border-box}
 .administrator-shell .soft-data-search:focus-within{border-color:rgba(8,116,67,.7);box-shadow:0 0 0 3px rgba(8,116,67,.09)}
 .administrator-shell .soft-data-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#eef3f0;font-size:12px;font-family:inherit}
@@ -125,3 +125,9 @@ body.aapi-admin-light .administrator-shell .soft-data-stat.gold .soft-data-stat-
 body.aapi-admin-light .administrator-shell .soft-data-stat.blue .soft-data-stat-icon{background:linear-gradient(145deg,#3d8bb3,#235a75)!important;color:#fff!important}
 body.aapi-admin-light .administrator-shell .soft-data-stat.red .soft-data-stat-icon{background:linear-gradient(145deg,#a95656,#6d2f2f)!important;color:#fff!important}
 body.aapi-admin-light .administrator-shell .soft-data-stat-icon{border:0!important}
+
+/* Remove the separator between the DATA MANAGEMENT header and its toolbar. */
+.administrator-shell .soft-data-panel-head{border-bottom:0!important;box-shadow:none!important}
+.administrator-shell .soft-data-toolbar{border-top:0!important;border-bottom:0!important;box-shadow:none!important}
+body.aapi-admin-light .administrator-shell .soft-data-panel-head{border-bottom-color:transparent!important;box-shadow:none!important}
+body.aapi-admin-light .administrator-shell .soft-data-toolbar{border-top-color:transparent!important;border-bottom-color:transparent!important;box-shadow:none!important}
