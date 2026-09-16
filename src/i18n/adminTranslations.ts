@@ -1,5 +1,6 @@
 export const adminTranslations = {
   ar: {
+    common: { language: "اللغة" },
     brand: { centralAdministration: "الإدارة المركزية", systemAdmin: "مسؤول النظام" },
     nav: {
       administration: "الإدارة", system: "النظام", dashboard: "لوحة التحكم", users: "المستخدمون", investors: "المستثمرون", projects: "المشاريع", investments: "الاستثمارات", requests: "الطلبات", messages: "الرسائل", documents: "الوثائق", settings: "الإعدادات", publicSite: "الموقع العام", logout: "تسجيل الخروج", openMenu: "فتح القائمة", closeMenu: "إغلاق القائمة"
@@ -10,6 +11,7 @@ export const adminTranslations = {
     }
   },
   fr: {
+    common: { language: "Langue" },
     brand: { centralAdministration: "Administration centrale", systemAdmin: "Administrateur système" },
     nav: {
       administration: "Administration", system: "Système", dashboard: "Tableau de bord", users: "Utilisateurs", investors: "Investisseurs", projects: "Projets", investments: "Investissements", requests: "Demandes", messages: "Messages", documents: "Documents", settings: "Paramètres", publicSite: "Site public", logout: "Déconnexion", openMenu: "Ouvrir le menu", closeMenu: "Fermer le menu"
@@ -20,6 +22,7 @@ export const adminTranslations = {
     }
   },
   en: {
+    common: { language: "Language" },
     brand: { centralAdministration: "Central Administration", systemAdmin: "System Administrator" },
     nav: {
       administration: "Administration", system: "System", dashboard: "Dashboard", users: "Users", investors: "Investors", projects: "Projects", investments: "Investments", requests: "Requests", messages: "Messages", documents: "Documents", settings: "Settings", publicSite: "Public website", logout: "Sign out", openMenu: "Open menu", closeMenu: "Close menu"
