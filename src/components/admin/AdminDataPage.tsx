@@ -114,9 +114,20 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const keys = section === "projects" ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"] : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
 
   return <div className="admin-dashboard admin-soft-data-page">
-    <header className="admin-dashboard-header soft-data-header"><div className="admin-dashboard-header-content"><div className="admin-dashboard-welcome"><span className="admin-dashboard-eyebrow">{t("admin.dashboard.eyebrow")}</span><h1>{c.title}</h1><p>{c.subtitle}</p></div><button className="admin-refresh-button soft-data-refresh" onClick={() => void load()} disabled={loading}><RefreshCw size={15} className={loading ? "spin" : ""} /> {t("admin.data.refresh")}</button></div></header>
     {error && <div className="admin-dashboard-error"><AlertCircle size={16} /><span>{error}</span></div>}
     <main className="admin-dashboard-main soft-data-main">
+      <header className="admin-dashboard-header soft-data-header">
+        <div className="admin-dashboard-header-content">
+          <div className="admin-dashboard-welcome">
+            <span className="admin-dashboard-eyebrow">{t("admin.dashboard.eyebrow")}</span>
+            <h1>{c.title}</h1>
+            <p>{c.subtitle}</p>
+          </div>
+          <button className="admin-refresh-button soft-data-refresh" onClick={() => void load()} disabled={loading}>
+            <RefreshCw size={15} className={loading ? "spin" : ""} /> {t("admin.data.refresh")}
+          </button>
+        </div>
+      </header>
       <section className="soft-data-stat-grid">{summary.map(item => <article className={`soft-data-stat ${item.tone}`} key={item.label}><div className="soft-data-stat-icon">{item.icon}</div><div><span>{item.label}</span><strong>{item.value}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>)}</section>
       <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head"><div><span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span><h2>{c.title}</h2><p>{c.subtitle}</p></div><span className="soft-data-count">{fmt(total, language)} {t("admin.data.items")}</span></div>
