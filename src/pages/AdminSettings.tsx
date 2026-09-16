@@ -16,16 +16,7 @@ const menu = [
 ] as const;
 
 type Theme = "dark" | "light";
-type Account = {
-  id?: number;
-  nom?: string;
-  prenom?: string;
-  email?: string;
-  telephone?: string;
-  role?: string;
-  statut?: string;
-  photo?: string | null;
-};
+type Account = { id?: number; nom?: string; prenom?: string; email?: string; telephone?: string; role?: string; statut?: string; photo?: string | null };
 
 function applyTheme(theme: Theme) {
   document.body.classList.toggle("aapi-admin-light", theme === "light");
@@ -34,11 +25,7 @@ function applyTheme(theme: Theme) {
 }
 
 function readAccount(): Account {
-  try {
-    return JSON.parse(localStorage.getItem("aapi_user") || "{}") as Account;
-  } catch {
-    return {};
-  }
+  try { return JSON.parse(localStorage.getItem("aapi_user") || "{}") as Account; } catch { return {}; }
 }
 
 export default function AdminSettings() {
@@ -50,24 +37,15 @@ export default function AdminSettings() {
   const [account, setAccount] = useState<Account>(() => readAccount());
   const [saved, setSaved] = useState(false);
 
-  useEffect(() => {
-    applyTheme(theme);
-    return () => document.body.classList.remove("aapi-admin-light");
-  }, [theme]);
-
-  const logout = () => {
-    localStorage.removeItem("aapi_user");
-    navigate("/login", { replace: true });
-  };
+  useEffect(() => { applyTheme(theme); return () => document.body.classList.remove("aapi-admin-light"); }, [theme]);
+  const logout = () => { localStorage.removeItem("aapi_user"); navigate("/login", { replace: true }); };
   const closeMobile = () => setMobileMenu(false);
   const change = (key: keyof Account, value: string) => setAccount(prev => ({ ...prev, [key]: value }));
   const saveAccount = () => {
     const current = readAccount();
     localStorage.setItem("aapi_user", JSON.stringify({ ...current, ...account }));
-    setAccount(prev => ({ ...current, ...prev }));
-    setSaved(true);
-    window.dispatchEvent(new CustomEvent("aapi-account-change"));
-    window.setTimeout(() => setSaved(false), 2200);
+    setAccount(prev => ({ ...current, ...prev })); setSaved(true);
+    window.dispatchEvent(new CustomEvent("aapi-account-change")); window.setTimeout(() => setSaved(false), 2200);
   };
 
   return <div className={`admin-settings-layout${mobileMenu ? " mobile-menu-open" : ""}`} dir={direction} lang={language}>
@@ -80,10 +58,8 @@ export default function AdminSettings() {
       <nav>{menu.map(([path, key, Icon]) => <NavLink key={path} to={path} onClick={closeMobile}><Icon size={17}/><span>{t(`admin.nav.${key}`)}</span></NavLink>)}</nav>
       <div className="admin-settings-sidebar-bottom"><button onClick={() => navigate("/")}><Building2 size={16}/> {t("admin.nav.publicSite")}</button><button onClick={logout}><LogOut size={16}/> {t("admin.nav.logout")}</button></div>
     </aside>
-
     <main className="admin-settings-main">
       <header className="admin-settings-header"><div><span>{t("admin.settings.eyebrow")}</span><h1>{t("admin.settings.title")}</h1><p>{t("admin.settings.subtitle")}</p></div></header>
-
       <section className="admin-settings-card">
         <div className="admin-settings-title"><div className="admin-settings-title-icon"><UserRound size={22}/></div><div><h2>{t("admin.settings.account")}</h2><p>{t("admin.settings.accountSubtitle")}</p></div></div>
         <div className="admin-account-form">
@@ -96,16 +72,11 @@ export default function AdminSettings() {
         </div>
         <div className="admin-account-actions"><button type="button" onClick={saveAccount}><Save size={16}/>{saved ? t("admin.settings.saved") : t("admin.settings.save")}</button></div>
       </section>
-
       <section className="admin-settings-card">
         <div className="admin-settings-title"><div className="admin-settings-title-icon"><Settings size={22}/></div><div><h2>{t("admin.settings.appearance")}</h2><p>{t("admin.settings.appearanceSubtitle")}</p></div></div>
         <div className="admin-theme-options">
-          <button type="button" className={`admin-theme-choice ${theme === "dark" ? "active" : ""}`} onClick={() => setTheme("dark")}>
-            <div className="admin-theme-choice-preview dark"><Moon size={25}/><div><strong>{t("admin.settings.dark")}</strong><span>Dark Mode</span></div></div><div className="admin-theme-check">{theme === "dark" && <Check size={15}/>}</div>
-          </button>
-          <button type="button" className={`admin-theme-choice ${theme === "light" ? "active" : ""}`} onClick={() => setTheme("light")}>
-            <div className="admin-theme-choice-preview light"><Settings size={25}/><div><strong>{t("admin.settings.light")}</strong><span>Light Mode</span></div></div><div className="admin-theme-check">{theme === "light" && <Check size={15}/>}</div>
-          </button>
+          <button type="button" className={`admin-theme-choice ${theme === "dark" ? "active" : ""}`} onClick={() => setTheme("dark")}><div className="admin-theme-choice-preview dark"><Moon size={25}/><div><strong>{t("admin.settings.dark")}</strong></div></div><div className="admin-theme-check">{theme === "dark" && <Check size={15}/>}</div></button>
+          <button type="button" className={`admin-theme-choice ${theme === "light" ? "active" : ""}`} onClick={() => setTheme("light")}><div className="admin-theme-choice-preview light"><Settings size={25}/><div><strong>{t("admin.settings.light")}</strong></div></div><div className="admin-theme-check">{theme === "light" && <Check size={15}/>}</div></button>
         </div>
         <div className="admin-settings-current"><span>{t("admin.settings.current")}</span><strong>{theme === "dark" ? t("admin.settings.dark") : t("admin.settings.light")}</strong></div>
       </section>
