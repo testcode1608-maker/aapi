@@ -49,6 +49,12 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
 .administrator-shell[dir="ltr"] .soft-admin-profile>span{order:1!important}
 .administrator-shell[dir="ltr"] .soft-admin-profile>div{order:2!important;text-align:left!important}
 
+/* Arabic dashboard welcome — centered. */
+.administrator-shell[dir="rtl"] .admin-dashboard-header-content{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;direction:rtl!important;text-align:center!important;min-height:110px!important}
+.administrator-shell[dir="rtl"] .admin-dashboard-header-content .admin-dashboard-welcome{position:absolute!important;left:50%!important;right:auto!important;top:50%!important;transform:translate(-50%,-50%)!important;width:max-content!important;max-width:70%!important;margin:0!important;order:initial!important;text-align:center!important;direction:rtl!important}
+.administrator-shell[dir="rtl"] .admin-dashboard-header-content .admin-dashboard-welcome .admin-dashboard-eyebrow,.administrator-shell[dir="rtl"] .admin-dashboard-header-content .admin-dashboard-welcome h1,.administrator-shell[dir="rtl"] .admin-dashboard-header-content .admin-dashboard-welcome p{text-align:center!important}
+.administrator-shell[dir="rtl"] .admin-dashboard-header-content .admin-refresh-button{order:initial!important;margin-right:auto!important;margin-left:0!important;direction:rtl!important}
+
 /* LTR dashboard welcome — centered in the full header, independent of the refresh button. */
 .administrator-shell[dir="ltr"] .admin-dashboard-header-content{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;direction:ltr!important;text-align:center!important;min-height:110px!important}
 .administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-dashboard-welcome{position:absolute!important;left:50%!important;right:auto!important;top:50%!important;transform:translate(-50%,-50%)!important;width:max-content!important;max-width:70%!important;margin:0!important;order:initial!important;text-align:center!important;direction:ltr!important}
@@ -110,6 +116,8 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
  .administrator-shell[dir="ltr"] .admin-main-content{width:100%!important;margin-left:0!important;margin-right:0!important}
  .administrator-shell[dir="ltr"] .admin-dashboard-header-content{min-height:130px!important}
  .administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-dashboard-welcome{max-width:calc(100% - 24px)!important;width:auto!important}
+ .administrator-shell[dir="rtl"] .admin-dashboard-header-content{min-height:130px!important}
+ .administrator-shell[dir="rtl"] .admin-dashboard-header-content .admin-dashboard-welcome{max-width:calc(100% - 24px)!important;width:auto!important}
 }
 @media (max-width:520px){
  .administrator-shell .admin-dashboard-main{padding-inline:12px}
@@ -125,6 +133,5 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
 }
 @media (min-width:801px){
  .administrator-shell .admin-dashboard-header-content{display:flex;align-items:flex-start;justify-content:space-between;gap:clamp(16px,2vw,28px)}
- .administrator-shell .admin-dashboard-header-content>*{flex:0 1 auto}
- .administrator-shell[dir="ltr"] .admin-dashboard-header-content{align-items:center!important;justify-content:center!important}
+ .administrator-shell[dir="ltr"] .admin-dashboard-header-content,.administrator-shell[dir="rtl"] .admin-dashboard-header-content{align-items:center!important;justify-content:center!important}
 }
