@@ -27,15 +27,11 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
 .administrator-shell .soft-ui-bars,.administrator-shell .soft-ui-bar-wrap{min-width:0}
 .administrator-shell .soft-admin-profile{flex:0 0 auto;min-width:0}
 .administrator-shell .soft-admin-icon-button{flex:0 0 auto}
-
-/* Data toolbar — fixed 42px controls and one identical 12px spacing system. */
 .administrator-shell .soft-data-toolbar{display:grid!important;grid-template-columns:minmax(0,1fr) 170px 118px!important;direction:rtl!important;align-items:center!important;column-gap:12px!important;row-gap:12px!important;width:calc(100% - 48px)!important;max-width:none!important;margin:0 24px 18px!important;padding:0!important;box-sizing:border-box!important}
 .administrator-shell .soft-data-toolbar .soft-data-search{grid-column:auto!important;width:100%!important;min-width:0!important;max-width:none!important;height:42px!important;flex:none!important;margin:0!important}
 .administrator-shell .soft-data-toolbar .soft-data-filter{grid-column:auto!important;width:170px!important;min-width:170px!important;max-width:170px!important;height:42px!important;min-height:42px!important;flex:none!important;margin:0!important;padding:0!important}
 .administrator-shell .soft-data-toolbar .soft-data-filter select,.administrator-shell .soft-data-toolbar select{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:42px!important;min-height:42px!important;margin:0!important;padding:0 12px!important;box-sizing:border-box!important}
 .administrator-shell .soft-data-toolbar .soft-data-filter-button{grid-column:auto!important;width:118px!important;min-width:118px!important;max-width:118px!important;height:42px!important;min-height:42px!important;flex:none!important;margin:0!important;box-sizing:border-box!important}
-
-/* Dashboard header — RTL: welcome starts on the right and refresh button sits on the left. */
 .administrator-shell .admin-dashboard-header-content{direction:rtl!important;text-align:right!important}
 .administrator-shell .admin-dashboard-header-content .admin-dashboard-welcome{order:1!important;text-align:right!important;direction:rtl!important}
 .administrator-shell .admin-dashboard-header-content .admin-refresh-button{order:2!important;margin-right:auto!important;margin-left:0!important;direction:rtl!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;white-space:nowrap!important}
@@ -52,9 +48,12 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
 .administrator-shell[dir="ltr"] .soft-admin-profile{direction:ltr!important;text-align:left!important}
 .administrator-shell[dir="ltr"] .soft-admin-profile>span{order:1!important}
 .administrator-shell[dir="ltr"] .soft-admin-profile>div{order:2!important;text-align:left!important}
-.administrator-shell[dir="ltr"] .admin-dashboard-header-content{direction:ltr!important;text-align:left!important}
-.administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-dashboard-welcome{order:1!important;text-align:left!important;direction:ltr!important}
-.administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-refresh-button{order:2!important;margin-left:auto!important;margin-right:0!important;direction:ltr!important}
+
+/* LTR dashboard welcome — centered in the full header, independent of the refresh button. */
+.administrator-shell[dir="ltr"] .admin-dashboard-header-content{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;direction:ltr!important;text-align:center!important;min-height:110px!important}
+.administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-dashboard-welcome{position:absolute!important;left:50%!important;right:auto!important;top:50%!important;transform:translate(-50%,-50%)!important;width:max-content!important;max-width:70%!important;margin:0!important;order:initial!important;text-align:center!important;direction:ltr!important}
+.administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-dashboard-welcome .admin-dashboard-eyebrow,.administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-dashboard-welcome h1,.administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-dashboard-welcome p{text-align:center!important}
+.administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-refresh-button{order:initial!important;margin-left:auto!important;margin-right:0!important;direction:ltr!important}
 .administrator-shell[dir="ltr"] .admin-panel-header{direction:ltr!important;text-align:left!important}
 .administrator-shell[dir="ltr"] .admin-panel-header>div{text-align:left!important}
 .administrator-shell[dir="ltr"] .admin-panel-header svg{margin-left:0!important;margin-right:0!important}
@@ -109,6 +108,8 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
  .administrator-shell[dir="ltr"] .admin-navbar{left:0!important;right:auto!important;transform:translateX(-110%)}
  .administrator-shell[dir="ltr"].admin-sidebar-open .admin-navbar{transform:translateX(0)}
  .administrator-shell[dir="ltr"] .admin-main-content{width:100%!important;margin-left:0!important;margin-right:0!important}
+ .administrator-shell[dir="ltr"] .admin-dashboard-header-content{min-height:130px!important}
+ .administrator-shell[dir="ltr"] .admin-dashboard-header-content .admin-dashboard-welcome{max-width:calc(100% - 24px)!important;width:auto!important}
 }
 @media (max-width:520px){
  .administrator-shell .admin-dashboard-main{padding-inline:12px}
@@ -125,4 +126,5 @@ html,body,#root{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
 @media (min-width:801px){
  .administrator-shell .admin-dashboard-header-content{display:flex;align-items:flex-start;justify-content:space-between;gap:clamp(16px,2vw,28px)}
  .administrator-shell .admin-dashboard-header-content>*{flex:0 1 auto}
+ .administrator-shell[dir="ltr"] .admin-dashboard-header-content{align-items:center!important;justify-content:center!important}
 }
