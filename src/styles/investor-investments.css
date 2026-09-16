@@ -10,19 +10,30 @@
 .investor-investment-create-card .investor-project-form-field input[readonly]{background:var(--id-light);font-weight:700;color:var(--id-green);cursor:default}
 .investor-investment-create-card .investor-project-form-field select{cursor:pointer}
 
-/* Creative Tim Soft UI — same compact card shape */
+/* Creative Tim Soft UI — stable compact Billing shape */
+.investor-investments-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:start!important;
+  grid-auto-rows:270px!important;
+  gap:20px!important;
+  width:100%!important;
+}
 .investor-soft-billing-card{
   position:relative!important;
   overflow:hidden!important;
   width:100%!important;
   min-width:0!important;
-  min-height:0!important;
+  max-width:none!important;
+  min-height:270px!important;
   height:270px!important;
   padding:0!important;
   margin:0!important;
   border-radius:12px!important;
   text-align:center!important;
   box-sizing:border-box!important;
+  align-self:start!important;
+  flex:none!important;
 }
 .investor-soft-billing-icon-wrap{
   display:flex!important;
@@ -30,10 +41,13 @@
   align-items:center!important;
   margin:0 24px!important;
   padding:12px 0 0!important;
+  height:60px!important;
+  box-sizing:border-box!important;
 }
 .investor-soft-billing-icon{
   width:48px!important;
   height:48px!important;
+  flex:0 0 48px!important;
   display:grid!important;
   place-items:center!important;
   border-radius:10px!important;
@@ -43,8 +57,12 @@
   font-size:19px!important;
 }
 .investor-soft-billing-body{
+  width:100%!important;
+  height:210px!important;
   padding:12px 24px 16px!important;
   text-align:center!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
 }
 .investor-soft-billing-body .investor-dashboard-card-overline{
   display:block!important;
@@ -56,6 +74,9 @@
   color:var(--id-gray)!important;
 }
 .investor-soft-billing-body h2{
+  display:block!important;
+  width:100%!important;
+  height:19px!important;
   margin:0!important;
   color:var(--id-dark)!important;
   font-size:14px!important;
@@ -69,12 +90,14 @@
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
+  height:22px!important;
   margin:6px 0 0!important;
   padding:4px 9px!important;
   border-radius:999px!important;
   font-size:9px!important;
   font-weight:700!important;
   line-height:1.15!important;
+  box-sizing:border-box!important;
 }
 .investor-soft-billing-divider{
   width:100%!important;
@@ -86,6 +109,7 @@
 }
 .investor-soft-billing-label{
   display:block!important;
+  height:12px!important;
   margin:0!important;
   color:var(--id-gray)!important;
   font-size:9px!important;
@@ -94,6 +118,7 @@
 }
 .investor-soft-billing-amount{
   display:block!important;
+  height:22px!important;
   margin:3px 0 0!important;
   color:var(--id-dark)!important;
   font-size:17px!important;
@@ -107,25 +132,34 @@
   display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   gap:8px!important;
+  width:100%!important;
+  height:45px!important;
   margin-top:12px!important;
 }
 .investor-soft-billing-meta>div{
   min-width:0!important;
+  height:45px!important;
   padding:8px!important;
   border-radius:8px!important;
   background:var(--id-light)!important;
   border:1px solid var(--id-border)!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
 }
 .investor-soft-billing-meta span{
   display:block!important;
+  height:10px!important;
   margin:0 0 3px!important;
   color:var(--id-gray)!important;
   font-size:8px!important;
   font-weight:700!important;
   line-height:1.2!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
 }
 .investor-soft-billing-meta strong{
   display:block!important;
+  height:12px!important;
   margin:0!important;
   color:var(--id-dark)!important;
   font-size:9px!important;
@@ -138,9 +172,10 @@
 .investor-soft-billing-meta>div:first-child strong{direction:ltr!important;color:var(--id-green)!important;font-family:"Segoe UI",Tahoma,Arial,sans-serif!important;letter-spacing:.01em!important}
 .investor-soft-billing-meta>div:nth-child(2) strong{direction:rtl!important;font-variant-numeric:tabular-nums!important}
 
-/* Ensure every investment card has exactly the same shape */
+/* Keep the card geometry independent from browser zoom */
+.investor-investments-grid .investor-soft-billing-card,
 .investor-dashboard-grid .investor-soft-billing-card{align-self:start!important}
-.investor-dashboard-grid .investor-soft-billing-card .investor-soft-billing-body{height:210px!important;box-sizing:border-box!important}
+.investor-investments-grid .investor-soft-billing-card .investor-soft-billing-body{height:210px!important}
 
 /* Dark mode */
 body.aapi-investor-dark .investor-soft-billing-card{background:#111317!important;border-color:#252930!important}
@@ -166,11 +201,11 @@ body.aapi-admin-light .investor-soft-billing-divider{background:#dce5df!importan
 body.aapi-admin-light .investor-soft-billing-meta>div{background:#f8faf9!important;border-color:#dce5df!important}
 body.aapi-admin-light .investor-soft-billing-meta>div:first-child strong{color:#087443!important}
 
-@media(max-width:760px){
-  .investor-investment-empty-form{align-items:flex-start}
-  .investor-soft-billing-card{height:260px!important}
-  .investor-soft-billing-meta{grid-template-columns:1fr!important}
-  .investor-soft-billing-body{padding:11px 16px 14px!important}
-  .investor-soft-billing-icon-wrap{padding-top:10px!important}
-  .investor-dashboard-grid .investor-soft-billing-card .investor-soft-billing-body{height:auto!important}
+/* Responsive: change only the number of columns, never the card shape */
+@media(max-width:900px){
+  .investor-investments-grid{grid-template-columns:minmax(0,1fr)!important}
+}
+@media(max-width:420px){
+  .investor-investments-grid{gap:14px!important}
+  .investor-soft-billing-body{padding-left:16px!important;padding-right:16px!important}
 }
