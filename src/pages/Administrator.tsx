@@ -38,7 +38,7 @@ export default function Administrator() {
   };
   const current = names[name ?? "dashboard"] ?? t("admin.nav.dashboard");
 
-  return <div className={`administrator-shell ${open ? "admin-sidebar-open" : ""}`} dir={language === "ar" ? "rtl" : "ltr"}>
+  return <div className={`administrator-shell ${open ? "admin-sidebar-open" : ""}`} dir={language === "ar" ? "rtl" : "ltr"} lang={language}>
     <AdminNavbar onToggle={() => setOpen(v => !v)} />
     {open && <button className="admin-navbar-overlay" aria-label={t("admin.nav.closeMenu")} onClick={() => setOpen(false)} />}
     <div className="admin-main-content">
