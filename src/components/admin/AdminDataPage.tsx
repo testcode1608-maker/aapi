@@ -1,14 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Search, RefreshCw, Database, CheckCircle2, Clock3, AlertCircle, ChevronDown } from "lucide-react";
+import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-status-dropdown.css";
 
 const API = "http://localhost/aapi-api/auth/admin/admin.php";
 type R = Record<string, any>;
 type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents";
-
-const labels: Record<string, string> = {
-  id: "المعرف", user_id: "User ID", investor_id: "معرف المستثمر", investisseur_id: "معرف المستثمر", nom: "الاسم", prenom: "اللقب", email: "البريد الإلكتروني", telephone: "الهاتف", role: "الدور", titre: "المشروع", nom_projet: "المشروع", wilaya: "الولاية", secteur: "القطاع", statut: "الحالة", montant: "المبلغ", montant_investissement: "قيمة الاستثمار", montant_effectif: "المبلغ الفعلي", date_creation: "تاريخ الإنشاء", created_at: "تاريخ الإنشاء", updated_at: "آخر تحديث", message: "الرسالة", sujet: "الموضوع", lu: "القراءة", document: "الوثيقة", type: "النوع", description: "الوصف", brouillon: "مسودة", soumis: "مُرسل", en_etude: "قيد الدراسة", approuve: "مقبول", en_cours: "قيد التنفيذ", realise: "منجز", rejete: "مرفوض", archive: "مؤرشف", actif: "نشط", inactif: "غير نشط", suspendu: "موقوف", en_attente: "في الانتظار", valide: "مقبول", termine: "منتهي", annule: "ملغى", nouvelle: "جديد", acceptee: "مقبول", refusee: "مرفوض", terminee: "منتهٍ", lu_status: "مقروء", non_lu: "غير مقروء"
-};
 
 const projectStatuses = ["brouillon", "soumis", "en_etude", "approuve", "en_cours", "realise", "rejete", "archive"];
 const userStatuses = ["actif", "inactif", "suspendu"];
@@ -16,24 +13,15 @@ const investmentStatuses = ["en_attente", "valide", "en_cours", "termine", "annu
 const requestStatuses = ["nouvelle", "en_cours", "en_attente", "acceptee", "refusee", "terminee"];
 const documentStatuses = ["en_attente", "valide", "rejete"];
 
-const text = (v: any) => labels[String(v ?? "")] ?? String(v ?? "—").replaceAll("_", " ");
-const fmt = (v: any) => Number(v ?? 0).toLocaleString("fr-DZ");
-const da = (v: any) => `${fmt(v)} DA`;
+const fmt = (v: any, language: "ar" | "fr" | "en") => Number(v ?? 0).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ");
+const da = (v: any, language: "ar" | "fr" | "en") => `${fmt(v, language)} DA`;
 const userIdOf = (r: R) => r.user_id ?? r.investor_id ?? r.investisseur_id ?? r.utilisateur_id ?? "—";
 const isRead = (r: R) => r.lu === 1 || r.lu === true || r.statut === "lu";
 
-const config: Record<Section, { title: string; subtitle: string; action: string }> = {
-  users: { title: "المستخدمون", subtitle: "إدارة حسابات مستخدمي المنصة", action: "users" },
-  investors: { title: "المستثمرون", subtitle: "إدارة ملفات المستثمرين", action: "investors" },
-  projects: { title: "المشاريع", subtitle: "متابعة ومراجعة مشاريع الاستثمار", action: "projects" },
-  investments: { title: "الاستثمارات", subtitle: "متابعة عمليات الاستثمار", action: "investments" },
-  requests: { title: "الطلبات", subtitle: "متابعة طلبات المستثمرين وتحديث حالتها", action: "requests" },
-  messages: { title: "الرسائل", subtitle: "إدارة رسائل المستثمرين ومتابعة المقروء وغير المقروء", action: "messages" },
-  documents: { title: "الوثائق", subtitle: "مراجعة وثائق المستثمرين والتحقق من حالتها", action: "documents" }
-};
-
 export default function AdminDataPage({ section, userId }: { section: Section; userId: number }) {
-  const c = config[section];
+  const { language, t } = useTranslation();
+  const c = { title: t(`admin.data.section.${section}.title`), subtitle: t(`admin.data.section.${section}.subtitle`), action: section };
+  const text = (v: any) => t(`admin.data.labels.${String(v ?? "")}`) !== `admin.data.labels.${String(v ?? "")}` ? t(`admin.data.labels.${String(v ?? "")}`) : String(v ?? "—").replaceAll("_", " ");
   const [rows, setRows] = useState<R[]>([]);
   const [stats, setStats] = useState<R>({});
   const [loading, setLoading] = useState(true);
@@ -51,13 +39,13 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       if (filter !== "all") q.set("statut", filter);
       const r = await fetch(`${API}?${q}`);
       const j = await r.json();
-      if (!j.success) throw Error(j.message || "تعذر تحميل البيانات");
+      if (!j.success) throw Error(j.message || t("admin.data.loadError"));
       setRows(Array.isArray(j[section]) ? j[section] : []);
       setStats(j.stats ?? {});
       setError("");
-    } catch (e) { setError(e instanceof Error ? e.message : "حدث خطأ"); }
+    } catch (e) { setError(e instanceof Error ? e.message : t("admin.data.unknownError")); }
     finally { setLoading(false); }
-  }, [c.action, filter, search, section, userId]);
+  }, [c.action, filter, search, section, userId, t]);
 
   useEffect(() => { void load(); }, [load]);
   useEffect(() => {
@@ -76,11 +64,11 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const rejected = Number(stats.rejete ?? stats.refusee ?? stats.rejected ?? 0);
 
   const summary = useMemo(() => [
-    { label: "إجمالي السجلات", value: fmt(total), icon: <Database size={18} />, tone: "green" },
-    { label: "نشطة / مقبولة", value: fmt(active), icon: <CheckCircle2 size={18} />, tone: "gold" },
-    { label: "قيد المتابعة", value: fmt(pending), icon: <Clock3 size={18} />, tone: "blue" },
-    { label: "مرفوضة / متوقفة", value: fmt(rejected), icon: <AlertCircle size={18} />, tone: "red" }
-  ], [total, active, pending, rejected]);
+    { label: t("admin.data.totalRecords"), value: fmt(total, language), icon: <Database size={18} />, tone: "green" },
+    { label: t("admin.data.activeAccepted"), value: fmt(active, language), icon: <CheckCircle2 size={18} />, tone: "gold" },
+    { label: t("admin.data.pending"), value: fmt(pending, language), icon: <Clock3 size={18} />, tone: "blue" },
+    { label: t("admin.data.rejectedStopped"), value: fmt(rejected, language), icon: <AlertCircle size={18} />, tone: "red" }
+  ], [total, active, pending, rejected, language, t]);
 
   const update = async (row: R, status: string) => {
     const id = Number(row.id);
@@ -100,10 +88,10 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     try {
       const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const j = await r.json();
-      if (!j.success) throw Error(j.message || "تعذر تحديث الحالة");
+      if (!j.success) throw Error(j.message || t("admin.data.updateError"));
       setRows(prev => prev.map(x => x.id === row.id ? { ...x, statut: status } : x));
       setError("");
-    } catch (e) { setError(e instanceof Error ? e.message : "تعذر تحديث الحالة"); }
+    } catch (e) { setError(e instanceof Error ? e.message : t("admin.data.updateError")); }
     finally { setSaving(null); }
   };
 
@@ -116,36 +104,31 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     try {
       const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ user_id: userId, action, message_id: id }) });
       const j = await r.json();
-      if (!j.success) throw Error(j.message || "تعذر تحديث الرسالة");
+      if (!j.success) throw Error(j.message || t("admin.data.messageError"));
       setRows(prev => prev.map(x => x.id === row.id ? { ...x, lu: read ? 0 : 1, statut: read ? "non_lu" : "lu" } : x));
       setError("");
-    } catch (e) { setError(e instanceof Error ? e.message : "تعذر تحديث الرسالة"); }
+    } catch (e) { setError(e instanceof Error ? e.message : t("admin.data.messageError")); }
     finally { setSaving(null); }
   };
 
   const keys = section === "projects" ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"] : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
 
   return <div className="admin-dashboard admin-soft-data-page">
-    <header className="admin-dashboard-header soft-data-header"><div className="admin-dashboard-header-content"><div className="admin-dashboard-welcome"><span className="admin-dashboard-eyebrow">AAPI / ADMINISTRATION</span><h1>{c.title}</h1><p>{c.subtitle}</p></div><button className="admin-refresh-button soft-data-refresh" onClick={() => void load()} disabled={loading}><RefreshCw size={15} className={loading ? "spin" : ""} /> تحديث البيانات</button></div></header>
+    <header className="admin-dashboard-header soft-data-header"><div className="admin-dashboard-header-content"><div className="admin-dashboard-welcome"><span className="admin-dashboard-eyebrow">{t("admin.dashboard.eyebrow")}</span><h1>{c.title}</h1><p>{c.subtitle}</p></div><button className="admin-refresh-button soft-data-refresh" onClick={() => void load()} disabled={loading}><RefreshCw size={15} className={loading ? "spin" : ""} /> {t("admin.data.refresh")}</button></div></header>
     {error && <div className="admin-dashboard-error"><AlertCircle size={16} /><span>{error}</span></div>}
     <main className="admin-dashboard-main soft-data-main">
-      <section className="soft-data-stat-grid">{summary.map(item => <article className={`soft-data-stat ${item.tone}`} key={item.label}><div className="soft-data-stat-icon">{item.icon}</div><div><span>{item.label}</span><strong>{item.value}</strong><small>AAPI • تحديث مباشر</small></div></article>)}</section>
+      <section className="soft-data-stat-grid">{summary.map(item => <article className={`soft-data-stat ${item.tone}`} key={item.label}><div className="soft-data-stat-icon">{item.icon}</div><div><span>{item.label}</span><strong>{item.value}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>)}</section>
       <section className="admin-panel soft-data-panel">
-        <div className="admin-panel-header soft-data-panel-head"><div><span className="soft-ui-card-label">DATA MANAGEMENT</span><h2>{c.title}</h2><p>{c.subtitle}</p></div><span className="soft-data-count">{fmt(total)} عنصر</span></div>
+        <div className="admin-panel-header soft-data-panel-head"><div><span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span><h2>{c.title}</h2><p>{c.subtitle}</p></div><span className="soft-data-count">{fmt(total, language)} {t("admin.data.items")}</span></div>
         <div className="admin-toolbar soft-data-toolbar">
-          <div className="soft-data-search"><Search size={16} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="ابحث في البيانات..." aria-label="بحث" /></div>
+          <div className="soft-data-search"><Search size={16} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder={t("admin.data.search")} aria-label={t("admin.data.searchAria")} /></div>
           <div className={`soft-data-filter${filterOpen ? " is-open" : ""}`}>
-            <button type="button" className="soft-data-filter-trigger" aria-haspopup="listbox" aria-expanded={filterOpen} onClick={() => setFilterOpen(v => !v)}>
-              <span>{filter === "all" ? "كل الحالات" : text(filter)}</span><ChevronDown size={15} />
-            </button>
-            {filterOpen && <div className="soft-data-filter-menu" role="listbox" aria-label="تصفية حسب الحالة">
-              <button type="button" className={filter === "all" ? "is-selected" : ""} onClick={() => { setFilter("all"); setFilterOpen(false); }}>كل الحالات</button>
-              {options.map(o => <button type="button" key={o} role="option" aria-selected={filter === o} className={filter === o ? "is-selected" : ""} onClick={() => { setFilter(o); setFilterOpen(false); }}>{text(o)}</button>)}
-            </div>}
+            <button type="button" className="soft-data-filter-trigger" aria-haspopup="listbox" aria-expanded={filterOpen} onClick={() => setFilterOpen(v => !v)}><span>{filter === "all" ? t("admin.data.allStatuses") : text(filter)}</span><ChevronDown size={15} /></button>
+            {filterOpen && <div className="soft-data-filter-menu" role="listbox" aria-label={t("admin.data.allStatuses")}><button type="button" className={filter === "all" ? "is-selected" : ""} onClick={() => { setFilter("all"); setFilterOpen(false); }}>{t("admin.data.allStatuses")}</button>{options.map(o => <button type="button" key={o} role="option" aria-selected={filter === o} className={filter === o ? "is-selected" : ""} onClick={() => { setFilter(o); setFilterOpen(false); }}>{text(o)}</button>)}</div>}
           </div>
-          <button className="soft-data-filter-button" onClick={() => { setSearch(""); setFilter("all"); setFilterOpen(false); }}><RefreshCw size={14} /> إعادة ضبط</button>
+          <button className="soft-data-filter-button" onClick={() => { setSearch(""); setFilter("all"); setFilterOpen(false); }}><RefreshCw size={14} /> {t("admin.data.reset")}</button>
         </div>
-        {loading ? <div className="admin-empty-state soft-data-empty">جاري تحميل البيانات...</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">لا توجد بيانات مطابقة.</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{options.length > 0 && <th>الإجراء</th>}{section === "messages" && <th>القراءة</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>{keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? "مقروء" : "غير مقروء") : k.includes("montant") || k.includes("investissement") ? da(r[k]) : String(r[k] ?? "—")}</td>)}{options.length > 0 && <td><select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={`تحديث حالة ${text(r.titre ?? r.nom ?? r.id)}`}><option value="">—</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select></td>}{section === "messages" && <td><button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id)} onClick={() => void toggleMessage(r)}>{isRead(r) ? "تعيين كغير مقروء" : "تعيين كمقروء"}</button></td>}</tr>)}</tbody></table></div>}
+        {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{options.length > 0 && <th>{t("admin.data.action")}</th>}{section === "messages" && <th>{t("admin.data.reading")}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>{keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}{options.length > 0 && <td><select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={`${t("admin.data.updateStatus")} ${text(r.titre ?? r.nom ?? r.id)}`}><option value="">—</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select></td>}{section === "messages" && <td><button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id)} onClick={() => void toggleMessage(r)}>{isRead(r) ? t("admin.data.markUnread") : t("admin.data.markRead")}</button></td>}</tr>)}</tbody></table></div>}
       </section>
     </main>
   </div>;
