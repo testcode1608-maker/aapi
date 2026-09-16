@@ -63,7 +63,7 @@ export default function InvestorInvestmentCreateForm({ form, setForm, projects, 
 
           <div className="investor-project-form-actions full">
             <button type="submit" className="investor-dashboard-primary-btn" disabled={creating}><i className={creating ? "bi bi-hourglass-split" : "bi bi-plus-circle"} />{creating ? t(field("register")) : t(field("add"))}</button>
-            <button type="button" className="investor-dashboard-logout" onClick={onReset} disabled={creating}>{t(field("clear"))}</button>
+            <button type="button" className="investor-dashboard-logout" onClick={onReset} disabled={creating}><i className="bi bi-arrow-counterclockwise" /> إعادة تعيين</button>
           </div>
         </form>
       )}
