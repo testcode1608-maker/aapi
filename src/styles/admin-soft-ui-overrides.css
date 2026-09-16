@@ -114,3 +114,14 @@ body.aapi-admin-light .administrator-shell .soft-data-panel{border-color:#dce5df
 body.aapi-admin-light .administrator-shell .soft-data-search,body.aapi-admin-light .administrator-shell .soft-data-filter,body.aapi-admin-light .administrator-shell .soft-status-select,body.aapi-admin-light .administrator-shell .soft-read-toggle{background:#fff!important;border-color:#dce5df!important;color:#38433e!important}
 body.aapi-admin-light .administrator-shell .soft-data-table thead th{color:#7b8580!important;border-bottom-color:#e1e8e4!important}
 body.aapi-admin-light .administrator-shell .soft-data-table tbody td{color:#38433e!important;border-bottom-color:#e8eeeb!important}
+
+/* Light mode: make Soft UI statistic cards fully consistent with the AAPI light theme. */
+body.aapi-admin-light .administrator-shell .soft-data-stat{background:#fff!important;border-color:#dce5df!important;box-shadow:0 12px 30px rgba(25,70,48,.06)!important;color:#20372c!important}
+body.aapi-admin-light .administrator-shell .soft-data-stat span{color:#52615a!important}
+body.aapi-admin-light .administrator-shell .soft-data-stat strong{color:#20372c!important}
+body.aapi-admin-light .administrator-shell .soft-data-stat small{color:#68766f!important}
+body.aapi-admin-light .administrator-shell .soft-data-stat.green .soft-data-stat-icon{background:linear-gradient(145deg,#0b8750,#055c35)!important;color:#fff!important;box-shadow:0 8px 20px rgba(8,116,67,.14)!important}
+body.aapi-admin-light .administrator-shell .soft-data-stat.gold .soft-data-stat-icon{background:linear-gradient(145deg,#d5b43b,#9a7610)!important;color:#fff!important}
+body.aapi-admin-light .administrator-shell .soft-data-stat.blue .soft-data-stat-icon{background:linear-gradient(145deg,#3d8bb3,#235a75)!important;color:#fff!important}
+body.aapi-admin-light .administrator-shell .soft-data-stat.red .soft-data-stat-icon{background:linear-gradient(145deg,#a95656,#6d2f2f)!important;color:#fff!important}
+body.aapi-admin-light .administrator-shell .soft-data-stat-icon{border:0!important}
