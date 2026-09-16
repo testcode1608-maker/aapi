@@ -131,3 +131,60 @@
   font: inherit; font-size: 13px; transition: .18s ease;
 }
 .investor-dashboard-logout:hover { background: rgba(255,255,255,.08); color: var(--id-white); }
+
+/* ==========================================================
+   AAPI — Investor Reset Button / Dark Mode Fix
+   ========================================================== */
+.investor-dashboard-logout {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 42px !important;
+  padding: 0 18px !important;
+  border: 1px solid #087443 !important;
+  border-radius: 10px !important;
+  background: #087443 !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease !important;
+}
+.investor-dashboard-logout i { color: inherit !important; font-size: 15px !important; }
+.investor-dashboard-logout:hover {
+  background: #0b8750 !important;
+  border-color: #0b8750 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px rgba(8, 116, 67, .20) !important;
+  transform: translateY(-1px) !important;
+}
+.investor-dashboard-logout:active { transform: translateY(0) !important; }
+
+.aapi-site-dark .investor-dashboard-logout,
+body.aapi-site-dark .investor-dashboard-logout {
+  background: #15181c !important;
+  border-color: #087443 !important;
+  color: #79d9a4 !important;
+  box-shadow: none !important;
+}
+.aapi-site-dark .investor-dashboard-logout i,
+body.aapi-site-dark .investor-dashboard-logout i { color: #79d9a4 !important; }
+.aapi-site-dark .investor-dashboard-logout:hover,
+body.aapi-site-dark .investor-dashboard-logout:hover {
+  background: #1d2026 !important;
+  border-color: #0b8750 !important;
+  color: #8ee6b5 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .25) !important;
+}
+body.aapi-admin-light .investor-dashboard-logout {
+  background: #087443 !important;
+  border-color: #087443 !important;
+  color: #ffffff !important;
+}
+body.aapi-admin-light .investor-dashboard-logout:hover {
+  background: #0b8750 !important;
+  border-color: #0b8750 !important;
+  color: #ffffff !important;
+}
