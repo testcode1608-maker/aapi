@@ -16,13 +16,13 @@ const getUser = (): R | null => {
 
 const items: Array<[string, string, ReactNode]> = [
   ["/investor/dashboard", "لوحة التحكم", <LayoutDashboard size={18} />],
-  ["/investor/dashboard/projects", "المشاريع", <FolderKanban size={18} />],
-  ["/investor/dashboard/investments", "الاستثمارات", <Wallet size={18} />],
-  ["/investor/dashboard/requests", "الطلبات", <ClipboardList size={18} />],
-  ["/investor/dashboard/documents", "الوثائق", <FileCheck2 size={18} />],
-  ["/investor/dashboard/messages", "الرسائل", <MessageSquare size={18} />],
-  ["/investor/dashboard/notifications", "الإشعارات", <UserCheck size={18} />],
-  ["/investor/dashboard/profile", "الملف الشخصي", <UserCheck size={18} />],
+  ["/investor/dashboard/projects", "مشاريعي", <FolderKanban size={18} />],
+  ["/investor/dashboard/investments", "استثماراتي", <Wallet size={18} />],
+  ["/investor/dashboard/requests", "طلباتي", <ClipboardList size={18} />],
+  ["/investor/dashboard/documents", "وثائقي", <FileCheck2 size={18} />],
+  ["/investor/dashboard/messages", "رسائلي", <MessageSquare size={18} />],
+  ["/investor/dashboard/notifications", "إشعاراتي", <UserCheck size={18} />],
+  ["/investor/dashboard/profile", "ملفي الشخصي", <UserCheck size={18} />],
 ];
 
 export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void }) {
