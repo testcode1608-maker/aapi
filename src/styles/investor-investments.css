@@ -9,8 +9,116 @@
 .investor-investment-create-card .investor-project-form-actions{margin-top:2px}
 .investor-investment-create-card .investor-project-form-field input[readonly]{background:var(--id-light);font-weight:700;color:var(--id-green);cursor:default}
 .investor-investment-create-card .investor-project-form-field select{cursor:pointer}
-body.aapi-investor-dark .investor-investment-empty-form{background:#121614;color:#aab8b1;border-color:#294238}
-body.aapi-investor-dark .investor-investment-create-card .investor-project-form-field input[readonly]{background:#121614;color:#8de0b5}
-body.aapi-investor-dark .investor-investment-create-card .investor-dashboard-card-header h2,
-body.aapi-investor-dark .investor-investment-create-card .investor-project-form-field label{color:#fff!important}
-@media(max-width:760px){.investor-investment-empty-form{align-items:flex-start}}
+
+/* Investment metadata — clean Soft UI table */
+.investor-dashboard-investment-items{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:12px!important;
+  width:100%!important;
+  margin-top:14px!important;
+  padding-top:14px!important;
+  border-top:1px solid var(--id-border)!important;
+}
+.investor-dashboard-investment-items>div{
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  gap:6px!important;
+  min-height:66px!important;
+  padding:12px 14px!important;
+  border:1px solid var(--id-border)!important;
+  border-radius:12px!important;
+  background:var(--id-light)!important;
+  text-align:right!important;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease!important;
+}
+.investor-dashboard-investment-items>div:hover{
+  transform:translateY(-1px)!important;
+  border-color:rgba(8,116,67,.25)!important;
+  box-shadow:0 7px 18px rgba(20,34,27,.06)!important;
+}
+.investor-dashboard-investment-items span{
+  display:block!important;
+  margin:0!important;
+  color:var(--id-gray)!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  line-height:1.3!important;
+  letter-spacing:.04em!important;
+}
+.investor-dashboard-investment-items strong{
+  display:block!important;
+  margin:0!important;
+  color:var(--id-dark)!important;
+  font-size:12px!important;
+  font-weight:800!important;
+  line-height:1.45!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+.investor-dashboard-investment-items>div:first-child strong{
+  color:var(--id-green)!important;
+  direction:ltr!important;
+  text-align:right!important;
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif!important;
+  letter-spacing:.02em!important;
+}
+.investor-dashboard-investment-items>div:nth-child(2) strong{
+  direction:rtl!important;
+  text-align:right!important;
+  font-variant-numeric:tabular-nums!important;
+}
+
+/* Dark mode */
+body.aapi-investor-dark .investor-dashboard-investment-items,
+body.aapi-admin-light .investor-dashboard-investment-items{}
+body.aapi-investor-dark .investor-dashboard-investment-items{
+  border-top-color:#294238!important;
+}
+body.aapi-investor-dark .investor-dashboard-investment-items>div{
+  background:#121614!important;
+  border-color:#294238!important;
+}
+body.aapi-investor-dark .investor-dashboard-investment-items>div:hover{
+  border-color:rgba(11,135,80,.55)!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.22)!important;
+}
+body.aapi-investor-dark .investor-dashboard-investment-items span{
+  color:#91a19a!important;
+}
+body.aapi-investor-dark .investor-dashboard-investment-items strong{
+  color:#f3f5f4!important;
+}
+body.aapi-investor-dark .investor-dashboard-investment-items>div:first-child strong{
+  color:#79d9a4!important;
+}
+
+/* Unified Soft UI light mode */
+body.aapi-admin-light .investor-dashboard-investment-items{
+  border-top-color:#dce5df!important;
+}
+body.aapi-admin-light .investor-dashboard-investment-items>div{
+  background:#f8faf9!important;
+  border-color:#dce5df!important;
+}
+body.aapi-admin-light .investor-dashboard-investment-items>div:hover{
+  border-color:rgba(8,116,67,.28)!important;
+  box-shadow:0 7px 18px rgba(25,70,48,.07)!important;
+}
+body.aapi-admin-light .investor-dashboard-investment-items span{
+  color:#68766e!important;
+}
+body.aapi-admin-light .investor-dashboard-investment-items strong{
+  color:#17241d!important;
+}
+body.aapi-admin-light .investor-dashboard-investment-items>div:first-child strong{
+  color:#087443!important;
+}
+
+@media(max-width:760px){
+  .investor-investment-empty-form{align-items:flex-start}
+  .investor-dashboard-investment-items{grid-template-columns:1fr!important}
+  .investor-dashboard-investment-items>div{min-height:60px!important;padding:11px 13px!important}
+}
