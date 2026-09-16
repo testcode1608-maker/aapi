@@ -24,17 +24,41 @@ export default function SiteThemeToggle() {
     button.type = "button";
     button.className = "aapi-site-theme-toggle";
     Object.assign(button.style, {
-      position: "fixed", left: "18px", bottom: "18px", width: "44px", height: "44px",
-      border: "0", borderRadius: "50%", display: "grid", placeItems: "center", zIndex: "99999",
-      cursor: "pointer", background: "#087443", color: "#fff", boxShadow: "0 8px 24px rgba(0,0,0,.22)", fontSize: "18px",
+      position: "fixed",
+      bottom: "18px",
+      width: "44px",
+      height: "44px",
+      border: "0",
+      borderRadius: "50%",
+      display: "grid",
+      placeItems: "center",
+      zIndex: "99999",
+      cursor: "pointer",
+      background: "#087443",
+      color: "#fff",
+      boxShadow: "0 8px 24px rgba(0,0,0,.22)",
+      fontSize: "18px",
     });
 
     const updateButton = () => {
       const dark = document.documentElement.classList.contains(DARK_HTML_CLASS);
+      const direction = document.documentElement.dir || getComputedStyle(document.documentElement).direction;
+      const isRtl = direction === "rtl";
+
+      // Keep the fixed button in an unused corner so it never changes the page layout.
+      button.style.left = isRtl ? "18px" : "auto";
+      button.style.right = isRtl ? "auto" : "18px";
+
       button.innerHTML = `<i class="bi ${dark ? "bi-sun-fill" : "bi-moon-stars-fill"}"></i>`;
       button.setAttribute("aria-label", dark ? "تفعيل الوضع النهاري" : "تفعيل الوضع الليلي");
       button.title = dark ? "الوضع النهاري" : "الوضع الليلي";
     };
+
+    const directionObserver = new MutationObserver(updateButton);
+    directionObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["dir", "lang"],
+    });
 
     button.addEventListener("click", () => {
       const dark = !document.documentElement.classList.contains(DARK_HTML_CLASS);
@@ -46,6 +70,7 @@ export default function SiteThemeToggle() {
     updateButton();
 
     return () => {
+      directionObserver.disconnect();
       window.removeEventListener(EVENT_NAME, updateButton);
       button.remove();
     };
