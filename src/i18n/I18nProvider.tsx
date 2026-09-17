@@ -9,6 +9,7 @@ import { registrationTranslations } from "./registrationTranslations";
 import { investorDashboardTranslations } from "./investorDashboardTranslations";
 import { investorFormsTranslations } from "./investorFormsTranslations";
 import { adminTranslations } from "./adminTranslations";
+import { investorProfileTranslations } from "./investorProfileTranslations";
 
 type I18nContextValue = { language: Language; setLanguage: (language: Language) => void; t: (key: string) => string };
 const I18nContext = createContext<I18nContextValue | null>(null);
@@ -35,6 +36,7 @@ function getSources(language: Language) {
     { investorDashboard: investorDashboardTranslations[language] },
     { investorForms: investorFormsTranslations[language] },
     { admin: adminTranslations[language] },
+    { investorProfile: investorProfileTranslations[language] },
   ];
 }
 
