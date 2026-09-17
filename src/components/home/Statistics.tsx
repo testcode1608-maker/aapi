@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "../../i18n/I18nProvider";
+import type { Language } from "../../translations/translations";
+import "../../styles/home/statistics.css";
+
+interface StatisticsProps {
+  language: Language;
+}
 
 interface StatisticsData {
   projects: number;
@@ -8,255 +13,86 @@ interface StatisticsData {
   jobs: number;
 }
 
-interface StatisticCardProps {
-  icon: string;
-  value: number;
-  label: string;
-  description: string;
-  valueSuffix?: string;
-  isCurrency?: boolean;
-}
-
 const STATISTICS_API = "http://localhost/aapi-api/statistics.php";
 
-function Statistics() {
-  const { t, language } = useTranslation();
-  const [data, setData] = useState<StatisticsData>({
-    projects: 0,
-    investors: 0,
-    investment_value: 0,
-    jobs: 0,
-  });
+const labels = {
+  ar: { title: "أرقام الاستثمار", projects: "المشاريع الاستثمارية", investors: "المستثمرون النشطون", investment_value: "قيمة الاستثمارات", jobs: "مناصب العمل", loading: "جاري تحميل البيانات...", error: "تعذر تحميل الإحصائيات من خادم AAPI." },
+  fr: { title: "Chiffres de l’investissement", projects: "Projets d’investissement", investors: "Investisseurs actifs", investment_value: "Valeur des investissements", jobs: "Emplois", loading: "Chargement des données...", error: "Impossible de charger les statistiques depuis le serveur AAPI." },
+  en: { title: "Investment figures", projects: "Investment projects", investors: "Active investors", investment_value: "Investment value", jobs: "Jobs", loading: "Loading data...", error: "Unable to load statistics from the AAPI server." },
+};
+
+const emptyData: StatisticsData = { projects: 0, investors: 0, investment_value: 0, jobs: 0 };
+
+export default function Statistics({ language }: StatisticsProps) {
+  const [data, setData] = useState<StatisticsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
     const loadStatistics = async () => {
       try {
-        const response = await fetch(STATISTICS_API, {
-          method: "GET",
-          headers: { Accept: "application/json" },
-          signal: controller.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error(`Statistics API returned ${response.status}`);
-        }
-
-        const result = await response.json();
-        const source = result?.data ?? result;
+        setLoading(true);
+        setError(false);
+        const response = await fetch(STATISTICS_API, { headers: { Accept: "application/json" }, signal: controller.signal });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        const source = payload?.data ?? payload;
+        if (payload?.success === false || !source) throw new Error("Invalid statistics response");
 
         setData({
-          projects: Number(source?.projects ?? 0),
-          investors: Number(source?.investors ?? 0),
-          investment_value: Number(source?.investment_value ?? 0),
-          jobs: Number(source?.jobs ?? 0),
+          projects: Number(source.projects) || 0,
+          investors: Number(source.investors) || 0,
+          investment_value: Number(source.investment_value) || 0,
+          jobs: Number(source.jobs) || 0,
         });
-      } catch (error) {
-        if (!(error instanceof DOMException && error.name === "AbortError")) {
-          console.error("Unable to load AAPI statistics:", error);
-        }
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("AAPI statistics error:", err);
+        setData(null);
+        setError(true);
       } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
 
     loadStatistics();
-
     return () => controller.abort();
   }, []);
 
-  const statistics = useMemo(() => {
-    if (language === "ar") {
-      return [
-        {
-          icon: "bi-folder2-open",
-          value: data.projects,
-          label: "إجمالي المشاريع",
-          description: "المشاريع الاستثمارية المسجلة لدى الوكالة",
-        },
-        {
-          icon: "bi-people",
-          value: data.investors,
-          label: "المستثمرون",
-          description: "المستثمرون المسجلون في المنصة",
-        },
-        {
-          icon: "bi-cash-stack",
-          value: data.investment_value,
-          label: "قيمة الاستثمارات",
-          description: "القيمة الإجمالية للاستثمارات المسجلة",
-          isCurrency: true,
-        },
-        {
-          icon: "bi-briefcase",
-          value: data.jobs,
-          label: "مناصب العمل",
-          description: "مناصب العمل المتوقعة من المشاريع المسجلة",
-        },
-      ];
-    }
+  const copy = labels[language];
+  const displayData = data ?? emptyData;
+  const formatter = useMemo(() => new Intl.NumberFormat(language === "ar" ? "ar-DZ" : "fr-DZ"), [language]);
 
-    if (language === "fr") {
-      return [
-        {
-          icon: "bi-folder2-open",
-          value: data.projects,
-          label: "Projets d'investissement",
-          description: "Projets d'investissement enregistrés auprès de l'AAPI",
-        },
-        {
-          icon: "bi-people",
-          value: data.investors,
-          label: "Investisseurs",
-          description: "Investisseurs enregistrés sur la plateforme",
-        },
-        {
-          icon: "bi-cash-stack",
-          value: data.investment_value,
-          label: "Valeur des investissements",
-          description: "Valeur totale des investissements enregistrés",
-          isCurrency: true,
-        },
-        {
-          icon: "bi-briefcase",
-          value: data.jobs,
-          label: "Emplois",
-          description: "Emplois prévisionnels liés aux projets enregistrés",
-        },
-      ];
-    }
-
-    return [
-      {
-        icon: "bi-folder2-open",
-        value: data.projects,
-        label: "Investment projects",
-        description: "Investment projects registered with AAPI",
-      },
-      {
-        icon: "bi-people",
-        value: data.investors,
-        label: "Investors",
-        description: "Investors registered on the platform",
-      },
-      {
-        icon: "bi-cash-stack",
-        value: data.investment_value,
-        label: "Investment value",
-        description: "Total value of registered investments",
-        isCurrency: true,
-      },
-      {
-        icon: "bi-briefcase",
-        value: data.jobs,
-        label: "Jobs",
-        description: "Expected jobs from registered projects",
-      },
-    ];
-  }, [data, language]);
+  const items = [
+    { key: "projects", label: copy.projects, value: displayData.projects, icon: "bi-buildings" },
+    { key: "investors", label: copy.investors, value: displayData.investors, icon: "bi-people" },
+    { key: "investment_value", label: copy.investment_value, value: displayData.investment_value, icon: "bi-cash-stack", currency: true },
+    { key: "jobs", label: copy.jobs, value: displayData.jobs, icon: "bi-briefcase" },
+  ];
 
   return (
-    <section className="statistics-section">
-      <div className="statistics-background" />
-      <div className="container">
-        <div className="statistics-header">
-          <div>
-            <span className="statistics-overline">{t("statistics.overline")}</span>
-            <h2>
-              {t("statistics.title")} <strong>{t("statistics.titleStrong")}</strong>
-            </h2>
-          </div>
-          <p>{t("statistics.description")}</p>
+    <section className="statistics-section" dir={language === "ar" ? "rtl" : "ltr"}>
+      <div className="statistics-container">
+        <div className="statistics-heading">
+          <h2>{copy.title}</h2>
+          {(loading || error) && <p className={`statistics-status${error ? " is-error" : ""}`}>{loading ? copy.loading : copy.error}</p>}
         </div>
 
         <div className="statistics-grid admin-kpi-grid soft-ui-kpi-grid">
-          {statistics.map((stat) => (
-            <StatisticCard
-              key={stat.label}
-              {...stat}
-              loading={loading}
-              valueSuffix={stat.isCurrency ? " DA" : undefined}
-            />
+          {items.map((item) => (
+            <article className="admin-kpi-card soft-ui-kpi" key={item.key}>
+              <div className="admin-kpi-icon"><i className={`bi ${item.icon}`} aria-hidden="true" /></div>
+              <div className="admin-kpi-content">
+                <span className="admin-kpi-label">{item.label}</span>
+                <strong className="admin-kpi-value">{loading ? "—" : formatter.format(item.value)}{item.currency && !loading ? " DA" : ""}</strong>
+              </div>
+              <svg className="admin-kpi-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </article>
           ))}
         </div>
       </div>
     </section>
   );
 }
-
-function StatisticCard({
-  icon,
-  value,
-  label,
-  description,
-  valueSuffix,
-  isCurrency,
-  loading,
-}: StatisticCardProps & { loading: boolean }) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (loading) return;
-
-    const duration = 1200;
-    const startTime = performance.now();
-    let frame = 0;
-
-    const animate = (time: number) => {
-      const progress = Math.min((time - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(value * eased));
-
-      if (progress < 1) {
-        frame = requestAnimationFrame(animate);
-      }
-    };
-
-    frame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(frame);
-  }, [loading, value]);
-
-  const displayValue = isCurrency
-    ? new Intl.NumberFormat("fr-DZ", { maximumFractionDigits: 0 }).format(count)
-    : new Intl.NumberFormat("fr-DZ", { maximumFractionDigits: 0 }).format(count);
-
-  return (
-    <article className="admin-kpi-card soft-ui-kpi">
-      <div className="admin-kpi-icon">
-        <i className={`bi ${icon}`} aria-hidden="true" />
-      </div>
-
-      <div className="admin-kpi-content">
-        <span>{label}</span>
-        <strong>{loading ? "—" : `${displayValue}${valueSuffix ?? ""}`}</strong>
-        <small>
-          <i className="bi bi-graph-up-arrow" aria-hidden="true" />
-          {description}
-        </small>
-      </div>
-
-      <svg
-        className="admin-kpi-arrow"
-        width="17"
-        height="17"
-        viewBox="0 0 24 24"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M5 12h13M13 6l6 6-6 6"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </article>
-  );
-}
-
-export default Statistics;
