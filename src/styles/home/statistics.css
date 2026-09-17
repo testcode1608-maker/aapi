@@ -1,132 +1,151 @@
 .statistics-section {
   position: relative;
-  padding: 100px 0;
+  padding: 92px 0;
+  overflow: hidden;
   background: var(--aapi-green);
-  color: #ffffff;
+  color: #fff;
 }
 
 .statistics-background {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: none;
+  background:
+    radial-gradient(circle at 8% 18%, rgba(255,255,255,.07), transparent 28%),
+    radial-gradient(circle at 92% 82%, rgba(199,162,74,.09), transparent 30%);
 }
 
 .statistics-container {
   position: relative;
+  z-index: 1;
   width: min(1200px, calc(100% - 40px));
   margin: 0 auto;
 }
 
 .statistics-heading {
   text-align: center;
-  margin-bottom: 55px;
+  margin-bottom: 46px;
 }
 
 .statistics-heading h2 {
   margin: 0;
-  font-size: 42px;
+  color: #fff;
+  font-size: clamp(30px, 4vw, 42px);
   line-height: 1.2;
-  font-weight: 400;
-  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: -.02em;
 }
 
 .statistics-status {
   margin: 12px 0 0;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255,255,255,.72);
   font-size: 13px;
 }
 
 .statistics-status.is-error {
-  color: #f4d7d7;
+  color: #ffdede;
 }
 
 .statistics-grid.admin-kpi-grid,
 .statistics-grid.soft-ui-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
+  gap: 18px;
   margin: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-inline-end: 1px solid rgba(255, 255, 255, 0.2);
+  border: 0;
 }
 
 .statistics-grid .admin-kpi-card.soft-ui-kpi {
-  min-height: 220px;
-  padding: 35px 25px;
+  min-height: 214px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0;
-  border: 0;
-  border-inline-start: 1px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0;
-  background: transparent;
-  color: #ffffff;
-  box-shadow: none;
-  text-align: center;
+  padding: 30px 20px 27px;
   overflow: hidden;
-  transition: background 0.25s ease;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 20px;
+  background: rgba(255,255,255,.065);
+  color: #fff;
+  box-shadow: 0 14px 30px rgba(0,0,0,.10), inset 0 1px 0 rgba(255,255,255,.08);
+  text-align: center;
+  backdrop-filter: blur(2px);
+  transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
 }
 
-.statistics-grid .admin-kpi-card.soft-ui-kpi::before,
+.statistics-grid .admin-kpi-card.soft-ui-kpi::before {
+  content: "";
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  top: -75px;
+  inset-inline-end: -60px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.07);
+  pointer-events: none;
+}
+
 .statistics-grid .admin-kpi-card.soft-ui-kpi::after {
-  display: none;
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(90deg, rgba(255,255,255,.65), var(--aapi-gold, #c7a24a));
 }
 
 .statistics-grid .admin-kpi-card.soft-ui-kpi:hover {
-  transform: none;
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.035);
-  box-shadow: none;
+  transform: translateY(-5px);
+  border-color: rgba(255,255,255,.28);
+  background: rgba(255,255,255,.10);
+  box-shadow: 0 20px 38px rgba(0,0,0,.17), inset 0 1px 0 rgba(255,255,255,.10);
 }
 
 .statistics-grid .admin-kpi-icon {
   flex: 0 0 58px;
   width: 58px;
   height: 58px;
-  margin-bottom: 18px;
+  margin-bottom: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 17px;
+  background: rgba(255,255,255,.13);
+  color: #fff;
   font-size: 23px;
-  box-shadow: none;
+  box-shadow: 0 8px 18px rgba(0,0,0,.10);
 }
 
 .statistics-grid .admin-kpi-content {
-  min-width: 0;
   width: 100%;
-  flex: 0 0 auto;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
+  gap: 6px;
 }
 
 .statistics-grid .admin-kpi-content > span {
   order: 2;
-  margin-top: 12px;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.5;
+  color: rgba(255,255,255,.78);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
 }
 
 .statistics-grid .admin-kpi-content > strong {
   order: 1;
   display: block;
-  color: #ffffff;
-  font-size: 38px;
+  max-width: 100%;
+  color: #fff;
+  font-size: clamp(28px, 3vw, 39px);
   font-weight: 900;
-  letter-spacing: 0;
-  line-height: 1;
+  letter-spacing: -.025em;
+  line-height: 1.05;
   white-space: nowrap;
   direction: ltr;
   text-align: center;
@@ -134,21 +153,6 @@
 
 .statistics-grid .admin-kpi-arrow {
   display: none;
-}
-
-html[data-theme="dark"] .statistics-grid .admin-kpi-card.soft-ui-kpi,
-html.dark .statistics-grid .admin-kpi-card.soft-ui-kpi,
-body.dark .statistics-grid .admin-kpi-card.soft-ui-kpi {
-  background: transparent;
-  color: #ffffff;
-  box-shadow: none;
-}
-
-html[data-theme="dark"] .statistics-grid .admin-kpi-card.soft-ui-kpi:hover,
-html.dark .statistics-grid .admin-kpi-card.soft-ui-kpi:hover,
-body.dark .statistics-grid .admin-kpi-card.soft-ui-kpi:hover {
-  background: rgba(255, 255, 255, 0.035);
-  box-shadow: none;
 }
 
 @media (max-width: 1199px) {
@@ -160,7 +164,7 @@ body.dark .statistics-grid .admin-kpi-card.soft-ui-kpi:hover {
 
 @media (max-width: 767px) {
   .statistics-section {
-    padding: 75px 0;
+    padding: 72px 0;
   }
 
   .statistics-container {
@@ -168,20 +172,31 @@ body.dark .statistics-grid .admin-kpi-card.soft-ui-kpi:hover {
   }
 
   .statistics-heading {
-    margin-bottom: 38px;
-  }
-
-  .statistics-heading h2 {
-    font-size: 34px;
+    margin-bottom: 34px;
   }
 
   .statistics-grid.admin-kpi-grid,
   .statistics-grid.soft-ui-kpi-grid {
     grid-template-columns: 1fr;
+    gap: 13px;
   }
 
   .statistics-grid .admin-kpi-card.soft-ui-kpi {
-    min-height: 190px;
-    padding: 30px 20px;
+    min-height: 180px;
+    padding: 27px 18px 24px;
+  }
+
+  .statistics-grid .admin-kpi-content > strong {
+    font-size: clamp(27px, 9vw, 35px);
+  }
+}
+
+@media (max-width: 420px) {
+  .statistics-container {
+    width: calc(100% - 22px);
+  }
+
+  .statistics-grid .admin-kpi-card.soft-ui-kpi {
+    min-height: 170px;
   }
 }
