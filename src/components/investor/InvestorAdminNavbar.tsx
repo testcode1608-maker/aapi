@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Building2, ClipboardList, FileCheck2, FolderKanban, LayoutDashboard, LogOut, Menu, MessageSquare, Settings, UserCheck, Wallet, X } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { getUserFullName, getUserInitials, getUserPhotoUrl } from "../../utils/investorDashboard";
 
 type R = Record<string, any>;
 
@@ -20,6 +21,9 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
   const { t, language, setLanguage } = useTranslation();
   const direction = language === "ar" ? "rtl" : "ltr";
   const user = getUser() ?? {};
+  const fullName = getUserFullName(user);
+  const userPhotoUrl = getUserPhotoUrl(user);
+  const userInitials = getUserInitials(user?.prenom, user?.nom);
   const close = () => onToggle();
   const logout = () => {
     localStorage.removeItem("aapi_user");
@@ -40,7 +44,7 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
   return (
     <>
       <div className="admin-mobile-header" dir={direction}>
-        <button className="admin-mobile-menu-button" onClick={onToggle} aria-label={language === "ar" ? "فتح القائمة" : "Open menu"}><Menu size={20} /></button>
+        <button className="admin-mobile-menu-button" onClick={onToggle} aria-label={language === "ar" ? "فتح القائمة" : language === "fr" ? "Ouvrir le menu" : "Open menu"}><Menu size={20} /></button>
         <strong>AAPI</strong>
       </div>
       <aside className="admin-navbar investor-admin-navbar" dir={direction} lang={language}>
@@ -49,13 +53,25 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
             <span className="admin-navbar-logo">A</span>
             <span className="admin-navbar-brand-text"><strong>AAPI</strong><small>{t("investorDashboard.topbar.investorSpace")}</small></span>
           </button>
-          <button className="admin-navbar-mobile-close" onClick={close} aria-label={language === "ar" ? "إغلاق القائمة" : "Close menu"}><X size={18} /></button>
+          <button className="admin-navbar-mobile-close" onClick={close} aria-label={language === "ar" ? "إغلاق القائمة" : language === "fr" ? "Fermer le menu" : "Close menu"}><X size={18} /></button>
         </div>
 
         <div className="admin-navbar-user">
-          <span className="admin-navbar-user-avatar">{String(user.prenom ?? user.nom ?? "A").slice(0, 2).toUpperCase()}</span>
+          {userPhotoUrl ? (
+            <img
+              src={userPhotoUrl}
+              alt={fullName || t("investorDashboard.sidebar.investor")}
+              className="investor-navbar-user-photo"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+                const fallback = event.currentTarget.nextElementSibling as HTMLElement | null;
+                if (fallback) fallback.style.display = "grid";
+              }}
+            />
+          ) : null}
+          <span className="admin-navbar-user-avatar investor-navbar-user-fallback" style={{ display: userPhotoUrl ? "none" : "grid" }}>{userInitials}</span>
           <span className="admin-navbar-user-info">
-            <strong>{`${user.prenom ?? ""} ${user.nom ?? ""}`.trim() || user.email || t("investorDashboard.sidebar.investor")}</strong>
+            <strong>{fullName || user.email || t("investorDashboard.sidebar.investor")}</strong>
             <span>{t("investorDashboard.sidebar.investor")}</span>
           </span>
         </div>
@@ -73,7 +89,7 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
             </div>
           </div>
           <div className="admin-navbar-section">
-            <div className="admin-navbar-section-title">{language === "ar" ? "النظام" : "Système"}</div>
+            <div className="admin-navbar-section-title">{language === "ar" ? "النظام" : language === "fr" ? "Système" : "System"}</div>
             <NavLink to="/investor/dashboard/settings" onClick={close} className={({ isActive }) => `admin-nav-link${isActive ? " active" : ""}`}>
               <span className="admin-nav-icon"><Settings size={18} /></span>
               <span className="admin-nav-label">{t("investorDashboard.sidebar.settings")}</span>
@@ -81,7 +97,7 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
           </div>
         </nav>
 
-        <div className="investor-navbar-language" role="group" aria-label="Language">
+        <div className="investor-navbar-language" role="group" aria-label={language === "ar" ? "اللغة" : language === "fr" ? "Langue" : "Language"}>
           {(["ar", "fr", "en"] as const).map((code) => (
             <button key={code} type="button" className={language === code ? "active" : ""} onClick={() => setLanguage(code)}>{code.toUpperCase()}</button>
           ))}
