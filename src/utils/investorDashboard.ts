@@ -11,10 +11,7 @@ const projectSectors = {
   en: ["Agriculture", "Industry", "Technology", "Tourism", "Energy", "Transport", "Health", "Services"],
 } as const;
 
-export const PROJECT_SECTORS = projectSectors.ar.map((nom, index) => ({
-  id: index + 1,
-  nom,
-})) as ReadonlyArray<{ id: number; nom: string }>;
+export const PROJECT_SECTORS = projectSectors.ar.map((nom, index) => ({ id: index + 1, nom })) as ReadonlyArray<{ id: number; nom: string }>;
 
 export function getProjectSectors(language: DashboardLanguage = getLanguage()) {
   return projectSectors[language].map((nom, index) => ({ id: index + 1, nom }));
@@ -141,12 +138,17 @@ export function getFileUrl(value?: string | null): string {
 export function getUserInitials(prenom?: string | null, nom?: string | null): string {
   const first = prenom?.trim().charAt(0) || "";
   const last = nom?.trim().charAt(0) || "";
-  return `${first}${last}`.trim() || "م";
+  return `${first}${last}`.trim() || "A";
 }
 
 export function getUserFullName(user?: { prenom?: string | null; nom?: string | null } | string | null, nom?: string | null): string {
-  if (typeof user === "string" || user == null) return `${user || ""} ${nom || ""}`.trim() || "المستثمر";
-  return `${user.prenom || ""} ${user.nom || ""}`.trim() || "المستثمر";
+  if (typeof user === "string" || user == null) return `${user || ""} ${nom || ""}`.trim() || getLanguageAwareInvestorLabel();
+  return `${user.prenom || ""} ${user.nom || ""}`.trim() || getLanguageAwareInvestorLabel();
+}
+
+function getLanguageAwareInvestorLabel(): string {
+  const language = getLanguage();
+  return language === "fr" ? "Investisseur" : language === "en" ? "Investor" : "المستثمر";
 }
 
 export function getUserPhotoUrl(user?: { photo?: string | null; photo_url?: string | null; avatar?: string | null } | null): string {
