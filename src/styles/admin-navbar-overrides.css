@@ -2,7 +2,8 @@
 .administrator-shell .admin-navbar{display:flex;flex-direction:column;gap:0;background:linear-gradient(180deg,#0c0e11 0%,#090a0c 100%);border-left:1px solid rgba(255,255,255,.07);overflow:hidden}
 .administrator-shell .admin-navbar-brand{flex:0 0 auto;padding:18px 14px 14px;border-bottom:1px solid rgba(255,255,255,.055)}
 .administrator-shell .admin-navbar-brand-button{width:100%;display:flex;align-items:center;gap:11px;padding:7px;background:transparent;color:#fff;border:0;cursor:pointer}
-.administrator-shell .admin-navbar-logo{order:1;flex:0 0 42px;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#f7faf8,#dcebe3);color:#087443;font-weight:900;font-size:17px}
+.administrator-shell .admin-navbar-logo{order:1;flex:0 0 42px;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#f7faf8,#dcebe3);color:#087443;font-weight:900;font-size:17px;overflow:hidden}
+.administrator-shell .admin-navbar-logo-image{width:34px;height:34px;display:block;object-fit:contain;border-radius:8px}
 .administrator-shell .admin-navbar-brand-text{order:2;min-width:0;display:flex;flex-direction:column;gap:3px}
 .administrator-shell .admin-navbar-brand-text strong{font-size:16px;line-height:1;color:#f4f7f5;letter-spacing:.2px}
 .administrator-shell .admin-navbar-brand-text small{font-size:9px;color:#737d87;white-space:nowrap}
