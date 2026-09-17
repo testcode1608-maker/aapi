@@ -22,7 +22,7 @@
   transition: 0.3s ease;
 }
 
-/* Sector number follows the active page direction.
+/* The number position is controlled directly by the active language class.
    Arabic = right, French/English = left. */
 .sector-card-number {
   position: absolute;
@@ -38,12 +38,12 @@
   transition: color 0.3s ease, left 0.2s ease, right 0.2s ease;
 }
 
-[dir="rtl"] .sector-card-number {
+.sector-card-number-rtl {
   right: 28px;
   left: auto;
 }
 
-[dir="ltr"] .sector-card-number {
+.sector-card-number-ltr {
   left: 28px;
   right: auto;
 }
@@ -122,6 +122,6 @@
   .sectors-section { padding: 75px 0; }
   .sector-card { padding: 28px 22px; }
   .sector-card-number { top: 18px; font-size: 34px; }
-  [dir="rtl"] .sector-card-number { right: 20px; }
-  [dir="ltr"] .sector-card-number { left: 20px; }
+  .sector-card-number-rtl { right: 20px; left: auto; }
+  .sector-card-number-ltr { left: 20px; right: auto; }
 }
