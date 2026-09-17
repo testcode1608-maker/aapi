@@ -50,7 +50,7 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
       <aside className="admin-navbar investor-admin-navbar" dir={direction} lang={language}>
         <div className="admin-navbar-brand">
           <button className="admin-navbar-brand-button" onClick={() => { navigate("/investor/dashboard"); close(); }}>
-            <span className="admin-navbar-logo">A</span>
+            <span className="admin-navbar-logo"><img src="/logo.png" alt="AAPI" className="admin-navbar-logo-image" /></span>
             <span className="admin-navbar-brand-text"><strong>AAPI</strong><small>{t("investorDashboard.topbar.investorSpace")}</small></span>
           </button>
           <button className="admin-navbar-mobile-close" onClick={close} aria-label={language === "ar" ? "إغلاق القائمة" : language === "fr" ? "Fermer le menu" : "Close menu"}><X size={18} /></button>
