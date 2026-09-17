@@ -9,24 +9,34 @@
 }
 
 .sector-card {
-  position: relative;
   min-height: 230px;
   height: 100%;
   padding: 35px;
   display: flex;
-  align-items: flex-start;
-  gap: 25px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
   background: #ffffff;
   border-left: 1px solid #dfe7e3;
   border-bottom: 1px solid #dfe7e3;
   transition: 0.3s ease;
 }
 
-/* The number position is controlled directly by the active language class.
-   Arabic = right, French/English = left. */
+/* Same structure as the AAPI service cards:
+   number + icon stay together in a normal top row. */
+.sector-card-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  direction: ltr;
+}
+
 .sector-card-number {
-  position: absolute;
-  top: 22px;
+  position: static;
+  display: block;
+  margin: 0;
   font-size: 42px;
   line-height: 1;
   font-weight: 900;
@@ -35,35 +45,13 @@
   pointer-events: none;
   user-select: none;
   z-index: 0;
-  transition: color 0.3s ease, left 0.2s ease, right 0.2s ease;
+  transition: color 0.3s ease;
 }
-
-.sector-card-number-rtl {
-  right: 28px;
-  left: auto;
-}
-
-.sector-card-number-ltr {
-  left: 28px;
-  right: auto;
-}
-
-.sector-card:hover .sector-card-number {
-  color: rgba(255, 255, 255, 0.16);
-}
-
-.sector-icon,
-.sector-content {
-  position: relative;
-  z-index: 1;
-}
-
-.sector-card:hover { background: var(--aapi-green); color: #ffffff; }
 
 .sector-icon {
   width: 55px;
   height: 55px;
-  flex-shrink: 0;
+  flex: 0 0 55px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -74,15 +62,24 @@
   transition: 0.3s ease;
 }
 
+.sector-card:hover { background: var(--aapi-green); color: #ffffff; }
+
+.sector-card:hover .sector-card-number {
+  color: rgba(255, 255, 255, 0.16);
+}
+
 .sector-card:hover .sector-icon {
   background: rgba(255, 255, 255, 0.15);
   color: #ffffff;
 }
 
-.sector-content { flex: 1; }
+.sector-content {
+  flex: 1;
+  min-width: 0;
+}
 
 .sector-content h3 {
-  margin: 3px 0 10px;
+  margin: 0 0 10px;
   font-size: 21px;
   font-weight: 800;
 }
@@ -109,8 +106,6 @@
 
 .sector-card:hover .sector-content a { color: #ffffff; }
 .sector-content a i { transition: 0.25s ease; }
-.sector-card[dir="rtl"] .sector-content a i { transform-origin: center; }
-.sector-card[dir="ltr"] .sector-content a i { transform-origin: center; }
 .sector-content a:hover i { transform: translateX(-5px); }
 
 .sectors-button-wrapper {
@@ -121,7 +116,6 @@
 @media (max-width: 767px) {
   .sectors-section { padding: 75px 0; }
   .sector-card { padding: 28px 22px; }
-  .sector-card-number { top: 18px; font-size: 34px; }
-  .sector-card-number-rtl { right: 20px; left: auto; }
-  .sector-card-number-ltr { left: 20px; right: auto; }
+  .sector-card-top { gap: 14px; }
+  .sector-card-number { font-size: 34px; }
 }
