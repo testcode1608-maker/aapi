@@ -47,7 +47,7 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
         <button className="admin-mobile-menu-button" onClick={onToggle} aria-label={language === "ar" ? "فتح القائمة" : language === "fr" ? "Ouvrir le menu" : "Open menu"}><Menu size={20} /></button>
         <strong>AAPI</strong>
       </div>
-      <aside className="admin-navbar investor-admin-navbar" dir={direction} lang={language}>
+      <aside className="admin-navbar investor-admin-navbar" dir={direction} lang={language} style={{ left: direction === "ltr" ? 0 : "auto", right: direction === "rtl" ? 0 : "auto" }}>
         <div className="admin-navbar-brand">
           <button className="admin-navbar-brand-button" onClick={() => { navigate("/investor/dashboard"); close(); }}>
             <span className="admin-navbar-logo"><img src="/logo.png" alt="AAPI" className="admin-navbar-logo-image" /></span>
@@ -58,16 +58,7 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
 
         <div className="admin-navbar-user">
           {userPhotoUrl ? (
-            <img
-              src={userPhotoUrl}
-              alt={fullName || t("investorDashboard.sidebar.investor")}
-              className="investor-navbar-user-photo"
-              onError={(event) => {
-                event.currentTarget.style.display = "none";
-                const fallback = event.currentTarget.nextElementSibling as HTMLElement | null;
-                if (fallback) fallback.style.display = "grid";
-              }}
-            />
+            <img src={userPhotoUrl} alt={fullName || t("investorDashboard.sidebar.investor")} className="investor-navbar-user-photo" onError={(event) => { event.currentTarget.style.display = "none"; const fallback = event.currentTarget.nextElementSibling as HTMLElement | null; if (fallback) fallback.style.display = "grid"; }} />
           ) : null}
           <span className="admin-navbar-user-avatar investor-navbar-user-fallback" style={{ display: userPhotoUrl ? "none" : "grid" }}>{userInitials}</span>
           <span className="admin-navbar-user-info">
