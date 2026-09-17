@@ -12,10 +12,50 @@ interface StatisticsData {
 const STATISTICS_API = "http://localhost/aapi-api/statistics.php";
 
 const labels = {
-  ar: { title: "أرقام الاستثمار", projects: "المشاريع الاستثمارية", investors: "المستثمرون النشطون", investment_value: "قيمة الاستثمارات", jobs: "مناصب العمل", loading: "جاري تحميل البيانات...", error: "تعذر تحميل الإحصائيات من خادم AAPI." },
-  fr: { title: "Chiffres de l’investissement", projects: "Projets d’investissement", investors: "Investisseurs actifs", investment_value: "Valeur des investissements", jobs: "Emplois", loading: "Chargement des données...", error: "Impossible de charger les statistiques depuis le serveur AAPI." },
-  en: { title: "Investment figures", projects: "Investment projects", investors: "Active investors", investment_value: "Investment value", jobs: "Jobs", loading: "Loading data...", error: "Unable to load statistics from the AAPI server." },
+  ar: {
+    title: "أرقام الاستثمار",
+    projects: "المشاريع الاستثمارية",
+    investors: "المستثمرون النشطون",
+    investment_value: "قيمة الاستثمارات",
+    jobs: "مناصب العمل",
+    loading: "جاري تحميل البيانات...",
+    error: "تعذر تحميل الإحصائيات من خادم AAPI.",
+  },
+  fr: {
+    title: "Chiffres de l’investissement",
+    projects: "Projets d’investissement",
+    investors: "Investisseurs actifs",
+    investment_value: "Valeur des investissements",
+    jobs: "Emplois",
+    loading: "Chargement des données...",
+    error: "Impossible de charger les statistiques depuis le serveur AAPI.",
+  },
+  en: {
+    title: "Investment figures",
+    projects: "Investment projects",
+    investors: "Active investors",
+    investment_value: "Investment value",
+    jobs: "Jobs",
+    loading: "Loading data...",
+    error: "Unable to load statistics from the AAPI server.",
+  },
 } as const;
+
+function formatCompactAmount(value: number, language: keyof typeof labels) {
+  if (value >= 1_000_000_000) {
+    return `${(value / 1_000_000_000).toLocaleString(language === "ar" ? "ar-DZ" : "fr-DZ", { maximumFractionDigits: 1 })} Md`;
+  }
+
+  if (value >= 1_000_000) {
+    return `${(value / 1_000_000).toLocaleString(language === "ar" ? "ar-DZ" : "fr-DZ", { maximumFractionDigits: 1 })} M`;
+  }
+
+  if (value >= 1_000) {
+    return `${(value / 1_000).toLocaleString(language === "ar" ? "ar-DZ" : "fr-DZ", { maximumFractionDigits: 1 })} K`;
+  }
+
+  return value.toLocaleString(language === "ar" ? "ar-DZ" : "fr-DZ");
+}
 
 export default function Statistics() {
   const { language } = useTranslation();
@@ -37,9 +77,7 @@ export default function Statistics() {
           signal: controller.signal,
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const payload = await response.json();
         const source = payload?.data ?? payload;
@@ -90,6 +128,7 @@ export default function Statistics() {
 
   return (
     <section className="statistics-section" dir={language === "ar" ? "rtl" : "ltr"}>
+      <div className="statistics-background" />
       <div className="statistics-container">
         <div className="statistics-heading">
           <h2>{copy.title}</h2>
@@ -109,13 +148,13 @@ export default function Statistics() {
               <div className="admin-kpi-content">
                 <span className="admin-kpi-label">{item.label}</span>
                 <strong className="admin-kpi-value">
-                  {loading ? "—" : error || item.value === undefined ? "—" : formatter.format(item.value)}
-                  {item.currency && !loading && !error && item.value !== undefined ? " DA" : ""}
+                  {loading || error || item.value === undefined
+                    ? "—"
+                    : item.currency
+                      ? `${formatCompactAmount(item.value, language)} DA`
+                      : formatter.format(item.value)}
                 </strong>
               </div>
-              <svg className="admin-kpi-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
             </article>
           ))}
         </div>
