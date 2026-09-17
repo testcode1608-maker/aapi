@@ -1,9 +1,9 @@
 /* AAPI Admin — Sidebar / Topbar final refinement */
 .administrator-shell .admin-navbar{display:flex;flex-direction:column;gap:0;background:linear-gradient(180deg,#0c0e11 0%,#090a0c 100%);border-left:1px solid rgba(255,255,255,.07);overflow:hidden}
 .administrator-shell .admin-navbar-brand{flex:0 0 auto;padding:18px 14px 14px;border-bottom:1px solid rgba(255,255,255,.055)}
-.administrator-shell .admin-navbar-brand-button{width:100%;display:flex;align-items:center;gap:11px;padding:7px;background:transparent;color:#fff;border:0;text-align:right;cursor:pointer}
-.administrator-shell .admin-navbar-logo{flex:0 0 42px;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#f7faf8,#dcebe3);color:#087443;font-weight:900;font-size:17px}
-.administrator-shell .admin-navbar-brand-text{min-width:0;display:flex;flex-direction:column;gap:3px}
+.administrator-shell .admin-navbar-brand-button{width:100%;display:flex;align-items:center;gap:11px;padding:7px;background:transparent;color:#fff;border:0;cursor:pointer}
+.administrator-shell .admin-navbar-logo{order:1;flex:0 0 42px;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#f7faf8,#dcebe3);color:#087443;font-weight:900;font-size:17px}
+.administrator-shell .admin-navbar-brand-text{order:2;min-width:0;display:flex;flex-direction:column;gap:3px}
 .administrator-shell .admin-navbar-brand-text strong{font-size:16px;line-height:1;color:#f4f7f5;letter-spacing:.2px}
 .administrator-shell .admin-navbar-brand-text small{font-size:9px;color:#737d87;white-space:nowrap}
 .administrator-shell .admin-navbar-user{flex:0 0 auto;margin:14px;padding:11px;border-radius:14px;display:flex;align-items:center;gap:10px;min-width:0}
@@ -53,6 +53,8 @@
 .administrator-shell[dir="ltr"]{direction:ltr!important}
 .administrator-shell[dir="ltr"] .admin-navbar{left:0;right:auto;border-left:0;border-right:1px solid rgba(255,255,255,.07)}
 .administrator-shell[dir="ltr"] .admin-navbar-brand-button{direction:ltr;text-align:left}
+.administrator-shell[dir="ltr"] .admin-navbar-logo{order:1}
+.administrator-shell[dir="ltr"] .admin-navbar-brand-text{order:2;align-items:flex-start;text-align:left}
 .administrator-shell[dir="ltr"] .admin-navbar-user{direction:ltr}
 .administrator-shell[dir="ltr"] .admin-navbar-section-title{text-align:left}
 .administrator-shell[dir="ltr"] .admin-nav-link{direction:ltr;text-align:left}
@@ -74,6 +76,8 @@
 .administrator-shell[dir="rtl"]{direction:rtl!important}
 .administrator-shell[dir="rtl"] .admin-navbar{left:auto;right:0;border-right:0;border-left:1px solid rgba(255,255,255,.07)}
 .administrator-shell[dir="rtl"] .admin-navbar-brand-button{direction:rtl;text-align:right}
+.administrator-shell[dir="rtl"] .admin-navbar-logo{order:1}
+.administrator-shell[dir="rtl"] .admin-navbar-brand-text{order:2;align-items:flex-end;text-align:right}
 .administrator-shell[dir="rtl"] .admin-navbar-user{direction:rtl}
 .administrator-shell[dir="rtl"] .admin-navbar-section-title{text-align:right}
 .administrator-shell[dir="rtl"] .admin-nav-link{direction:rtl;text-align:right}
