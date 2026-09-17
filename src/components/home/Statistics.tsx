@@ -17,8 +17,6 @@ const labels = {
   en: { title: "Investment figures", projects: "Investment projects", investors: "Active investors", investment_value: "Investment value", jobs: "Jobs", loading: "Loading data...", error: "Unable to load statistics from the AAPI server." },
 } as const;
 
-const emptyData: StatisticsData = { projects: 0, investors: 0, investment_value: 0, jobs: 0 };
-
 export default function Statistics() {
   const { language } = useTranslation();
   const [data, setData] = useState<StatisticsData | null>(null);
@@ -32,22 +30,36 @@ export default function Statistics() {
       try {
         setLoading(true);
         setError(false);
+
         const response = await fetch(STATISTICS_API, {
           method: "GET",
           headers: { Accept: "application/json" },
           signal: controller.signal,
         });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
 
         const payload = await response.json();
         const source = payload?.data ?? payload;
-        if (payload?.success === false || !source) throw new Error("Invalid statistics response");
+
+        if (
+          payload?.success === false ||
+          !source ||
+          !Number.isFinite(Number(source.projects)) ||
+          !Number.isFinite(Number(source.investors)) ||
+          !Number.isFinite(Number(source.investment_value)) ||
+          !Number.isFinite(Number(source.jobs))
+        ) {
+          throw new Error("Invalid statistics response");
+        }
 
         setData({
-          projects: Number(source.projects) || 0,
-          investors: Number(source.investors) || 0,
-          investment_value: Number(source.investment_value) || 0,
-          jobs: Number(source.jobs) || 0,
+          projects: Number(source.projects),
+          investors: Number(source.investors),
+          investment_value: Number(source.investment_value),
+          jobs: Number(source.jobs),
         });
       } catch (err) {
         if (err instanceof DOMException && err.name === "AbortError") return;
@@ -64,17 +76,16 @@ export default function Statistics() {
   }, []);
 
   const copy = labels[language];
-  const displayData = data ?? emptyData;
   const formatter = useMemo(
     () => new Intl.NumberFormat(language === "ar" ? "ar-DZ" : "fr-DZ"),
     [language],
   );
 
   const items = [
-    { key: "projects", label: copy.projects, value: displayData.projects, icon: "bi-buildings" },
-    { key: "investors", label: copy.investors, value: displayData.investors, icon: "bi-people" },
-    { key: "investment_value", label: copy.investment_value, value: displayData.investment_value, icon: "bi-cash-stack", currency: true },
-    { key: "jobs", label: copy.jobs, value: displayData.jobs, icon: "bi-briefcase" },
+    { key: "projects", label: copy.projects, value: data?.projects, icon: "bi-buildings" },
+    { key: "investors", label: copy.investors, value: data?.investors, icon: "bi-people" },
+    { key: "investment_value", label: copy.investment_value, value: data?.investment_value, icon: "bi-cash-stack", currency: true },
+    { key: "jobs", label: copy.jobs, value: data?.jobs, icon: "bi-briefcase" },
   ];
 
   return (
@@ -98,8 +109,8 @@ export default function Statistics() {
               <div className="admin-kpi-content">
                 <span className="admin-kpi-label">{item.label}</span>
                 <strong className="admin-kpi-value">
-                  {loading ? "—" : formatter.format(item.value)}
-                  {item.currency && !loading ? " DA" : ""}
+                  {loading ? "—" : error || item.value === undefined ? "—" : formatter.format(item.value)}
+                  {item.currency && !loading && !error && item.value !== undefined ? " DA" : ""}
                 </strong>
               </div>
               <svg className="admin-kpi-arrow" viewBox="0 0 24 24" aria-hidden="true">
