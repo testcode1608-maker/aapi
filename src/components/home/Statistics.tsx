@@ -1,10 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Language } from "../../translations/translations";
+import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/home/statistics.css";
-
-interface StatisticsProps {
-  language: Language;
-}
 
 interface StatisticsData {
   projects: number;
@@ -19,11 +15,12 @@ const labels = {
   ar: { title: "أرقام الاستثمار", projects: "المشاريع الاستثمارية", investors: "المستثمرون النشطون", investment_value: "قيمة الاستثمارات", jobs: "مناصب العمل", loading: "جاري تحميل البيانات...", error: "تعذر تحميل الإحصائيات من خادم AAPI." },
   fr: { title: "Chiffres de l’investissement", projects: "Projets d’investissement", investors: "Investisseurs actifs", investment_value: "Valeur des investissements", jobs: "Emplois", loading: "Chargement des données...", error: "Impossible de charger les statistiques depuis le serveur AAPI." },
   en: { title: "Investment figures", projects: "Investment projects", investors: "Active investors", investment_value: "Investment value", jobs: "Jobs", loading: "Loading data...", error: "Unable to load statistics from the AAPI server." },
-};
+} as const;
 
 const emptyData: StatisticsData = { projects: 0, investors: 0, investment_value: 0, jobs: 0 };
 
-export default function Statistics({ language }: StatisticsProps) {
+export default function Statistics() {
+  const { language } = useTranslation();
   const [data, setData] = useState<StatisticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -35,8 +32,13 @@ export default function Statistics({ language }: StatisticsProps) {
       try {
         setLoading(true);
         setError(false);
-        const response = await fetch(STATISTICS_API, { headers: { Accept: "application/json" }, signal: controller.signal });
+        const response = await fetch(STATISTICS_API, {
+          method: "GET",
+          headers: { Accept: "application/json" },
+          signal: controller.signal,
+        });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
         const payload = await response.json();
         const source = payload?.data ?? payload;
         if (payload?.success === false || !source) throw new Error("Invalid statistics response");
@@ -63,7 +65,10 @@ export default function Statistics({ language }: StatisticsProps) {
 
   const copy = labels[language];
   const displayData = data ?? emptyData;
-  const formatter = useMemo(() => new Intl.NumberFormat(language === "ar" ? "ar-DZ" : "fr-DZ"), [language]);
+  const formatter = useMemo(
+    () => new Intl.NumberFormat(language === "ar" ? "ar-DZ" : "fr-DZ"),
+    [language],
+  );
 
   const items = [
     { key: "projects", label: copy.projects, value: displayData.projects, icon: "bi-buildings" },
@@ -77,18 +82,29 @@ export default function Statistics({ language }: StatisticsProps) {
       <div className="statistics-container">
         <div className="statistics-heading">
           <h2>{copy.title}</h2>
-          {(loading || error) && <p className={`statistics-status${error ? " is-error" : ""}`}>{loading ? copy.loading : copy.error}</p>}
+          {(loading || error) && (
+            <p className={`statistics-status${error ? " is-error" : ""}`}>
+              {loading ? copy.loading : copy.error}
+            </p>
+          )}
         </div>
 
         <div className="statistics-grid admin-kpi-grid soft-ui-kpi-grid">
           {items.map((item) => (
             <article className="admin-kpi-card soft-ui-kpi" key={item.key}>
-              <div className="admin-kpi-icon"><i className={`bi ${item.icon}`} aria-hidden="true" /></div>
+              <div className="admin-kpi-icon">
+                <i className={`bi ${item.icon}`} aria-hidden="true" />
+              </div>
               <div className="admin-kpi-content">
                 <span className="admin-kpi-label">{item.label}</span>
-                <strong className="admin-kpi-value">{loading ? "—" : formatter.format(item.value)}{item.currency && !loading ? " DA" : ""}</strong>
+                <strong className="admin-kpi-value">
+                  {loading ? "—" : formatter.format(item.value)}
+                  {item.currency && !loading ? " DA" : ""}
+                </strong>
               </div>
-              <svg className="admin-kpi-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <svg className="admin-kpi-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </article>
           ))}
         </div>
