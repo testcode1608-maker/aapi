@@ -18,7 +18,7 @@ const getUser = (): R | null => {
 
 export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void }) {
   const navigate = useNavigate();
-  const { t, language, setLanguage } = useTranslation();
+  const { t, language } = useTranslation();
   const direction = language === "ar" ? "rtl" : "ltr";
   const user = getUser() ?? {};
   const fullName = getUserFullName(user);
@@ -96,12 +96,6 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
             </NavLink>
           </div>
         </nav>
-
-        <div className="investor-navbar-language" role="group" aria-label={language === "ar" ? "اللغة" : language === "fr" ? "Langue" : "Language"}>
-          {(["ar", "fr", "en"] as const).map((code) => (
-            <button key={code} type="button" className={language === code ? "active" : ""} onClick={() => setLanguage(code)}>{code.toUpperCase()}</button>
-          ))}
-        </div>
 
         <div className="admin-navbar-bottom">
           <button className="admin-navbar-bottom-button" onClick={() => navigate("/")}><Building2 size={17} /> {language === "ar" ? "الموقع العام" : language === "fr" ? "Site public" : "Public website"}</button>
