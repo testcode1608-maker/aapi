@@ -20,7 +20,7 @@ export default function InvestorRequestCreateForm({ form, setForm, setDocuments,
       <div className="investor-project-form-field investor-project-form-field-full"><label htmlFor="request-documents">{tr("documents")}</label><input id="request-documents" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" onChange={setDocuments} /><small className="investor-request-files-help">{tr("filesHelp")}</small>{form.documents.length > 0 && <div className="investor-request-files-list">{form.documents.map((file, index) => <span key={`${file.name}-${index}`}><i className="bi bi-paperclip" />{file.name}</span>)}</div>}</div>
       {error && <div className="investor-project-form-field-full investor-investment-form-message error">{error}</div>}
       {success && <div className="investor-project-form-field-full investor-investment-form-message success">{success}</div>}
-      <div className="investor-project-form-actions investor-project-form-field-full"><button className="investor-dashboard-primary-btn" type="submit" disabled={creating}>{creating ? tr("sending") : tr("send")}</button><button type="button" className="investor-dashboard-logout" onClick={onReset} disabled={creating}><i className="bi bi-arrow-counterclockwise" /> إعادة تعيين</button></div>
+      <div className="investor-project-form-actions investor-project-form-field-full"><button className="investor-dashboard-primary-btn" type="submit" disabled={creating}>{creating ? tr("sending") : tr("send")}</button><button type="button" className="investor-dashboard-logout" onClick={onReset} disabled={creating}><i className="bi bi-arrow-counterclockwise" /> {t("investorForms.projectForm.reset")}</button></div>
     </form>
   </section>;
 }
