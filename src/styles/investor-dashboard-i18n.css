@@ -1,0 +1,126 @@
+/* AAPI Investor Dashboard — language direction */
+.investor-admin-copy[dir="rtl"],
+.investor-admin-copy[dir="ltr"]{
+  direction:inherit;
+}
+
+/* Sidebar: Arabic on the right, French/English on the left. */
+.investor-admin-copy .investor-admin-navbar[dir="rtl"]{
+  right:0!important;
+  left:auto!important;
+  direction:rtl;
+  text-align:right;
+}
+.investor-admin-copy .investor-admin-navbar[dir="ltr"]{
+  left:0!important;
+  right:auto!important;
+  direction:ltr;
+  text-align:left;
+}
+
+/* Main content follows the sidebar direction. */
+.administrator-shell.investor-admin-copy[dir="rtl"] .admin-main-content{
+  margin-right:264px!important;
+  margin-left:0!important;
+  width:calc(100% - 264px)!important;
+  direction:rtl;
+}
+.administrator-shell.investor-admin-copy[dir="ltr"] .admin-main-content{
+  margin-left:264px!important;
+  margin-right:0!important;
+  width:calc(100% - 264px)!important;
+  direction:ltr;
+}
+
+/* Topbar and every dashboard section follow the active language. */
+.investor-admin-copy .soft-admin-topbar[dir="rtl"],
+.investor-admin-copy .investor-dashboard-admin-main[dir="rtl"],
+.investor-admin-copy .investor-dashboard-page-header[dir="rtl"]{
+  direction:rtl;
+  text-align:right;
+}
+.investor-admin-copy .soft-admin-topbar[dir="ltr"],
+.investor-admin-copy .investor-dashboard-admin-main[dir="ltr"],
+.investor-admin-copy .investor-dashboard-page-header[dir="ltr"]{
+  direction:ltr;
+  text-align:left;
+}
+
+/* Flex/grid children inherit the correct reading order. */
+.investor-admin-copy .soft-investor-dashboard,
+.investor-admin-copy .soft-investor-kpi-grid,
+.investor-admin-copy .soft-investor-main-grid,
+.investor-admin-copy .soft-investor-card,
+.investor-admin-copy .investor-dashboard-grid{
+  direction:inherit;
+}
+
+.investor-admin-copy .soft-investor-table th,
+.investor-admin-copy .soft-investor-table td{
+  text-align:inherit;
+}
+
+/* Use logical borders so separators stay correct in both directions. */
+.investor-admin-copy .soft-investor-mini-stats div+div{
+  border-right:0!important;
+  border-inline-start:1px solid rgba(255,255,255,.055);
+}
+body.aapi-admin-light .investor-admin-copy .soft-investor-mini-stats div+div{
+  border-inline-start-color:#e7ece9;
+}
+
+/* Language selector in the investor navbar. */
+.investor-admin-copy .investor-navbar-language{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:12px 18px 8px;
+}
+.investor-admin-copy .investor-navbar-language button{
+  min-width:40px;
+  height:30px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:8px;
+  background:rgba(255,255,255,.035);
+  color:#8f9995;
+  font-size:9px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.investor-admin-copy .investor-navbar-language button:hover,
+.investor-admin-copy .investor-navbar-language button.active{
+  background:#087443;
+  border-color:#087443;
+  color:#fff;
+}
+body.aapi-admin-light .investor-admin-copy .investor-navbar-language button{
+  border-color:#e1e7e4;
+  background:#f7f9f8;
+  color:#67748e;
+}
+body.aapi-admin-light .investor-admin-copy .investor-navbar-language button:hover,
+body.aapi-admin-light .investor-admin-copy .investor-navbar-language button.active{
+  background:#087443;
+  border-color:#087443;
+  color:#fff;
+}
+
+/* Search/profile actions reverse naturally with the document direction. */
+.investor-admin-copy .soft-admin-topbar-actions{
+  direction:inherit;
+}
+.investor-admin-copy .soft-admin-search input{
+  direction:inherit;
+  text-align:inherit;
+}
+
+/* Mobile: do not reserve desktop sidebar space. */
+@media (max-width: 991px){
+  .administrator-shell.investor-admin-copy[dir="rtl"] .admin-main-content,
+  .administrator-shell.investor-admin-copy[dir="ltr"] .admin-main-content{
+    width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+}
