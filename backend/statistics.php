@@ -27,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 $dbHost = getenv('AAPI_DB_HOST') ?: '127.0.0.1';
-$dbName = getenv('AAPI_DB_NAME') ?: 'aapi';
+$dbName = getenv('AAPI_DB_NAME') ?: 'aapi_db';
 $dbUser = getenv('AAPI_DB_USER') ?: 'root';
 $dbPass = getenv('AAPI_DB_PASS') ?: '';
-$dbCharset = 'utf8mb4';
+dbCharset = 'utf8mb4';
 
 try {
     $pdo = new PDO(
@@ -44,18 +44,24 @@ try {
         ]
     );
 
-    $projects = (int) $pdo->query("SELECT COUNT(*) FROM projects")->fetchColumn();
+    $projects = (int) $pdo->query(
+        "SELECT COUNT(*) FROM projects"
+    )->fetchColumn();
 
     $investors = (int) $pdo->query(
         "SELECT COUNT(*) FROM users WHERE role = 'investisseur' AND statut = 'actif'"
     )->fetchColumn();
 
     $investmentValue = (float) $pdo->query(
-        "SELECT COALESCE(SUM(montant_investissement), 0) FROM projects WHERE statut <> 'archive'"
+        "SELECT COALESCE(SUM(montant_investissement), 0)
+         FROM projects
+         WHERE statut <> 'archive'"
     )->fetchColumn();
 
     $jobs = (int) $pdo->query(
-        "SELECT COALESCE(SUM(nombre_emplois), 0) FROM projects WHERE statut <> 'archive'"
+        "SELECT COALESCE(SUM(nombre_emplois), 0)
+         FROM projects
+         WHERE statut <> 'archive'"
     )->fetchColumn();
 
     echo json_encode([
