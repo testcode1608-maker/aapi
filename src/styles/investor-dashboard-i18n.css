@@ -1,7 +1,9 @@
-/* AAPI Investor Dashboard — language direction */
-.investor-admin-copy[dir="rtl"],
+/* AAPI Investor Dashboard — complete language direction */
+.investor-admin-copy[dir="rtl"]{
+  direction:rtl;
+}
 .investor-admin-copy[dir="ltr"]{
-  direction:inherit;
+  direction:ltr;
 }
 
 /* Sidebar: Arabic on the right, French/English on the left. */
@@ -24,12 +26,14 @@
   margin-left:0!important;
   width:calc(100% - 264px)!important;
   direction:rtl;
+  text-align:right;
 }
 .administrator-shell.investor-admin-copy[dir="ltr"] .admin-main-content{
   margin-left:264px!important;
   margin-right:0!important;
   width:calc(100% - 264px)!important;
   direction:ltr;
+  text-align:left;
 }
 
 /* Topbar and every dashboard section follow the active language. */
@@ -46,18 +50,79 @@
   text-align:left;
 }
 
-/* Flex/grid children inherit the correct reading order. */
-.investor-admin-copy .soft-investor-dashboard,
-.investor-admin-copy .soft-investor-kpi-grid,
-.investor-admin-copy .soft-investor-main-grid,
-.investor-admin-copy .soft-investor-card,
-.investor-admin-copy .investor-dashboard-grid{
+/* Projects page: ALL nested elements inherit RTL/LTR. */
+.administrator-shell.investor-admin-copy[dir="rtl"] .investor-dashboard-admin-main,
+.administrator-shell.investor-admin-copy[dir="rtl"] .investor-dashboard-admin-main *{
+  direction:rtl;
+}
+.administrator-shell.investor-admin-copy[dir="ltr"] .investor-dashboard-admin-main,
+.administrator-shell.investor-admin-copy[dir="ltr"] .investor-dashboard-admin-main *{
+  direction:ltr;
+}
+
+/* Keep text alignment consistent on every project element. */
+.administrator-shell.investor-admin-copy[dir="rtl"] .investor-dashboard-admin-main,
+.administrator-shell.investor-admin-copy[dir="rtl"] .investor-dashboard-card,
+.administrator-shell.investor-admin-copy[dir="rtl"] .investor-dashboard-card-header,
+.administrator-shell.investor-admin-copy[dir="rtl"] .investor-dashboard-project-item,
+.administrator-shell.investor-admin-copy[dir="rtl"] .investor-dashboard-project-info{
+  text-align:right;
+}
+.administrator-shell.investor-admin-copy[dir="ltr"] .investor-dashboard-admin-main,
+.administrator-shell.investor-admin-copy[dir="ltr"] .investor-dashboard-card,
+.administrator-shell.investor-admin-copy[dir="ltr"] .investor-dashboard-card-header,
+.administrator-shell.investor-admin-copy[dir="ltr"] .investor-dashboard-project-item,
+.administrator-shell.investor-admin-copy[dir="ltr"] .investor-dashboard-project-info{
+  text-align:left;
+}
+
+/* Project cards and their icon/info layout follow the reading direction. */
+.investor-admin-copy .investor-dashboard-grid,
+.investor-admin-copy .investor-dashboard-card,
+.investor-admin-copy .investor-dashboard-card-header,
+.investor-admin-copy .investor-dashboard-project-list,
+.investor-admin-copy .investor-dashboard-project-item,
+.investor-admin-copy .investor-dashboard-project-info{
   direction:inherit;
 }
 
+/* Explicit icon placement: icon right in Arabic, left in French/English. */
+.administrator-shell.investor-admin-copy[dir="rtl"] .investor-dashboard-project-item{
+  flex-direction:row-reverse;
+}
+.administrator-shell.investor-admin-copy[dir="ltr"] .investor-dashboard-project-item{
+  flex-direction:row;
+}
+
+/* Buttons stay at the correct visual side of the page header. */
+.administrator-shell.investor-admin-copy[dir="rtl"] .investor-dashboard-page-header{
+  flex-direction:row-reverse;
+}
+.administrator-shell.investor-admin-copy[dir="ltr"] .investor-dashboard-page-header{
+  flex-direction:row;
+}
+
+/* Tables, inputs and controls inherit the same reading direction. */
 .investor-admin-copy .soft-investor-table th,
 .investor-admin-copy .soft-investor-table td{
   text-align:inherit;
+  direction:inherit;
+}
+.investor-admin-copy input,
+.investor-admin-copy textarea,
+.investor-admin-copy select,
+.investor-admin-copy button{
+  direction:inherit;
+}
+.administrator-shell.investor-admin-copy[dir="rtl"] input,
+.administrator-shell.investor-admin-copy[dir="rtl"] textarea,
+.administrator-shell.investor-admin-copy[dir="rtl"] select{
+  text-align:right;
+}
+.administrator-shell.investor-admin-copy[dir="ltr"] input,
+.administrator-shell.investor-admin-copy[dir="ltr"] textarea,
+.administrator-shell.investor-admin-copy[dir="ltr"] select{
+  text-align:left;
 }
 
 /* Use logical borders so separators stay correct in both directions. */
@@ -138,7 +203,7 @@ body.aapi-admin-light .investor-admin-copy .investor-navbar-language button.acti
 }
 
 /* Mobile: do not reserve desktop sidebar space. */
-@media (max-width: 991px){
+@media (max-width:991px){
   .administrator-shell.investor-admin-copy[dir="rtl"] .admin-main-content,
   .administrator-shell.investor-admin-copy[dir="ltr"] .admin-main-content{
     width:100%!important;
