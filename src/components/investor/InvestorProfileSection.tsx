@@ -99,9 +99,9 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
     <section className="investor-dashboard-section investor-profile-page">
       <div className="investor-dashboard-page-header investor-profile-page-header">
         <div>
-          <span className="investor-dashboard-overline">الحساب</span>
-          <h1>الملف الشخصي</h1>
-          <p>إدارة معلومات المستثمر وبيانات الحساب الخاصة بك.</p>
+          <span className="investor-dashboard-overline">{t("investorProfile.account")}</span>
+          <h1>{t("investorProfile.title")}</h1>
+          <p>{t("investorProfile.description")}</p>
         </div>
       </div>
 
@@ -112,7 +112,7 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
             <div className="investor-profile-avatar">
               {photo ? <img src={photo} alt={fullName} /> : fullName.charAt(0)}
             </div>
-            <label className="investor-profile-avatar-edit" title="تغيير الصورة">
+            <label className="investor-profile-avatar-edit" title={t("investorProfile.changePhotoTitle")}>
               <i className="bi bi-camera-fill" />
               <input
                 type="file"
@@ -126,7 +126,7 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
             <h2>{fullName}</h2>
             <p>{email || "—"}</p>
             <div className="investor-profile-tags">
-              <span>{profile?.type_investisseur || "مستثمر"}</span>
+              <span>{profile?.type_investisseur || t("investorProfile.investor")}</span>
               {profile?.nom_entreprise && <span>{profile.nom_entreprise}</span>}
               {location && <span>{location}</span>}
             </div>
@@ -138,15 +138,15 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
         <form className="investor-dashboard-card investor-profile-card investor-profile-edit-card" onSubmit={save}>
           <div className="investor-profile-card-heading">
             <div>
-              <span>تعديل الملف</span>
-              <h2>معلومات الحساب</h2>
+              <span>{t("investorProfile.editProfile")}</span>
+              <h2>{t("investorProfile.accountInfo")}</h2>
             </div>
             <div className="investor-profile-heading-icon"><i className="bi bi-person-gear" /></div>
           </div>
 
           <div className="investor-profile-form-grid">
             <label>
-              <span>البريد الإلكتروني</span>
+              <span>{t("investorProfile.email")}</span>
               <div className="investor-profile-input-wrap">
                 <i className="bi bi-envelope" />
                 <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
@@ -154,7 +154,7 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
             </label>
 
             <label>
-              <span>رقم الهاتف</span>
+              <span>{t("investorProfile.phone")}</span>
               <div className="investor-profile-input-wrap">
                 <i className="bi bi-telephone" />
                 <input type="tel" value={telephone} onChange={(event) => setTelephone(event.target.value)} />
@@ -168,12 +168,12 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
           <div className="investor-profile-form-footer">
             <label className="investor-profile-photo-button">
               <i className="bi bi-camera" />
-              <span>تغيير الصورة</span>
+              <span>{t("investorProfile.changePhoto")}</span>
               <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => choosePhoto(event.target.files?.[0])} />
             </label>
             <button className="investor-profile-save" type="submit" disabled={saving}>
               <i className="bi bi-check2" />
-              {saving ? "جارٍ الحفظ..." : "حفظ التغييرات"}
+              {saving ? t("investorProfile.saving") : t("investorProfile.save")}
             </button>
           </div>
         </form>
@@ -181,54 +181,54 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
         <div className="investor-dashboard-card investor-profile-card">
           <div className="investor-profile-card-heading">
             <div>
-              <span>البيانات الشخصية</span>
-              <h2>معلومات المستخدم</h2>
+              <span>{t("investorProfile.personalData")}</span>
+              <h2>{t("investorProfile.userInfo")}</h2>
             </div>
             <div className="investor-profile-heading-icon"><i className="bi bi-person-vcard" /></div>
           </div>
 
           <div className="investor-profile-details">
-            <div><span>الاسم</span><strong>{value(user?.prenom)}</strong></div>
-            <div><span>اللقب</span><strong>{value(user?.nom)}</strong></div>
-            <div><span>البريد الإلكتروني</span><strong dir="ltr">{value(user?.email)}</strong></div>
-            <div><span>الهاتف</span><strong dir="ltr">{value(user?.telephone)}</strong></div>
-            <div><span>نوع المستثمر</span><strong>{value(profile?.type_investisseur)}</strong></div>
-            <div><span>الشركة</span><strong>{value(profile?.nom_entreprise)}</strong></div>
+            <div><span>{t("investorProfile.firstName")}</span><strong>{value(user?.prenom)}</strong></div>
+            <div><span>{t("investorProfile.lastName")}</span><strong>{value(user?.nom)}</strong></div>
+            <div><span>{t("investorProfile.email")}</span><strong dir="ltr">{value(user?.email)}</strong></div>
+            <div><span>{t("investorProfile.phone")}</span><strong dir="ltr">{value(user?.telephone)}</strong></div>
+            <div><span>{t("investorProfile.investorType")}</span><strong>{value(profile?.type_investisseur)}</strong></div>
+            <div><span>{t("investorProfile.company")}</span><strong>{value(profile?.nom_entreprise)}</strong></div>
           </div>
         </div>
 
         <div className="investor-dashboard-card investor-profile-card">
           <div className="investor-profile-card-heading">
             <div>
-              <span>معلومات الاتصال</span>
-              <h2>بيانات العنوان</h2>
+              <span>{t("investorProfile.contactInfo")}</span>
+              <h2>{t("investorProfile.addressData")}</h2>
             </div>
             <div className="investor-profile-heading-icon"><i className="bi bi-geo-alt" /></div>
           </div>
 
           <div className="investor-profile-details">
-            <div><span>الولاية</span><strong>{value(profile?.wilaya)}</strong></div>
-            <div><span>البلدية</span><strong>{value(profile?.commune)}</strong></div>
-            <div className="is-wide"><span>العنوان</span><strong>{value(profile?.adresse)}</strong></div>
-            <div className="is-wide"><span>الموقع الإلكتروني</span><strong dir="ltr">{value(profile?.site_web)}</strong></div>
+            <div><span>{t("investorProfile.wilaya")}</span><strong>{value(profile?.wilaya)}</strong></div>
+            <div><span>{t("investorProfile.commune")}</span><strong>{value(profile?.commune)}</strong></div>
+            <div className="is-wide"><span>{t("investorProfile.address")}</span><strong>{value(profile?.adresse)}</strong></div>
+            <div className="is-wide"><span>{t("investorProfile.website")}</span><strong dir="ltr">{value(profile?.site_web)}</strong></div>
           </div>
         </div>
 
         <div className="investor-dashboard-card investor-profile-card">
           <div className="investor-profile-card-heading">
             <div>
-              <span>بيانات الاستثمار</span>
-              <h2>المعلومات القانونية والنشاط</h2>
+              <span>{t("investorProfile.investmentData")}</span>
+              <h2>{t("investorProfile.legalActivity")}</h2>
             </div>
             <div className="investor-profile-heading-icon"><i className="bi bi-building" /></div>
           </div>
 
           <div className="investor-profile-details">
-            <div><span>السجل التجاري</span><strong>{value(profile?.registre_commerce)}</strong></div>
+            <div><span>{t("investorProfile.commercialRegister")}</span><strong>{value(profile?.registre_commerce)}</strong></div>
             <div><span>NIF</span><strong dir="ltr">{value(profile?.nif)}</strong></div>
             <div><span>NIS</span><strong dir="ltr">{value(profile?.nis)}</strong></div>
-            <div><span>قطاع النشاط</span><strong>{value(profile?.secteur_activite)}</strong></div>
-            <div className="is-wide investor-profile-description"><span>الوصف</span><strong>{value(profile?.description)}</strong></div>
+            <div><span>{t("investorProfile.activitySector")}</span><strong>{value(profile?.secteur_activite)}</strong></div>
+            <div className="is-wide investor-profile-description"><span>{t("investorProfile.descriptionLabel")}</span><strong>{value(profile?.description)}</strong></div>
           </div>
         </div>
       </div>
