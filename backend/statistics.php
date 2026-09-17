@@ -30,7 +30,7 @@ $dbHost = getenv('AAPI_DB_HOST') ?: '127.0.0.1';
 $dbName = getenv('AAPI_DB_NAME') ?: 'aapi_db';
 $dbUser = getenv('AAPI_DB_USER') ?: 'root';
 $dbPass = getenv('AAPI_DB_PASS') ?: '';
-dbCharset = 'utf8mb4';
+$dbCharset = 'utf8mb4';
 
 try {
     $pdo = new PDO(
