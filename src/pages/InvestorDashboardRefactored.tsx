@@ -12,6 +12,7 @@ import "../styles/admin-chart-canvas.css";
 import "../styles/investor/index.css";
 import "../styles/investor-admin-copy.css";
 import "../styles/investor-page-header-theme.css";
+import "../styles/investor-dashboard-i18n.css";
 import InvestorAdminNavbar from "../components/investor/InvestorAdminNavbar";
 import InvestorDashboardOverview from "../components/investor/InvestorDashboardOverview";
 import InvestorProjectCreateForm from "../components/investor/InvestorProjectCreateForm";
