@@ -106,6 +106,28 @@ body.aapi-admin-light .investor-admin-copy .investor-navbar-language button.acti
   color:#fff;
 }
 
+/* Investor profile photo in the sidebar. */
+.investor-admin-copy .investor-navbar-user-photo,
+.investor-admin-copy .investor-navbar-user-fallback{
+  width:42px;
+  height:42px;
+  min-width:42px;
+  border-radius:50%;
+  object-fit:cover;
+  flex-shrink:0;
+}
+.investor-admin-copy .investor-navbar-user-photo{
+  display:block;
+  border:2px solid #087443;
+  background:#087443;
+}
+.investor-admin-copy .investor-navbar-user-fallback{
+  place-items:center;
+  background:#087443;
+  color:#fff;
+  font-weight:800;
+}
+
 /* Search/profile actions reverse naturally with the document direction. */
 .investor-admin-copy .soft-admin-topbar-actions{
   direction:inherit;
