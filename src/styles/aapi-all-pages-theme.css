@@ -290,3 +290,25 @@ html[dir="rtl"] .agency-page p,
 html[dir="rtl"] .agency-page span{
   text-align:right !important;
 }
+
+
+/* AGENCY — service number belongs to the right side in LTR cards */
+html[dir="ltr"] .agency-page .agency-service-card{
+  direction:ltr !important;
+}
+html[dir="ltr"] .agency-page .agency-service-card .agency-service-number{
+  order:2 !important;
+  margin-left:auto !important;
+  margin-right:0 !important;
+  text-align:right !important;
+  direction:ltr !important;
+  unicode-bidi:plaintext !important;
+}
+html[dir="ltr"] .agency-page .agency-service-card > *:not(.agency-service-number){
+  order:1 !important;
+}
+
+html[dir="rtl"] .agency-page .agency-service-card .agency-service-number{
+  text-align:left !important;
+  direction:ltr !important;
+}
