@@ -112,7 +112,9 @@ body.aapi-investor-dark .investor-profile-alert.success{background:#123d2a;color
 @media (max-width:560px){.investor-profile-cover{border-radius:16px}.investor-profile-avatar{width:132px;height:132px;font-size:40px}.investor-profile-avatar-edit{right:2px;bottom:1px}.investor-profile-card{padding:21px!important}.investor-profile-card-heading h2{font-size:19px}.investor-profile-form-footer{align-items:stretch;flex-direction:column}.investor-profile-photo-button,.investor-profile-save{width:100%}}
 
 /* Light mode: keep the edit card borders visually consistent */
-html:not([data-theme="dark"]) .investor-profile-edit-card,
-html:not([data-theme="dark"]) .investor-profile-edit-card .investor-profile-form-footer,
-html:not([data-theme="dark"]) .investor-profile-edit-card .investor-profile-form-grid input{border-color:var(--id-border)!important}
-html:not([data-theme="dark"]) .investor-profile-edit-card .investor-profile-photo-button{border-color:var(--id-border)!important}
+body:not(.aapi-investor-dark) .investor-profile-edit-card,
+body:not(.aapi-investor-dark) .investor-profile-edit-card .investor-profile-form-footer,
+body:not(.aapi-investor-dark) .investor-profile-edit-card .investor-profile-form-grid input{border-color:var(--id-border)!important}
+body:not(.aapi-investor-dark) .investor-profile-edit-card .investor-profile-photo-button{border-color:var(--id-border)!important}
+body:not(.aapi-investor-dark) .investor-profile-edit-card .investor-profile-form-grid input:hover{border-color:rgba(8,116,67,.35)!important}
+body:not(.aapi-investor-dark) .investor-profile-edit-card .investor-profile-form-grid input:focus{border-color:var(--id-green)!important;box-shadow:0 0 0 4px rgba(8,116,67,.09)!important}
