@@ -1,9 +1,8 @@
+/* Investor profile — AAPI bilingual/RTL/LTR layout */
 .investor-profile-page{max-width:1240px;margin:0 auto;padding-bottom:40px;direction:rtl;text-align:right}
 .investor-profile-page *{box-sizing:border-box}
 .investor-profile-page-header{margin-bottom:22px;text-align:right;direction:rtl}
 .investor-profile-page-header h1,.investor-profile-page-header p{direction:rtl;text-align:right}
-
-/* Argon-inspired profile cover, adapted to AAPI colors and RTL */
 .investor-profile-cover{position:relative;min-height:250px;margin-bottom:78px;border-radius:20px;background:linear-gradient(135deg,#087443 0%,#055c35 55%,#043d25 100%);overflow:visible;box-shadow:0 18px 45px rgba(8,116,67,.18);direction:rtl;text-align:right}
 .investor-profile-cover-pattern{position:absolute;inset:0;opacity:.16;background:radial-gradient(circle at 12% 25%,#ffffff 0 1px,transparent 1.5px),radial-gradient(circle at 72% 35%,#ffffff 0 1px,transparent 1.5px),radial-gradient(circle at 42% 75%,#ffffff 0 1px,transparent 1.5px);background-size:34px 34px,42px 42px,28px 28px}
 .investor-profile-cover-content{position:relative;z-index:1;display:flex;align-items:flex-end;gap:28px;min-height:250px;padding:34px 38px;color:#fff;direction:rtl;text-align:right}
@@ -17,7 +16,6 @@
 .investor-profile-identity p{margin:8px 0 14px;color:rgba(255,255,255,.82);font-size:14px;direction:ltr;text-align:right}
 .investor-profile-tags{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:8px;direction:rtl}
 .investor-profile-tags span{display:inline-flex;align-items:center;min-height:30px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:12px;font-weight:700;direction:rtl;text-align:right}
-
 .investor-profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;direction:rtl}
 .investor-profile-card{padding:28px!important;border:1px solid var(--id-border);border-radius:18px;background:var(--id-white);box-shadow:0 10px 30px rgba(20,34,27,.06);min-width:0;direction:rtl;text-align:right}
 .investor-profile-edit-card{grid-column:1/-1}
@@ -26,7 +24,6 @@
 .investor-profile-card-heading span{display:block;margin-bottom:6px;color:var(--id-green);font-size:11px;font-weight:800;letter-spacing:.04em;text-align:right}
 .investor-profile-card-heading h2{margin:0;color:var(--id-dark);font-size:21px;font-weight:800;line-height:1.35;text-align:right}
 .investor-profile-heading-icon{width:46px;height:46px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;background:var(--id-light-green);color:var(--id-green);font-size:20px;direction:ltr}
-
 .investor-profile-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;direction:rtl}
 .investor-profile-form-grid label{display:flex;flex-direction:column;gap:9px;min-width:0;text-align:right;direction:rtl}
 .investor-profile-form-grid label>span{color:var(--id-dark);font-size:13px;font-weight:750;text-align:right}
@@ -35,7 +32,6 @@
 .investor-profile-form-grid input{width:100%;min-height:52px;padding:0 44px 0 15px;border:1px solid var(--id-border);border-radius:11px;background:var(--id-light);color:var(--id-dark);outline:none;font:inherit;font-size:14px;direction:ltr;text-align:left;transition:.2s ease}
 .investor-profile-form-grid input:hover{border-color:rgba(8,116,67,.35)}
 .investor-profile-form-grid input:focus{background:var(--id-white);border-color:var(--id-green);box-shadow:0 0 0 4px rgba(8,116,67,.09)}
-
 .investor-profile-form-footer{display:flex;align-items:center;justify-content:flex-start;gap:12px;margin-top:20px;padding-top:20px;border-top:1px solid var(--id-border);direction:rtl}
 .investor-profile-photo-button,.investor-profile-save{min-height:46px;border-radius:10px;padding:0 17px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-size:13px;font-weight:750;cursor:pointer;transition:.2s ease;direction:rtl}
 .investor-profile-photo-button{background:var(--id-light-green);border:1px solid #cfe7da;color:var(--id-dark-green)}
@@ -44,29 +40,53 @@
 .investor-profile-save{border:1px solid var(--id-green);background:var(--id-green);color:#fff;box-shadow:0 7px 18px rgba(8,116,67,.17)}
 .investor-profile-save:hover{background:#0b8750;border-color:#0b8750;transform:translateY(-1px)}
 .investor-profile-save:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
-
 .investor-profile-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px;border-top:1px solid var(--id-border);direction:rtl;text-align:right}
 .investor-profile-details>div{min-width:0;padding:16px 0;border-bottom:1px solid var(--id-border);display:flex;flex-direction:column;gap:6px;direction:rtl;text-align:right}
 .investor-profile-details>div.is-wide{grid-column:1/-1}
 .investor-profile-details span{color:var(--id-gray);font-size:11px;font-weight:650;text-align:right}
 .investor-profile-details strong{color:var(--id-dark);font-size:13px;font-weight:750;line-height:1.55;word-break:break-word;text-align:right;direction:rtl}
-.investor-profile-details strong[dir="ltr"]{direction:ltr;text-align:right}
+.investor-profile-details strong[dir="ltr"]{direction:ltr;text-align:left}
 .investor-profile-description strong{font-weight:600;white-space:pre-wrap}
-
 .investor-profile-alert{margin-top:18px;padding:12px 14px;border-radius:10px;font-size:13px;font-weight:650;line-height:1.6;direction:rtl;text-align:right}
 .investor-profile-alert.error{background:#fff1f1;color:#8b3030;border:1px solid #efcaca}
 .investor-profile-alert.success{background:var(--id-light-green);color:var(--id-dark-green);border:1px solid #c9e5d5}
 
-/* Force the profile to follow the same RTL system as the investor dashboard. */
-[dir="rtl"] .investor-profile-page,[dir="rtl"] .investor-profile-page .investor-profile-card{direction:rtl;text-align:right}
-[dir="rtl"] .investor-profile-page .investor-profile-cover-content{direction:rtl}
-[dir="rtl"] .investor-profile-page .investor-profile-card-heading{direction:rtl}
-[dir="rtl"] .investor-profile-page .investor-profile-details{direction:rtl}
-[dir="rtl"] .investor-profile-page .investor-profile-form-grid{direction:rtl}
-[dir="ltr"] .investor-profile-page{direction:ltr;text-align:left}
-[dir="ltr"] .investor-profile-page .investor-profile-card{text-align:left}
+/* Language-aware direction: Arabic = RTL, French/English = LTR. */
+html[dir="rtl"] .investor-profile-page,
+html[dir="rtl"] .investor-profile-page .investor-profile-card{direction:rtl;text-align:right}
+html[dir="rtl"] .investor-profile-page .investor-profile-card-heading,
+html[dir="rtl"] .investor-profile-page .investor-profile-details,
+html[dir="rtl"] .investor-profile-page .investor-profile-form-grid{direction:rtl}
+html[dir="rtl"] .investor-profile-page .investor-profile-card-heading>div:first-child,
+html[dir="rtl"] .investor-profile-page .investor-profile-details>div,
+html[dir="rtl"] .investor-profile-page .investor-profile-details span,
+html[dir="rtl"] .investor-profile-page .investor-profile-details strong{text-align:right}
 
-/* Keep the page consistent with the existing AAPI dark-mode system */
+html[dir="ltr"] .investor-profile-page,
+html[dir="ltr"] .investor-profile-page .investor-profile-card{direction:ltr;text-align:left}
+html[dir="ltr"] .investor-profile-page .investor-profile-card-heading,
+html[dir="ltr"] .investor-profile-page .investor-profile-details,
+html[dir="ltr"] .investor-profile-page .investor-profile-form-grid{direction:ltr}
+html[dir="ltr"] .investor-profile-page .investor-profile-card-heading>div:first-child,
+html[dir="ltr"] .investor-profile-page .investor-profile-details>div,
+html[dir="ltr"] .investor-profile-page .investor-profile-details span,
+html[dir="ltr"] .investor-profile-page .investor-profile-details strong{text-align:left}
+html[dir="ltr"] .investor-profile-page .investor-profile-form-grid label{direction:ltr;text-align:left}
+html[dir="ltr"] .investor-profile-page .investor-profile-form-grid label>span{text-align:left}
+html[dir="ltr"] .investor-profile-page .investor-profile-input-wrap{direction:ltr}
+html[dir="ltr"] .investor-profile-page .investor-profile-input-wrap>i{left:15px;right:auto}
+html[dir="ltr"] .investor-profile-page .investor-profile-form-grid input{padding-left:44px;padding-right:15px}
+html[dir="ltr"] .investor-profile-page .investor-profile-form-footer{direction:ltr;justify-content:flex-start}
+html[dir="ltr"] .investor-profile-page .investor-profile-photo-button,
+html[dir="ltr"] .investor-profile-page .investor-profile-save{direction:ltr}
+html[dir="ltr"] .investor-profile-page .investor-profile-cover-content{direction:ltr;text-align:left}
+html[dir="ltr"] .investor-profile-page .investor-profile-identity{direction:ltr;text-align:left}
+html[dir="ltr"] .investor-profile-page .investor-profile-identity h2{text-align:left}
+html[dir="ltr"] .investor-profile-page .investor-profile-identity p{text-align:left}
+html[dir="ltr"] .investor-profile-page .investor-profile-tags{direction:ltr;justify-content:flex-start}
+html[dir="ltr"] .investor-profile-page .investor-profile-tags span{direction:ltr;text-align:left}
+html[dir="ltr"] .investor-profile-page .investor-profile-avatar-edit{left:7px;right:auto}
+
 body.aapi-investor-dark .investor-profile-cover{box-shadow:0 18px 45px rgba(0,0,0,.28)}
 body.aapi-investor-dark .investor-profile-card{background:#151a17;border-color:#29352f;box-shadow:0 14px 35px rgba(0,0,0,.2)}
 body.aapi-investor-dark .investor-profile-card-heading h2,body.aapi-investor-dark .investor-profile-details strong,body.aapi-investor-dark .investor-profile-form-grid label>span{color:#edf3ef}
@@ -83,29 +103,6 @@ body.aapi-investor-dark .investor-profile-photo-button:hover{background:#174b34}
 body.aapi-investor-dark .investor-profile-alert.error{background:#351d1d;color:#ffb4b4;border-color:#633535}
 body.aapi-investor-dark .investor-profile-alert.success{background:#123d2a;color:#9be0bb;border-color:#295640}
 
-@media (max-width:900px){
-  .investor-profile-grid{grid-template-columns:1fr}
-  .investor-profile-edit-card{grid-column:auto}
-}
-
-@media (max-width:760px){
-  .investor-profile-cover{min-height:300px;margin-bottom:84px}
-  .investor-profile-cover-content{min-height:300px;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:30px 20px 28px}
-  .investor-profile-avatar-wrap{margin-bottom:-92px}
-  .investor-profile-identity{padding-bottom:0;text-align:center}
-  .investor-profile-identity h2{text-align:center;font-size:25px}
-  .investor-profile-identity p{text-align:center}
-  .investor-profile-tags{justify-content:center}
-  .investor-profile-form-grid,.investor-profile-details{grid-template-columns:1fr}
-  .investor-profile-details>div.is-wide{grid-column:auto}
-}
-
-@media (max-width:560px){
-  .investor-profile-cover{border-radius:16px}
-  .investor-profile-avatar{width:132px;height:132px;font-size:40px}
-  .investor-profile-avatar-edit{right:2px;bottom:1px}
-  .investor-profile-card{padding:21px!important}
-  .investor-profile-card-heading h2{font-size:19px}
-  .investor-profile-form-footer{align-items:stretch;flex-direction:column}
-  .investor-profile-photo-button,.investor-profile-save{width:100%}
-}
+@media (max-width:900px){.investor-profile-grid{grid-template-columns:1fr}.investor-profile-edit-card{grid-column:auto}}
+@media (max-width:760px){.investor-profile-cover{min-height:300px;margin-bottom:84px}.investor-profile-cover-content{min-height:300px;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:30px 20px 28px}.investor-profile-avatar-wrap{margin-bottom:-92px}.investor-profile-identity{padding-bottom:0;text-align:center}.investor-profile-identity h2{text-align:center;font-size:25px}.investor-profile-identity p{text-align:center}.investor-profile-tags{justify-content:center}.investor-profile-form-grid,.investor-profile-details{grid-template-columns:1fr}.investor-profile-details>div.is-wide{grid-column:auto}}
+@media (max-width:560px){.investor-profile-cover{border-radius:16px}.investor-profile-avatar{width:132px;height:132px;font-size:40px}.investor-profile-avatar-edit{right:2px;bottom:1px}.investor-profile-card{padding:21px!important}.investor-profile-card-heading h2{font-size:19px}.investor-profile-form-footer{align-items:stretch;flex-direction:column}.investor-profile-photo-button,.investor-profile-save{width:100%}}
