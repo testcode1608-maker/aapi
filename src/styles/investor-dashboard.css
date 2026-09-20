@@ -188,3 +188,187 @@ body.aapi-admin-light .investor-dashboard-logout:hover {
   border-color: #0b8750 !important;
   color: #ffffff !important;
 }
+
+
+/* ==========================================================
+   AAPI — Investor Arabic RTL master direction
+   Apply one consistent right-to-left layout to all Investor pages.
+   ========================================================== */
+.investor-admin-copy[dir="rtl"],
+.investor-admin-copy[dir="rtl"] .admin-main-content,
+.investor-admin-copy[dir="rtl"] .investor-dashboard-admin-main{
+  direction:rtl !important;
+  text-align:right;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-dashboard-page-header{
+  direction:rtl !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-dashboard-page-header > div{
+  direction:rtl !important;
+  text-align:right !important;
+  margin-right:0 !important;
+  margin-left:auto !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-dashboard-page-header .investor-dashboard-overline,
+.investor-admin-copy[dir="rtl"] .investor-dashboard-page-header h1,
+.investor-admin-copy[dir="rtl"] .investor-dashboard-page-header p{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-dashboard-page-header .investor-dashboard-primary-btn{
+  direction:rtl !important;
+  flex:0 0 auto;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-dashboard-card-header,
+.investor-admin-copy[dir="rtl"] .investor-dashboard-card-heading,
+.investor-admin-copy[dir="rtl"] .soft-investor-card-head{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-dashboard-card-header > div,
+.investor-admin-copy[dir="rtl"] .soft-investor-card-head > div{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-dashboard-card-header h2,
+.investor-admin-copy[dir="rtl"] .investor-dashboard-card-header span,
+.investor-admin-copy[dir="rtl"] .soft-investor-card-head h2,
+.investor-admin-copy[dir="rtl"] .soft-investor-card-head span{
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-dashboard-grid,
+.investor-admin-copy[dir="rtl"] .soft-investor-dashboard,
+.investor-admin-copy[dir="rtl"] .soft-investor-main-grid,
+.investor-admin-copy[dir="rtl"] .soft-investor-kpi-grid{
+  direction:rtl !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-project-form-grid,
+.investor-admin-copy[dir="rtl"] .investor-project-form-field,
+.investor-admin-copy[dir="rtl"] .investor-project-form-field label,
+.investor-admin-copy[dir="rtl"] .investor-project-form-field small{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-project-form-field input,
+.investor-admin-copy[dir="rtl"] .investor-project-form-field select,
+.investor-admin-copy[dir="rtl"] .investor-project-form-field textarea{
+  direction:rtl;
+  text-align:right;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-project-form-actions{
+  direction:rtl !important;
+  justify-content:flex-start !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-dashboard-table,
+.investor-admin-copy[dir="rtl"] table{
+  direction:rtl;
+}
+
+.investor-admin-copy[dir="rtl"] th,
+.investor-admin-copy[dir="rtl"] td{
+  text-align:right;
+}
+
+.investor-admin-copy[dir="rtl"] .soft-investor-project-name,
+.investor-admin-copy[dir="rtl"] .soft-investor-order,
+.investor-admin-copy[dir="rtl"] .soft-investor-progress-row{
+  direction:rtl;
+}
+
+.investor-admin-copy[dir="rtl"] .soft-investor-project-name > div,
+.investor-admin-copy[dir="rtl"] .soft-investor-order > div,
+.investor-admin-copy[dir="rtl"] .soft-investor-progress-row > div:last-child{
+  text-align:right;
+  direction:rtl;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-messages-header,
+.investor-admin-copy[dir="rtl"] .investor-message-compose-form,
+.investor-admin-copy[dir="rtl"] .investor-notifications-header,
+.investor-admin-copy[dir="rtl"] .investor-notification-content,
+.investor-admin-copy[dir="rtl"] .investor-request-response{
+  direction:rtl;
+  text-align:right;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-message-compose-form input,
+.investor-admin-copy[dir="rtl"] .investor-message-compose-form textarea{
+  direction:rtl;
+  text-align:right;
+}
+
+.investor-admin-copy[dir="rtl"] .admin-navbar{
+  direction:rtl !important;
+  left:auto !important;
+  right:0 !important;
+}
+
+.investor-admin-copy[dir="rtl"] .admin-navbar-menu,
+.investor-admin-copy[dir="rtl"] .admin-navbar-section,
+.investor-admin-copy[dir="rtl"] .admin-navbar-section-items{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .admin-nav-link{
+  direction:rtl !important;
+  flex-direction:row !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .admin-nav-label{
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .admin-nav-link.active{
+  box-shadow:inset -3px 0 0 var(--id-gold);
+}
+
+.investor-admin-copy[dir="rtl"] .soft-admin-topbar{
+  direction:rtl !important;
+}
+
+.investor-admin-copy[dir="rtl"] .soft-admin-breadcrumb{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .soft-admin-topbar-actions{
+  direction:rtl !important;
+}
+
+.investor-admin-copy[dir="rtl"] .soft-admin-search{
+  direction:rtl !important;
+}
+
+.investor-admin-copy[dir="rtl"] .soft-admin-search input{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .soft-admin-profile{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-copy[dir="rtl"] .investor-profile-page{
+  direction:rtl !important;
+  text-align:right !important;
+}
