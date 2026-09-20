@@ -118,3 +118,13 @@ body:not(.aapi-investor-dark) .investor-profile-edit-card .investor-profile-form
 body:not(.aapi-investor-dark) .investor-profile-edit-card .investor-profile-photo-button{border-color:var(--id-border)!important}
 body:not(.aapi-investor-dark) .investor-profile-edit-card .investor-profile-form-grid input:hover{border-color:rgba(8,116,67,.35)!important}
 body:not(.aapi-investor-dark) .investor-profile-edit-card .investor-profile-form-grid input:focus{border-color:var(--id-green)!important;box-shadow:0 0 0 4px rgba(8,116,67,.09)!important}
+
+
+/* LTR profile page header — French / English */
+html[dir="ltr"] .investor-profile-page-header,
+html[dir="ltr"] .investor-profile-page-header h1,
+html[dir="ltr"] .investor-profile-page-header p,
+html[dir="ltr"] .investor-profile-page-header .investor-dashboard-overline{
+  direction:ltr !important;
+  text-align:left !important;
+}
