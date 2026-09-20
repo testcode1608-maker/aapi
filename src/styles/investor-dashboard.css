@@ -372,3 +372,48 @@ body.aapi-admin-light .investor-dashboard-logout:hover {
   direction:rtl !important;
   text-align:right !important;
 }
+
+
+/* ==========================================================
+   AAPI — Investor Navbar Arabic RTL
+   Brand and bottom actions read naturally right-to-left.
+   ========================================================== */
+.investor-admin-navbar[dir="rtl"] .admin-navbar-brand,
+.investor-admin-navbar[dir="rtl"] .admin-navbar-brand-button,
+.investor-admin-navbar[dir="rtl"] .admin-navbar-bottom{
+  direction:rtl !important;
+}
+
+.investor-admin-navbar[dir="rtl"] .admin-navbar-brand-button{
+  flex-direction:row !important;
+  justify-content:flex-start !important;
+  text-align:right !important;
+}
+
+.investor-admin-navbar[dir="rtl"] .admin-navbar-brand-text{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-navbar[dir="rtl"] .admin-navbar-brand-text strong,
+.investor-admin-navbar[dir="rtl"] .admin-navbar-brand-text small{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+.investor-admin-navbar[dir="rtl"] .admin-navbar-bottom{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+}
+
+.investor-admin-navbar[dir="rtl"] .admin-navbar-bottom-button{
+  direction:rtl !important;
+  flex-direction:row !important;
+  justify-content:flex-start !important;
+  text-align:right !important;
+}
+
+.investor-admin-navbar[dir="rtl"] .admin-navbar-bottom-button svg{
+  flex:0 0 auto;
+}
