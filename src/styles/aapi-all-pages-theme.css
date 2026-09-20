@@ -295,17 +295,31 @@ html[dir="rtl"] .agency-page span{
 /* AGENCY — service number belongs to the right side in LTR cards */
 html[dir="ltr"] .agency-page .agency-service-card{
   direction:ltr !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  text-align:left !important;
 }
 html[dir="ltr"] .agency-page .agency-service-card .agency-service-number{
-  order:2 !important;
-  margin-left:auto !important;
-  margin-right:0 !important;
+  display:block !important;
+  align-self:flex-end !important;
+  order:-1 !important;
+  width:max-content !important;
+  margin:0 0 8px auto !important;
+  padding:0 !important;
   text-align:right !important;
   direction:ltr !important;
   unicode-bidi:plaintext !important;
 }
-html[dir="ltr"] .agency-page .agency-service-card > *:not(.agency-service-number){
+html[dir="ltr"] .agency-page .agency-service-card .agency-service-icon{
+  order:0 !important;
+  align-self:flex-start !important;
+}
+html[dir="ltr"] .agency-page .agency-service-card h3,
+html[dir="ltr"] .agency-page .agency-service-card p{
   order:1 !important;
+  text-align:left !important;
+  direction:ltr !important;
 }
 
 html[dir="rtl"] .agency-page .agency-service-card .agency-service-number{
