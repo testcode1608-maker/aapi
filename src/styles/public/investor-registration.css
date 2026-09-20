@@ -10,3 +10,37 @@
 .investor-registration-section[dir="ltr"] .investor-registration-header,.investor-registration-section[dir="ltr"] .investor-registration-block-title{direction:ltr}.investor-registration-section[dir="rtl"] .investor-registration-header,.investor-registration-section[dir="rtl"] .investor-registration-block-title{direction:rtl}
 @media(max-width:767px){.investor-registration-section{padding:35px 0}.investor-registration-header{padding:26px 22px;align-items:flex-start}.investor-registration-header h2{font-size:24px}.investor-registration-form{padding:25px 22px}.investor-registration-block{padding-bottom:24px;margin-bottom:24px}.investor-registration-actions{justify-content:stretch}.investor-registration-actions>*{width:100%;justify-content:center}.investor-registration-success{padding:45px 22px}}
 @media(max-width:480px){.investor-registration-header{flex-direction:column}.investor-registration-icon{width:54px;height:54px;flex-basis:54px}.investor-registration-block-title{gap:10px}.investor-registration-block-title>span{width:36px;height:36px;flex-basis:36px}.investor-registration-header h2{font-size:21px}}
+
+
+/* Investor registration — dark mode header consistency */
+body.aapi-site-dark .investor-registration-section{
+  background:linear-gradient(145deg,#0e1210,#121a16)!important;
+  color:#edf4f0!important;
+}
+body.aapi-site-dark .investor-registration-card{
+  background:#181c19!important;
+  border-color:#294238!important;
+  box-shadow:0 18px 55px rgba(0,0,0,.32)!important;
+}
+body.aapi-site-dark .investor-registration-header{
+  background:linear-gradient(135deg,#181c19,#151a17)!important;
+  border-bottom-color:#294238!important;
+  color:#edf4f0!important;
+}
+body.aapi-site-dark .investor-registration-header .section-overline{
+  color:#8de0b5!important;
+}
+body.aapi-site-dark .investor-registration-header h2{
+  color:#edf4f0!important;
+}
+body.aapi-site-dark .investor-registration-header h2 strong{
+  color:#8de0b5!important;
+}
+body.aapi-site-dark .investor-registration-header p{
+  color:#aab8b1!important;
+}
+body.aapi-site-dark .investor-registration-icon{
+  background:#123d2a!important;
+  color:#8de0b5!important;
+  border:1px solid rgba(8,116,67,.35);
+}
