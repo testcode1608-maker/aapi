@@ -44,3 +44,21 @@ body.aapi-site-dark .investor-registration-icon{
   color:#8de0b5!important;
   border:1px solid rgba(8,116,67,.35);
 }
+
+
+/* Investor registration consent — dark mode */
+body.aapi-site-dark .investor-registration-consent{
+  color:#aab8b1!important;
+}
+body.aapi-site-dark .investor-registration-consent label{
+  color:#aab8b1!important;
+  background:transparent!important;
+}
+body.aapi-site-dark .investor-registration-consent label span{
+  color:#aab8b1!important;
+}
+body.aapi-site-dark .investor-registration-consent input{
+  accent-color:#087443!important;
+  background:#181c19!important;
+  border-color:#3a4b43!important;
+}
