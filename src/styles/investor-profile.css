@@ -1,5 +1,5 @@
 /* Investor profile — AAPI bilingual/RTL/LTR layout */
-.investor-profile-page{max-width:1240px;margin:0 auto;padding-bottom:40px;direction:rtl;text-align:right}
+.investor-profile-page{--id-green:#087443;--id-dark-green:#055c35;--id-light-green:#eaf6f0;--id-gold:#c9a227;--id-dark:#14221b;--id-gray:#66736d;--id-light:#f5f7f6;--id-white:#ffffff;--id-border:#dfe8e3;max-width:1240px;margin:0 auto;padding-bottom:40px;direction:rtl;text-align:right}
 .investor-profile-page *{box-sizing:border-box}
 .investor-profile-page-header{margin-bottom:22px;text-align:right;direction:rtl}
 .investor-profile-page-header h1,.investor-profile-page-header p{direction:rtl;text-align:right}
