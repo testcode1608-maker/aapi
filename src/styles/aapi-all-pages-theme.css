@@ -182,3 +182,111 @@ body.aapi-site-dark .contact-cta-button{background:#c9a227!important;color:#1422
 body.aapi-investor-dark .investor-dashboard-page,body.aapi-investor-dark .investor-dashboard-page main{background:#0e1210!important;color:#edf4f0!important}
 body.aapi-investor-dark .investor-dashboard-page [class*="card"],body.aapi-investor-dark .investor-dashboard-page [class*="panel"],body.aapi-investor-dark .investor-dashboard-page [class*="section"]{border-color:#294238!important}
 body.aapi-admin-light .admin-dashboard,body.aapi-admin-light .admin-projects-page,body.aapi-admin-light .admin-requests-page,body.aapi-admin-light .admin-users-page,body.aapi-admin-light .admin-investments-page,body.aapi-admin-light .admin-investors-page,body.aapi-admin-light .admin-messages-page,body.aapi-admin-light .admin-documents-page{color:#14221b!important}
+
+
+/* ==========================================================
+   AAPI — AGENCY PAGE LTR / RTL MASTER DIRECTION
+   French + English = left-to-right
+   Arabic = right-to-left
+   ========================================================== */
+
+html[dir="ltr"] .agency-page{
+  direction:ltr !important;
+  text-align:left !important;
+}
+
+html[dir="ltr"] .agency-page .container,
+html[dir="ltr"] .agency-page .row,
+html[dir="ltr"] .agency-page [class*="col-"]{
+  direction:ltr !important;
+}
+
+html[dir="ltr"] .agency-page .agency-hero-content,
+html[dir="ltr"] .agency-page .agency-section-heading,
+html[dir="ltr"] .agency-page .agency-centered-heading,
+html[dir="ltr"] .agency-page .agency-values,
+html[dir="ltr"] .agency-page .agency-values-title,
+html[dir="ltr"] .agency-page .agency-values-text,
+html[dir="ltr"] .agency-page .agency-intro-text,
+html[dir="ltr"] .agency-page .agency-service-card,
+html[dir="ltr"] .agency-page .agency-value-item,
+html[dir="ltr"] .agency-page .agency-intro-card{
+  direction:ltr !important;
+  text-align:left !important;
+}
+
+html[dir="ltr"] .agency-page h1,
+html[dir="ltr"] .agency-page h2,
+html[dir="ltr"] .agency-page h3,
+html[dir="ltr"] .agency-page p,
+html[dir="ltr"] .agency-page span,
+html[dir="ltr"] .agency-page a{
+  direction:ltr !important;
+  text-align:left !important;
+}
+
+html[dir="ltr"] .agency-page .agency-breadcrumb{
+  direction:ltr !important;
+  justify-content:flex-start !important;
+  text-align:left !important;
+}
+
+html[dir="ltr"] .agency-page .agency-breadcrumb i{
+  transform:rotate(180deg);
+}
+
+html[dir="ltr"] .agency-page .agency-primary-button,
+html[dir="ltr"] .agency-page .agency-final-button{
+  direction:ltr !important;
+  flex-direction:row !important;
+  justify-content:center !important;
+  text-align:left !important;
+}
+
+html[dir="ltr"] .agency-page .agency-primary-button i,
+html[dir="ltr"] .agency-page .agency-final-button i{
+  margin-left:8px !important;
+  margin-right:0 !important;
+  transform:rotate(180deg);
+}
+
+html[dir="ltr"] .agency-page .agency-service-card,
+html[dir="ltr"] .agency-page .agency-value-item{
+  flex-direction:row !important;
+}
+
+html[dir="ltr"] .agency-page .agency-card-number{
+  direction:ltr !important;
+  text-align:left !important;
+  justify-content:flex-start !important;
+}
+
+html[dir="ltr"] .agency-page .agency-final-cta-inner{
+  direction:ltr !important;
+  text-align:left !important;
+}
+
+html[dir="ltr"] .agency-page .agency-final-cta-inner > div{
+  direction:ltr !important;
+  text-align:left !important;
+}
+
+/* Arabic remains RTL */
+html[dir="rtl"] .agency-page{
+  direction:rtl !important;
+  text-align:right !important;
+}
+
+html[dir="rtl"] .agency-page .container,
+html[dir="rtl"] .agency-page .row,
+html[dir="rtl"] .agency-page [class*="col-"]{
+  direction:rtl !important;
+}
+
+html[dir="rtl"] .agency-page h1,
+html[dir="rtl"] .agency-page h2,
+html[dir="rtl"] .agency-page h3,
+html[dir="rtl"] .agency-page p,
+html[dir="rtl"] .agency-page span{
+  text-align:right !important;
+}
