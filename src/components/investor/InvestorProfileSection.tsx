@@ -166,12 +166,7 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
           {message && <div className="investor-profile-alert success">{message}</div>}
 
           <div className="investor-profile-form-footer">
-            <label className="investor-profile-photo-button">
-              <i className="bi bi-camera" />
-              <span>{t("investorProfile.changePhoto")}</span>
-              <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => choosePhoto(event.target.files?.[0])} />
-            </label>
-            <button className="investor-profile-save" type="submit" disabled={saving}>
+<button className="investor-profile-save" type="submit" disabled={saving}>
               <i className="bi bi-check2" />
               {saving ? t("investorProfile.saving") : t("investorProfile.save")}
             </button>
