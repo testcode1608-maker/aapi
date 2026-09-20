@@ -326,3 +326,48 @@ html[dir="rtl"] .agency-page .agency-service-card .agency-service-number{
   text-align:left !important;
   direction:ltr !important;
 }
+
+
+/* AGENCY — service number: fixed to the right edge of the card in FR/EN */
+html[dir="ltr"] .agency-page .agency-service-card{
+  position:relative !important;
+  display:block !important;
+  direction:ltr !important;
+  text-align:left !important;
+}
+html[dir="ltr"] .agency-page .agency-service-card .agency-service-number{
+  position:absolute !important;
+  top:28px !important;
+  right:28px !important;
+  left:auto !important;
+  display:block !important;
+  width:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-align:right !important;
+  direction:ltr !important;
+  z-index:2 !important;
+}
+html[dir="ltr"] .agency-page .agency-service-card .agency-service-icon,
+html[dir="ltr"] .agency-page .agency-service-card h3,
+html[dir="ltr"] .agency-page .agency-service-card p{
+  position:relative !important;
+  z-index:1 !important;
+  text-align:left !important;
+  direction:ltr !important;
+}
+
+html[dir="rtl"] .agency-page .agency-service-card{
+  position:relative !important;
+  direction:rtl !important;
+  text-align:right !important;
+}
+html[dir="rtl"] .agency-page .agency-service-card .agency-service-number{
+  position:absolute !important;
+  top:28px !important;
+  left:28px !important;
+  right:auto !important;
+  margin:0 !important;
+  text-align:left !important;
+  direction:ltr !important;
+}
