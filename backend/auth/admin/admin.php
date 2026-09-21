@@ -75,6 +75,7 @@ $handlers = [
     'delete_requests' => __DIR__.'/delete.php',
     'delete_messages' => __DIR__.'/delete.php',
     'delete_documents' => __DIR__.'/delete.php',
+    'delete_sectors' => __DIR__.'/delete.php',
     'delete_announcements' => __DIR__.'/delete.php',
     'delete_news' => __DIR__.'/delete.php',
 ];
