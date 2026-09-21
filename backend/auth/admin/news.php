@@ -1,0 +1,129 @@
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . "/../../config/db.php";
+
+$origin = $_SERVER["HTTP_ORIGIN"] ?? "";
+$allowedOrigins = [
+    "http://localhost:5173","http://127.0.0.1:5173",
+    "http://localhost:5174","http://127.0.0.1:5174",
+    "http://localhost:5176","http://127.0.0.1:5176",
+];
+if (in_array($origin, $allowedOrigins, true)) {
+    header("Access-Control-Allow-Origin: " . $origin);
+    header("Vary: Origin");
+}
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Content-Type: application/json; charset=UTF-8");
+
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") { http_response_code(200); exit; }
+
+$body = [];
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $contentType = $_SERVER["CONTENT_TYPE"] ?? "";
+    if (stripos($contentType, "multipart/form-data") === 0) {
+        $body = $_POST;
+    } else {
+        $body = json_decode(file_get_contents("php://input") ?: "{}", true);
+        $body = is_array($body) ? $body : [];
+    }
+}
+$userId = (int)($body["user_id"] ?? $_GET["user_id"] ?? 0);
+
+try {
+    $auth = $pdo->prepare("SELECT id, role, statut FROM users WHERE id = :id LIMIT 1");
+    $auth->execute(["id" => $userId]);
+    $user = $auth->fetch(PDO::FETCH_ASSOC);
+    if (!$user || $user["role"] !== "admin" || $user["statut"] !== "actif") {
+        http_response_code(403);
+        echo json_encode(["success"=>false,"message"=>"Accès administrateur refusé."], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] === "GET") {
+        $stmt = $pdo->query("
+            SELECT n.id,n.titre,n.slug,n.resume,n.contenu,n.image,n.auteur_id,n.statut,
+                   n.date_publication,n.created_at,n.updated_at,
+                   CONCAT(COALESCE(u.prenom,''),' ',COALESCE(u.nom,'')) AS auteur
+            FROM news n
+            LEFT JOIN users u ON u.id=n.auteur_id
+            ORDER BY COALESCE(n.date_publication,n.created_at) DESC,n.id DESC
+        ");
+        $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode([
+            "success"=>true,"news"=>$rows,
+            "stats"=>[
+                "total"=>count($rows),
+                "publie"=>count(array_filter($rows,fn($r)=>$r["statut"]==="publie")),
+                "brouillon"=>count(array_filter($rows,fn($r)=>$r["statut"]==="brouillon")),
+                "archive"=>count(array_filter($rows,fn($r)=>$r["statut"]==="archive")),
+            ],
+        ],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        exit;
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+        http_response_code(405);
+        echo json_encode(["success"=>false,"message"=>"Méthode non autorisée."],JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    $action=trim((string)($body["action"]??""));
+    if ($action==="create_news") {
+        $title=trim((string)($body["titre"]??""));
+        $resume=trim((string)($body["resume"]??""));
+        $content=trim((string)($body["contenu"]??""));
+        $image=trim((string)($body["image"]??""));
+
+        if (isset($_FILES["image"]) && $_FILES["image"]["error"]!==UPLOAD_ERR_NO_FILE) {
+            if ($_FILES["image"]["error"]!==UPLOAD_ERR_OK) {
+                http_response_code(422);
+                echo json_encode(["success"=>false,"message"=>"Impossible de téléverser l’image."],JSON_UNESCAPED_UNICODE); exit;
+            }
+            $allowedMime=["image/jpeg"=>"jpg","image/png"=>"png","image/webp"=>"webp","image/gif"=>"gif"];
+            $mime=mime_content_type($_FILES["image"]["tmp_name"]) ?: "";
+            $size=(int)$_FILES["image"]["size"];
+            if (!isset($allowedMime[$mime]) || $size>5*1024*1024) {
+                http_response_code(422);
+                echo json_encode(["success"=>false,"message"=>"Image invalide. Formats acceptés : JPG, PNG, WEBP, GIF, 5 Mo maximum."],JSON_UNESCAPED_UNICODE); exit;
+            }
+            $uploadDir=__DIR__."/../../../uploads/news/";
+            if (!is_dir($uploadDir) && !mkdir($uploadDir,0755,true)) throw new RuntimeException("Impossible de créer le dossier des images.");
+            $filename="news-".bin2hex(random_bytes(8)).".".$allowedMime[$mime];
+            if (!move_uploaded_file($_FILES["image"]["tmp_name"],$uploadDir.$filename)) throw new RuntimeException("Impossible d’enregistrer l’image.");
+            $image="/aapi-api/uploads/news/".$filename;
+        }
+
+        $status=trim((string)($body["statut"]??"publie"));
+        $date=trim((string)($body["date_publication"]??""));
+        if ($title==="" || $content==="") {
+            http_response_code(422);
+            echo json_encode(["success"=>false,"message"=>"Le titre et le contenu sont obligatoires."],JSON_UNESCAPED_UNICODE); exit;
+        }
+        if (!in_array($status,["brouillon","publie","archive"],true)) $status="publie";
+
+        $slug=strtolower(trim(preg_replace("/[^a-zA-Z0-9]+/","-",iconv("UTF-8","ASCII//TRANSLIT//IGNORE",$title) ?: $title),"-"));
+        if ($slug==="") $slug="actualite";
+        $slug .= "-".date("YmdHis");
+        $publicationDate=$date!=="" ? str_replace("T"," ",$date) : ($status==="publie"?date("Y-m-d H:i:s"):null);
+        if ($publicationDate!==null && strlen($publicationDate)===16) $publicationDate.=":00";
+
+        $stmt=$pdo->prepare("INSERT INTO news (titre,slug,resume,contenu,image,auteur_id,statut,date_publication) VALUES (:titre,:slug,:resume,:contenu,:image,:auteur_id,:statut,:date_publication)");
+        $stmt->execute([
+            "titre"=>$title,"slug"=>$slug,"resume"=>$resume!==""?$resume:null,
+            "contenu"=>$content,"image"=>$image!==""?$image:null,"auteur_id"=>$userId,
+            "statut"=>$status,"date_publication"=>$publicationDate
+        ]);
+        echo json_encode(["success"=>true,"message"=>"Actualité créée avec succès.","id"=>(int)$pdo->lastInsertId()],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        exit;
+    }
+
+    http_response_code(400);
+    echo json_encode(["success"=>false,"message"=>"Action inconnue."],JSON_UNESCAPED_UNICODE);
+} catch(Throwable $e) {
+    error_log("AAPI ADMIN NEWS ERROR: ".$e->getMessage());
+    http_response_code(500);
+    echo json_encode(["success"=>false,"message"=>"Impossible de traiter l’actualité."],JSON_UNESCAPED_UNICODE);
+}
