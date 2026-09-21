@@ -25,6 +25,17 @@ type ApiAnnouncement = {
 };
 
 const API_URL = "http://localhost/aapi-api/announcements.php";
+const API_ORIGIN = "http://localhost";
+
+function resolveAnnouncementImage(image: string | null | undefined) {
+  if (!image) return null;
+  const value = String(image).trim();
+  if (!value) return null;
+  if (/^https?:\/\//i.test(value)) return value;
+  if (value.startsWith("/")) return `${API_ORIGIN}${value}`;
+  if (value.startsWith("uploads/")) return `${API_ORIGIN}/aapi-api/${value}`;
+  return `${API_ORIGIN}/aapi-api/uploads/announcements/${value}`;
+}
 
 function AnnouncementsPage() {
   const { t } = useTranslation();
@@ -65,7 +76,7 @@ function AnnouncementsPage() {
               title: item.titre,
               content: item.contenu,
               date: item.date_publication || item.created_at || null,
-              image: item.image || null,
+              image: resolveAnnouncementImage(item.image),
               category: "general",
               icon: "bi-megaphone",
               important: index === 0,
