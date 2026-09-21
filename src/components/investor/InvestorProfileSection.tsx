@@ -13,9 +13,11 @@ interface Props {
 }
 
 export default function InvestorProfileSection({ user, profile, fullName, userPhotoUrl }: Props) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [email, setEmail] = useState(user?.email || "");
   const [telephone, setTelephone] = useState(user?.telephone || "");
+  const [wilaya, setWilaya] = useState(profile?.wilaya || "");
+  const [wilayas, setWilayas] = useState<Array<{ id: number; code: string; nom_fr: string; nom_ar: string }>>([]);
   const [photo, setPhoto] = useState(userPhotoUrl);
   const [photoData, setPhotoData] = useState("");
   const [saving, setSaving] = useState(false);
@@ -25,8 +27,27 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
   useEffect(() => {
     setEmail(user?.email || "");
     setTelephone(user?.telephone || "");
+    setWilaya(profile?.wilaya || "");
     setPhoto(getUserPhotoUrl(user) || userPhotoUrl);
-  }, [user, userPhotoUrl]);
+  }, [user, userPhotoUrl, profile?.wilaya]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${API_BASE_URL}/wilayas.php`)
+      .then((response) => {
+        if (!response.ok) throw new Error("Wilayas API error");
+        return response.json();
+      })
+      .then((data) => {
+        if (!cancelled && data?.success && Array.isArray(data.wilayas)) {
+          setWilayas(data.wilayas);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setWilayas([]);
+      });
+    return () => { cancelled = true; };
+  }, []);
 
   const value = (text?: string | null) => text?.trim() || "—";
   const location = [profile?.wilaya, profile?.commune].filter(Boolean).join(" · ");
@@ -72,7 +93,7 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
       const response = await fetch(`${API_BASE_URL}/auth/investor/update-profile.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: id, email, telephone, photo: photoData }),
+        body: JSON.stringify({ user_id: id, email, telephone, wilaya, photo: photoData }),
       });
 
       const data = await response.json();
@@ -158,6 +179,21 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
               <div className="investor-profile-input-wrap">
                 <i className="bi bi-telephone" />
                 <input type="tel" value={telephone} onChange={(event) => setTelephone(event.target.value)} />
+              </div>
+            </label>
+
+            <label>
+              <span>{t("investorProfile.wilaya")}</span>
+              <div className="investor-profile-input-wrap">
+                <i className="bi bi-geo-alt" />
+                <select value={wilaya} onChange={(event) => setWilaya(event.target.value)}>
+                  <option value="">{language === "ar" ? "اختر الولاية" : language === "en" ? "Select wilaya" : "Sélectionner la wilaya"}</option>
+                  {wilayas.map((item) => (
+                    <option key={item.id} value={item.nom_fr}>
+                      {item.code} — {language === "ar" ? item.nom_ar : item.nom_fr}
+                    </option>
+                  ))}
+                </select>
               </div>
             </label>
           </div>
