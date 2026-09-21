@@ -22,7 +22,7 @@ const copy={
 
 function NewsPage(){
   const {language}=useTranslation(); const c=copy[language];
-  const [news,setNews]=useState<NewsItem[]>([]); const [active,setActive]=useState(c.all);
+  const [news,setNews]=useState<NewsItem[]>([]); const [active,setActive]=useState<string>(c.all);
   const [search,setSearch]=useState(""); const [loading,setLoading]=useState(true); const [error,setError]=useState("");
   useEffect(()=>setActive(c.all),[c.all]);
   useEffect(()=>{let cancelled=false;const load=async()=>{try{setLoading(true);setError("");const response=await fetch(API_URL);const data=await response.json();if(!response.ok||!data?.success)throw new Error(data?.message||c.error);const rows:ApiNews[]=Array.isArray(data.news)?data.news:[];if(!cancelled)setNews(rows.map((item,index)=>({id:Number(item.id),title:item.titre,excerpt:item.resume?.trim()||item.contenu,date:item.date_publication||item.created_at||null,image:resolveNewsImage(item.image,Number(item.id)),category:c.category,featured:index===0})));}catch(e){if(!cancelled){setNews([]);setError(e instanceof Error?e.message:c.error);}}finally{if(!cancelled)setLoading(false);}};void load();return()=>{cancelled=true;};},[c.category,c.error]);
