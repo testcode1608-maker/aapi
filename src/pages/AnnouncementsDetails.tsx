@@ -51,7 +51,13 @@ function AnnouncementsDetails() {
         }
 
         if (!cancelled) {
-          setAnnouncement({\n            ...data.announcement,\n            image: resolveAnnouncementImage(data.announcement.image, Number(data.announcement.id)),\n          });
+          setAnnouncement({
+            ...data.announcement,
+            image: resolveAnnouncementImage(
+              data.announcement.image,
+              Number(data.announcement.id),
+            ),
+          });
         }
       } catch (requestError) {
         if (!cancelled) {
