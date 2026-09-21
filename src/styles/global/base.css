@@ -70,3 +70,193 @@ button {
 .container {
   max-width: 1320px;
 }
+
+
+/* ============================================================
+   AAPI — SHARED INSTITUTIONAL VISUAL SYSTEM
+   Consistent public-page styling: cards, buttons, forms and rhythm.
+   ============================================================ */
+
+:root {
+  --aapi-green: #087443;
+  --aapi-green-dark: #055c35;
+  --aapi-green-soft: #eaf6f0;
+  --aapi-green-pale: #f5faf7;
+  --aapi-gold: #c9a227;
+  --aapi-gold-light: #e7c957;
+  --aapi-ink: #14221b;
+  --aapi-muted: #66736d;
+  --aapi-border: #e5ebe7;
+  --aapi-surface: #ffffff;
+  --aapi-surface-soft: #f7faf8;
+  --aapi-radius-sm: 10px;
+  --aapi-radius-md: 14px;
+  --aapi-radius-lg: 20px;
+  --aapi-shadow-soft: 0 10px 30px rgba(20, 34, 27, .07);
+  --aapi-shadow-card: 0 16px 42px rgba(20, 34, 27, .09);
+  --aapi-shadow-hover: 0 20px 52px rgba(20, 34, 27, .13);
+  --aapi-focus: 0 0 0 4px rgba(8, 116, 67, .12);
+  --aapi-motion: 180ms ease;
+}
+
+body {
+  background: #f8faf9;
+  color: var(--aapi-ink);
+}
+
+::selection {
+  background: var(--aapi-green);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, .38);
+  outline-offset: 3px;
+}
+
+.aapi-section-header,
+.statistics-header,
+.opportunities-header,
+.events-header {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.aapi-section-header::after,
+.statistics-header::after,
+.opportunities-header::after,
+.events-header::after {
+  content: "";
+  display: block;
+  width: 54px;
+  height: 3px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--aapi-gold), var(--aapi-green));
+}
+
+.aapi-service-card,
+.sector-card,
+.opportunity-card,
+.news-card,
+.event-card,
+.mission-card,
+.value-card,
+.contact-card,
+.faq-item,
+.agency-highlight,
+.visual-card {
+  border: 1px solid var(--aapi-border);
+  border-radius: var(--aapi-radius-md);
+  background: var(--aapi-surface);
+  box-shadow: var(--aapi-shadow-soft);
+  transition: transform var(--aapi-motion), box-shadow var(--aapi-motion), border-color var(--aapi-motion);
+}
+
+.aapi-service-card:hover,
+.sector-card:hover,
+.opportunity-card:hover,
+.news-card:hover,
+.event-card:hover,
+.mission-card:hover,
+.value-card:hover,
+.contact-card:hover,
+.faq-item:hover,
+.agency-highlight:hover,
+.visual-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(8, 116, 67, .24);
+  box-shadow: var(--aapi-shadow-hover);
+}
+
+.aapi-primary-button,
+.primary-button,
+.opportunity-button,
+.aapi-header-register,
+.aapi-hero-primary-button {
+  border: 1px solid var(--aapi-green);
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--aapi-green), var(--aapi-green-dark));
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(8, 116, 67, .16);
+  transition: transform var(--aapi-motion), box-shadow var(--aapi-motion), filter var(--aapi-motion);
+}
+
+.aapi-primary-button:hover,
+.primary-button:hover,
+.opportunity-button:hover,
+.aapi-header-register:hover,
+.aapi-hero-primary-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+  box-shadow: 0 12px 26px rgba(8, 116, 67, .22);
+}
+
+.aapi-secondary-button,
+.secondary-button,
+.aapi-header-login,
+.aapi-hero-secondary-button {
+  border: 1px solid rgba(8, 116, 67, .26);
+  border-radius: 10px;
+  background: var(--aapi-green-soft);
+  color: var(--aapi-green-dark);
+  transition: transform var(--aapi-motion), background var(--aapi-motion), border-color var(--aapi-motion);
+}
+
+.aapi-secondary-button:hover,
+.secondary-button:hover,
+.aapi-header-login:hover,
+.aapi-hero-secondary-button:hover {
+  transform: translateY(-2px);
+  background: #dff1e8;
+  border-color: rgba(8, 116, 67, .45);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  border: 1px solid var(--aapi-border);
+  border-radius: var(--aapi-radius-sm);
+  background: #fff;
+  color: var(--aapi-ink);
+  transition: border-color var(--aapi-motion), box-shadow var(--aapi-motion), background var(--aapi-motion);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+textarea:focus,
+select:focus {
+  border-color: rgba(8, 116, 67, .48);
+  box-shadow: var(--aapi-focus);
+  outline: 0;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #98a49e;
+}
+
+.status-badge,
+.badge,
+.category-badge,
+.opportunity-category,
+.event-type {
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.container {
+  width: min(100% - 32px, 1320px);
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: min(100% - 24px, 1320px);
+  }
+
+  .aapi-section-header,
+  .statistics-header,
+  .opportunities-header,
+  .events-header {
+    margin-bottom: 22px;
+  }
+}
