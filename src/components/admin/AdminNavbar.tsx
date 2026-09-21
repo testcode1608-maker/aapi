@@ -20,6 +20,7 @@ export default function AdminNavbar({ onToggle }: { onToggle: () => void }) {
     ["/admin/messages", t("admin.nav.messages"), <MessageSquare size={18} />],
     ["/admin/documents", t("admin.nav.documents"), <FileCheck2 size={18} />],
     ["/admin/announcements", t("admin.nav.announcements"), <MessageSquare size={18} />],
+    ["/admin/news", t("admin.nav.news"), <MessageSquare size={18} />],
   ];
   const logout = () => { localStorage.removeItem("aapi_user"); nav("/login", { replace: true }); };
   const close = () => onToggle();
