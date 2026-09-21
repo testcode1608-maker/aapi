@@ -91,6 +91,25 @@ try {
 
     $action = trim((string)($body["action"] ?? ""));
 
+    if ($action === "update_announcement") {
+        $id=(int)($body["id"]??0); $title=trim((string)($body["titre"]??"")); $content=trim((string)($body["contenu"]??""));
+        if($id<=0 || $title==="" || $content===""){http_response_code(422);echo json_encode(["success"=>false,"message"=>"Le titre et le contenu sont obligatoires."],JSON_UNESCAPED_UNICODE);exit;}
+        $status=trim((string)($body["statut"]??"publie")); if(!in_array($status,["brouillon","publie","archive"],true))$status="publie";
+        $date=trim((string)($body["date_publication"]??"")); $publicationDate=$date!==""?str_replace("T"," ",$date):null; if($publicationDate!==null&&strlen($publicationDate)===16)$publicationDate.=":00";
+        $old=$pdo->prepare("SELECT image FROM announcements WHERE id=:id LIMIT 1");$old->execute(["id"=>$id]);$existing=$old->fetch(PDO::FETCH_ASSOC);if(!$existing){http_response_code(404);echo json_encode(["success"=>false,"message"=>"Annonce introuvable."],JSON_UNESCAPED_UNICODE);exit;}
+        $image=(string)($existing["image"]??"");
+        if(isset($_FILES["image"])&&$_FILES["image"]["error"]!==UPLOAD_ERR_NO_FILE){
+            if($_FILES["image"]["error"]!==UPLOAD_ERR_OK)throw new RuntimeException("Impossible de téléverser l’image.");
+            $allowedMime=["image/jpeg"=>"jpg","image/png"=>"png","image/webp"=>"webp","image/gif"=>"gif"];$mime=mime_content_type($_FILES["image"]["tmp_name"])?: ""; $size=(int)$_FILES["image"]["size"];
+            if(!isset($allowedMime[$mime])||$size>5*1024*1024)throw new RuntimeException("Image invalide. Formats acceptés : JPG, PNG, WEBP, GIF, 5 Mo maximum.");
+            $dir=__DIR__."/../../../uploads/announcements/";if(!is_dir($dir)&&!mkdir($dir,0755,true))throw new RuntimeException("Impossible de créer le dossier des images.");
+            $ext=$allowedMime[$mime];$filename="announcement-".bin2hex(random_bytes(8)).".".$ext;if(!move_uploaded_file($_FILES["image"]["tmp_name"],$dir.$filename))throw new RuntimeException("Impossible d’enregistrer l’image.");$image="/aapi-api/uploads/announcements/".$filename;
+        }
+        $stmt=$pdo->prepare("UPDATE announcements SET titre=:titre, contenu=:contenu, image=:image, statut=:statut, date_publication=:date_publication WHERE id=:id");
+        $stmt->execute(["titre"=>$title,"contenu"=>$content,"image"=>$image!==""?$image:null,"statut"=>$status,"date_publication"=>$publicationDate,"id"=>$id]);
+        echo json_encode(["success"=>true,"message"=>"Annonce modifiée avec succès."],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);exit;
+    }
+
     if ($action === "create_announcement") {
         $title = trim((string)($body["titre"] ?? ""));
         $content = trim((string)($body["contenu"] ?? ""));
