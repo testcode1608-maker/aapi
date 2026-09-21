@@ -86,6 +86,7 @@ try {
         "delete_requests",
         "delete_messages",
         "delete_documents",
+        "delete_sectors",
         "delete_announcements",
         "delete_news",
     ];
@@ -140,6 +141,7 @@ try {
             "delete_requests" => "investment_requests",
             "delete_messages" => "messages",
             "delete_documents" => "documents",
+            "delete_sectors" => "sectors",
             "delete_announcements" => "announcements",
             "delete_news" => "news",
         ];
