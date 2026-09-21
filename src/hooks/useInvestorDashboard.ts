@@ -45,12 +45,21 @@ export interface UseInvestorDashboardResult {
   reload: () => Promise<void>;
 }
 
-function getStoredUserId(): number | null {
+function getStoredUser(): { id: number; role: string } | null {
   const stored = localStorage.getItem("aapi_user");
   if (!stored) return null;
+
   try {
-    const id = Number((JSON.parse(stored) as { id?: number | string }).id);
-    return Number.isFinite(id) && id > 0 ? id : null;
+    const parsed = JSON.parse(stored) as { id?: number | string; role?: string };
+    const id = Number(parsed.id);
+    const role = String(parsed.role || "").trim().toLowerCase();
+
+    if (!Number.isFinite(id) || id <= 0) {
+      localStorage.removeItem("aapi_user");
+      return null;
+    }
+
+    return { id, role };
   } catch {
     localStorage.removeItem("aapi_user");
     return null;
@@ -77,12 +86,34 @@ export function useInvestorDashboard(): UseInvestorDashboardResult {
     setLoading(true);
     setError("");
 
-    const userId = getStoredUserId();
-    if (!userId) {
+    const storedUser = getStoredUser();
+
+    if (!storedUser) {
       navigate(LOGIN_ROUTE, { replace: true });
       setLoading(false);
       return;
     }
+
+    if (storedUser.role === "admin") {
+      navigate("/admin/dashboard", { replace: true });
+      setLoading(false);
+      return;
+    }
+
+    if (storedUser.role === "agent") {
+      navigate("/agent/dashboard", { replace: true });
+      setLoading(false);
+      return;
+    }
+
+    if (storedUser.role && storedUser.role !== "investisseur" && storedUser.role !== "investor") {
+      localStorage.removeItem("aapi_user");
+      navigate(LOGIN_ROUTE, { replace: true });
+      setLoading(false);
+      return;
+    }
+
+    const userId = storedUser.id;
 
     try {
       const response = await fetch(API_URL, {
@@ -96,9 +127,17 @@ export function useInvestorDashboard(): UseInvestorDashboardResult {
         throw new Error("INVALID_RESPONSE");
       }
 
-      const data: DashboardResponse = await response.json();
+      const data = await response.json() as DashboardResponse & {
+        message?: string;
+        error?: string;
+      };
+
       if (!response.ok || !data?.success) {
-        throw new Error("DASHBOARD_REQUEST_FAILED");
+        throw new Error(
+          data?.message ||
+          data?.error ||
+          `DASHBOARD_REQUEST_FAILED_${response.status}`
+        );
       }
 
       setUser(data.user || null);
@@ -116,7 +155,12 @@ export function useInvestorDashboard(): UseInvestorDashboardResult {
         localStorage.setItem("aapi_user", JSON.stringify(data.user));
       }
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "DASHBOARD_REQUEST_FAILED");
+      console.error("Investor dashboard request failed:", requestError);
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : "DASHBOARD_REQUEST_FAILED"
+      );
     } finally {
       setLoading(false);
     }
