@@ -1,4 +1,6 @@
-/* AAPI — Registration page: global RTL / LTR direction */
+/* AAPI — inscription direction helpers
+   Keep Bootstrap grid stable and only control language direction/alignment.
+*/
 
 .investor-registration-section[dir="rtl"] {
   direction: rtl !important;
@@ -10,189 +12,84 @@
   text-align: left !important;
 }
 
-/* Bootstrap grid */
 .investor-registration-section[dir="rtl"] .row.g-4 {
   direction: rtl !important;
-  flex-direction: row-reverse !important;
 }
 
 .investor-registration-section[dir="ltr"] .row.g-4 {
   direction: ltr !important;
-  flex-direction: row !important;
 }
 
-.investor-registration-section[dir="rtl"] .row.g-4 > [class*="col-"] {
+.investor-registration-section[dir="rtl"] .row.g-4 > [class*="col-"],
+.investor-registration-section[dir="rtl"] label,
+.investor-registration-section[dir="rtl"] .investor-registration-block-title > div {
   direction: rtl !important;
   text-align: right !important;
 }
 
-.investor-registration-section[dir="ltr"] .row.g-4 > [class*="col-"] {
+.investor-registration-section[dir="ltr"] .row.g-4 > [class*="col-"],
+.investor-registration-section[dir="ltr"] label,
+.investor-registration-section[dir="ltr"] .investor-registration-block-title > div {
   direction: ltr !important;
   text-align: left !important;
 }
 
-/* All registration labels */
-.investor-registration-section[dir="rtl"] .investor-registration-form label {
-  display: block !important;
-  width: 100% !important;
-  margin: 0 0 8px !important;
-  padding: 0 !important;
-  direction: rtl !important;
-  text-align: right !important;
-}
-
-.investor-registration-section[dir="ltr"] .investor-registration-form label {
-  display: block !important;
-  width: 100% !important;
-  margin: 0 0 8px !important;
-  padding: 0 !important;
-  direction: ltr !important;
-  text-align: left !important;
-}
-
-/* All registration input groups */
 .investor-registration-section[dir="rtl"] .investor-registration-input {
   direction: rtl !important;
   flex-direction: row-reverse !important;
-  text-align: right !important;
 }
 
 .investor-registration-section[dir="ltr"] .investor-registration-input {
   direction: ltr !important;
   flex-direction: row !important;
-  text-align: left !important;
 }
 
-/* All text inputs */
-.investor-registration-section[dir="rtl"] .investor-registration-input input {
+.investor-registration-section[dir="rtl"] input,
+.investor-registration-section[dir="rtl"] select,
+.investor-registration-section[dir="rtl"] textarea {
   direction: rtl !important;
   text-align: right !important;
 }
 
-.investor-registration-section[dir="ltr"] .investor-registration-input input {
+.investor-registration-section[dir="ltr"] input,
+.investor-registration-section[dir="ltr"] select,
+.investor-registration-section[dir="ltr"] textarea {
   direction: ltr !important;
   text-align: left !important;
 }
 
-/* ==========================================================
-   ALL SELECTS ON INSCRIPTION
-   Arabic  = icon right / text right / native arrow left
-   French  = icon left  / text left  / native arrow right
-   English = icon left  / text left  / native arrow right
-   ========================================================== */
-
-.investor-registration-section .investor-registration-input select,
-.investor-registration-section select {
-  display: block !important;
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-  width: 100% !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
-  writing-mode: horizontal-tb !important;
-  unicode-bidi: plaintext !important;
-}
-
-.investor-registration-section[dir="rtl"] .investor-registration-input select,
 .investor-registration-section[dir="rtl"] select {
-  direction: rtl !important;
-  text-align: right !important;
   text-align-last: right !important;
-  unicode-bidi: plaintext !important;
-  writing-mode: horizontal-tb !important;
 }
 
-.investor-registration-section[dir="ltr"] .investor-registration-input select,
 .investor-registration-section[dir="ltr"] select {
-  direction: ltr !important;
-  text-align: left !important;
   text-align-last: left !important;
-  unicode-bidi: plaintext !important;
-  writing-mode: horizontal-tb !important;
 }
 
-/* Every option follows the selected language direction. */
-.investor-registration-section[dir="rtl"] select option {
-  direction: rtl !important;
-  text-align: right !important;
-}
-
-.investor-registration-section[dir="ltr"] select option {
-  direction: ltr !important;
-  text-align: left !important;
-}
-
-/* Keep the native select arrow on the language side.
-   Do NOT use appearance:none: the normal browser arrow remains visible. */
-.investor-registration-section[dir="rtl"] select {
-  direction: rtl !important;
-}
-
-.investor-registration-section[dir="ltr"] select {
-  direction: ltr !important;
-}
-
-/* Textarea */
-.investor-registration-section[dir="rtl"] .investor-registration-textarea,
-.investor-registration-section[dir="rtl"] .investor-registration-textarea textarea {
-  direction: rtl !important;
-  text-align: right !important;
-}
-
-.investor-registration-section[dir="ltr"] .investor-registration-textarea,
-.investor-registration-section[dir="ltr"] .investor-registration-textarea textarea {
-  direction: ltr !important;
-  text-align: left !important;
-}
-
-/* Section headers */
-.investor-registration-section[dir="rtl"] .investor-registration-header,
-.investor-registration-section[dir="rtl"] .investor-registration-block-title,
 .investor-registration-section[dir="rtl"] .investor-registration-actions,
 .investor-registration-section[dir="rtl"] .investor-registration-success-actions {
   direction: rtl !important;
-  text-align: right !important;
 }
 
-.investor-registration-section[dir="ltr"] .investor-registration-header,
-.investor-registration-section[dir="ltr"] .investor-registration-block-title,
 .investor-registration-section[dir="ltr"] .investor-registration-actions,
 .investor-registration-section[dir="ltr"] .investor-registration-success-actions {
   direction: ltr !important;
-  text-align: left !important;
 }
 
-.investor-registration-section[dir="rtl"] .investor-registration-header-content,
-.investor-registration-section[dir="rtl"] .investor-registration-block-title > div,
-.investor-registration-section[dir="rtl"] .investor-registration-success {
-  text-align: right !important;
-}
-
-.investor-registration-section[dir="ltr"] .investor-registration-header-content,
-.investor-registration-section[dir="ltr"] .investor-registration-block-title > div,
-.investor-registration-section[dir="ltr"] .investor-registration-success {
-  text-align: left !important;
-}
-
-/* Consent */
-.investor-registration-section[dir="rtl"] .investor-registration-consent label {
-  display: flex !important;
-  flex-direction: row-reverse !important;
-  align-items: flex-start !important;
+.investor-registration-section[dir="rtl"] .investor-registration-actions {
   justify-content: flex-start !important;
-  text-align: right !important;
+}
+
+.investor-registration-section[dir="ltr"] .investor-registration-actions {
+  justify-content: flex-end !important;
+}
+
+.investor-registration-section[dir="rtl"] .investor-registration-consent label {
+  flex-direction: row-reverse !important;
+  justify-content: flex-start !important;
 }
 
 .investor-registration-section[dir="ltr"] .investor-registration-consent label {
-  display: flex !important;
   flex-direction: row !important;
-  align-items: flex-start !important;
   justify-content: flex-start !important;
-  text-align: left !important;
-}
-
-/* Actions */
-.investor-registration-section .investor-registration-actions,
-.investor-registration-section .investor-registration-success-actions {
-  display: flex !important;
 }
