@@ -79,13 +79,24 @@ function SectorsPage() {
         <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>∞</strong><span>{t("sectorsPage.statPotential")}</span></div></div>
       </div></div></section>
 
-      <section className="sectors-page-content"><div className="container"><div className="sectors-page-grid">
-        {sectors.map((sector) => <article className="sector-page-card" key={sector.number}>
-          <div className="sector-page-card-top"><span>{sector.number}</span><div className="sector-page-icon">{sector.imageUrl ? <img src={sector.imageUrl} alt="" loading="lazy" /> : <i className={`bi ${sector.icon}`} aria-hidden="true"></i>}</div></div>
-          <h3>{sector.title}</h3><p>{sector.description}</p>
-          <div className="sector-page-opportunity"><i className="bi bi-arrow-left" aria-hidden="true"></i><span>{sector.opportunities}</span></div>
-          <Link to="/opportunities">{t("sectorsPage.explore")} <i className="bi bi-arrow-left" aria-hidden="true"></i></Link>
-        </article>)}
+      <section className="sectors-page-content"><div className="container"><div className="row g-4">
+        {sectors.map((sector) => <div className="col-xl-4 col-lg-6 col-md-6" key={sector.number}>
+          <article className="sector-page-card">
+            <div className="sector-page-card-visual">
+              {sector.imageUrl ? <img src={sector.imageUrl} alt={sector.title} loading="lazy" /> : <div className="sector-page-card-placeholder"><i className={`bi ${sector.icon}`} aria-hidden="true"></i></div>}
+              <span className="sector-page-category">{t("sectorsPage.heroOverline")}</span>
+              <div className="sector-page-number">{sector.number}</div>
+            </div>
+            <div className="sector-page-card-content">
+              <div className="sector-card-small-meta">
+                <span><i className={`bi ${sector.icon}`} aria-hidden="true"></i>{sector.title}</span>
+              </div>
+              <h3>{sector.title}</h3>
+              <p>{sector.description}</p>
+              <Link className="sector-read-more" to="/opportunities">{t("sectorsPage.explore")} <i className="bi bi-arrow-left" aria-hidden="true"></i></Link>
+            </div>
+          </article>
+        </div>)}
       </div></div></section>
 
       <section className="why-algeria"><div className="container"><div className="row align-items-center g-5">
