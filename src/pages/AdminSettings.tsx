@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Bell, Search, UserRound, Save } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 import "../styles/main.css";
@@ -34,7 +34,6 @@ function readAccount(): Account {
 
 export default function AdminSettings() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { language, setLanguage, t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [account, setAccount] = useState<Account>(() => readAccount());
