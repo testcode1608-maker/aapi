@@ -4,6 +4,7 @@ const THEME_KEY = "aapi-site-theme";
 const DARK_CLASS = "aapi-site-dark";
 const DARK_HTML_CLASS = "aapi-site-dark-root";
 const ADMIN_LIGHT_CLASS = "aapi-admin-light";
+const ADMIN_THEME_KEY = "aapi-admin-theme";
 const EVENT_NAME = "aapi-public-theme-change";
 
 function applyTheme(dark: boolean) {
@@ -12,12 +13,16 @@ function applyTheme(dark: boolean) {
   document.body.classList.toggle(ADMIN_LIGHT_CLASS, !dark);
   document.documentElement.dataset.aapiTheme = dark ? "dark" : "light";
   localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
+  localStorage.setItem(ADMIN_THEME_KEY, dark ? "dark" : "light");
   window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: { dark } }));
 }
 
 export default function SiteThemeToggle() {
   useEffect(() => {
-    const saved = localStorage.getItem(THEME_KEY);
+    const adminPath = window.location.pathname.startsWith("/admin");
+    const saved = adminPath
+      ? localStorage.getItem(ADMIN_THEME_KEY) ?? localStorage.getItem(THEME_KEY)
+      : localStorage.getItem(THEME_KEY);
     applyTheme(saved === "dark");
 
     const button = document.createElement("button");
