@@ -114,3 +114,113 @@ body:not(.aapi-admin-light) .admin-account-actions button{
   background:#087443!important;
   color:#fff!important;
 }
+
+
+/* Admin Settings — isolate the page from global public dark-mode overrides */
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout,
+body.aapi-site-dark .admin-settings-layout{
+  background:#090a0c!important;
+  color:#f3f5f4!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-main,
+body.aapi-site-dark .admin-settings-layout .admin-settings-main{
+  background:#090a0c!important;
+  color:#f3f5f4!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-sidebar,
+body.aapi-site-dark .admin-settings-layout .admin-settings-sidebar{
+  background:#0b0c0f!important;
+  color:#f3f5f4!important;
+  border-color:#1d2025!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-header,
+body.aapi-site-dark .admin-settings-layout .admin-settings-header{
+  background:transparent!important;
+  color:#f3f5f4!important;
+  border-bottom-color:#1d2026!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-header h1,
+body.aapi-site-dark .admin-settings-layout .admin-settings-header h1{
+  color:#f3f5f4!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-header p,
+body.aapi-site-dark .admin-settings-layout .admin-settings-header p{
+  color:#7f8791!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-card,
+body.aapi-site-dark .admin-settings-layout .admin-settings-card{
+  background:#111317!important;
+  color:#f3f5f4!important;
+  border:1px solid #252930!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.30)!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-title,
+body.aapi-site-dark .admin-settings-layout .admin-settings-title{
+  border-bottom-color:#1d2026!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-title h2,
+body.aapi-site-dark .admin-settings-layout .admin-settings-title h2{
+  color:#f3f5f4!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-title p,
+body.aapi-site-dark .admin-settings-layout .admin-settings-title p{
+  color:#7f8791!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-account-form label span,
+body.aapi-site-dark .admin-settings-layout .admin-account-form label span{
+  color:#8b949e!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-account-form input,
+body.aapi-site-dark .admin-settings-layout .admin-account-form input{
+  background:#15181c!important;
+  color:#f3f5f4!important;
+  border:1px solid #252930!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-account-form input:focus,
+body.aapi-site-dark .admin-settings-layout .admin-account-form input:focus{
+  background:#15181c!important;
+  color:#f3f5f4!important;
+  border-color:#087443!important;
+  box-shadow:0 0 0 3px rgba(8,116,67,.14)!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-account-form input[readonly],
+body.aapi-site-dark .admin-settings-layout .admin-account-form input[readonly]{
+  background:#121417!important;
+  color:#aeb7b2!important;
+  border-color:#252930!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-account-form input::placeholder,
+body.aapi-site-dark .admin-settings-layout .admin-account-form input::placeholder{
+  color:#626a74!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-account-actions button,
+body.aapi-site-dark .admin-settings-layout .admin-account-actions button{
+  background:#087443!important;
+  color:#fff!important;
+  border-color:#087443!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-account-actions button:hover,
+body.aapi-site-dark .admin-settings-layout .admin-account-actions button:hover{
+  background:#055c35!important;
+  color:#fff!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-title-icon,
+body.aapi-site-dark .admin-settings-layout .admin-settings-title-icon{
+  background:#123d2a!important;
+  color:#8de0b5!important;
+  border-color:rgba(8,116,67,.35)!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-user,
+body.aapi-site-dark .admin-settings-layout .admin-settings-user{
+  background:transparent!important;
+  color:#f3f5f4!important;
+  border-color:#252930!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-user strong,
+body.aapi-site-dark .admin-settings-layout .admin-settings-user strong{
+  color:#f3f5f4!important;
+}
+html.aapi-site-dark-root body.aapi-site-dark .admin-settings-layout .admin-settings-user small,
+body.aapi-site-dark .admin-settings-layout .admin-settings-user small{
+  color:#737a84!important;
+}
