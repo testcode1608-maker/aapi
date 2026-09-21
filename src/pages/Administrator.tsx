@@ -35,7 +35,7 @@ export default function Administrator() {
   const section: Section = name && ["users", "investors", "projects", "investments", "requests", "messages", "documents", "announcements"].includes(name) ? name : "dashboard";
   const names: Record<string, string> = {
     dashboard: t("admin.nav.dashboard"), users: t("admin.nav.users"), investors: t("admin.nav.investors"), projects: t("admin.nav.projects"),
-    investments: t("admin.nav.investments"), requests: t("admin.nav.requests"), messages: t("admin.nav.messages"), documents: t("admin.nav.documents"), announcements: "الإعلانات", settings: t("admin.nav.settings")
+    investments: t("admin.nav.investments"), requests: t("admin.nav.requests"), messages: t("admin.nav.messages"), documents: t("admin.nav.documents"), announcements: t("admin.nav.announcements"), settings: t("admin.nav.settings")
   };
   const current = names[name ?? "dashboard"] ?? t("admin.nav.dashboard");
 
