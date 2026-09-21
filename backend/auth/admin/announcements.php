@@ -28,8 +28,13 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 
 $body = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $body = json_decode(file_get_contents("php://input") ?: "{}", true);
-    $body = is_array($body) ? $body : [];
+    $contentType = $_SERVER["CONTENT_TYPE"] ?? "";
+    if (stripos($contentType, "multipart/form-data") === 0) {
+        $body = $_POST;
+    } else {
+        $body = json_decode(file_get_contents("php://input") ?: "{}", true);
+        $body = is_array($body) ? $body : [];
+    }
 }
 
 $userId = (int)($body["user_id"] ?? $_GET["user_id"] ?? 0);
@@ -90,6 +95,38 @@ try {
         $title = trim((string)($body["titre"] ?? ""));
         $content = trim((string)($body["contenu"] ?? ""));
         $image = trim((string)($body["image"] ?? ""));
+
+        if (isset($_FILES["image"]) && $_FILES["image"]["error"] !== UPLOAD_ERR_NO_FILE) {
+            if ($_FILES["image"]["error"] !== UPLOAD_ERR_OK) {
+                http_response_code(422);
+                echo json_encode(["success"=>false,"message"=>"Impossible de téléverser l’image."], JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+
+            $allowedMime = [
+                "image/jpeg" => "jpg",
+                "image/png" => "png",
+                "image/webp" => "webp",
+                "image/gif" => "gif",
+            ];
+            $mime = mime_content_type($_FILES["image"]["tmp_name"]) ?: "";
+            $size = (int)$_FILES["image"]["size"];
+            if (!isset($allowedMime[$mime]) || $size > 5 * 1024 * 1024) {
+                http_response_code(422);
+                echo json_encode(["success"=>false,"message"=>"Image invalide. Formats acceptés : JPG, PNG, WEBP, GIF, 5 Mo maximum."], JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+
+            $uploadDir = __DIR__ . "/../../../uploads/announcements/";
+            if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
+                throw new RuntimeException("Impossible de créer le dossier des images.");
+            }
+            $filename = "announcement-" . bin2hex(random_bytes(8)) . "." . $allowedMime[$mime];
+            if (!move_uploaded_file($_FILES["image"]["tmp_name"], $uploadDir . $filename)) {
+                throw new RuntimeException("Impossible d’enregistrer l’image.");
+            }
+            $image = "/aapi-api/uploads/announcements/" . $filename;
+        }
         $status = trim((string)($body["statut"] ?? "publie"));
         $date = trim((string)($body["date_publication"] ?? ""));
 
