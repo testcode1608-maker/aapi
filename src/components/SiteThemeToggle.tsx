@@ -21,7 +21,7 @@ export default function SiteThemeToggle() {
   useEffect(() => {
     const adminPath = window.location.pathname.startsWith("/admin");
     const saved = adminPath
-      ? localStorage.getItem(ADMIN_THEME_KEY) ?? localStorage.getItem(THEME_KEY)
+      ? localStorage.getItem(THEME_KEY) ?? localStorage.getItem(ADMIN_THEME_KEY)
       : localStorage.getItem(THEME_KEY);
     applyTheme(saved === "dark");
 
