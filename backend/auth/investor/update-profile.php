@@ -42,6 +42,7 @@ if (!is_array($input)) {
 $userId = (int)($input['user_id'] ?? 0);
 $email = trim((string)($input['email'] ?? ''));
 $telephone = trim((string)($input['telephone'] ?? ''));
+$wilaya = trim((string)($input['wilaya'] ?? ''));
 $photo = trim((string)($input['photo'] ?? ''));
 
 if ($userId <= 0 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -67,6 +68,14 @@ try {
     if ($emailStmt->fetch()) {
         http_response_code(409);
         echo json_encode(['success' => false, 'message' => 'البريد الإلكتروني مستخدم من طرف حساب آخر.'], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    $wilayaStmt = $pdo->prepare("SELECT nom_fr FROM wilayas WHERE nom_fr = ? AND statut = 'actif' LIMIT 1");
+    $wilayaStmt->execute([$wilaya]);
+    if ($wilaya !== '' && !$wilayaStmt->fetchColumn()) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Wilaya invalide.'], JSON_UNESCAPED_UNICODE);
         exit;
     }
 
@@ -147,6 +156,9 @@ try {
             }
         }
     }
+
+    $profileUpdate = $pdo->prepare("UPDATE investor_profiles SET wilaya = ?, updated_at = NOW() WHERE user_id = ?");
+    $profileUpdate->execute([$wilaya !== '' ? $wilaya : null, $userId]);
 
     $update = $pdo->prepare("UPDATE users SET email = ?, telephone = ?, photo = ?, updated_at = NOW() WHERE id = ?");
     $update->execute([$email, $telephone, $storedPhoto, $userId]);
