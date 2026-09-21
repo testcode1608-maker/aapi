@@ -17,7 +17,7 @@ import AdminDashboardOverview from "../components/admin/AdminDashboardOverview";
 import AdminDataPage from "../components/admin/AdminDataPage";
 
 type R = Record<string, any>;
-type Section = "dashboard" | "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents";
+type Section = "dashboard" | "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "announcements";
 
 const getUser = (): R | null => {
   try { const x = localStorage.getItem("aapi_user"); const u = x ? JSON.parse(x) : null; return u && typeof u === "object" ? u : null; }
@@ -35,7 +35,7 @@ export default function Administrator() {
   const section: Section = name && ["users", "investors", "projects", "investments", "requests", "messages", "documents"].includes(name) ? name : "dashboard";
   const names: Record<string, string> = {
     dashboard: t("admin.nav.dashboard"), users: t("admin.nav.users"), investors: t("admin.nav.investors"), projects: t("admin.nav.projects"),
-    investments: t("admin.nav.investments"), requests: t("admin.nav.requests"), messages: t("admin.nav.messages"), documents: t("admin.nav.documents"), settings: t("admin.nav.settings")
+    investments: t("admin.nav.investments"), requests: t("admin.nav.requests"), messages: t("admin.nav.messages"), documents: t("admin.nav.documents"), announcements: "الإعلانات", settings: t("admin.nav.settings")
   };
   const current = names[name ?? "dashboard"] ?? t("admin.nav.dashboard");
 
