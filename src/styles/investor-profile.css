@@ -128,3 +128,40 @@ html[dir="ltr"] .investor-profile-page-header .investor-dashboard-overline{
   direction:ltr !important;
   text-align:left !important;
 }
+
+/* Wilaya select — same visual language as profile inputs */
+.investor-profile-form-grid select{
+  width:100%;
+  min-height:52px;
+  padding:0 44px 0 15px;
+  border:1px solid var(--id-border);
+  border-radius:11px;
+  background:var(--id-light);
+  color:var(--id-dark);
+  outline:none;
+  font:inherit;
+  font-size:14px;
+  direction:rtl;
+  text-align:right;
+  transition:.2s ease;
+  cursor:pointer;
+}
+.investor-profile-form-grid select:focus{
+  border-color:#087443;
+  box-shadow:0 0 0 3px rgba(8,116,67,.10);
+}
+html[dir="ltr"] .investor-profile-page .investor-profile-form-grid select{
+  padding-left:44px;
+  padding-right:15px;
+  direction:ltr;
+  text-align:left;
+}
+body.aapi-investor-dark .investor-profile-form-grid select{
+  background:#121614;
+  color:#edf3ef;
+  border-color:#2b3932;
+}
+body.aapi-investor-dark .investor-profile-form-grid select:focus{
+  border-color:#087443;
+  box-shadow:0 0 0 3px rgba(8,116,67,.14);
+}
