@@ -6,7 +6,7 @@ import "../../styles/admin-status-dropdown.css";
 
 const API = "http://localhost/aapi-api/auth/admin/admin.php";
 type R = Record<string, any>;
-type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "announcements";
+type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "announcements" | "news";
 
 const projectStatuses = ["brouillon", "soumis", "en_etude", "approuve", "en_cours", "realise", "rejete", "archive"];
 const userStatuses = ["actif", "inactif", "suspendu"];
@@ -35,6 +35,9 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const [announcementForm, setAnnouncementForm] = useState({ titre: "", contenu: "", image: "", statut: "publie", date_publication: "" });
   const [announcementPhoto, setAnnouncementPhoto] = useState<File | null>(null);
   const [creatingAnnouncement, setCreatingAnnouncement] = useState(false);
+  const [newsForm, setNewsForm] = useState({ titre: "", resume: "", contenu: "", statut: "publie", date_publication: "" });
+  const [newsPhoto, setNewsPhoto] = useState<File | null>(null);
+  const [creatingNews, setCreatingNews] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -62,7 +65,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : section === "announcements" ? [] : [];
+  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : section === "announcements" || section === "news" ? [] : [];
   const total = Number(stats.total ?? rows.length);
   const active = Number(stats.actif ?? stats.active ?? stats.approuve ?? stats.valide ?? 0);
   const pending = Number(stats.en_attente ?? stats.soumis ?? stats.nouvelle ?? stats.pending ?? 0);
@@ -134,6 +137,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       messages: "delete_messages",
       documents: "delete_documents",
       announcements: "delete_announcements",
+      news: "delete_news",
     };
     const action = deleteActions[section];
     setDeleting(id);
@@ -208,6 +212,34 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     }
   };
 
+  const createNews = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!newsForm.titre.trim() || !newsForm.contenu.trim() || creatingNews) return;
+    setCreatingNews(true);
+    try {
+      const formData = new FormData();
+      formData.append("action", "create_news");
+      formData.append("user_id", String(userId));
+      formData.append("titre", newsForm.titre);
+      formData.append("resume", newsForm.resume);
+      formData.append("contenu", newsForm.contenu);
+      formData.append("statut", newsForm.statut);
+      formData.append("date_publication", newsForm.date_publication);
+      if (newsPhoto) formData.append("image", newsPhoto);
+      const r = await fetch(API, { method: "POST", body: formData });
+      const j = await r.json();
+      if (!j.success) throw Error(j.message || "Impossible de créer l’actualité.");
+      setNewsForm({ titre: "", resume: "", contenu: "", statut: "publie", date_publication: "" });
+      setNewsPhoto(null);
+      await load();
+      setError("");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Impossible de créer l’actualité.");
+    } finally {
+      setCreatingNews(false);
+    }
+  };
+
   const toggleMessage = async (row: R) => {
     const id = Number(row.id);
     if (!id) return;
@@ -224,7 +256,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     finally { setSaving(null); }
   };
 
-  const keys = section === "projects" ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"] : section === "announcements" ? ["id", "titre", "statut", "date_publication", "auteur_id"] : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
+  const keys = section === "projects" ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"] : section === "announcements" || section === "news" ? ["id", "titre", "statut", "date_publication", "auteur_id"] : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
 
   return <div className="admin-dashboard admin-soft-data-page">
     {error && <div className="admin-dashboard-error"><AlertCircle size={16} /><span>{error}</span></div>}
@@ -261,6 +293,25 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
             <label className="admin-announcement-field"><span>{t("admin.data.announcement.publicationDate")}</span><input type="datetime-local" value={announcementForm.date_publication} onChange={e => setAnnouncementForm(v => ({ ...v, date_publication: e.target.value }))} /></label>
           </div>
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingAnnouncement}>{creatingAnnouncement ? <><RefreshCw size={15} className="spin" /> {t("admin.data.announcement.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.announcement.publish")}</>}</button></div>
+        </form>}
+        {section === "news" && <form className="admin-announcement-form" onSubmit={createNews}>
+          <div className="admin-announcement-form-head">
+            <div className="admin-announcement-form-copy">
+              <span className="admin-announcement-eyebrow">{t("admin.data.news.eyebrow")}</span>
+              <h2>{t("admin.data.news.new")}</h2>
+              <p>{t("admin.data.news.description")}</p>
+            </div>
+            <div className="admin-announcement-form-mark" aria-hidden="true"><MessageSquare size={22} /></div>
+          </div>
+          <div className="admin-announcement-form-grid">
+            <label className="admin-announcement-field"><span>{t("admin.data.news.title")}</span><input value={newsForm.titre} onChange={e => setNewsForm(v => ({ ...v, titre: e.target.value }))} placeholder={t("admin.data.news.titlePlaceholder")} required /></label>
+            <label className="admin-announcement-field"><span>{t("admin.data.news.status")}</span><select value={newsForm.statut} onChange={e => setNewsForm(v => ({ ...v, statut: e.target.value }))}><option value="publie">{t("admin.data.news.published")}</option><option value="brouillon">{t("admin.data.news.draft")}</option><option value="archive">{t("admin.data.news.archived")}</option></select></label>
+            <label className="admin-announcement-field admin-announcement-field-full"><span>{t("admin.data.news.summary")}</span><textarea value={newsForm.resume} onChange={e => setNewsForm(v => ({ ...v, resume: e.target.value }))} placeholder={t("admin.data.news.summaryPlaceholder")} /></label>
+            <label className="admin-announcement-field admin-announcement-field-full"><span>{t("admin.data.news.content")}</span><textarea value={newsForm.contenu} onChange={e => setNewsForm(v => ({ ...v, contenu: e.target.value }))} placeholder={t("admin.data.news.contentPlaceholder")} required /></label>
+            <div className="admin-announcement-field"><span>{t("admin.data.news.image")}</span><label className="admin-announcement-upload"><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e => setNewsPhoto(e.target.files?.[0] ?? null)} /><span>📷 {newsPhoto ? newsPhoto.name : t("admin.data.news.imagePlaceholder")}</span></label></div>
+            <label className="admin-announcement-field"><span>{t("admin.data.news.publicationDate")}</span><input type="datetime-local" value={newsForm.date_publication} onChange={e => setNewsForm(v => ({ ...v, date_publication: e.target.value }))} /></label>
+          </div>
+          <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingNews}>{creatingNews ? <><RefreshCw size={15} className="spin" /> {t("admin.data.news.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.news.publish")}</>}</button></div>
         </form>}
         <div className="admin-toolbar soft-data-toolbar">
           <div className="soft-data-search"><Search size={16} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder={t("admin.data.search")} aria-label={t("admin.data.searchAria")} /></div>
