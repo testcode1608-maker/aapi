@@ -1,4 +1,4 @@
-.administrator-shell .soft-data-filter{position:relative!important;z-index:100!important;overflow:visible!important}
+ .administrator-shell .soft-data-filter{position:relative!important;z-index:100!important;overflow:visible!important}
 .administrator-shell .soft-data-filter.is-open{border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.08)!important}
 .administrator-shell .soft-data-filter-trigger{width:100%;height:40px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 12px;border:0;border-radius:9px;background:transparent;color:#dce3df;font-size:11px;font-family:inherit;line-height:1;cursor:pointer;text-align:right;direction:rtl;box-sizing:border-box}
 .administrator-shell .soft-data-filter-trigger svg{flex:0 0 15px;transition:transform .18s ease}
@@ -12,7 +12,6 @@ body.aapi-admin-light .administrator-shell .soft-data-filter-menu{background:#ff
 body.aapi-admin-light .administrator-shell .soft-data-filter-menu button{color:#38433e!important}
 body.aapi-admin-light .administrator-shell .soft-data-filter-menu button:hover,body.aapi-admin-light .administrator-shell .soft-data-filter-menu button.is-selected{background:#edf7f1!important;color:#087443!important}
 
-/* Light mode: search results and data table must stay white instead of inheriting the dark Soft UI surface. */
 body.aapi-admin-light .administrator-shell .soft-data-panel{background:#fff!important;color:#20372c!important;box-shadow:0 12px 30px rgba(25,70,48,.06)!important}
 body.aapi-admin-light .administrator-shell .soft-data-toolbar{background:transparent!important;color:#38433e!important}
 body.aapi-admin-light .administrator-shell .soft-data-table-wrap{background:#fff!important}
@@ -30,14 +29,10 @@ body.aapi-admin-light .administrator-shell .soft-data-search input::placeholder{
 body.aapi-admin-light .administrator-shell .soft-status-select{background:#fff!important;color:#38433e!important;border-color:#dce5df!important}
 body.aapi-admin-light .administrator-shell .soft-read-toggle{background:#fff!important;color:#52615a!important;border-color:#dce5df!important}
 
-/* AAPI admin data direction: Arabic RTL, French/English LTR. */
-.administrator-shell[dir="rtl"] .soft-data-stat-grid,
-.administrator-shell[dir="rtl"] .soft-data-table-wrap,
-.administrator-shell[dir="rtl"] .soft-data-table{direction:rtl!important}
+.administrator-shell[dir="rtl"] .soft-data-stat-grid,.administrator-shell[dir="rtl"] .soft-data-table-wrap,.administrator-shell[dir="rtl"] .soft-data-table{direction:rtl!important}
 .administrator-shell[dir="rtl"] .soft-data-stat{direction:rtl!important;text-align:right!important}
 .administrator-shell[dir="rtl"] .soft-data-stat>div:last-child{direction:rtl!important;text-align:right!important}
-.administrator-shell[dir="rtl"] .soft-data-table th,
-.administrator-shell[dir="rtl"] .soft-data-table td{direction:rtl!important;text-align:right!important}
+.administrator-shell[dir="rtl"] .soft-data-table th,.administrator-shell[dir="rtl"] .soft-data-table td{direction:rtl!important;text-align:right!important}
 
 .administrator-shell[dir="ltr"] .soft-data-stat-grid{direction:ltr!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:15px!important;width:100%!important}
 .administrator-shell[dir="ltr"] .soft-data-stat{direction:ltr!important;text-align:left!important;display:flex!important;flex-direction:row!important;align-items:flex-start!important;justify-content:flex-start!important;gap:15px!important}
@@ -58,7 +53,6 @@ body.aapi-admin-light .administrator-shell .soft-read-toggle{background:#fff!imp
 @media(max-width:800px){.administrator-shell[dir="ltr"] .soft-data-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:520px){.administrator-shell[dir="ltr"] .soft-data-stat-grid{grid-template-columns:1fr!important}}
 
-
 .soft-data-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:180px}
 .soft-delete-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:0 11px;border:1px solid rgba(220,72,72,.28);border-radius:9px;background:rgba(220,72,72,.08);color:#d95b5b;font:600 10px/1 inherit;cursor:pointer;transition:all .18s ease;white-space:nowrap}
 .soft-delete-button:hover:not(:disabled){background:#d95b5b;color:#fff;border-color:#d95b5b;transform:translateY(-1px)}
@@ -67,6 +61,82 @@ body.aapi-admin-light .administrator-shell .soft-delete-button{background:#fff4f
 body.aapi-admin-light .administrator-shell .soft-delete-button:hover:not(:disabled){background:#c84646!important;color:#fff!important;border-color:#c84646!important}
 .administrator-shell[dir="rtl"] .soft-data-actions{justify-content:flex-start;direction:rtl}
 .administrator-shell[dir="ltr"] .soft-data-actions{justify-content:flex-start;direction:ltr}
+
+/* Professional AAPI error alert: clean Soft UI card, no background blur. */
+.administrator-shell .admin-dashboard-error{
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  width:100%!important;
+  min-height:48px!important;
+  margin:0 0 18px!important;
+  padding:13px 16px!important;
+  box-sizing:border-box!important;
+  border:1px solid rgba(220,72,72,.20)!important;
+  border-radius:14px!important;
+  background:rgba(220,72,72,.065)!important;
+  color:#c43f3f!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  line-height:1.55!important;
+  box-shadow:0 7px 20px rgba(20,40,30,.045)!important;
+  overflow:hidden!important;
+}
+.administrator-shell .admin-dashboard-error::before{
+  content:""!important;
+  flex:0 0 3px!important;
+  align-self:stretch!important;
+  min-height:22px!important;
+  border-radius:99px!important;
+  background:#d95b5b!important;
+}
+.administrator-shell .admin-dashboard-error svg{
+  flex:0 0 19px!important;
+  width:19px!important;
+  height:19px!important;
+  stroke-width:2.2!important;
+  color:#d95b5b!important;
+}
+.administrator-shell .admin-dashboard-error span{
+  flex:1 1 auto!important;
+  min-width:0!important;
+}
+body.aapi-admin-light .administrator-shell .admin-dashboard-error{
+  border-color:#f0caca!important;
+  background:#fff6f6!important;
+  color:#b83b3b!important;
+  box-shadow:0 8px 22px rgba(120,45,45,.07)!important;
+}
+body.aapi-admin-light .administrator-shell .admin-dashboard-error::before{background:#c84646!important}
+body.aapi-admin-light .administrator-shell .admin-dashboard-error svg{color:#c84646!important}
+body.aapi-site-dark .administrator-shell .admin-dashboard-error{
+  border-color:rgba(255,107,107,.22)!important;
+  background:rgba(255,107,107,.075)!important;
+  color:#ffb7b7!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.18)!important;
+}
+body.aapi-site-dark .administrator-shell .admin-dashboard-error::before{background:#ff7070!important}
+body.aapi-site-dark .administrator-shell .admin-dashboard-error svg{color:#ff8585!important}
+.administrator-shell[dir="rtl"] .admin-dashboard-error{
+  direction:rtl!important;
+  text-align:right!important;
+  justify-content:flex-start!important;
+}
+.administrator-shell[dir="rtl"] .admin-dashboard-error::before{order:4!important}
+.administrator-shell[dir="rtl"] .admin-dashboard-error svg{order:3!important}
+.administrator-shell[dir="rtl"] .admin-dashboard-error span{order:2!important}
+.administrator-shell[dir="ltr"] .admin-dashboard-error{
+  direction:ltr!important;
+  text-align:left!important;
+  justify-content:flex-start!important;
+}
+.administrator-shell[dir="ltr"] .admin-dashboard-error::before{order:1!important}
+.administrator-shell[dir="ltr"] .admin-dashboard-error svg{order:2!important}
+.administrator-shell[dir="ltr"] .admin-dashboard-error span{order:3!important}
+@media(max-width:640px){
+  .administrator-shell .admin-dashboard-error{font-size:12px!important;padding:12px 13px!important;gap:9px!important;border-radius:12px!important}
+  .administrator-shell .admin-dashboard-error svg{width:17px!important;height:17px!important}
+}
 /* Error messages follow the active language direction. */
 .administrator-shell[dir="rtl"] .admin-dashboard-error{direction:rtl!important;text-align:right!important;justify-content:flex-start!important}
 .administrator-shell[dir="rtl"] .admin-dashboard-error span{direction:rtl!important;text-align:right!important}
