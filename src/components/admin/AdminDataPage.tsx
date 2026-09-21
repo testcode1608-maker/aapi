@@ -16,7 +16,16 @@ const documentStatuses = ["en_attente", "valide", "rejete"];
 
 const fmt = (v: any, language: "ar" | "fr" | "en") => Number(v ?? 0).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ");
 const da = (v: any, language: "ar" | "fr" | "en") => `${fmt(v, language)} DA`;
-const imageUrl = (value: any, id: number) => { const v = String(value ?? "").trim(); if (!v) return `http://localhost/aapi-api/news-image.php?id=${id}`; if (/^https?:\/\//i.test(v)) return v; if (v.startsWith("/")) return `http://localhost${v}`; return `http://localhost/aapi-api/news-image.php?id=${id}`; };
+const imageUrl = (value: any, id: number, section: Section) => {
+  const v = String(value ?? "").trim();
+  const fallback = section === "announcements"
+    ? `http://localhost/aapi-api/announcement-image.php?id=${id}`
+    : `http://localhost/aapi-api/news-image.php?id=${id}`;
+  if (!v) return fallback;
+  if (/^https?:\/\//i.test(v)) return v;
+  if (v.startsWith("/")) return `http://localhost${v}`;
+  return fallback;
+};
 const userIdOf = (r: R) => r.user_id ?? r.investor_id ?? r.investisseur_id ?? r.utilisateur_id ?? "—";
 const isRead = (r: R) => r.lu === 1 || r.lu === true || r.statut === "lu";
 
@@ -66,11 +75,11 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : section === "announcements" || section === "news" ? [] : [];
+  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : [];
   const total = Number(stats.total ?? rows.length);
-  const active = Number(stats.actif ?? stats.active ?? stats.approuve ?? stats.valide ?? 0);
-  const pending = Number(stats.en_attente ?? stats.soumis ?? stats.nouvelle ?? stats.pending ?? 0);
-  const rejected = Number(stats.rejete ?? stats.refusee ?? stats.rejected ?? 0);
+  const active = Number(stats.actif ?? stats.active ?? stats.approuve ?? stats.valide ?? stats.publie ?? 0);
+  const pending = Number(stats.en_attente ?? stats.soumis ?? stats.nouvelle ?? stats.pending ?? stats.brouillon ?? 0);
+  const rejected = Number(stats.rejete ?? stats.refusee ?? stats.rejected ?? stats.archive ?? 0);
 
   const summary = useMemo(() => [
     { label: t("admin.data.totalRecords"), value: fmt(total, language), icon: <Database size={18} />, tone: "green" },
@@ -107,11 +116,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const translateError = (message: string) => {
     const normalized = message.trim();
     if (normalized === "لا يمكنك حذف حساب المسؤول الذي تستخدمه حالياً.") {
-      return language === "fr"
-        ? "Vous ne pouvez pas supprimer le compte administrateur que vous utilisez actuellement."
-        : language === "en"
-          ? "You cannot delete the administrator account you are currently using."
-          : normalized;
+      return language === "fr" ? "Vous ne pouvez pas supprimer le compte administrateur que vous utilisez actuellement." : language === "en" ? "You cannot delete the administrator account you are currently using." : normalized;
     }
     return normalized;
   };
@@ -119,98 +124,46 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const remove = async (row: R) => {
     const id = Number(row.id);
     if (!id || deleting === id) return;
-
     const label = String(row.titre ?? row.nom ?? row.sujet ?? row.objet ?? row.id);
-    const confirmText = language === "ar"
-      ? "هل أنت متأكد من حذف هذا السجل؟"
-      : language === "en"
-        ? "Are you sure you want to delete this record?"
-        : "Êtes-vous sûr de vouloir supprimer cet enregistrement ?";
-
+    const confirmText = language === "ar" ? "هل أنت متأكد من حذف هذا السجل؟" : language === "en" ? "Are you sure you want to delete this record?" : "Êtes-vous sûr de vouloir supprimer cet enregistrement ?";
     if (!window.confirm(confirmText + "\n\n" + label)) return;
-
-    const deleteActions: Record<Section, string> = {
-      users: "delete_users",
-      investors: "delete_investors",
-      projects: "delete_projects",
-      investments: "delete_investments",
-      requests: "delete_requests",
-      messages: "delete_messages",
-      documents: "delete_documents",
-      announcements: "delete_announcements",
-      news: "delete_news",
-    };
+    const deleteActions: Record<Section, string> = { users: "delete_users", investors: "delete_investors", projects: "delete_projects", investments: "delete_investments", requests: "delete_requests", messages: "delete_messages", documents: "delete_documents", announcements: "delete_announcements", news: "delete_news" };
     const action = deleteActions[section];
     setDeleting(id);
-
     try {
-      const r = await fetch(API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: userId, action, record_id: id }),
-      });
+      const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ user_id: userId, action, record_id: id }) });
       const j = await r.json();
-      if (!j.success) {
-        throw Error(
-          j.message ||
-          (language === "ar"
-            ? "تعذر حذف السجل."
-            : language === "en"
-              ? "Unable to delete the record."
-              : "Impossible de supprimer l’enregistrement.")
-        );
-      }
+      if (!j.success) throw Error(j.message || (language === "ar" ? "تعذر حذف السجل." : language === "en" ? "Unable to delete the record." : "Impossible de supprimer l’enregistrement."));
       setRows(prev => prev.filter(x => Number(x.id) !== id));
       setStats(prev => ({ ...prev, total: Math.max(0, Number(prev.total ?? rows.length) - 1) }));
       setError("");
     } catch (e) {
-      setError(
-        translateError(
-          e instanceof Error
-            ? e.message
-            : language === "ar"
-              ? "تعذر حذف السجل."
-              : language === "en"
-                ? "Unable to delete the record."
-                : "Impossible de supprimer l’enregistrement."
-        )
-      );
-    } finally {
-      setDeleting(null);
-    }
+      setError(translateError(e instanceof Error ? e.message : language === "ar" ? "تعذر حذف السجل." : language === "en" ? "Unable to delete the record." : "Impossible de supprimer l’enregistrement."));
+    } finally { setDeleting(null); }
   };
 
   const createAnnouncement = async (event: FormEvent) => {
     event.preventDefault();
     if (!announcementForm.titre.trim() || !announcementForm.contenu.trim() || creatingAnnouncement) return;
-
     setCreatingAnnouncement(true);
     try {
-      const r = await fetch(API, {
-        method: "POST",
-        body: (() => {
-          const formData = new FormData();
-          formData.append("action", "create_announcement");
-          formData.append("user_id", String(userId));
-          formData.append("titre", announcementForm.titre);
-          formData.append("contenu", announcementForm.contenu);
-          formData.append("statut", announcementForm.statut);
-          formData.append("date_publication", announcementForm.date_publication);
-          if (announcementPhoto) formData.append("image", announcementPhoto);
-          return formData;
-        })(),
-      });
+      const formData = new FormData();
+      formData.append("action", "create_announcement");
+      formData.append("user_id", String(userId));
+      formData.append("titre", announcementForm.titre.trim());
+      formData.append("contenu", announcementForm.contenu.trim());
+      formData.append("statut", announcementForm.statut);
+      if (announcementForm.date_publication) formData.append("date_publication", announcementForm.date_publication);
+      if (announcementPhoto) formData.append("image", announcementPhoto);
+      const r = await fetch(API, { method: "POST", body: formData });
       const j = await r.json();
-      if (!j.success) throw Error(j.message || "Impossible de créer l'annonce.");
+      if (!r.ok || !j.success) throw Error(j.message || "Impossible de créer l'annonce.");
       setAnnouncementForm({ titre: "", contenu: "", image: "", statut: "publie", date_publication: "" });
       setAnnouncementPhoto(null);
       await load();
       setError("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Impossible de créer l'annonce.");
-    } finally {
-      setCreatingAnnouncement(false);
-    }
+    } catch (e) { setError(e instanceof Error ? e.message : "Impossible de créer l'annonce."); }
+    finally { setCreatingAnnouncement(false); }
   };
 
   const createNews = async (event: FormEvent) => {
@@ -221,24 +174,21 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       const formData = new FormData();
       formData.append("action", "create_news");
       formData.append("user_id", String(userId));
-      formData.append("titre", newsForm.titre);
-      formData.append("resume", newsForm.resume);
-      formData.append("contenu", newsForm.contenu);
+      formData.append("titre", newsForm.titre.trim());
+      formData.append("resume", newsForm.resume.trim());
+      formData.append("contenu", newsForm.contenu.trim());
       formData.append("statut", newsForm.statut);
-      formData.append("date_publication", newsForm.date_publication);
+      if (newsForm.date_publication) formData.append("date_publication", newsForm.date_publication);
       if (newsPhoto) formData.append("image", newsPhoto);
       const r = await fetch(API, { method: "POST", body: formData });
       const j = await r.json();
-      if (!j.success) throw Error(j.message || "Impossible de créer l’actualité.");
+      if (!r.ok || !j.success) throw Error(j.message || "Impossible de créer l’actualité.");
       setNewsForm({ titre: "", resume: "", contenu: "", statut: "publie", date_publication: "" });
       setNewsPhoto(null);
       await load();
       setError("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Impossible de créer l’actualité.");
-    } finally {
-      setCreatingNews(false);
-    }
+    } catch (e) { setError(e instanceof Error ? e.message : "Impossible de créer l’actualité."); }
+    finally { setCreatingNews(false); }
   };
 
   const toggleMessage = async (row: R) => {
@@ -257,7 +207,11 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     finally { setSaving(null); }
   };
 
-  const keys = section === "projects" ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"] : section === "announcements" || section === "news" ? ["id", "titre", "image", "statut", "date_publication", "auteur_id"] : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
+  const keys = section === "projects"
+    ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"]
+    : section === "announcements" || section === "news"
+      ? ["id", "titre", "image", "statut", "date_publication", "auteur_id"]
+      : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
 
   return <div className="admin-dashboard admin-soft-data-page">
     {error && <div className="admin-dashboard-error"><AlertCircle size={16} /><span>{error}</span></div>}
@@ -277,6 +231,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       <section className="soft-data-stat-grid">{summary.map(item => <article className={`soft-data-stat ${item.tone}`} key={item.label}><div className="soft-data-stat-icon">{item.icon}</div><div><span>{item.label}</span><strong>{item.value}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>)}</section>
       <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head"><div><span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span><h2>{c.title}</h2><p>{c.subtitle}</p></div><span className="soft-data-count">{fmt(total, language)} {t("admin.data.items")}</span></div>
+
         {section === "announcements" && <form className="admin-announcement-form" onSubmit={createAnnouncement}>
           <div className="admin-announcement-form-head">
             <div className="admin-announcement-form-copy">
@@ -295,6 +250,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           </div>
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingAnnouncement}>{creatingAnnouncement ? <><RefreshCw size={15} className="spin" /> {t("admin.data.announcement.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.announcement.publish")}</>}</button></div>
         </form>}
+
         {section === "news" && <form className="admin-announcement-form" onSubmit={createNews}>
           <div className="admin-announcement-form-head">
             <div className="admin-announcement-form-copy">
@@ -314,6 +270,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           </div>
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingNews}>{creatingNews ? <><RefreshCw size={15} className="spin" /> {t("admin.data.news.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.news.publish")}</>}</button></div>
         </form>}
+
         <div className="admin-toolbar soft-data-toolbar">
           <div className="soft-data-search"><Search size={16} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder={t("admin.data.search")} aria-label={t("admin.data.searchAria")} /></div>
           <div className={`soft-data-filter${filterOpen ? " is-open" : ""}`}>
@@ -322,23 +279,14 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           </div>
           <button className="soft-data-filter-button" onClick={() => { setSearch(""); setFilter("all"); setFilterOpen(false); }}><RefreshCw size={14} /> {t("admin.data.reset")}</button>
         </div>
+
         {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages" || section === "announcements" || section === "news") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
-  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "image" && (section === "news" || section === "announcements") ? <img src={imageUrl(r[k], Number(r.id))} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = `http://localhost/aapi-api/news-image.php?id=${Number(r.id)}`; }} /> : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
-  {(options.length > 0 || section === "messages" || section === "announcements" || section === "news") && <td>
-    <div className="soft-data-actions">
-      {options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}>
-        <option value="">—</option>
-        {options.map(o => <option key={o} value={o}>{text(o)}</option>)}
-      </select>}
-      {section === "messages" && <button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id) || deleting === Number(r.id)} onClick={() => void toggleMessage(r)}>
-        {isRead(r) ? t("admin.data.markUnread") : t("admin.data.markRead")}
-      </button>}
-      <button type="button" className="soft-delete-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => void remove(r)} aria-label={(language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer") + " " + text(r.titre ?? r.nom ?? r.sujet ?? r.objet ?? r.id)} title={language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}>
-        <Trash2 size={15} />
-        {language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}
-      </button>
-    </div>
-  </td>}
+  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "image" && (section === "news" || section === "announcements") ? <img src={imageUrl(r[k], Number(r.id), section)} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = imageUrl("", Number(r.id), section); }} /> : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
+  {(options.length > 0 || section === "messages" || section === "announcements" || section === "news") && <td><div className="soft-data-actions">
+      {options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}><option value="">—</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select>}
+      {section === "messages" && <button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id) || deleting === Number(r.id)} onClick={() => void toggleMessage(r)}>{isRead(r) ? t("admin.data.markUnread") : t("admin.data.markRead")}</button>}
+      <button type="button" className="soft-delete-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => void remove(r)} aria-label={(language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer") + " " + text(r.titre ?? r.nom ?? r.sujet ?? r.objet ?? r.id)} title={language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}><Trash2 size={15} />{language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}</button>
+    </div></td>}
 </tr>)}</tbody></table></div>}
       </section>
     </main>
