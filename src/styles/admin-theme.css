@@ -432,86 +432,24 @@ body.aapi-site-dark .admin-settings-layout .admin-settings-user small{
 }
 
 
-/* Admin settings inside the shared administrator shell — Soft UI dark mode */
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-main{
-  min-height:calc(100vh - 72px);
-  background:#0e1210!important;
-  color:#edf4f0!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-header{
-  padding:28px 34px 20px;
-  background:transparent!important;
-  border-bottom:1px solid rgba(255,255,255,.055)!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-header>div>span{
-  color:#68736d!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-header h1{
-  color:#edf4f0!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-header p{
-  color:#8d9992!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-card{
-  max-width:920px;
-  margin:28px 34px 40px;
-  padding:25px;
-  background:#181c19!important;
-  color:#edf4f0!important;
-  border:1px solid #294238!important;
-  border-radius:18px;
-  box-shadow:0 12px 35px rgba(0,0,0,.24)!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-title{
-  border-bottom:1px solid #294238!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-title-icon{
-  background:rgba(8,116,67,.16)!important;
-  color:#7cdbac!important;
-  border-color:rgba(8,116,67,.30)!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-title h2{
-  color:#edf4f0!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-settings-title p{
-  color:#8d9992!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-account-form label span{
-  color:#9aa8a1!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-account-form input{
-  background:#111713!important;
-  color:#edf4f0!important;
-  border:1px solid #294238!important;
-  box-shadow:none!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-account-form input::placeholder{
-  color:#6f7d75!important;
-  opacity:1!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-account-form input:focus{
-  background:#121a15!important;
-  border-color:#087443!important;
-  color:#f3f7f5!important;
-  box-shadow:0 0 0 3px rgba(8,116,67,.14)!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-account-form input[readonly]{
-  background:#101512!important;
-  color:#aebbb4!important;
-  border-color:#253b31!important;
-  opacity:1!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-account-actions button{
-  background:#087443!important;
-  border-color:#087443!important;
-  color:#fff!important;
-  box-shadow:none!important;
-}
-body:not(.aapi-admin-light) .administrator-shell .admin-account-actions button:hover{
-  background:#0a8a50!important;
-  border-color:#0a8a50!important;
-}
-@media(max-width:800px){
-  body:not(.aapi-admin-light) .administrator-shell .admin-settings-header{padding:22px 16px 14px}
-  body:not(.aapi-admin-light) .administrator-shell .admin-settings-card{margin:16px;padding:18px}
-}
+/* Admin settings inside the shared administrator shell — final theme alignment */
+body.aapi-admin-light .administrator-shell .admin-settings-main{min-height:calc(100vh - 72px);background:#f3f6f4!important;color:#17241d!important}
+body.aapi-admin-light .administrator-shell .admin-settings-header{padding:28px 34px 20px;background:#f3f6f4!important;border-bottom:1px solid #dce5df!important}
+body.aapi-admin-light .administrator-shell .admin-settings-header>div>span{color:#68766e!important}
+body.aapi-admin-light .administrator-shell .admin-settings-header h1{color:#17241d!important}
+body.aapi-admin-light .administrator-shell .admin-settings-header p{color:#65736b!important}
+body.aapi-admin-light .administrator-shell .admin-settings-card{max-width:920px;margin:28px 34px 40px;padding:25px;background:#fff!important;color:#17241d!important;border:1px solid #dce5df!important;border-radius:18px;box-shadow:0 10px 28px rgba(25,70,48,.06)!important}
+body.aapi-admin-light .administrator-shell .admin-settings-title{border-bottom:1px solid #e7eee9!important}
+body.aapi-admin-light .administrator-shell .admin-settings-title-icon{background:#e8f5ee!important;color:#087443!important;border-color:#c8e3d2!important}
+body.aapi-admin-light .administrator-shell .admin-settings-title h2{color:#17241d!important}
+body.aapi-admin-light .administrator-shell .admin-settings-title p{color:#65736b!important}
+body.aapi-admin-light .administrator-shell .admin-account-form label span{color:#506057!important}
+body.aapi-admin-light .administrator-shell .admin-account-form input{background:#fff!important;color:#26352d!important;border:1px solid #d8e4dd!important;box-shadow:none!important}
+body.aapi-admin-light .administrator-shell .admin-account-form input::placeholder{color:#89958f!important;opacity:1!important}
+body.aapi-admin-light .administrator-shell .admin-account-form input:hover{border-color:#c4d6cc!important}
+body.aapi-admin-light .administrator-shell .admin-account-form input:focus{background:#fff!important;color:#17241d!important;border-color:#087443!important;box-shadow:0 0 0 3px rgba(8,116,67,.10)!important}
+body.aapi-admin-light .administrator-shell .admin-account-form input[readonly]{background:#f4f7f5!important;color:#65736b!important;border-color:#d8e4dd!important;opacity:1!important}
+body.aapi-admin-light .administrator-shell .admin-account-actions{border-top:0!important}
+body.aapi-admin-light .administrator-shell .admin-account-actions button{background:#087443!important;color:#fff!important;border:1px solid #087443!important;box-shadow:0 6px 16px rgba(8,116,67,.14)!important}
+body.aapi-admin-light .administrator-shell .admin-account-actions button:hover{background:#0a8a50!important;border-color:#0a8a50!important;color:#fff!important}
+@media(max-width:800px){body.aapi-admin-light .administrator-shell .admin-settings-header{padding:22px 16px 14px}body.aapi-admin-light .administrator-shell .admin-settings-card{margin:16px;padding:18px}}
