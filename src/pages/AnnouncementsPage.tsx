@@ -1,56 +1,112 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
 
-type Category = "all" | "general" | "investors" | "offers" | "dates";
+type Category = "all" | "general";
 
 type Announcement = {
   id: number;
   title: string;
-  excerpt: string;
-  date: string;
-  category: Exclude<Category, "all">;
+  content: string;
+  date: string | null;
+  category: "general";
   icon: string;
   important?: boolean;
 };
 
-const announcementsData: Omit<Announcement, "title" | "excerpt">[] = [
-  { id: 1, date: "2026-09-02", category: "investors", icon: "bi-megaphone", important: true },
-  { id: 2, date: "2026-08-30", category: "dates", icon: "bi-calendar-event" },
-  { id: 3, date: "2026-08-27", category: "dates", icon: "bi-person-plus" },
-  { id: 4, date: "2026-08-24", category: "offers", icon: "bi-file-earmark-text" },
-  { id: 5, date: "2026-08-20", category: "general", icon: "bi-info-circle" },
-  { id: 6, date: "2026-08-17", category: "dates", icon: "bi-clock" },
-  { id: 7, date: "2026-08-13", category: "investors", icon: "bi-briefcase" },
-  { id: 8, date: "2026-08-09", category: "general", icon: "bi-folder2-open" },
-];
+type ApiAnnouncement = {
+  id: number;
+  titre: string;
+  contenu: string;
+  date_publication: string | null;
+  created_at: string;
+};
+
+const API_URL = "http://localhost/aapi-api/announcements.php";
 
 function AnnouncementsPage() {
-  const { language, t } = useTranslation();
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState<Category>("all");
   const [search, setSearch] = useState("");
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const categoryLabels: Record<Category, string> = {
     all: t("announcementsPage.all"),
     general: t("announcementsPage.general"),
-    investors: t("announcementsPage.investors"),
-    offers: t("announcementsPage.offers"),
-    dates: t("announcementsPage.dates"),
   };
 
-  const announcements: Announcement[] = announcementsData.map((item) => ({
-    ...item,
-    title: t(`announcementsPage.a${item.id}Title`),
-    excerpt: t(`announcementsPage.a${item.id}Text`),
-  }));
+  useEffect(() => {
+    let cancelled = false;
 
-  const locale = language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ";
-  const formatDate = (date: string) =>
-    new Intl.DateTimeFormat(locale, {
+    const loadAnnouncements = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        if (!response.ok || !data?.success) {
+          throw new Error(data?.message || "Unable to load announcements.");
+        }
+
+        const rows: ApiAnnouncement[] = Array.isArray(data.announcements)
+          ? data.announcements
+          : [];
+
+        if (!cancelled) {
+          setAnnouncements(
+            rows.map((item, index) => ({
+              id: Number(item.id),
+              title: item.titre,
+              content: item.contenu,
+              date: item.date_publication || item.created_at || null,
+              category: "general",
+              icon: "bi-megaphone",
+              important: index === 0,
+            })),
+          );
+        }
+      } catch (requestError) {
+        if (!cancelled) {
+          setAnnouncements([]);
+          setError(
+            requestError instanceof Error
+              ? requestError.message
+              : "Impossible de charger les annonces.",
+          );
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    void loadAnnouncements();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const locale = document.documentElement.lang === "ar"
+    ? "ar-DZ"
+    : document.documentElement.lang === "fr"
+      ? "fr-DZ"
+      : "en-DZ";
+
+  const formatDate = (date: string | null) => {
+    if (!date) return "";
+    const parsed = new Date(date.replace(" ", "T"));
+    if (Number.isNaN(parsed.getTime())) return date;
+
+    return new Intl.DateTimeFormat(locale, {
       day: "2-digit",
       month: "long",
       year: "numeric",
-    }).format(new Date(`${date}T12:00:00`));
+    }).format(parsed);
+  };
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -58,9 +114,10 @@ function AnnouncementsPage() {
     return announcements.filter((item) => {
       const categoryMatches =
         activeCategory === "all" || item.category === activeCategory;
+
       const searchMatches =
         !query ||
-        `${item.title} ${item.excerpt} ${categoryLabels[item.category]}`
+        `${item.title} ${item.content} ${categoryLabels[item.category]}`
           .toLowerCase()
           .includes(query);
 
@@ -160,7 +217,26 @@ function AnnouncementsPage() {
             )}
           </div>
 
-          {filtered.length ? (
+          {loading ? (
+            <div className="announcements-empty">
+              <div className="announcements-empty-icon">
+                <i className="bi bi-arrow-repeat" aria-hidden="true" />
+              </div>
+              <h3>{t("announcementsPage.latest")}</h3>
+              <p>...</p>
+            </div>
+          ) : error ? (
+            <div className="announcements-empty">
+              <div className="announcements-empty-icon">
+                <i className="bi bi-exclamation-circle" aria-hidden="true" />
+              </div>
+              <h3>{t("announcementsPage.notFound")}</h3>
+              <p>{error}</p>
+              <button type="button" className="aapi-primary-button" onClick={reset}>
+                {t("announcementsPage.showAll")} <i className="bi bi-arrow-left" aria-hidden="true" />
+              </button>
+            </div>
+          ) : filtered.length ? (
             <div className="row g-4">
               {filtered.map((item) => (
                 <div className="col-xl-4 col-lg-6 col-md-6" key={item.id}>
@@ -185,7 +261,7 @@ function AnnouncementsPage() {
                         {formatDate(item.date)}
                       </div>
                       <h3>{item.title}</h3>
-                      <p>{item.excerpt}</p>
+                      <p>{item.content}</p>
                       <Link
                         to={`/announcements/${item.id}`}
                         className="announcement-read-more"
