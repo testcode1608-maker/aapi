@@ -42,3 +42,18 @@ body.aapi-admin-light .investor-dashboard-page{background:radial-gradient(circle
 .admin-sector-form .admin-announcement-upload input[type="file"] {
   display: none;
 }
+
+
+/* Admin edit actions + modal */
+.soft-edit-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 11px;border:1px solid rgba(8,116,67,.28);border-radius:9px;background:rgba(8,116,67,.10);color:#78d7a2;font-size:10px;font-weight:700;cursor:pointer;transition:.18s ease}
+.soft-edit-button:hover{background:#087443;color:#fff;transform:translateY(-1px);box-shadow:0 7px 16px rgba(8,116,67,.16)}
+.soft-edit-button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.admin-edit-modal-backdrop{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.38)}
+.admin-edit-modal{width:min(760px,94vw);max-height:90vh;overflow:auto;border:1px solid var(--aapi-border,#252930);border-radius:18px;background:var(--aapi-surface,#111317);box-shadow:0 24px 70px rgba(0,0,0,.38);padding:24px;direction:rtl}
+.admin-edit-modal-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--aapi-border-soft,#1d2026)}
+.admin-edit-modal-head h2{margin:4px 0 0;color:var(--aapi-text,#f3f5f4);font-size:18px}
+.admin-edit-modal-close{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.05);color:#aeb5b0;font-size:25px;line-height:1;cursor:pointer}
+.admin-edit-modal-close:hover{background:rgba(255,255,255,.1);color:#fff}
+.admin-edit-modal .admin-announcement-field input,.admin-edit-modal .admin-announcement-field textarea,.admin-edit-modal .admin-announcement-field select{width:100%}
+.admin-edit-modal .admin-announcement-form-actions{justify-content:flex-start;gap:10px}
+@media(max-width:700px){.admin-edit-modal-backdrop{padding:10px}.admin-edit-modal{width:100%;padding:18px;max-height:94vh}.soft-edit-button{padding:0 8px}.soft-edit-button svg{width:14px}}
