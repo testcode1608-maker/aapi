@@ -9,6 +9,7 @@ type Announcement = {
   title: string;
   content: string;
   date: string | null;
+  image: string | null;
   category: "general";
   icon: string;
   important?: boolean;
@@ -19,6 +20,7 @@ type ApiAnnouncement = {
   titre: string;
   contenu: string;
   date_publication: string | null;
+  image: string | null;
   created_at: string;
 };
 
@@ -63,6 +65,7 @@ function AnnouncementsPage() {
               title: item.titre,
               content: item.contenu,
               date: item.date_publication || item.created_at || null,
+              image: item.image || null,
               category: "general",
               icon: "bi-megaphone",
               important: index === 0,
@@ -241,6 +244,15 @@ function AnnouncementsPage() {
               {filtered.map((item) => (
                 <div className="col-xl-4 col-lg-6 col-md-6" key={item.id}>
                   <article className={item.important ? "announcement-card important" : "announcement-card"}>
+                    {item.image && (
+                      <div className="announcement-card-image">
+                        <img
+                          src={item.image.startsWith("http") ? item.image : `http://localhost${item.image}`}
+                          alt={item.title}
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
                     <div className="announcement-card-top">
                       <div className="announcement-icon">
                         <i className={`bi ${item.icon}`} aria-hidden="true" />
