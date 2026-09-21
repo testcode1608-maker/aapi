@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $sql="SELECT id, nom, description FROM sectors WHERE 1=1"; $params=[];
     if ($search!=="") { $sql.=" AND (nom LIKE ? OR description LIKE ?)"; $v="%".$search."%"; $params=[$v,$v]; }
     $sql.=" ORDER BY nom ASC";
-    $s=$pdo->prepare($sql); $s->execute($params); $rows=$s->fetchAll(PDO::FETCH_ASSOC);
+    $s=$pdo->prepare($sql); $s->execute($params); $rows=$s->fetchAll(PDO::FETCH_ASSOC);\n    foreach ($rows as &$row) { $row["image_url"] = "http://localhost/aapi-api/sector-image.php?id=".(int)$row["id"]; } unset($row);
     sectorJson(true,"Secteurs chargés avec succès.",["sectors"=>$rows,"stats"=>["total"=>count($rows)]]);
 }
 
