@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Building2, LayoutDashboard, LogOut, Menu, Users, UserCheck, FolderKanban, Wallet, ClipboardList, MessageSquare, FileCheck2, X, UserRound, Save } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
@@ -28,6 +28,16 @@ export default function AdminSettings() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [account, setAccount] = useState<Account>(() => readAccount());
   const [saved, setSaved] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => document.documentElement.dataset.aapiTheme === "dark");
+
+  useEffect(() => {
+    const syncTheme = (event: Event) => {
+      const detail = (event as CustomEvent<{ dark?: boolean }>).detail;
+      setDarkMode(typeof detail?.dark === "boolean" ? detail.dark : document.documentElement.dataset.aapiTheme === "dark");
+    };
+    window.addEventListener("aapi-public-theme-change", syncTheme);
+    return () => window.removeEventListener("aapi-public-theme-change", syncTheme);
+  }, []);
 
   const logout = () => { localStorage.removeItem("aapi_user"); navigate("/login", { replace: true }); };
   const closeMobile = () => setMobileMenu(false);
@@ -39,7 +49,7 @@ export default function AdminSettings() {
     window.dispatchEvent(new CustomEvent("aapi-account-change")); window.setTimeout(() => setSaved(false), 2200);
   };
 
-  return <div className={`admin-settings-layout${mobileMenu ? " mobile-menu-open" : ""}`} dir={direction} lang={language}>
+  return <div className={`admin-settings-layout ${darkMode ? "theme-dark" : "theme-light"}${mobileMenu ? " mobile-menu-open" : ""}`} dir={direction} lang={language}>
     <button className="admin-settings-mobile-bar" type="button" onClick={() => setMobileMenu(true)} aria-label={t("admin.settings.openMenu")}><Menu size={20}/><strong>AAPI</strong><span>{t("admin.settings.title")}</span></button>
     {mobileMenu && <button className="admin-settings-mobile-overlay" type="button" aria-label={t("admin.settings.closeMenu")} onClick={closeMobile}/>} 
     <aside className="admin-settings-sidebar">
