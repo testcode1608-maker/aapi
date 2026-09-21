@@ -691,3 +691,41 @@ body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field texta
     width:100%;
   }
 }
+
+/* Announcement image upload */
+.administrator-shell .admin-announcement-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px dashed rgba(48, 184, 126, 0.55);
+  border-radius: 14px;
+  background: rgba(48, 184, 126, 0.06);
+  color: #2f7d61;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.administrator-shell .admin-announcement-upload:hover {
+  border-color: #2f9e78;
+  background: rgba(48, 184, 126, 0.11);
+  transform: translateY(-1px);
+}
+.administrator-shell .admin-announcement-upload input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.administrator-shell .admin-announcement-upload span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.administrator-shell.aapi-site-dark .admin-announcement-upload,
+.aapi-site-dark .administrator-shell .admin-announcement-upload {
+  border-color: rgba(89, 201, 151, 0.5);
+  background: rgba(89, 201, 151, 0.08);
+  color: #9fe0c3;
+}
