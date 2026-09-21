@@ -285,7 +285,7 @@ try {
         "projects_value"=>jsonNumber($projectFinancial["total_value"] ?? 0),
         "total_jobs"=>jsonInt($projectFinancial["total_jobs"] ?? 0),
         "investments_total"=>jsonInt($investmentStats["total"] ?? 0),
-        "total_investment"=>jsonNumber($investmentStats["montant_effectif"] ?? 0),
+        "total_investment"=>jsonNumber($investmentStats["montant_total"] ?? 0),
         "investments_gross_amount"=>jsonNumber($investmentStats["montant_total"] ?? 0),
         "investments_pending_amount"=>jsonNumber($investmentStats["montant_pending"] ?? 0),
         "investments_pending"=>jsonInt($investmentStats["en_attente"] ?? 0),
