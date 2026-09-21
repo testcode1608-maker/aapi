@@ -33,6 +33,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const [saving, setSaving] = useState<number | null>(null);
   const [deleting, setDeleting] = useState<number | null>(null);
   const [announcementForm, setAnnouncementForm] = useState({ titre: "", contenu: "", image: "", statut: "publie", date_publication: "" });
+  const [announcementPhoto, setAnnouncementPhoto] = useState<File | null>(null);
   const [creatingAnnouncement, setCreatingAnnouncement] = useState(false);
 
   const load = useCallback(async () => {
@@ -182,16 +183,22 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     try {
       const r = await fetch(API, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "create_announcement",
-          user_id: userId,
-          ...announcementForm,
-        }),
+        body: (() => {
+          const formData = new FormData();
+          formData.append("action", "create_announcement");
+          formData.append("user_id", String(userId));
+          formData.append("titre", announcementForm.titre);
+          formData.append("contenu", announcementForm.contenu);
+          formData.append("statut", announcementForm.statut);
+          formData.append("date_publication", announcementForm.date_publication);
+          if (announcementPhoto) formData.append("image", announcementPhoto);
+          return formData;
+        })(),
       });
       const j = await r.json();
       if (!j.success) throw Error(j.message || "Impossible de créer l'annonce.");
       setAnnouncementForm({ titre: "", contenu: "", image: "", statut: "publie", date_publication: "" });
+      setAnnouncementPhoto(null);
       await load();
       setError("");
     } catch (e) {
@@ -250,7 +257,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
             <label className="admin-announcement-field"><span>{t("admin.data.announcement.title")}</span><input value={announcementForm.titre} onChange={e => setAnnouncementForm(v => ({ ...v, titre: e.target.value }))} placeholder={t("admin.data.announcement.titlePlaceholder")} required /></label>
             <label className="admin-announcement-field"><span>{t("admin.data.announcement.status")}</span><select value={announcementForm.statut} onChange={e => setAnnouncementForm(v => ({ ...v, statut: e.target.value }))}><option value="publie">{t("admin.data.announcement.published")}</option><option value="brouillon">{t("admin.data.announcement.draft")}</option><option value="archive">{t("admin.data.announcement.archived")}</option></select></label>
             <label className="admin-announcement-field admin-announcement-field-full"><span>{t("admin.data.announcement.content")}</span><textarea value={announcementForm.contenu} onChange={e => setAnnouncementForm(v => ({ ...v, contenu: e.target.value }))} placeholder={t("admin.data.announcement.contentPlaceholder")} required /></label>
-            <label className="admin-announcement-field"><span>{t("admin.data.announcement.image")}</span><input value={announcementForm.image} onChange={e => setAnnouncementForm(v => ({ ...v, image: e.target.value }))} placeholder={t("admin.data.announcement.imagePlaceholder")} /></label>
+            <div className="admin-announcement-field"><span>{t("admin.data.announcement.image")}</span><label className="admin-announcement-upload"><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e => setAnnouncementPhoto(e.target.files?.[0] ?? null)} /><span>📷 {announcementPhoto ? announcementPhoto.name : t("admin.data.announcement.imagePlaceholder")}</span></label></div>
             <label className="admin-announcement-field"><span>{t("admin.data.announcement.publicationDate")}</span><input type="datetime-local" value={announcementForm.date_publication} onChange={e => setAnnouncementForm(v => ({ ...v, date_publication: e.target.value }))} /></label>
           </div>
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingAnnouncement}>{creatingAnnouncement ? <><RefreshCw size={15} className="spin" /> {t("admin.data.announcement.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.announcement.publish")}</>}</button></div>
