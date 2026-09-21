@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Building2, Check, LayoutDashboard, LogOut, Menu, Moon, Settings, Users, UserCheck, FolderKanban, Wallet, ClipboardList, MessageSquare, FileCheck2, X, UserRound, Save } from "lucide-react";
+import { Building2, LayoutDashboard, LogOut, Menu, Users, UserCheck, FolderKanban, Wallet, ClipboardList, MessageSquare, FileCheck2, X, UserRound, Save } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 import "../styles/admin-theme.css";
 
@@ -15,14 +15,7 @@ const menu = [
   ["/admin/documents", "documents", FileCheck2],
 ] as const;
 
-type Theme = "dark" | "light";
 type Account = { id?: number; nom?: string; prenom?: string; email?: string; telephone?: string; role?: string; statut?: string; photo?: string | null };
-
-function applyTheme(theme: Theme) {
-  document.body.classList.toggle("aapi-admin-light", theme === "light");
-  localStorage.setItem("aapi-admin-theme", theme);
-  window.dispatchEvent(new CustomEvent("aapi-theme-change", { detail: theme }));
-}
 
 function readAccount(): Account {
   try { return JSON.parse(localStorage.getItem("aapi_user") || "{}") as Account; } catch { return {}; }
@@ -32,12 +25,10 @@ export default function AdminSettings() {
   const navigate = useNavigate();
   const { language, t } = useTranslation();
   const direction = language === "ar" ? "rtl" : "ltr";
-  const [theme, setTheme] = useState<Theme>(() => localStorage.getItem("aapi-admin-theme") === "light" ? "light" : "dark");
   const [mobileMenu, setMobileMenu] = useState(false);
   const [account, setAccount] = useState<Account>(() => readAccount());
   const [saved, setSaved] = useState(false);
 
-  useEffect(() => { applyTheme(theme); return () => document.body.classList.remove("aapi-admin-light"); }, [theme]);
   const logout = () => { localStorage.removeItem("aapi_user"); navigate("/login", { replace: true }); };
   const closeMobile = () => setMobileMenu(false);
   const change = (key: keyof Account, value: string) => setAccount(prev => ({ ...prev, [key]: value }));
@@ -72,14 +63,7 @@ export default function AdminSettings() {
         </div>
         <div className="admin-account-actions"><button type="button" onClick={saveAccount}><Save size={16}/>{saved ? t("admin.settings.saved") : t("admin.settings.save")}</button></div>
       </section>
-      <section className="admin-settings-card">
-        <div className="admin-settings-title"><div className="admin-settings-title-icon"><Settings size={22}/></div><div><h2>{t("admin.settings.appearance")}</h2><p>{t("admin.settings.appearanceSubtitle")}</p></div></div>
-        <div className="admin-theme-options">
-          <button type="button" className={`admin-theme-choice ${theme === "dark" ? "active" : ""}`} onClick={() => setTheme("dark")}><div className="admin-theme-choice-preview dark"><Moon size={25}/><div><strong>{t("admin.settings.dark")}</strong></div></div><div className="admin-theme-check">{theme === "dark" && <Check size={15}/>}</div></button>
-          <button type="button" className={`admin-theme-choice ${theme === "light" ? "active" : ""}`} onClick={() => setTheme("light")}><div className="admin-theme-choice-preview light"><Settings size={25}/><div><strong>{t("admin.settings.light")}</strong></div></div><div className="admin-theme-check">{theme === "light" && <Check size={15}/>}</div></button>
-        </div>
-        <div className="admin-settings-current"><span>{t("admin.settings.current")}</span><strong>{theme === "dark" ? t("admin.settings.dark") : t("admin.settings.light")}</strong></div>
-      </section>
+
     </main>
   </div>;
 }
