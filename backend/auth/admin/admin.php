@@ -56,6 +56,13 @@ $handlers = [
     'mark_message_read' => __DIR__.'/messages.php',
     'mark_message_unread' => __DIR__.'/messages.php',
     'update_document_status' => __DIR__.'/documents.php',
+    'delete_users' => __DIR__.'/delete.php',
+    'delete_investors' => __DIR__.'/delete.php',
+    'delete_projects' => __DIR__.'/delete.php',
+    'delete_investments' => __DIR__.'/delete.php',
+    'delete_requests' => __DIR__.'/delete.php',
+    'delete_messages' => __DIR__.'/delete.php',
+    'delete_documents' => __DIR__.'/delete.php',
 ];
 
 if (!isset($handlers[$action])) {
