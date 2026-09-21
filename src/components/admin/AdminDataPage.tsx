@@ -217,7 +217,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     finally { setSaving(null); }
   };
 
-  const keys = section === "projects" ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"] : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
+  const keys = section === "projects" ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"] : section === "announcements" ? ["id", "titre", "statut", "date_publication", "auteur_id"] : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
 
   return <div className="admin-dashboard admin-soft-data-page">
     {error && <div className="admin-dashboard-error"><AlertCircle size={16} /><span>{error}</span></div>}
@@ -237,21 +237,24 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       <section className="soft-data-stat-grid">{summary.map(item => <article className={`soft-data-stat ${item.tone}`} key={item.label}><div className="soft-data-stat-icon">{item.icon}</div><div><span>{item.label}</span><strong>{item.value}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>)}</section>
       <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head"><div><span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span><h2>{c.title}</h2><p>{c.subtitle}</p></div><span className="soft-data-count">{fmt(total, language)} {t("admin.data.items")}</span></div>
-        {section === "announcements" && <form className="admin-panel soft-data-panel" onSubmit={createAnnouncement} style={{ marginBottom: 20 }}>
-          <div className="admin-panel-header soft-data-panel-head">
-            <div><span className="soft-ui-card-label">AAPI</span><h2>إضافة إعلان جديد</h2><p>أنشئ إعلاناً وسيظهر مباشرة في الموقع إذا كانت حالته منشورة.</p></div>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 16, padding: 20 }}>
-            <label style={{ display: "flex", flexDirection: "column", gap: 7 }}><strong>العنوان</strong><input className="soft-data-search" style={{ width: "100%" }} value={announcementForm.titre} onChange={e => setAnnouncementForm(v => ({ ...v, titre: e.target.value }))} placeholder="عنوان الإعلان" required /></label>
-            <label style={{ display: "flex", flexDirection: "column", gap: 7 }}><strong>الحالة</strong><select className="soft-status-select" value={announcementForm.statut} onChange={e => setAnnouncementForm(v => ({ ...v, statut: e.target.value }))}><option value="publie">منشور</option><option value="brouillon">مسودة</option><option value="archive">مؤرشف</option></select></label>
-            <label style={{ display: "flex", flexDirection: "column", gap: 7, gridColumn: "1 / -1" }}><strong>المحتوى</strong><textarea className="soft-data-search" style={{ width: "100%", minHeight: 150, padding: 14 }} value={announcementForm.contenu} onChange={e => setAnnouncementForm(v => ({ ...v, contenu: e.target.value }))} placeholder="محتوى الإعلان" required /></label>
-            <label style={{ display: "flex", flexDirection: "column", gap: 7 }}><strong>رابط الصورة</strong><input className="soft-data-search" style={{ width: "100%" }} value={announcementForm.image} onChange={e => setAnnouncementForm(v => ({ ...v, image: e.target.value }))} placeholder="https://..." /></label>
-            <label style={{ display: "flex", flexDirection: "column", gap: 7 }}><strong>تاريخ النشر</strong><input className="soft-data-search" style={{ width: "100%" }} type="datetime-local" value={announcementForm.date_publication} onChange={e => setAnnouncementForm(v => ({ ...v, date_publication: e.target.value }))} /></label>
-            <div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: "flex-start" }}>
-              <button type="submit" className="soft-data-filter-button" disabled={creatingAnnouncement}>{creatingAnnouncement ? "جاري النشر..." : "إضافة الإعلان"}</button>
+        {section === "announcements" && <form className="admin-announcement-form" onSubmit={createAnnouncement}>
+          <div className="admin-announcement-form-head">
+            <div className="admin-announcement-form-copy">
+              <span className="admin-announcement-eyebrow">{t("admin.data.announcement.eyebrow")}</span>
+              <h2>{t("admin.data.announcement.new")}</h2>
+              <p>{t("admin.data.announcement.description")}</p>
             </div>
+            <div className="admin-announcement-form-mark" aria-hidden="true"><MessageSquare size={22} /></div>
           </div>
-        </form>}
+          <div className="admin-announcement-form-grid">
+            <label className="admin-announcement-field"><span>{t("admin.data.announcement.title")}</span><input value={announcementForm.titre} onChange={e => setAnnouncementForm(v => ({ ...v, titre: e.target.value }))} placeholder={t("admin.data.announcement.titlePlaceholder")} required /></label>
+            <label className="admin-announcement-field"><span>{t("admin.data.announcement.status")}</span><select value={announcementForm.statut} onChange={e => setAnnouncementForm(v => ({ ...v, statut: e.target.value }))}><option value="publie">{t("admin.data.announcement.published")}</option><option value="brouillon">{t("admin.data.announcement.draft")}</option><option value="archive">{t("admin.data.announcement.archived")}</option></select></label>
+            <label className="admin-announcement-field admin-announcement-field-full"><span>{t("admin.data.announcement.content")}</span><textarea value={announcementForm.contenu} onChange={e => setAnnouncementForm(v => ({ ...v, contenu: e.target.value }))} placeholder={t("admin.data.announcement.contentPlaceholder")} required /></label>
+            <label className="admin-announcement-field"><span>{t("admin.data.announcement.image")}</span><input value={announcementForm.image} onChange={e => setAnnouncementForm(v => ({ ...v, image: e.target.value }))} placeholder={t("admin.data.announcement.imagePlaceholder")} /></label>
+            <label className="admin-announcement-field"><span>{t("admin.data.announcement.publicationDate")}</span><input type="datetime-local" value={announcementForm.date_publication} onChange={e => setAnnouncementForm(v => ({ ...v, date_publication: e.target.value }))} /></label>
+          </div>
+          <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingAnnouncement}>{creatingAnnouncement ? <><RefreshCw size={15} className="spin" /> {t("admin.data.announcement.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.announcement.publish")}</>}</button></div>
+        </form>}}
         <div className="admin-toolbar soft-data-toolbar">
           <div className="soft-data-search"><Search size={16} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder={t("admin.data.search")} aria-label={t("admin.data.searchAria")} /></div>
           <div className={`soft-data-filter${filterOpen ? " is-open" : ""}`}>
@@ -260,9 +263,9 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           </div>
           <button className="soft-data-filter-button" onClick={() => { setSearch(""); setFilter("all"); setFilterOpen(false); }}><RefreshCw size={14} /> {t("admin.data.reset")}</button>
         </div>
-        {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
-  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
-  {(options.length > 0 || section === "messages") && <td>
+        {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages" || section === "announcements") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
+  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
+  {(options.length > 0 || section === "messages" || section === "announcements") && <td>
     <div className="soft-data-actions">
       {options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}>
         <option value="">—</option>
