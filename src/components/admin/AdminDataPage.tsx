@@ -96,7 +96,58 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     finally { setSaving(null); }
   };
 
-  const remove = async (row: R) => {\n    const id = Number(row.id);\n    if (!id || deleting === id) return;\n\n    const label = String(row.titre ?? row.nom ?? row.sujet ?? row.objet ?? row.id);\n    if (!window.confirm(t("admin.data.deleteConfirm") + "\\n\\n" + label)) return;\n\n    const action = `delete_${section.slice(0, -1)}`;\n    setDeleting(id);\n\n    try {\n      const r = await fetch(API, {\n        method: "POST",\n        headers: { "Content-Type": "application/json" },\n        body: JSON.stringify({ user_id: userId, action, record_id: id }),\n      });\n      const j = await r.json();\n      if (!j.success) throw Error(j.message || language === "ar" ? "تعذر حذف السجل." : language === "en" ? "Unable to delete the record." : "Impossible de supprimer l’enregistrement.");\n      setRows(prev => prev.filter(x => Number(x.id) !== id));\n      setStats(prev => ({ ...prev, total: Math.max(0, Number(prev.total ?? rows.length) - 1) }));\n      setError("");\n    } catch (e) {\n      setError(e instanceof Error ? e.message : t("admin.data.deleteError"));\n    } finally {\n      setDeleting(null);\n    }\n  };\n\n  const toggleMessage = async (row: R) => {
+  const remove = async (row: R) => {
+    const id = Number(row.id);
+    if (!id || deleting === id) return;
+
+    const label = String(row.titre ?? row.nom ?? row.sujet ?? row.objet ?? row.id);
+    const confirmText = language === "ar"
+      ? "هل أنت متأكد من حذف هذا السجل؟"
+      : language === "en"
+        ? "Are you sure you want to delete this record?"
+        : "Êtes-vous sûr de vouloir supprimer cet enregistrement ?";
+
+    if (!window.confirm(confirmText + "\n\n" + label)) return;
+
+    const action = `delete_${section.slice(0, -1)}`;
+    setDeleting(id);
+
+    try {
+      const r = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId, action, record_id: id }),
+      });
+      const j = await r.json();
+      if (!j.success) {
+        throw Error(
+          j.message ||
+          (language === "ar"
+            ? "تعذر حذف السجل."
+            : language === "en"
+              ? "Unable to delete the record."
+              : "Impossible de supprimer l’enregistrement.")
+        );
+      }
+      setRows(prev => prev.filter(x => Number(x.id) !== id));
+      setStats(prev => ({ ...prev, total: Math.max(0, Number(prev.total ?? rows.length) - 1) }));
+      setError("");
+    } catch (e) {
+      setError(
+        e instanceof Error
+          ? e.message
+          : language === "ar"
+            ? "تعذر حذف السجل."
+            : language === "en"
+              ? "Unable to delete the record."
+              : "Impossible de supprimer l’enregistrement."
+      );
+    } finally {
+      setDeleting(null);
+    }
+  };
+
+  const toggleMessage = async (row: R) => {
     const id = Number(row.id);
     if (!id) return;
     const read = isRead(row);
@@ -140,7 +191,24 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           </div>
           <button className="soft-data-filter-button" onClick={() => { setSearch(""); setFilter("all"); setFilterOpen(false); }}><RefreshCw size={14} /> {t("admin.data.reset")}</button>
         </div>
-        {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{options.length > 0 && <th>{t("admin.data.action")}</th>}{section === "messages" && <th>{t("admin.data.reading")}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>{keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}{(options.length > 0 || section === "messages") && <td><div className="soft-data-actions">{options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}><option value="">—</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select>}{section === "messages" && <button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id) || deleting === Number(r.id)} onClick={() => void toggleMessage(r)}>{isRead(r) ? t("admin.data.markUnread") : t("admin.data.markRead")}</button>}<button type="button" className="soft-delete-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => void remove(r)} aria-label={(language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer") + " " + text(r.titre ?? r.nom ?? r.sujet ?? r.objet ?? r.id)} title={language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}><Trash2 size={15} />{language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}</button></div></td>}}{section === "messages" && <td><button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id)} onClick={() => void toggleMessage(r)}>{isRead(r) ? t("admin.data.markUnread") : t("admin.data.markRead")}</button></td>}</tr>)}</tbody></table></div>}
+        {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
+  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
+  {(options.length > 0 || section === "messages") && <td>
+    <div className="soft-data-actions">
+      {options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}>
+        <option value="">—</option>
+        {options.map(o => <option key={o} value={o}>{text(o)}</option>)}
+      </select>}
+      {section === "messages" && <button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id) || deleting === Number(r.id)} onClick={() => void toggleMessage(r)}>
+        {isRead(r) ? t("admin.data.markUnread") : t("admin.data.markRead")}
+      </button>}
+      <button type="button" className="soft-delete-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => void remove(r)} aria-label={(language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer") + " " + text(r.titre ?? r.nom ?? r.sujet ?? r.objet ?? r.id)} title={language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}>
+        <Trash2 size={15} />
+        {language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}
+      </button>
+    </div>
+  </td>}
+</tr>)}</tbody></table></div>}
       </section>
     </main>
   </div>;
