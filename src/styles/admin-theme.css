@@ -453,3 +453,39 @@ body.aapi-admin-light .administrator-shell .admin-account-actions{border-top:0!i
 body.aapi-admin-light .administrator-shell .admin-account-actions button{background:#087443!important;color:#fff!important;border:1px solid #087443!important;box-shadow:0 6px 16px rgba(8,116,67,.14)!important}
 body.aapi-admin-light .administrator-shell .admin-account-actions button:hover{background:#0a8a50!important;border-color:#0a8a50!important;color:#fff!important}
 @media(max-width:800px){body.aapi-admin-light .administrator-shell .admin-settings-header{padding:22px 16px 14px}body.aapi-admin-light .administrator-shell .admin-settings-card{margin:16px;padding:18px}}
+
+
+/* ============================================================
+   AAPI — ADMIN SHARED POLISH
+   ============================================================ */
+
+.admin-settings-card,
+.admin-settings-layout .admin-theme-choice,
+.admin-settings-layout .admin-settings-user {
+  border-radius: 16px;
+}
+
+.admin-settings-layout .admin-account-form input,
+.admin-settings-layout .admin-theme-choice {
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease, background 180ms ease;
+}
+
+.admin-settings-layout .admin-theme-choice:hover {
+  transform: translateY(-2px);
+}
+
+.admin-settings-layout .admin-account-actions button {
+  min-height: 40px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.admin-settings-layout .admin-settings-sidebar nav a,
+.admin-settings-layout .admin-settings-sidebar-bottom button {
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.admin-settings-layout .admin-settings-sidebar nav a:hover,
+.admin-settings-layout .admin-settings-sidebar-bottom button:hover {
+  transform: translateX(-2px);
+}
