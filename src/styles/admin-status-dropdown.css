@@ -67,3 +67,8 @@ body.aapi-admin-light .administrator-shell .soft-delete-button{background:#fff4f
 body.aapi-admin-light .administrator-shell .soft-delete-button:hover:not(:disabled){background:#c84646!important;color:#fff!important;border-color:#c84646!important}
 .administrator-shell[dir="rtl"] .soft-data-actions{justify-content:flex-start;direction:rtl}
 .administrator-shell[dir="ltr"] .soft-data-actions{justify-content:flex-start;direction:ltr}
+/* Error messages follow the active language direction. */
+.administrator-shell[dir="rtl"] .admin-dashboard-error{direction:rtl!important;text-align:right!important;justify-content:flex-start!important}
+.administrator-shell[dir="rtl"] .admin-dashboard-error span{direction:rtl!important;text-align:right!important}
+.administrator-shell[dir="ltr"] .admin-dashboard-error{direction:ltr!important;text-align:left!important;justify-content:flex-start!important}
+.administrator-shell[dir="ltr"] .admin-dashboard-error span{direction:ltr!important;text-align:left!important}
