@@ -86,7 +86,7 @@ function Sectors() {
                     <h3>{sector.nom}</h3>
                     <p>{sector.description || "—"}</p>
 
-                    <Link to={`/sectors/${sector.slug}`} className="sector-link">
+                    <Link to="/sectors" className="sector-link">
                       <span>{t("common.discover")}</span>
                       <i className="bi bi-arrow-left" aria-hidden="true" />
                     </Link>
