@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
 
-type Sector = { icon: string; number: string; title: string; description: string; opportunities: string };
+type Sector = { icon: string; number: string; title: string; description: string; opportunities: string; imageUrl?: string };
+
+type ApiSector = { id: number; nom: string; description: string; image_url?: string };
 
 const sectorMeta = [
   ["bi-buildings", "01"], ["bi-tree", "02"], ["bi-sun", "03"],
@@ -11,13 +14,52 @@ const sectorMeta = [
 
 function SectorsPage() {
   const { t } = useTranslation();
-  const sectors: Sector[] = sectorMeta.map(([icon, number]) => ({
+  const fallbackSectors: Sector[] = sectorMeta.map(([icon, number]) => ({
     icon,
     number,
     title: t(`sectorsPage.s${number.replace(/^0/, "")}`),
     description: t(`sectorsPage.s${number.replace(/^0/, "")}Text`),
     opportunities: t(`sectorsPage.s${number.replace(/^0/, "")}Opp`),
   }));
+  const [dbSectors, setDbSectors] = useState<ApiSector[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("http://localhost/aapi-api/sectors.php")
+      .then(async r => {
+        const raw = await r.text();
+        let data: { success?: boolean; sectors?: ApiSector[] };
+        try { data = JSON.parse(raw); } catch { throw new Error("Invalid sectors API response"); }
+        if (!r.ok || !data.success) throw new Error("Unable to load sectors");
+        if (!cancelled) setDbSectors(Array.isArray(data.sectors) ? data.sectors : []);
+      })
+      .catch(() => { if (!cancelled) setDbSectors([]); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const iconForSector = (name: string) => {
+    const n = name.toLowerCase();
+    if (n.includes("agri")) return "bi-tree";
+    if (n.includes("énergie") || n.includes("energie") || n.includes("renew")) return "bi-sun";
+    if (n.includes("tour")) return "bi-water";
+    if (n.includes("techn") || n.includes("numér") || n.includes("digital")) return "bi-cpu";
+    if (n.includes("transport") || n.includes("logist")) return "bi-truck";
+    if (n.includes("eau") || n.includes("environnement")) return "bi-droplet";
+    if (n.includes("santé") || n.includes("sante") || n.includes("health")) return "bi-heart-pulse";
+    if (n.includes("immobilier") || n.includes("service")) return "bi-house";
+    return "bi-buildings";
+  };
+
+  const sectors: Sector[] = dbSectors && dbSectors.length > 0
+    ? dbSectors.map((sector, index) => ({
+        icon: iconForSector(sector.nom),
+        number: String(index + 1).padStart(2, "0"),
+        title: sector.nom,
+        description: sector.description || "",
+        opportunities: t("sectorsPage.explore"),
+        imageUrl: sector.image_url,
+      }))
+    : fallbackSectors;
 
   return (
     <>
@@ -31,7 +73,7 @@ function SectorsPage() {
       </div></div></section>
 
       <section className="sectors-mini-stats"><div className="container"><div className="row g-0">
-        <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>09+</strong><span>{t("sectorsPage.statSectors")}</span></div></div>
+        <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>{dbSectors && dbSectors.length > 0 ? `${String(dbSectors.length).padStart(2, "0")}+` : "09+"}</strong><span>{t("sectorsPage.statSectors")}</span></div></div>
         <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>58</strong><span>{t("sectorsPage.statWilayas")}</span></div></div>
         <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>48+</strong><span>{t("sectorsPage.statActivities")}</span></div></div>
         <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>∞</strong><span>{t("sectorsPage.statPotential")}</span></div></div>
@@ -39,7 +81,7 @@ function SectorsPage() {
 
       <section className="sectors-page-content"><div className="container"><div className="sectors-page-grid">
         {sectors.map((sector) => <article className="sector-page-card" key={sector.number}>
-          <div className="sector-page-card-top"><span>{sector.number}</span><div className="sector-page-icon"><i className={`bi ${sector.icon}`} aria-hidden="true"></i></div></div>
+          <div className="sector-page-card-top"><span>{sector.number}</span><div className="sector-page-icon">{sector.imageUrl ? <img src={sector.imageUrl} alt="" loading="lazy" /> : <i className={`bi ${sector.icon}`} aria-hidden="true"></i>}</div></div>
           <h3>{sector.title}</h3><p>{sector.description}</p>
           <div className="sector-page-opportunity"><i className="bi bi-arrow-left" aria-hidden="true"></i><span>{sector.opportunities}</span></div>
           <Link to="/opportunities">{t("sectorsPage.explore")} <i className="bi bi-arrow-left" aria-hidden="true"></i></Link>
