@@ -1,18 +1,259 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
-import { announcementsDetailsTranslations } from "../i18n/announcementsDetailsTranslations";
+
+type ApiAnnouncement = {
+  id: number;
+  titre: string;
+  contenu: string;
+  image: string | null;
+  auteur: string | null;
+  date_publication: string | null;
+  created_at: string;
+};
+
+const API_URL = "http://localhost/aapi-api/announcements.php";
 
 function AnnouncementsDetails() {
   const { id } = useParams<{ id: string }>();
-  const { language } = useTranslation();
-  const page = announcementsDetailsTranslations[language].page;
-  const announcement = announcementsDetailsTranslations[language].articles[id as keyof typeof announcementsDetailsTranslations[typeof language]["articles"]];
+  const { t } = useTranslation();
+  const [announcement, setAnnouncement] = useState<ApiAnnouncement | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  if (!announcement) return <section className="announcement-details-not-found"><div className="container"><div className="announcement-not-found-card"><div className="announcement-not-found-icon"><i className="bi bi-exclamation-circle" aria-hidden="true"></i></div><h1>{page.notFound}</h1><p>{page.notFoundText}</p><Link to="/announcements" className="btn aapi-btn-primary"><i className="bi bi-arrow-right" aria-hidden="true"></i>{page.back}</Link></div></div></section>;
+  useEffect(() => {
+    let cancelled = false;
 
-  return <>
-    <section className="announcement-details-hero"><div className="container"><div className="announcement-details-hero-content"><span>{page.media}</span><h1>{page.title}</h1><div className="announcement-details-breadcrumb"><Link to="/">{page.home}</Link><i className="bi bi-chevron-left" aria-hidden="true"></i><Link to="/announcements">{page.media}</Link><i className="bi bi-chevron-left" aria-hidden="true"></i><strong>{page.details}</strong></div></div></div></section>
-    <section className="announcement-details-section"><div className="container"><div className="row g-4 g-lg-5"><div className="col-lg-8"><article className="announcement-details-article"><div className="announcement-details-top"><div className="announcement-details-category"><i className="bi bi-folder2-open" aria-hidden="true"></i>{announcement.category}</div>{id === "1" || id === "2" ? <div className="announcement-details-important"><i className="bi bi-star-fill" aria-hidden="true"></i>{page.important}</div> : null}</div><h2>{announcement.title}</h2><div className="announcement-details-date"><i className="bi bi-calendar3" aria-hidden="true"></i><span>{announcement.date}</span></div><div className="announcement-details-divider"></div><div className="announcement-details-intro">{announcement.excerpt}</div><div className="announcement-details-content">{announcement.content.map((paragraph,index)=><p key={`${id}-${index}`}>{paragraph}</p>)}</div><div className="announcement-details-actions"><Link to="/announcements" className="announcement-back-button"><i className="bi bi-arrow-right" aria-hidden="true"></i>{page.backList}</Link><button type="button" className="announcement-print-button" onClick={()=>window.print()}><i className="bi bi-printer" aria-hidden="true"></i>{page.print}</button></div></article></div><div className="col-lg-4"><aside className="announcement-details-sidebar"><div className="announcement-sidebar-card"><div className="announcement-sidebar-icon"><i className="bi bi-megaphone" aria-hidden="true"></i></div><h3>{page.all}</h3><p>{page.allText}</p><Link to="/announcements">{page.allLink}<i className="bi bi-arrow-left" aria-hidden="true"></i></Link></div><div className="announcement-sidebar-card green"><div className="announcement-sidebar-icon"><i className="bi bi-lightbulb" aria-hidden="true"></i></div><h3>{page.opportunities}</h3><p>{page.opportunitiesText}</p><Link to="/opportunities">{page.opportunitiesLink}<i className="bi bi-arrow-left" aria-hidden="true"></i></Link></div><div className="announcement-sidebar-contact"><i className="bi bi-headset" aria-hidden="true"></i><div><strong>{page.help}</strong><span>{page.helpText}</span></div><Link to="/contact">{page.contact}</Link></div></aside></div></div></div></section>
-  </>;
+    const loadAnnouncement = async () => {
+      if (!id) {
+        setError("Annonce introuvable.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(`${API_URL}?id=${encodeURIComponent(id)}`);
+        const data = await response.json();
+
+        if (!response.ok || !data?.success || !data?.announcement) {
+          throw new Error(data?.message || "Annonce introuvable.");
+        }
+
+        if (!cancelled) {
+          setAnnouncement(data.announcement);
+        }
+      } catch (requestError) {
+        if (!cancelled) {
+          setAnnouncement(null);
+          setError(
+            requestError instanceof Error
+              ? requestError.message
+              : "Impossible de charger l'annonce.",
+          );
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    void loadAnnouncement();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  const locale = document.documentElement.lang === "ar"
+    ? "ar-DZ"
+    : document.documentElement.lang === "fr"
+      ? "fr-DZ"
+      : "en-DZ";
+
+  const formattedDate = useMemo(() => {
+    const date = announcement?.date_publication || announcement?.created_at;
+    if (!date) return "";
+
+    const parsed = new Date(date.replace(" ", "T"));
+    if (Number.isNaN(parsed.getTime())) return date;
+
+    return new Intl.DateTimeFormat(locale, {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }).format(parsed);
+  }, [announcement, locale]);
+
+  const paragraphs = useMemo(() => {
+    if (!announcement?.contenu) return [];
+    return announcement.contenu
+      .split(/\r?\n\r?\n/)
+      .map((paragraph) => paragraph.trim())
+      .filter(Boolean);
+  }, [announcement]);
+
+  if (loading) {
+    return (
+      <section className="announcement-details-not-found">
+        <div className="container">
+          <div className="announcement-not-found-card">
+            <div className="announcement-not-found-icon">
+              <i className="bi bi-arrow-repeat" aria-hidden="true" />
+            </div>
+            <h1>{t("announcementsPage.latest")}</h1>
+            <p>...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!announcement) {
+    return (
+      <section className="announcement-details-not-found">
+        <div className="container">
+          <div className="announcement-not-found-card">
+            <div className="announcement-not-found-icon">
+              <i className="bi bi-exclamation-circle" aria-hidden="true" />
+            </div>
+            <h1>{t("announcementsPage.notFound")}</h1>
+            <p>{error || t("announcementsPage.notFoundText")}</p>
+            <Link to="/announcements" className="btn aapi-btn-primary">
+              <i className="bi bi-arrow-right" aria-hidden="true" />
+              {t("announcementsPage.reset")}
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <>
+      <section className="announcement-details-hero">
+        <div className="container">
+          <div className="announcement-details-hero-content">
+            <span>{t("announcementsPage.media")}</span>
+            <h1>{announcement.titre}</h1>
+            <div className="announcement-details-breadcrumb">
+              <Link to="/">{t("announcementsPage.title")}</Link>
+              <i className="bi bi-chevron-left" aria-hidden="true" />
+              <Link to="/announcements">{t("announcementsPage.media")}</Link>
+              <i className="bi bi-chevron-left" aria-hidden="true" />
+              <strong>{t("announcementsPage.read")}</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="announcement-details-section">
+        <div className="container">
+          <div className="row g-4 g-lg-5">
+            <div className="col-lg-8">
+              <article className="announcement-details-article">
+                {announcement.image && (
+                  <div className="announcement-details-image">
+                    <img src={announcement.image} alt={announcement.titre} />
+                  </div>
+                )}
+
+                <div className="announcement-details-top">
+                  <div className="announcement-details-category">
+                    <i className="bi bi-megaphone" aria-hidden="true" />
+                    {t("announcementsPage.general")}
+                  </div>
+                  <div className="announcement-details-important">
+                    <i className="bi bi-check-circle" aria-hidden="true" />
+                    {t("announcementsPage.importantLabel")}
+                  </div>
+                </div>
+
+                <h2>{announcement.titre}</h2>
+
+                <div className="announcement-details-date">
+                  <i className="bi bi-calendar3" aria-hidden="true" />
+                  <span>{formattedDate}</span>
+                </div>
+
+                {announcement.auteur && announcement.auteur.trim() && (
+                  <div className="announcement-details-date">
+                    <i className="bi bi-person" aria-hidden="true" />
+                    <span>{announcement.auteur.trim()}</span>
+                  </div>
+                )}
+
+                <div className="announcement-details-divider" />
+
+                <div className="announcement-details-content">
+                  {paragraphs.length ? (
+                    paragraphs.map((paragraph, index) => (
+                      <p key={`${announcement.id}-${index}`}>{paragraph}</p>
+                    ))
+                  ) : (
+                    <p>{announcement.contenu}</p>
+                  )}
+                </div>
+
+                <div className="announcement-details-actions">
+                  <Link to="/announcements" className="announcement-back-button">
+                    <i className="bi bi-arrow-right" aria-hidden="true" />
+                    {t("announcementsPage.reset")}
+                  </Link>
+                  <button
+                    type="button"
+                    className="announcement-print-button"
+                    onClick={() => window.print()}
+                  >
+                    <i className="bi bi-printer" aria-hidden="true" />
+                    {t("announcementsPage.read")}
+                  </button>
+                </div>
+              </article>
+            </div>
+
+            <div className="col-lg-4">
+              <aside className="announcement-details-sidebar">
+                <div className="announcement-sidebar-card">
+                  <div className="announcement-sidebar-icon">
+                    <i className="bi bi-megaphone" aria-hidden="true" />
+                  </div>
+                  <h3>{t("announcementsPage.all")}</h3>
+                  <p>{t("announcementsPage.allText")}</p>
+                  <Link to="/announcements">
+                    {t("announcementsPage.allLink")}
+                    <i className="bi bi-arrow-left" aria-hidden="true" />
+                  </Link>
+                </div>
+
+                <div className="announcement-sidebar-card green">
+                  <div className="announcement-sidebar-icon">
+                    <i className="bi bi-lightbulb" aria-hidden="true" />
+                  </div>
+                  <h3>{t("announcementsPage.opportunities")}</h3>
+                  <p>{t("announcementsPage.opportunitiesText")}</p>
+                  <Link to="/opportunities">
+                    {t("announcementsPage.opportunitiesLink")}
+                    <i className="bi bi-arrow-left" aria-hidden="true" />
+                  </Link>
+                </div>
+
+                <div className="announcement-sidebar-contact">
+                  <i className="bi bi-headset" aria-hidden="true" />
+                  <div>
+                    <strong>{t("announcementsPage.help")}</strong>
+                    <span>{t("announcementsPage.helpText")}</span>
+                  </div>
+                  <Link to="/contact">{t("announcementsPage.contact")}</Link>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
+
 export default AnnouncementsDetails;
