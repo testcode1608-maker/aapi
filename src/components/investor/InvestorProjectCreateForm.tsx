@@ -1,7 +1,9 @@
 import type { ChangeEvent, Dispatch, FormEvent, ReactNode, SetStateAction } from "react";
 import type { CreateProjectForm } from "../../types/investorDashboard";
 import { getProjectSectors } from "../../utils/investorDashboard";
+import { useEffect, useState } from "react";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { API_BASE_URL } from "../../utils/investorDashboard";
 
 interface Props {
   form: CreateProjectForm;
@@ -17,6 +19,23 @@ export default function InvestorProjectCreateForm({ form, setForm, creating, err
   const { language, t } = useTranslation();
   const tr = (key: string) => t(`investorForms.projectForm.${key}`);
   const sectors = getProjectSectors(language);
+  const [wilayas, setWilayas] = useState<Array<{ id: number; code: string; nom_fr: string; nom_ar: string }>>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${API_BASE_URL}/wilayas.php`)
+      .then((response) => {
+        if (!response.ok) throw new Error("Wilayas API error");
+        return response.json();
+      })
+      .then((data) => {
+        if (!cancelled && data?.success && Array.isArray(data.wilayas)) setWilayas(data.wilayas);
+      })
+      .catch(() => {
+        if (!cancelled) setWilayas([]);
+      });
+    return () => { cancelled = true; };
+  }, []);
   const update = (field: keyof CreateProjectForm) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setForm((current) => ({ ...current, [field]: event.target.value }));
@@ -36,7 +55,7 @@ export default function InvestorProjectCreateForm({ form, setForm, creating, err
           <Field full label={tr("title")} id="project-titre" required><input id="project-titre" type="text" value={form.titre} onChange={update("titre")} placeholder={tr("titlePlaceholder")} required disabled={creating} /></Field>
           <Field full label={tr("description")} id="project-description" required><textarea id="project-description" value={form.description} onChange={update("description")} placeholder={tr("descriptionPlaceholder")} rows={5} required disabled={creating} /></Field>
           <Field label={tr("sector")} id="project-sector"><select id="project-sector" value={form.sector_id} onChange={update("sector_id")} disabled={creating}><option value="">{tr("selectSector")}</option>{sectors.map((sector) => <option key={sector.id} value={sector.id}>{sector.nom}</option>)}</select></Field>
-          <Field label={tr("wilaya")} id="project-wilaya" required><input id="project-wilaya" type="text" value={form.wilaya} onChange={update("wilaya")} placeholder={tr("wilayaPlaceholder")} required disabled={creating} /></Field>
+          <Field label={tr("wilaya")} id="project-wilaya" required><select id="project-wilaya" value={form.wilaya} onChange={update("wilaya")} required disabled={creating}><option value="">{language === "ar" ? "اختر الولاية" : language === "en" ? "Select wilaya" : "Sélectionner la wilaya"}</option>{wilayas.map((wilaya) => <option key={wilaya.id} value={wilaya.nom_fr}>{wilaya.code} — {language === "ar" ? wilaya.nom_ar : wilaya.nom_fr}</option>)}</select></Field>
           <Field label={tr("commune")} id="project-commune"><input id="project-commune" type="text" value={form.commune} onChange={update("commune")} placeholder={tr("communePlaceholder")} disabled={creating} /></Field>
           <Field label={tr("address")} id="project-adresse"><input id="project-adresse" type="text" value={form.adresse} onChange={update("adresse")} placeholder={tr("addressPlaceholder")} disabled={creating} /></Field>
           <Field label={tr("investmentAmount")} id="project-montant" required><input id="project-montant" type="number" min="0" step="0.01" value={form.montant_investissement} onChange={update("montant_investissement")} placeholder={tr("investmentPlaceholder")} required disabled={creating} /><small>{tr("amountHint")}</small></Field>
