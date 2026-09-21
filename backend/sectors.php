@@ -51,6 +51,11 @@ try {
 
     $sectors = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    foreach ($sectors as &$sector) {
+        $sector["image_url"] = "http://localhost/aapi-api/sector-image.php?id=" . (int)$sector["id"];
+    }
+    unset($sector);
+
     echo json_encode([
         "success" => true,
         "sectors" => $sectors,
