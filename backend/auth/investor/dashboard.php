@@ -192,8 +192,6 @@ try {
             updated_at
         FROM users
         WHERE id = ?
-          AND LOWER(TRIM(role)) IN ('investisseur', 'investor')
-          AND LOWER(TRIM(statut)) = 'actif'
         LIMIT 1
     ");
 
@@ -208,7 +206,48 @@ try {
         echo json_encode(
             [
                 "success" => false,
-                "message" => "المستثمر غير موجود."
+                "message" => "المستخدم غير موجود في قاعدة البيانات.",
+                "error_code" => "USER_NOT_FOUND",
+                "user_id" => $userId
+            ],
+            JSON_UNESCAPED_UNICODE
+        );
+
+        exit;
+    }
+
+    $userRole = strtolower(trim((string) ($user["role"] ?? "")));
+    $userStatus = strtolower(trim((string) ($user["statut"] ?? "")));
+
+    if (!in_array($userRole, ["investisseur", "investor"], true)) {
+
+        http_response_code(403);
+
+        echo json_encode(
+            [
+                "success" => false,
+                "message" => "هذا الحساب ليس حساب مستثمر.",
+                "error_code" => "INVALID_INVESTOR_ROLE",
+                "user_id" => $userId,
+                "role" => $user["role"] ?? null
+            ],
+            JSON_UNESCAPED_UNICODE
+        );
+
+        exit;
+    }
+
+    if ($userStatus !== "actif") {
+
+        http_response_code(403);
+
+        echo json_encode(
+            [
+                "success" => false,
+                "message" => "حساب المستثمر غير نشط.",
+                "error_code" => "INVESTOR_NOT_ACTIVE",
+                "user_id" => $userId,
+                "statut" => $user["statut"] ?? null
             ],
             JSON_UNESCAPED_UNICODE
         );
