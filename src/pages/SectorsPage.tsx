@@ -1,18 +1,19 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
 
-type Sector = { icon: string; number: string; title: string; description: string; opportunities: string; featured: boolean };
+type Sector = { icon: string; number: string; title: string; description: string; opportunities: string };
 
 const sectorMeta = [
-  ["bi-buildings", "01", true], ["bi-tree", "02", false], ["bi-sun", "03", true],
-  ["bi-water", "04", false], ["bi-cpu", "05", true], ["bi-truck", "06", false],
-  ["bi-droplet", "07", false], ["bi-heart-pulse", "08", false], ["bi-house", "09", false],
+  ["bi-buildings", "01"], ["bi-tree", "02"], ["bi-sun", "03"],
+  ["bi-water", "04"], ["bi-cpu", "05"], ["bi-truck", "06"],
+  ["bi-droplet", "07"], ["bi-heart-pulse", "08"], ["bi-house", "09"],
 ] as const;
 
 function SectorsPage() {
   const { t } = useTranslation();
-  const sectors: Sector[] = sectorMeta.map(([icon, number, featured]) => ({
-    icon, number, featured,
+  const sectors: Sector[] = sectorMeta.map(([icon, number]) => ({
+    icon,
+    number,
     title: t(`sectorsPage.s${number.replace(/^0/, "")}`),
     description: t(`sectorsPage.s${number.replace(/^0/, "")}Text`),
     opportunities: t(`sectorsPage.s${number.replace(/^0/, "")}Opp`),
@@ -37,7 +38,7 @@ function SectorsPage() {
       </div></div></section>
 
       <section className="sectors-page-content"><div className="container"><div className="sectors-page-grid">
-        {sectors.map((sector) => <article className={sector.featured ? "sector-page-card featured" : "sector-page-card"} key={sector.number}>
+        {sectors.map((sector) => <article className="sector-page-card" key={sector.number}>
           <div className="sector-page-card-top"><span>{sector.number}</span><div className="sector-page-icon"><i className={`bi ${sector.icon}`} aria-hidden="true"></i></div></div>
           <h3>{sector.title}</h3><p>{sector.description}</p>
           <div className="sector-page-opportunity"><i className="bi bi-arrow-left" aria-hidden="true"></i><span>{sector.opportunities}</span></div>
