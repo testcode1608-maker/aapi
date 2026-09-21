@@ -86,6 +86,7 @@ try {
         "delete_requests",
         "delete_messages",
         "delete_documents",
+        "delete_announcements",
     ];
 
     if (!in_array($action, $allowedActions, true)) {
@@ -138,6 +139,7 @@ try {
             "delete_requests" => "investment_requests",
             "delete_messages" => "messages",
             "delete_documents" => "documents",
+            "delete_announcements" => "announcements",
         ];
 
         $table = $tables[$action];
