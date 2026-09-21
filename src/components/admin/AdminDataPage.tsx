@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { FormEvent } from "react";
 import { Search, RefreshCw, Database, CheckCircle2, Clock3, AlertCircle, ChevronDown, Trash2 } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-status-dropdown.css";
@@ -172,7 +173,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     }
   };
 
-  const createAnnouncement = async (event: React.FormEvent) => {
+  const createAnnouncement = async (event: FormEvent) => {
     event.preventDefault();
     if (!announcementForm.titre.trim() || !announcementForm.contenu.trim() || creatingAnnouncement) return;
 
