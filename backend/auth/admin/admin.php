@@ -55,6 +55,8 @@ $handlers = [
     'messages' => __DIR__.'/messages.php',
     'documents' => __DIR__.'/documents.php',
     'announcements' => __DIR__.'/announcements.php',
+    'news' => __DIR__.'/news.php',
+    'create_news' => __DIR__.'/news.php',
     'create_announcement' => __DIR__.'/announcements.php',
     'update_project_status' => __DIR__.'/dashboard.php',
     'update_user_status' => __DIR__.'/users.php',
@@ -72,6 +74,7 @@ $handlers = [
     'delete_messages' => __DIR__.'/delete.php',
     'delete_documents' => __DIR__.'/delete.php',
     'delete_announcements' => __DIR__.'/delete.php',
+    'delete_news' => __DIR__.'/delete.php',
 ];
 
 if (!isset($handlers[$action])) {
