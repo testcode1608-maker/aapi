@@ -6,7 +6,7 @@ import "../../styles/admin-status-dropdown.css";
 
 const API = "http://localhost/aapi-api/auth/admin/admin.php";
 type R = Record<string, any>;
-type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "announcements" | "news";
+type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "sectors" | "announcements" | "news";
 
 const projectStatuses = ["brouillon", "soumis", "en_etude", "approuve", "en_cours", "realise", "rejete", "archive"];
 const userStatuses = ["actif", "inactif", "suspendu"];
@@ -48,6 +48,8 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const [newsForm, setNewsForm] = useState({ titre: "", resume: "", contenu: "", statut: "publie", date_publication: "" });
   const [newsPhoto, setNewsPhoto] = useState<File | null>(null);
   const [creatingNews, setCreatingNews] = useState(false);
+  const [sectorForm, setSectorForm] = useState({ nom: "", description: "" });
+  const [creatingSector, setCreatingSector] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -127,7 +129,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     const label = String(row.titre ?? row.nom ?? row.sujet ?? row.objet ?? row.id);
     const confirmText = language === "ar" ? "هل أنت متأكد من حذف هذا السجل؟" : language === "en" ? "Are you sure you want to delete this record?" : "Êtes-vous sûr de vouloir supprimer cet enregistrement ?";
     if (!window.confirm(confirmText + "\n\n" + label)) return;
-    const deleteActions: Record<Section, string> = { users: "delete_users", investors: "delete_investors", projects: "delete_projects", investments: "delete_investments", requests: "delete_requests", messages: "delete_messages", documents: "delete_documents", announcements: "delete_announcements", news: "delete_news" };
+    const deleteActions: Record<Section, string> = { users: "delete_users", investors: "delete_investors", projects: "delete_projects", investments: "delete_investments", requests: "delete_requests", messages: "delete_messages", documents: "delete_documents", sectors: "delete_sectors", announcements: "delete_announcements", news: "delete_news" };
     const action = deleteActions[section];
     setDeleting(id);
     try {
@@ -164,6 +166,21 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       setError("");
     } catch (e) { setError(e instanceof Error ? e.message : "Impossible de créer l'annonce."); }
     finally { setCreatingAnnouncement(false); }
+  };
+
+  const createSector = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!sectorForm.nom.trim() || creatingSector) return;
+    setCreatingSector(true);
+    try {
+      const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "create_sector", user_id: userId, nom: sectorForm.nom.trim(), description: sectorForm.description.trim() }) });
+      const j = await r.json();
+      if (!r.ok || !j.success) throw Error(j.message || "Impossible de créer le secteur.");
+      setSectorForm({ nom: "", description: "" });
+      await load();
+      setError("");
+    } catch (e) { setError(e instanceof Error ? e.message : "Impossible de créer le secteur."); }
+    finally { setCreatingSector(false); }
   };
 
   const createNews = async (event: FormEvent) => {
@@ -209,7 +226,9 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
 
   const keys = section === "projects"
     ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"]
-    : section === "announcements" || section === "news"
+    : section === "sectors"
+      ? ["id", "nom", "description"]
+      : section === "announcements" || section === "news"
       ? ["id", "titre", "image", "statut", "date_publication", "auteur_id"]
       : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
 
@@ -231,6 +250,12 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       <section className="soft-data-stat-grid">{summary.map(item => <article className={`soft-data-stat ${item.tone}`} key={item.label}><div className="soft-data-stat-icon">{item.icon}</div><div><span>{item.label}</span><strong>{item.value}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>)}</section>
       <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head"><div><span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span><h2>{c.title}</h2><p>{c.subtitle}</p></div><span className="soft-data-count">{fmt(total, language)} {t("admin.data.items")}</span></div>
+
+        {section === "sectors" && <form className="admin-announcement-form admin-sector-form" onSubmit={createSector}>
+          <div className="admin-announcement-form-head"><div className="admin-announcement-form-copy"><span className="admin-announcement-eyebrow">{language === "ar" ? "إدارة القطاعات" : language === "en" ? "SECTOR MANAGEMENT" : "GESTION DES SECTEURS"}</span><h2>{language === "ar" ? "إضافة قطاع استثماري" : language === "en" ? "Add investment sector" : "Ajouter un secteur d’investissement"}</h2><p>{language === "ar" ? "أضف قطاعاً جديداً ليظهر في إدارة القطاعات." : language === "en" ? "Add a new sector to the sector management list." : "Ajoutez un nouveau secteur à la liste de gestion."}</p></div><div className="admin-announcement-form-mark" aria-hidden="true"><Database size={22} /></div></div>
+          <div className="admin-announcement-form-grid"><label className="admin-announcement-field"><span>{language === "ar" ? "اسم القطاع" : language === "en" ? "Sector name" : "Nom du secteur"}</span><input value={sectorForm.nom} onChange={e => setSectorForm(v => ({ ...v, nom: e.target.value }))} placeholder={language === "ar" ? "مثال: الصناعات الدوائية" : language === "en" ? "e.g. Pharmaceutical industry" : "Ex. Industrie pharmaceutique"} required /></label><label className="admin-announcement-field admin-announcement-field-full"><span>{language === "ar" ? "الوصف" : language === "en" ? "Description" : "Description"}</span><textarea value={sectorForm.description} onChange={e => setSectorForm(v => ({ ...v, description: e.target.value }))} placeholder={language === "ar" ? "وصف مختصر للقطاع..." : language === "en" ? "Short sector description..." : "Description courte du secteur..."} /></label></div>
+          <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingSector}>{creatingSector ? <><RefreshCw size={15} className="spin" /> {language === "ar" ? "إضافة..." : language === "en" ? "Adding..." : "Ajout..."}</> : <><Database size={15} /> {language === "ar" ? "إضافة القطاع" : language === "en" ? "Add sector" : "Ajouter le secteur"}</>}</button></div>
+        </form>}
 
         {section === "announcements" && <form className="admin-announcement-form" onSubmit={createAnnouncement}>
           <div className="admin-announcement-form-head">
