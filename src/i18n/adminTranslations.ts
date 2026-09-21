@@ -3,7 +3,7 @@ export const adminTranslations = {
     common: { language: "اللغة" },
     brand: { centralAdministration: "الإدارة المركزية", systemAdmin: "مسؤول النظام" },
     nav: {
-      administration: "الإدارة", system: "النظام", dashboard: "لوحة التحكم", users: "المستخدمون", investors: "المستثمرون", projects: "المشاريع", investments: "الاستثمارات", requests: "الطلبات", messages: "الرسائل", documents: "الوثائق", announcements: "الإعلانات", settings: "الإعدادات", publicSite: "الموقع العام", logout: "تسجيل الخروج", openMenu: "فتح القائمة", closeMenu: "إغلاق القائمة"
+      administration: "الإدارة", system: "النظام", dashboard: "لوحة التحكم", users: "المستخدمون", investors: "المستثمرون", projects: "المشاريع", investments: "الاستثمارات", requests: "الطلبات", messages: "الرسائل", documents: "الوثائق", announcements: "الإعلانات", news: "الأخبار", settings: "الإعدادات", publicSite: "الموقع العام", logout: "تسجيل الخروج", openMenu: "فتح القائمة", closeMenu: "إغلاق القائمة"
     },
     topbar: { agency: "الوكالة الجزائرية لترقية الاستثمار", search: "اكتب هنا للبحث...", searchAria: "بحث الإدارة", notifications: "الإشعارات" },
     dashboard: {
@@ -18,7 +18,8 @@ export const adminTranslations = {
         requests: { title: "الطلبات", subtitle: "متابعة طلبات المستثمرين وتحديث حالتها" },
         messages: { title: "الرسائل", subtitle: "إدارة رسائل المستثمرين ومتابعة المقروء وغير المقروء" },
         documents: { title: "الوثائق", subtitle: "مراجعة وثائق المستثمرين والتحقق من حالتها" },
-        announcements: { title: "الإعلانات", subtitle: "إنشاء ونشر ومتابعة إعلانات الوكالة" }
+        announcements: { title: "الإعلانات", subtitle: "إنشاء ونشر ومتابعة إعلانات الوكالة" },
+        news: { title: "الأخبار", subtitle: "إنشاء ونشر ومتابعة أخبار الوكالة" }
       },
       labels: {
         id: "المعرف", user_id: "معرف المستخدم", investor_id: "معرف المستثمر", investisseur_id: "معرف المستثمر", nom: "الاسم", prenom: "اللقب", email: "البريد الإلكتروني", telephone: "الهاتف", role: "الدور", titre: "المشروع", nom_projet: "المشروع", wilaya: "الولاية", secteur: "القطاع", statut: "الحالة", montant: "المبلغ", montant_investissement: "قيمة الاستثمار", montant_effectif: "المبلغ الفعلي", date_creation: "تاريخ الإنشاء", created_at: "تاريخ الإنشاء", updated_at: "آخر تحديث", date_publication: "تاريخ النشر", auteur_id: "معرف الكاتب", image: "الصورة", message: "الرسالة", sujet: "الموضوع", lu: "القراءة", document: "الوثيقة", type: "النوع", description: "الوصف", utilisateur_id: "معرف المستخدم", brouillon: "مسودة", soumis: "مُرسل", en_etude: "قيد الدراسة", approuve: "مقبول", en_cours: "قيد التنفيذ", realise: "منجز", rejete: "مرفوض", archive: "مؤرشف", actif: "نشط", inactif: "غير نشط", suspendu: "موقوف", en_attente: "في الانتظار", valide: "مقبول", termine: "منتهي", annule: "ملغى", nouvelle: "جديد", acceptee: "مقبول", refusee: "مرفوض", terminee: "منتهٍ", non_lu: "غير مقروء"
@@ -33,7 +34,7 @@ export const adminTranslations = {
     common: { language: "Langue" },
     brand: { centralAdministration: "Administration centrale", systemAdmin: "Administrateur système" },
     nav: {
-      administration: "Administration", system: "Système", dashboard: "Tableau de bord", users: "Utilisateurs", investors: "Investisseurs", projects: "Projets", investments: "Investissements", requests: "Demandes", messages: "Messages", documents: "Documents", announcements: "Annonces", settings: "Paramètres", publicSite: "Site public", logout: "Déconnexion", openMenu: "Ouvrir le menu", closeMenu: "Fermer le menu"
+      administration: "Administration", system: "Système", dashboard: "Tableau de bord", users: "Utilisateurs", investors: "Investisseurs", projects: "Projets", investments: "Investissements", requests: "Demandes", messages: "Messages", documents: "Documents", announcements: "Annonces", news: "Actualités", settings: "Paramètres", publicSite: "Site public", logout: "Déconnexion", openMenu: "Ouvrir le menu", closeMenu: "Fermer le menu"
     },
     topbar: { agency: "Agence Algérienne de Promotion de l’Investissement", search: "Rechercher ici...", searchAria: "Recherche administration", notifications: "Notifications" },
     dashboard: {
@@ -48,7 +49,8 @@ export const adminTranslations = {
         requests: { title: "Demandes", subtitle: "Suivre les demandes des investisseurs et mettre à jour leur statut" },
         messages: { title: "Messages", subtitle: "Gérer les messages des investisseurs et suivre les messages lus et non lus" },
         documents: { title: "Documents", subtitle: "Examiner les documents des investisseurs et vérifier leur statut" },
-        announcements: { title: "Annonces", subtitle: "Créer, publier et suivre les annonces de l’agence" }
+        announcements: { title: "Annonces", subtitle: "Créer, publier et suivre les annonces de l’agence" },
+        news: { title: "Actualités", subtitle: "Créer, publier et suivre les actualités de l’agence" }
       },
       labels: {
         id: "Identifiant", user_id: "ID utilisateur", investor_id: "ID investisseur", investisseur_id: "ID investisseur", nom: "Nom", prenom: "Prénom", email: "E-mail", telephone: "Téléphone", role: "Rôle", titre: "Projet", nom_projet: "Projet", wilaya: "Wilaya", secteur: "Secteur", statut: "Statut", montant: "Montant", montant_investissement: "Valeur de l’investissement", montant_effectif: "Montant effectif", date_creation: "Date de création", created_at: "Date de création", updated_at: "Dernière mise à jour", date_publication: "Date de publication", auteur_id: "ID auteur", image: "Image", message: "Message", sujet: "Objet", lu: "Lecture", document: "Document", type: "Type", description: "Description", utilisateur_id: "ID utilisateur", brouillon: "Brouillon", soumis: "Soumis", en_etude: "À l’étude", approuve: "Approuvé", en_cours: "En cours", realise: "Réalisé", rejete: "Rejeté", archive: "Archivé", actif: "Actif", inactif: "Inactif", suspendu: "Suspendu", en_attente: "En attente", valide: "Validé", termine: "Terminé", annule: "Annulé", nouvelle: "Nouveau", acceptee: "Acceptée", refusee: "Refusée", terminee: "Terminée", non_lu: "Non lu"
@@ -63,7 +65,7 @@ export const adminTranslations = {
     common: { language: "Language" },
     brand: { centralAdministration: "Central Administration", systemAdmin: "System Administrator" },
     nav: {
-      administration: "Administration", system: "System", dashboard: "Dashboard", users: "Users", investors: "Investors", projects: "Projects", investments: "Investments", requests: "Requests", messages: "Messages", documents: "Documents", announcements: "Announcements", settings: "Settings", publicSite: "Public website", logout: "Sign out", openMenu: "Open menu", closeMenu: "Close menu"
+      administration: "Administration", system: "System", dashboard: "Dashboard", users: "Users", investors: "Investors", projects: "Projects", investments: "Investments", requests: "Requests", messages: "Messages", documents: "Documents", announcements: "Announcements", news: "News", settings: "Settings", publicSite: "Public website", logout: "Sign out", openMenu: "Open menu", closeMenu: "Close menu"
     },
     topbar: { agency: "Algerian Agency for Investment Promotion", search: "Search here...", searchAria: "Administration search", notifications: "Notifications" },
     dashboard: {
@@ -78,7 +80,8 @@ export const adminTranslations = {
         requests: { title: "Requests", subtitle: "Monitor investor requests and update their status" },
         messages: { title: "Messages", subtitle: "Manage investor messages and track read and unread messages" },
         documents: { title: "Documents", subtitle: "Review investor documents and verify their status" },
-        announcements: { title: "Announcements", subtitle: "Create, publish and manage agency announcements" }
+        announcements: { title: "Announcements", subtitle: "Create, publish and manage agency announcements" },
+        news: { title: "News", subtitle: "Create, publish and manage agency news" }
       },
       labels: {
         id: "ID", user_id: "User ID", investor_id: "Investor ID", investisseur_id: "Investor ID", nom: "Last name", prenom: "First name", email: "Email", telephone: "Phone", role: "Role", titre: "Project", nom_projet: "Project", wilaya: "Wilaya", secteur: "Sector", statut: "Status", montant: "Amount", montant_investissement: "Investment value", montant_effectif: "Effective amount", date_creation: "Creation date", created_at: "Creation date", updated_at: "Last updated", date_publication: "Publication date", auteur_id: "Author ID", image: "Image", message: "Message", sujet: "Subject", lu: "Read status", document: "Document", type: "Type", description: "Description", utilisateur_id: "User ID", brouillon: "Draft", soumis: "Submitted", en_etude: "Under review", approuve: "Approved", en_cours: "In progress", realise: "Completed", rejete: "Rejected", archive: "Archived", actif: "Active", inactif: "Inactive", suspendu: "Suspended", en_attente: "Pending", valide: "Validated", termine: "Completed", annule: "Cancelled", nouvelle: "New", acceptee: "Accepted", refusee: "Rejected", terminee: "Completed", non_lu: "Unread"
