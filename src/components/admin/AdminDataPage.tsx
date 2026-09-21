@@ -5,7 +5,7 @@ import "../../styles/admin-status-dropdown.css";
 
 const API = "http://localhost/aapi-api/auth/admin/admin.php";
 type R = Record<string, any>;
-type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents";
+type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "announcements";
 
 const projectStatuses = ["brouillon", "soumis", "en_etude", "approuve", "en_cours", "realise", "rejete", "archive"];
 const userStatuses = ["actif", "inactif", "suspendu"];
@@ -31,6 +31,8 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const [filterOpen, setFilterOpen] = useState(false);
   const [saving, setSaving] = useState<number | null>(null);
   const [deleting, setDeleting] = useState<number | null>(null);
+  const [announcementForm, setAnnouncementForm] = useState({ titre: "", contenu: "", image: "", statut: "publie", date_publication: "" });
+  const [creatingAnnouncement, setCreatingAnnouncement] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -58,7 +60,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : [];
+  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : section === "announcements" ? ["brouillon", "publie", "archive"] : [];
   const total = Number(stats.total ?? rows.length);
   const active = Number(stats.actif ?? stats.active ?? stats.approuve ?? stats.valide ?? 0);
   const pending = Number(stats.en_attente ?? stats.soumis ?? stats.nouvelle ?? stats.pending ?? 0);
@@ -170,6 +172,33 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     }
   };
 
+  const createAnnouncement = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!announcementForm.titre.trim() || !announcementForm.contenu.trim() || creatingAnnouncement) return;
+
+    setCreatingAnnouncement(true);
+    try {
+      const r = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create_announcement",
+          user_id: userId,
+          ...announcementForm,
+        }),
+      });
+      const j = await r.json();
+      if (!j.success) throw Error(j.message || "Impossible de créer l'annonce.");
+      setAnnouncementForm({ titre: "", contenu: "", image: "", statut: "publie", date_publication: "" });
+      await load();
+      setError("");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Impossible de créer l'annonce.");
+    } finally {
+      setCreatingAnnouncement(false);
+    }
+  };
+
   const toggleMessage = async (row: R) => {
     const id = Number(row.id);
     if (!id) return;
@@ -206,6 +235,21 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       <section className="soft-data-stat-grid">{summary.map(item => <article className={`soft-data-stat ${item.tone}`} key={item.label}><div className="soft-data-stat-icon">{item.icon}</div><div><span>{item.label}</span><strong>{item.value}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>)}</section>
       <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head"><div><span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span><h2>{c.title}</h2><p>{c.subtitle}</p></div><span className="soft-data-count">{fmt(total, language)} {t("admin.data.items")}</span></div>
+        {section === "announcements" && <form className="admin-panel soft-data-panel" onSubmit={createAnnouncement} style={{ marginBottom: 20 }}>
+          <div className="admin-panel-header soft-data-panel-head">
+            <div><span className="soft-ui-card-label">AAPI</span><h2>إضافة إعلان جديد</h2><p>أنشئ إعلاناً وسيظهر مباشرة في الموقع إذا كانت حالته منشورة.</p></div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 16, padding: 20 }}>
+            <label style={{ display: "flex", flexDirection: "column", gap: 7 }}><strong>العنوان</strong><input className="soft-data-search" style={{ width: "100%" }} value={announcementForm.titre} onChange={e => setAnnouncementForm(v => ({ ...v, titre: e.target.value }))} placeholder="عنوان الإعلان" required /></label>
+            <label style={{ display: "flex", flexDirection: "column", gap: 7 }}><strong>الحالة</strong><select className="soft-status-select" value={announcementForm.statut} onChange={e => setAnnouncementForm(v => ({ ...v, statut: e.target.value }))}><option value="publie">منشور</option><option value="brouillon">مسودة</option><option value="archive">مؤرشف</option></select></label>
+            <label style={{ display: "flex", flexDirection: "column", gap: 7, gridColumn: "1 / -1" }}><strong>المحتوى</strong><textarea className="soft-data-search" style={{ width: "100%", minHeight: 150, padding: 14 }} value={announcementForm.contenu} onChange={e => setAnnouncementForm(v => ({ ...v, contenu: e.target.value }))} placeholder="محتوى الإعلان" required /></label>
+            <label style={{ display: "flex", flexDirection: "column", gap: 7 }}><strong>رابط الصورة</strong><input className="soft-data-search" style={{ width: "100%" }} value={announcementForm.image} onChange={e => setAnnouncementForm(v => ({ ...v, image: e.target.value }))} placeholder="https://..." /></label>
+            <label style={{ display: "flex", flexDirection: "column", gap: 7 }}><strong>تاريخ النشر</strong><input className="soft-data-search" style={{ width: "100%" }} type="datetime-local" value={announcementForm.date_publication} onChange={e => setAnnouncementForm(v => ({ ...v, date_publication: e.target.value }))} /></label>
+            <div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: "flex-start" }}>
+              <button type="submit" className="soft-data-filter-button" disabled={creatingAnnouncement}>{creatingAnnouncement ? "جاري النشر..." : "إضافة الإعلان"}</button>
+            </div>
+          </div>
+        </form>}
         <div className="admin-toolbar soft-data-toolbar">
           <div className="soft-data-search"><Search size={16} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder={t("admin.data.search")} aria-label={t("admin.data.searchAria")} /></div>
           <div className={`soft-data-filter${filterOpen ? " is-open" : ""}`}>
