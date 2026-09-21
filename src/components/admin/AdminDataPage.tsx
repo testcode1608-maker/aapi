@@ -96,6 +96,18 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     finally { setSaving(null); }
   };
 
+  const translateError = (message: string) => {
+    const normalized = message.trim();
+    if (normalized === "لا يمكنك حذف حساب المسؤول الذي تستخدمه حالياً.") {
+      return language === "fr"
+        ? "Vous ne pouvez pas supprimer le compte administrateur que vous utilisez actuellement."
+        : language === "en"
+          ? "You cannot delete the administrator account you are currently using."
+          : normalized;
+    }
+    return normalized;
+  };
+
   const remove = async (row: R) => {
     const id = Number(row.id);
     if (!id || deleting === id) return;
@@ -143,13 +155,15 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       setError("");
     } catch (e) {
       setError(
-        e instanceof Error
-          ? e.message
-          : language === "ar"
-            ? "تعذر حذف السجل."
-            : language === "en"
-              ? "Unable to delete the record."
-              : "Impossible de supprimer l’enregistrement."
+        translateError(
+          e instanceof Error
+            ? e.message
+            : language === "ar"
+              ? "تعذر حذف السجل."
+              : language === "en"
+                ? "Unable to delete the record."
+                : "Impossible de supprimer l’enregistrement."
+        )
       );
     } finally {
       setDeleting(null);
