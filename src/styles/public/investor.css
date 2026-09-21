@@ -256,3 +256,135 @@ body.aapi-site-dark .investor-step-content h3 {
 body.aapi-site-dark .investor-step-content p {
   color: #9aa7a0;
 }
+
+
+/* Investor journey — match the four-column service-card presentation */
+.investor-steps-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  max-width: none;
+  margin: 34px 0 0;
+}
+
+.investor-steps-list > [class*="col-"] {
+  display: flex;
+}
+
+.investor-steps-list .investor-step-card {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 28px;
+  border: 1px solid #e8eeeb;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: none;
+  overflow: hidden;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.investor-steps-list .investor-step-card::before {
+  display: none;
+}
+
+.investor-steps-list .investor-step-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(8,116,67,.3);
+  box-shadow: 0 16px 35px rgba(20,34,27,.08);
+}
+
+.investor-step-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.investor-step-top > span {
+  color: var(--aapi-gold);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.investor-steps-list .investor-step-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0;
+  flex: 0 0 52px;
+  border-radius: 13px;
+  background: var(--aapi-light-green);
+  border: 0;
+  color: var(--aapi-green);
+  font-size: 21px;
+  box-shadow: none;
+}
+
+.investor-steps-list .investor-step-card h3 {
+  margin: 0 0 10px;
+  color: var(--aapi-dark);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.investor-steps-list .investor-step-card > p {
+  margin: 0;
+  color: var(--aapi-gray);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+body.aapi-site-dark .investor-steps-list .investor-step-card {
+  background: #181c19;
+  border-color: #294238;
+  box-shadow: none;
+}
+
+body.aapi-site-dark .investor-steps-list .investor-step-card:hover {
+  border-color: rgba(141,224,181,.32);
+  box-shadow: 0 18px 42px rgba(0,0,0,.30);
+}
+
+body.aapi-site-dark .investor-steps-list .investor-step-top > span {
+  color: #d8b45a;
+}
+
+body.aapi-site-dark .investor-steps-list .investor-step-icon {
+  background: #123d2a;
+  border-color: transparent;
+  color: #8de0b5;
+}
+
+body.aapi-site-dark .investor-steps-list .investor-step-card h3 {
+  color: #edf4f0;
+}
+
+body.aapi-site-dark .investor-steps-list .investor-step-card > p {
+  color: #9aa7a0;
+}
+
+@media (max-width: 767px) {
+  .investor-steps-list {
+    margin-top: 26px;
+  }
+
+  .investor-steps-list .investor-step-card {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 430px) {
+  .investor-step-top {
+    margin-bottom: 20px;
+  }
+
+  .investor-steps-list .investor-step-card {
+    padding: 20px;
+  }
+}
