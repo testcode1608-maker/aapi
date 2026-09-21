@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 header('Content-Type: text/plain; charset=utf-8');
 
-require_once __DIR__ . '/../backend/config/database.php';
+require_once __DIR__ . '/../backend/config/db.php';
 
 $pdo = null;
 if (isset($conn) && $conn instanceof PDO) {
