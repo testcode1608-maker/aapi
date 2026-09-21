@@ -388,3 +388,38 @@ body.aapi-site-dark .investor-steps-list .investor-step-card > p {
     padding: 20px;
   }
 }
+
+
+/* Investor journey text direction and alignment */
+[dir="ltr"] .investor-steps-list .investor-step-card {
+  direction: ltr;
+  text-align: left;
+}
+
+[dir="rtl"] .investor-steps-list .investor-step-card {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] .investor-steps-list .investor-step-top {
+  direction: ltr;
+}
+
+[dir="rtl"] .investor-steps-list .investor-step-top {
+  direction: rtl;
+}
+
+[dir="ltr"] .investor-steps-list .investor-step-top > span,
+[dir="rtl"] .investor-steps-list .investor-step-top > span {
+  text-align: center;
+}
+
+[dir="rtl"] .investor-steps-list .investor-step-card h3,
+[dir="rtl"] .investor-steps-list .investor-step-card > p {
+  text-align: right;
+}
+
+[dir="ltr"] .investor-steps-list .investor-step-card h3,
+[dir="ltr"] .investor-steps-list .investor-step-card > p {
+  text-align: left;
+}
