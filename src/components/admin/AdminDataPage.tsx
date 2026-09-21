@@ -16,6 +16,7 @@ const documentStatuses = ["en_attente", "valide", "rejete"];
 
 const fmt = (v: any, language: "ar" | "fr" | "en") => Number(v ?? 0).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ");
 const da = (v: any, language: "ar" | "fr" | "en") => `${fmt(v, language)} DA`;
+const imageUrl = (value: any, id: number) => { const v = String(value ?? "").trim(); if (!v) return `http://localhost/aapi-api/news-image.php?id=${id}`; if (/^https?:\/\//i.test(v)) return v; if (v.startsWith("/")) return `http://localhost${v}`; return `http://localhost/aapi-api/news-image.php?id=${id}`; };
 const userIdOf = (r: R) => r.user_id ?? r.investor_id ?? r.investisseur_id ?? r.utilisateur_id ?? "—";
 const isRead = (r: R) => r.lu === 1 || r.lu === true || r.statut === "lu";
 
@@ -256,7 +257,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     finally { setSaving(null); }
   };
 
-  const keys = section === "projects" ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"] : section === "announcements" || section === "news" ? ["id", "titre", "statut", "date_publication", "auteur_id"] : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
+  const keys = section === "projects" ? ["id", "user_id", "titre", "wilaya", "statut", "montant_investissement"] : section === "announcements" || section === "news" ? ["id", "titre", "image", "statut", "date_publication", "auteur_id"] : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
 
   return <div className="admin-dashboard admin-soft-data-page">
     {error && <div className="admin-dashboard-error"><AlertCircle size={16} /><span>{error}</span></div>}
@@ -321,9 +322,9 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           </div>
           <button className="soft-data-filter-button" onClick={() => { setSearch(""); setFilter("all"); setFilterOpen(false); }}><RefreshCw size={14} /> {t("admin.data.reset")}</button>
         </div>
-        {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages" || section === "announcements") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
-  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
-  {(options.length > 0 || section === "messages" || section === "announcements") && <td>
+        {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages" || section === "announcements" || section === "news") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
+  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "image" && (section === "news" || section === "announcements") ? <img src={imageUrl(r[k], Number(r.id))} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = `http://localhost/aapi-api/news-image.php?id=${Number(r.id)}`; }} /> : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
+  {(options.length > 0 || section === "messages" || section === "announcements" || section === "news") && <td>
     <div className="soft-data-actions">
       {options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}>
         <option value="">—</option>
