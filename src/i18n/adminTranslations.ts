@@ -33,7 +33,7 @@ export const adminTranslations = {
     common: { language: "Langue" },
     brand: { centralAdministration: "Administration centrale", systemAdmin: "Administrateur système" },
     nav: {
-      administration: "Administration", system: "Système", dashboard: "Tableau de bord", users: "Utilisateurs", investors: "Investisseurs", projects: "Projets", investments: "Investissements", requests: "Demandes", messages: "Messages", documents: "Documents", announcements: "Announcements", settings: "Paramètres", publicSite: "Site public", logout: "Déconnexion", openMenu: "Ouvrir le menu", closeMenu: "Fermer le menu"
+      administration: "Administration", system: "Système", dashboard: "Tableau de bord", users: "Utilisateurs", investors: "Investisseurs", projects: "Projets", investments: "Investissements", requests: "Demandes", messages: "Messages", documents: "Documents", announcements: "Annonces", settings: "Paramètres", publicSite: "Site public", logout: "Déconnexion", openMenu: "Ouvrir le menu", closeMenu: "Fermer le menu"
     },
     topbar: { agency: "Agence Algérienne de Promotion de l’Investissement", search: "Rechercher ici...", searchAria: "Recherche administration", notifications: "Notifications" },
     dashboard: {
