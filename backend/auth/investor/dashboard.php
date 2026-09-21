@@ -192,7 +192,8 @@ try {
             updated_at
         FROM users
         WHERE id = ?
-          AND role = 'investisseur'
+          AND LOWER(TRIM(role)) IN ('investisseur', 'investor')
+          AND LOWER(TRIM(statut)) = 'actif'
         LIMIT 1
     ");
 
