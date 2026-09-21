@@ -116,7 +116,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   return <div className="admin-dashboard admin-soft-data-page">
     {error && <div className="admin-dashboard-error"><AlertCircle size={16} /><span>{error}</span></div>}
     <main className="admin-dashboard-main soft-data-main">
-      <header className="admin-dashboard-header soft-data-header">
+      <header className="admin-dashboard-main">
         <div className="admin-dashboard-header-content">
           <div className="admin-dashboard-welcome">
             <span className="admin-dashboard-eyebrow">{t("admin.dashboard.eyebrow")}</span>
