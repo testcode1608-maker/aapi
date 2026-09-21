@@ -49,6 +49,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const [newsPhoto, setNewsPhoto] = useState<File | null>(null);
   const [creatingNews, setCreatingNews] = useState(false);
   const [sectorForm, setSectorForm] = useState({ nom: "", description: "" });
+  const [sectorPhoto, setSectorPhoto] = useState<File | null>(null);
   const [creatingSector, setCreatingSector] = useState(false);
 
   const load = useCallback(async () => {
@@ -173,10 +174,19 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     if (!sectorForm.nom.trim() || creatingSector) return;
     setCreatingSector(true);
     try {
-      const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "create_sector", user_id: userId, nom: sectorForm.nom.trim(), description: sectorForm.description.trim() }) });
-      const j = await r.json();
+      const formData = new FormData();
+      formData.append("action", "create_sector");
+      formData.append("user_id", String(userId));
+      formData.append("nom", sectorForm.nom.trim());
+      formData.append("description", sectorForm.description.trim());
+      if (sectorPhoto) formData.append("image", sectorPhoto);
+      const r = await fetch(API, { method: "POST", body: formData });
+      const raw = await r.text();
+      let j: R;
+      try { j = JSON.parse(raw); } catch { throw Error("Le serveur PHP a renvoyé une erreur au lieu d'un JSON. Vérifiez les logs PHP."); }
       if (!r.ok || !j.success) throw Error(j.message || "Impossible de créer le secteur.");
       setSectorForm({ nom: "", description: "" });
+      setSectorPhoto(null);
       await load();
       setError("");
     } catch (e) { setError(e instanceof Error ? e.message : "Impossible de créer le secteur."); }
@@ -253,7 +263,11 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
 
         {section === "sectors" && <form className="admin-announcement-form admin-sector-form" onSubmit={createSector}>
           <div className="admin-announcement-form-head"><div className="admin-announcement-form-copy"><span className="admin-announcement-eyebrow">{language === "ar" ? "إدارة القطاعات" : language === "en" ? "SECTOR MANAGEMENT" : "GESTION DES SECTEURS"}</span><h2>{language === "ar" ? "إضافة قطاع استثماري" : language === "en" ? "Add investment sector" : "Ajouter un secteur d’investissement"}</h2><p>{language === "ar" ? "أضف قطاعاً جديداً ليظهر في إدارة القطاعات." : language === "en" ? "Add a new sector to the sector management list." : "Ajoutez un nouveau secteur à la liste de gestion."}</p></div><div className="admin-announcement-form-mark" aria-hidden="true"><Database size={22} /></div></div>
-          <div className="admin-announcement-form-grid"><label className="admin-announcement-field"><span>{language === "ar" ? "اسم القطاع" : language === "en" ? "Sector name" : "Nom du secteur"}</span><input value={sectorForm.nom} onChange={e => setSectorForm(v => ({ ...v, nom: e.target.value }))} placeholder={language === "ar" ? "مثال: الصناعات الدوائية" : language === "en" ? "e.g. Pharmaceutical industry" : "Ex. Industrie pharmaceutique"} required /></label><label className="admin-announcement-field admin-announcement-field-full"><span>{language === "ar" ? "الوصف" : language === "en" ? "Description" : "Description"}</span><textarea value={sectorForm.description} onChange={e => setSectorForm(v => ({ ...v, description: e.target.value }))} placeholder={language === "ar" ? "وصف مختصر للقطاع..." : language === "en" ? "Short sector description..." : "Description courte du secteur..."} /></label></div>
+          <div className="admin-announcement-form-grid">
+            <label className="admin-announcement-field"><span>{language === "ar" ? "اسم القطاع" : language === "en" ? "Sector name" : "Nom du secteur"}</span><input value={sectorForm.nom} onChange={e => setSectorForm(v => ({ ...v, nom: e.target.value }))} placeholder={language === "ar" ? "مثال: الصناعات الدوائية" : language === "en" ? "e.g. Pharmaceutical industry" : "Ex. Industrie pharmaceutique"} required /></label>
+            <label className="admin-announcement-field"><span>{language === "ar" ? "الصورة" : language === "en" ? "Photo" : "Photo"}</span><label className="admin-announcement-upload"><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e => setSectorPhoto(e.target.files?.[0] ?? null)} /><span>📷 {sectorPhoto ? sectorPhoto.name : (language === "ar" ? "اختر صورة القطاع" : language === "en" ? "Choose sector photo" : "Choisir une photo")}</span></label></label>
+            <label className="admin-announcement-field admin-announcement-field-full"><span>{language === "ar" ? "الوصف" : language === "en" ? "Description" : "Description"}</span><textarea value={sectorForm.description} onChange={e => setSectorForm(v => ({ ...v, description: e.target.value }))} placeholder={language === "ar" ? "وصف مختصر للقطاع..." : language === "en" ? "Short sector description..." : "Description courte du secteur..."} /></label>
+          </div>
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingSector}>{creatingSector ? <><RefreshCw size={15} className="spin" /> {language === "ar" ? "إضافة..." : language === "en" ? "Adding..." : "Ajout..."}</> : <><Database size={15} /> {language === "ar" ? "إضافة القطاع" : language === "en" ? "Add sector" : "Ajouter le secteur"}</>}</button></div>
         </form>}
 
@@ -306,7 +320,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
         </div>
 
         {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages" || section === "sectors" || section === "announcements" || section === "news") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
-  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : k === "image" && (section === "news" || section === "announcements") ? <img src={imageUrl(r[k], Number(r.id), section)} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = imageUrl("", Number(r.id), section); }} /> : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
+  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : (k === "image" && (section === "news" || section === "announcements")) ? <img src={imageUrl(r[k], Number(r.id), section)} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = imageUrl("", Number(r.id), section); }} /> : k === "image_url" && section === "sectors" ? <img src={String(r[k])} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.style.display = "none"; }} /> : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
   {(options.length > 0 || section === "messages" || section === "sectors" || section === "announcements" || section === "news") && <td><div className="soft-data-actions">
       {options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}><option value="">—</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select>}
       {section === "messages" && <button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id) || deleting === Number(r.id)} onClick={() => void toggleMessage(r)}>{isRead(r) ? t("admin.data.markUnread") : t("admin.data.markRead")}</button>}
