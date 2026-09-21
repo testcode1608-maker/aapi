@@ -157,6 +157,16 @@ try {
 
         $stmt = $pdo->prepare("DELETE FROM {$table} WHERE id = ? LIMIT 1");
         $stmt->execute([$recordId]);
+
+        if ($action === "delete_sectors") {
+            $dir = __DIR__ . "/../../uploads/sectors";
+            foreach (["jpg", "png", "webp", "gif"] as $ext) {
+                $imageFile = $dir . "/sector_" . $recordId . "." . $ext;
+                if (is_file($imageFile)) {
+                    @unlink($imageFile);
+                }
+            }
+        }
     }
 
     deleteJson(true, "تم حذف السجل بنجاح.", [
