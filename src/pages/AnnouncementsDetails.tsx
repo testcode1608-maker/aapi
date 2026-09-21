@@ -18,7 +18,7 @@ function resolveAnnouncementImage(image: string | null, id: number) {
   if (!image) return null;
   const value = String(image).trim();
   if (!value) return null;
-  if (/^https?:\\/\\//i.test(value)) return value;
+  if (/^https?:\/\//i.test(value)) return value;
   return `http://localhost/aapi-api/announcement-image.php?id=${id}`;
 }
 
