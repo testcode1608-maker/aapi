@@ -32,9 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 $action = trim((string)($_GET['action'] ?? ''));
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $raw = file_get_contents('php://input');
-    $body = json_decode($raw ?: '{}', true);
-    if (is_array($body) && isset($body['action'])) {
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    if (stripos($contentType, 'multipart/form-data') === 0) {
+        $body = $_POST;
+    } else {
+        $raw = file_get_contents('php://input');
+        $body = json_decode($raw ?: '{}', true);
+        $body = is_array($body) ? $body : [];
+    }
+    if (isset($body['action'])) {
         $action = trim((string)$body['action']);
     }
 }
@@ -65,6 +71,7 @@ $handlers = [
     'delete_requests' => __DIR__.'/delete.php',
     'delete_messages' => __DIR__.'/delete.php',
     'delete_documents' => __DIR__.'/delete.php',
+    'delete_announcements' => __DIR__.'/delete.php',
 ];
 
 if (!isset($handlers[$action])) {
