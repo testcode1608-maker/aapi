@@ -21,9 +21,16 @@ try {
     }
 
     $image = (string)$row["image"];
-    $filename = basename(parse_url($image, PHP_URL_PATH) ?: $image);
+    $path = parse_url($image, PHP_URL_PATH) ?: $image;
+    $filename = basename((string)$path);
 
-    $file = __DIR__ . "/uploads/announcements/" . $filename;
+    /*
+     * Uploaded announcement images are stored in the project-level
+     * /uploads/announcements directory by backend/auth/admin/announcements.php.
+     * This endpoint lives in /backend, so the project uploads directory
+     * is one level above __DIR__.
+     */
+    $file = __DIR__ . "/../uploads/announcements/" . $filename;
 
     if (!is_file($file) || !is_readable($file)) {
         http_response_code(404);
