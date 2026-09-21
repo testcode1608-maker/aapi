@@ -14,6 +14,14 @@ type ApiAnnouncement = {
 
 const API_URL = "http://localhost/aapi-api/announcements.php";
 
+function resolveAnnouncementImage(image: string | null, id: number) {
+  if (!image) return null;
+  const value = String(image).trim();
+  if (!value) return null;
+  if (/^https?:\\/\\//i.test(value)) return value;
+  return `http://localhost/aapi-api/announcement-image.php?id=${id}`;
+}
+
 function AnnouncementsDetails() {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
@@ -43,7 +51,7 @@ function AnnouncementsDetails() {
         }
 
         if (!cancelled) {
-          setAnnouncement(data.announcement);
+          setAnnouncement({\n            ...data.announcement,\n            image: resolveAnnouncementImage(data.announcement.image, Number(data.announcement.id)),\n          });
         }
       } catch (requestError) {
         if (!cancelled) {
