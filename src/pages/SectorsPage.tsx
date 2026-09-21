@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
+import "../styles/sectors-page-cards.css";
 
 type Sector = { icon: string; number: string; title: string; description: string; opportunities: string; imageUrl?: string };
 
