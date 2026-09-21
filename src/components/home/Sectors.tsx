@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "../../i18n/I18nProvider";
+import "../../styles/home-sectors.css";
 
 type Sector = {
   id: number;
