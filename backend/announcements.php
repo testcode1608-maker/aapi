@@ -28,15 +28,27 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     http_response_code(405);
-    echo json_encode([
-        "success" => false,
-        "message" => "Méthode non autorisée."
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    echo json_encode(["success" => false, "message" => "Méthode non autorisée."], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
+function announcementImageUrl(?string $image, int $id): ?string
+{
+    if (!$image || trim($image) === "") {
+        return null;
+    }
+
+    $value = trim($image);
+
+    if (preg_match('/^https?:\/\//i', $value)) {
+        return $value;
+    }
+
+    return "/aapi-api/announcement-image.php?id=" . $id;
+}
+
 try {
-    $id = isset($_GET["id"]) ? (int) $_GET["id"] : 0;
+    $id = isset($_GET["id"]) ? (int)$_GET["id"] : 0;
 
     if ($id > 0) {
         $stmt = $pdo->prepare("
@@ -64,12 +76,11 @@ try {
 
         if (!$announcement) {
             http_response_code(404);
-            echo json_encode([
-                "success" => false,
-                "message" => "Annonce introuvable."
-            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            echo json_encode(["success" => false, "message" => "Annonce introuvable."], JSON_UNESCAPED_UNICODE);
             exit;
         }
+
+        $announcement["image"] = announcementImageUrl($announcement["image"], (int)$announcement["id"]);
 
         echo json_encode([
             "success" => true,
@@ -100,6 +111,14 @@ try {
 
     $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    foreach ($announcements as &$announcement) {
+        $announcement["image"] = announcementImageUrl(
+            $announcement["image"],
+            (int)$announcement["id"]
+        );
+    }
+    unset($announcement);
+
     echo json_encode([
         "success" => true,
         "announcements" => $announcements,
@@ -112,5 +131,5 @@ try {
     echo json_encode([
         "success" => false,
         "message" => "Impossible de charger les annonces."
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    ], JSON_UNESCAPED_UNICODE);
 }
