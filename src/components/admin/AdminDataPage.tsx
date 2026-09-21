@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { Search, RefreshCw, Database, CheckCircle2, Clock3, AlertCircle, ChevronDown, Trash2, MessageSquare } from "lucide-react";
+import { Search, RefreshCw, Database, CheckCircle2, Clock3, AlertCircle, ChevronDown, Trash2, MessageSquare, Pencil } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-status-dropdown.css";
 
@@ -51,6 +51,10 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const [sectorForm, setSectorForm] = useState({ nom: "", description: "" });
   const [sectorPhoto, setSectorPhoto] = useState<File | null>(null);
   const [creatingSector, setCreatingSector] = useState(false);
+  const [editingRow, setEditingRow] = useState<R | null>(null);
+  const [editForm, setEditForm] = useState({ nom: "", titre: "", resume: "", contenu: "", statut: "publie", date_publication: "", description: "" });
+  const [editPhoto, setEditPhoto] = useState<File | null>(null);
+  const [savingEdit, setSavingEdit] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -218,6 +222,57 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     finally { setCreatingNews(false); }
   };
 
+  const openEdit = (row: R) => {
+    setEditingRow(row);
+    setEditPhoto(null);
+    const rawDate = row.date_publication ? String(row.date_publication).replace(" ", "T").slice(0,16) : "";
+    setEditForm({
+      nom: String(row.nom ?? ""),
+      titre: String(row.titre ?? ""),
+      resume: String(row.resume ?? ""),
+      contenu: String(row.contenu ?? ""),
+      statut: String(row.statut ?? "publie"),
+      date_publication: rawDate,
+      description: String(row.description ?? "")
+    });
+  };
+
+  const saveEdit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!editingRow || savingEdit) return;
+    const id = Number(editingRow.id);
+    if (!id) return;
+    setSavingEdit(true);
+    try {
+      const formData = new FormData();
+      const action = section === "sectors" ? "update_sector" : section === "announcements" ? "update_announcement" : "update_news";
+      formData.append("action", action);
+      formData.append("user_id", String(userId));
+      formData.append("id", String(id));
+      if (section === "sectors") {
+        formData.append("nom", editForm.nom.trim());
+        formData.append("description", editForm.description.trim());
+      } else {
+        formData.append("titre", editForm.titre.trim());
+        formData.append("contenu", editForm.contenu.trim());
+        formData.append("statut", editForm.statut);
+        formData.append("date_publication", editForm.date_publication);
+        if (section === "news") formData.append("resume", editForm.resume.trim());
+      }
+      if (editPhoto) formData.append("image", editPhoto);
+      const r = await fetch(API, { method: "POST", body: formData });
+      const raw = await r.text();
+      let j: R;
+      try { j = JSON.parse(raw); } catch { throw Error("Le serveur PHP a renvoyé une erreur au lieu d'un JSON."); }
+      if (!r.ok || !j.success) throw Error(j.message || t("admin.data.updateError"));
+      setEditingRow(null);
+      setEditPhoto(null);
+      await load();
+      setError("");
+    } catch (e) { setError(e instanceof Error ? e.message : t("admin.data.updateError")); }
+    finally { setSavingEdit(false); }
+  };
+
   const toggleMessage = async (row: R) => {
     const id = Number(row.id);
     if (!id) return;
@@ -310,6 +365,30 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingNews}>{creatingNews ? <><RefreshCw size={15} className="spin" /> {t("admin.data.news.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.news.publish")}</>}</button></div>
         </form>}
 
+        {editingRow && (section === "sectors" || section === "announcements" || section === "news") && <div className="admin-edit-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditingRow(null); }}>
+          <form className="admin-edit-modal" onSubmit={saveEdit}>
+            <div className="admin-edit-modal-head">
+              <div><span className="admin-announcement-eyebrow">{language === "ar" ? "تعديل" : language === "en" ? "EDIT" : "MODIFICATION"}</span><h2>{section === "sectors" ? (language === "ar" ? "تعديل القطاع" : language === "en" ? "Edit sector" : "Modifier le secteur") : section === "announcements" ? (language === "ar" ? "تعديل الإعلان" : language === "en" ? "Edit announcement" : "Modifier l’annonce") : (language === "ar" ? "تعديل الخبر" : language === "en" ? "Edit news" : "Modifier l’actualité")}</h2></div>
+              <button type="button" className="admin-edit-modal-close" onClick={() => setEditingRow(null)} aria-label={language === "ar" ? "إغلاق" : "Fermer"}>×</button>
+            </div>
+            <div className="admin-announcement-form-grid">
+              {section === "sectors" ? <>
+                <label className="admin-announcement-field"><span>{language === "ar" ? "اسم القطاع" : language === "en" ? "Sector name" : "Nom du secteur"}</span><input value={editForm.nom} onChange={e => setEditForm(v => ({...v, nom:e.target.value}))} required /></label>
+                <div className="admin-announcement-field"><span>{language === "ar" ? "الصورة" : language === "en" ? "Photo" : "Photo"}</span><label className="admin-announcement-upload"><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e => setEditPhoto(e.target.files?.[0] ?? null)} /><span>📷 {editPhoto ? editPhoto.name : (language === "ar" ? "تغيير الصورة" : language === "en" ? "Change photo" : "Changer la photo")}</span></label></div>
+                <label className="admin-announcement-field admin-announcement-field-full"><span>{language === "ar" ? "الوصف" : "Description"}</span><textarea value={editForm.description} onChange={e => setEditForm(v => ({...v, description:e.target.value}))} /></label>
+              </> : <>
+                <label className="admin-announcement-field"><span>{language === "ar" ? "العنوان" : language === "en" ? "Title" : "Titre"}</span><input value={editForm.titre} onChange={e => setEditForm(v => ({...v, titre:e.target.value}))} required /></label>
+                <label className="admin-announcement-field"><span>{language === "ar" ? "الحالة" : language === "en" ? "Status" : "Statut"}</span><select value={editForm.statut} onChange={e => setEditForm(v => ({...v, statut:e.target.value}))}><option value="publie">{language === "ar" ? "منشور" : language === "en" ? "Published" : "Publié"}</option><option value="brouillon">{language === "ar" ? "مسودة" : language === "en" ? "Draft" : "Brouillon"}</option><option value="archive">{language === "ar" ? "مؤرشف" : language === "en" ? "Archived" : "Archivé"}</option></select></label>
+                {section === "news" && <label className="admin-announcement-field admin-announcement-field-full"><span>{language === "ar" ? "الملخص" : language === "en" ? "Summary" : "Résumé"}</span><textarea value={editForm.resume} onChange={e => setEditForm(v => ({...v, resume:e.target.value}))} /></label>}
+                <label className="admin-announcement-field admin-announcement-field-full"><span>{language === "ar" ? "المحتوى" : language === "en" ? "Content" : "Contenu"}</span><textarea value={editForm.contenu} onChange={e => setEditForm(v => ({...v, contenu:e.target.value}))} required /></label>
+                <div className="admin-announcement-field"><span>{language === "ar" ? "الصورة" : language === "en" ? "Photo" : "Photo"}</span><label className="admin-announcement-upload"><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e => setEditPhoto(e.target.files?.[0] ?? null)} /><span>📷 {editPhoto ? editPhoto.name : (language === "ar" ? "تغيير الصورة" : language === "en" ? "Change photo" : "Changer la photo")}</span></label></div>
+                <label className="admin-announcement-field"><span>{language === "ar" ? "تاريخ النشر" : language === "en" ? "Publication date" : "Date de publication"}</span><input type="datetime-local" value={editForm.date_publication} onChange={e => setEditForm(v => ({...v, date_publication:e.target.value}))} /></label>
+              </>}
+            </div>
+            <div className="admin-announcement-form-actions"><button type="button" className="soft-data-filter-button" onClick={() => setEditingRow(null)}>{language === "ar" ? "إلغاء" : language === "en" ? "Cancel" : "Annuler"}</button><button type="submit" className="admin-announcement-submit" disabled={savingEdit}>{savingEdit ? <><RefreshCw size={15} className="spin" /> {language === "ar" ? "جارٍ الحفظ..." : language === "en" ? "Saving..." : "Enregistrement..."}</> : <><Pencil size={15} /> {language === "ar" ? "حفظ التعديلات" : language === "en" ? "Save changes" : "Enregistrer"}</>}</button></div>
+          </form>
+        </div>}
+
         <div className="admin-toolbar soft-data-toolbar">
           <div className="soft-data-search"><Search size={16} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder={t("admin.data.search")} aria-label={t("admin.data.searchAria")} /></div>
           <div className={`soft-data-filter${filterOpen ? " is-open" : ""}`}>
@@ -322,6 +401,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
         {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages" || section === "sectors" || section === "announcements" || section === "news") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
   {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : (k === "image" && (section === "news" || section === "announcements")) ? <img src={imageUrl(r[k], Number(r.id), section)} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = imageUrl("", Number(r.id), section); }} /> : k === "image_url" && section === "sectors" ? <img src={String(r[k])} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.style.display = "none"; }} /> : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
   {(options.length > 0 || section === "messages" || section === "sectors" || section === "announcements" || section === "news") && <td><div className="soft-data-actions">
+      {(section === "sectors" || section === "announcements" || section === "news") && <button type="button" className="soft-edit-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => openEdit(r)} aria-label={language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"} title={language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"}><Pencil size={15} />{language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"}</button>}
       {options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}><option value="">—</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select>}
       {section === "messages" && <button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id) || deleting === Number(r.id)} onClick={() => void toggleMessage(r)}>{isRead(r) ? t("admin.data.markUnread") : t("admin.data.markRead")}</button>}
       <button type="button" className="soft-delete-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => void remove(r)} aria-label={(language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer") + " " + text(r.titre ?? r.nom ?? r.sujet ?? r.objet ?? r.id)} title={language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}><Trash2 size={15} />{language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}</button>
