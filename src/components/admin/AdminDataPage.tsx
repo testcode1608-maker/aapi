@@ -109,7 +109,16 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
 
     if (!window.confirm(confirmText + "\n\n" + label)) return;
 
-    const deleteActions: Record<Section, string> = {\n      users: "delete_users",\n      investors: "delete_investors",\n      projects: "delete_projects",\n      investments: "delete_investments",\n      requests: "delete_requests",\n      messages: "delete_messages",\n      documents: "delete_documents",\n    };\n    const action = deleteActions[section];
+    const deleteActions: Record<Section, string> = {
+      users: "delete_users",
+      investors: "delete_investors",
+      projects: "delete_projects",
+      investments: "delete_investments",
+      requests: "delete_requests",
+      messages: "delete_messages",
+      documents: "delete_documents",
+    };
+    const action = deleteActions[section];
     setDeleting(id);
 
     try {
