@@ -61,7 +61,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : section === "announcements" ? ["brouillon", "publie", "archive"] : [];
+  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : section === "announcements" ? [] : [];
   const total = Number(stats.total ?? rows.length);
   const active = Number(stats.actif ?? stats.active ?? stats.approuve ?? stats.valide ?? 0);
   const pending = Number(stats.en_attente ?? stats.soumis ?? stats.nouvelle ?? stats.pending ?? 0);
@@ -132,6 +132,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       requests: "delete_requests",
       messages: "delete_messages",
       documents: "delete_documents",
+      announcements: "delete_announcements",
     };
     const action = deleteActions[section];
     setDeleting(id);
