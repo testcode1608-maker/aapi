@@ -57,3 +57,13 @@ body.aapi-admin-light .administrator-shell .soft-read-toggle{background:#fff!imp
 @media(max-width:1200px){.administrator-shell[dir="ltr"] .soft-data-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:800px){.administrator-shell[dir="ltr"] .soft-data-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:520px){.administrator-shell[dir="ltr"] .soft-data-stat-grid{grid-template-columns:1fr!important}}
+
+
+.soft-data-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:180px}
+.soft-delete-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:0 11px;border:1px solid rgba(220,72,72,.28);border-radius:9px;background:rgba(220,72,72,.08);color:#d95b5b;font:600 10px/1 inherit;cursor:pointer;transition:all .18s ease;white-space:nowrap}
+.soft-delete-button:hover:not(:disabled){background:#d95b5b;color:#fff;border-color:#d95b5b;transform:translateY(-1px)}
+.soft-delete-button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+body.aapi-admin-light .administrator-shell .soft-delete-button{background:#fff4f4!important;border-color:#f0caca!important;color:#c84646!important}
+body.aapi-admin-light .administrator-shell .soft-delete-button:hover:not(:disabled){background:#c84646!important;color:#fff!important;border-color:#c84646!important}
+.administrator-shell[dir="rtl"] .soft-data-actions{justify-content:flex-start;direction:rtl}
+.administrator-shell[dir="ltr"] .soft-data-actions{justify-content:flex-start;direction:ltr}
