@@ -111,7 +111,8 @@ try {
 
         $slug .= "-" . date("YmdHis");
 
-        $publicationDate = $date !== "" ? $date : ($status === "publie" ? date("Y-m-d H:i:s") : null);
+        $publicationDate = $date !== "" ? str_replace("T", " ", $date) : ($status === "publie" ? date("Y-m-d H:i:s") : null);
+        if ($publicationDate !== null && strlen($publicationDate) === 16) $publicationDate .= ":00";
 
         $stmt = $pdo->prepare("
             INSERT INTO announcements
