@@ -17,6 +17,8 @@
 @import "../../index.css";
 @import "../site-theme.css";
 @import "../aapi-all-pages-theme.css";
+@import "../inscription-dark.css";
+@import "../inscription-textarea-dark.css";
 @import "../language-switcher.css";
 @import "../global-direction.css";
 @import "../registration-direction.css";
