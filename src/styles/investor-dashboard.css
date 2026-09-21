@@ -417,3 +417,23 @@ body.aapi-admin-light .investor-dashboard-logout:hover {
 .investor-admin-navbar[dir="rtl"] .admin-navbar-bottom-button svg{
   flex:0 0 auto;
 }
+
+/* Real wilaya select in project form */
+.investor-project-form-field select#project-wilaya{
+  width:100%;
+  min-height:48px;
+  padding:0 14px;
+  border:1px solid var(--investor-dashboard-border,#dfe7e2);
+  border-radius:10px;
+  background:var(--investor-dashboard-input-bg,#fff);
+  color:var(--investor-dashboard-text,#24342c);
+  font:inherit;
+  font-size:14px;
+  outline:none;
+  cursor:pointer;
+  direction:rtl;
+  text-align:right;
+}
+.investor-project-form-field select#project-wilaya:focus{border-color:#087443;box-shadow:0 0 0 3px rgba(8,116,67,.10)}
+body.aapi-site-dark .investor-project-form-field select#project-wilaya{background:#121614;color:#edf3ef;border-color:#2b3932}
+html[dir="ltr"] .investor-project-form-field select#project-wilaya{direction:ltr;text-align:left}
