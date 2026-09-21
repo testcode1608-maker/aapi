@@ -333,3 +333,361 @@ body:not(.aapi-admin-light) .administrator-shell .soft-ui-kpi .admin-kpi-content
     font-size:21px !important;
   }
 }
+
+
+/* =========================================================
+   AAPI Admin — Announcements workspace
+   Professional editorial form + strict language direction.
+   Arabic: RTL | Français / English: LTR
+   ========================================================= */
+
+.administrator-shell .admin-announcement-form{
+  position:relative;
+  margin:0 24px 22px;
+  overflow:hidden;
+  border:1px solid #dfe8e3;
+  border-radius:20px;
+  background:linear-gradient(145deg,#ffffff 0%,#f8fbf9 100%);
+  box-shadow:0 14px 36px rgba(20,50,35,.08),0 3px 9px rgba(20,50,35,.04);
+}
+
+.administrator-shell .admin-announcement-form::before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:4px;
+  background:linear-gradient(180deg,#087443,#c9a227);
+}
+
+.administrator-shell .admin-announcement-form-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:22px 24px 18px;
+  border-bottom:1px solid #e7eee9;
+}
+
+.administrator-shell .admin-announcement-form-copy{
+  min-width:0;
+}
+
+.administrator-shell .admin-announcement-eyebrow{
+  display:block;
+  margin-bottom:6px;
+  color:#087443;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.administrator-shell .admin-announcement-form-copy h2{
+  margin:0;
+  color:#14221b;
+  font-size:20px;
+  font-weight:800;
+  line-height:1.3;
+}
+
+.administrator-shell .admin-announcement-form-copy p{
+  margin:6px 0 0;
+  color:#6b7771;
+  font-size:11px;
+  line-height:1.7;
+}
+
+.administrator-shell .admin-announcement-form-mark{
+  flex:0 0 48px;
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  color:#087443;
+  background:#eaf5ef;
+  border:1px solid #d4e9dd;
+  border-radius:14px;
+}
+
+.administrator-shell .admin-announcement-form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  padding:22px 24px;
+}
+
+.administrator-shell .admin-announcement-field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  min-width:0;
+}
+
+.administrator-shell .admin-announcement-field-full{
+  grid-column:1 / -1;
+}
+
+.administrator-shell .admin-announcement-field>span{
+  color:#4e5d55;
+  font-size:11px;
+  font-weight:800;
+}
+
+.administrator-shell .admin-announcement-field input,
+.administrator-shell .admin-announcement-field select,
+.administrator-shell .admin-announcement-field textarea{
+  width:100%;
+  min-width:0;
+  border:1px solid #dce6e0;
+  border-radius:12px;
+  outline:none;
+  background:#ffffff;
+  color:#17241d;
+  font:inherit;
+  font-size:12px;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+
+.administrator-shell .admin-announcement-field input,
+.administrator-shell .admin-announcement-field select{
+  height:44px;
+  padding:0 13px;
+}
+
+.administrator-shell .admin-announcement-field textarea{
+  min-height:155px;
+  resize:vertical;
+  padding:13px;
+  line-height:1.8;
+}
+
+.administrator-shell .admin-announcement-field input::placeholder,
+.administrator-shell .admin-announcement-field textarea::placeholder{
+  color:#9aa59f;
+}
+
+.administrator-shell .admin-announcement-field input:focus,
+.administrator-shell .admin-announcement-field select:focus,
+.administrator-shell .admin-announcement-field textarea:focus{
+  border-color:#087443;
+  box-shadow:0 0 0 3px rgba(8,116,67,.10);
+}
+
+.administrator-shell .admin-announcement-form-actions{
+  display:flex;
+  align-items:center;
+  padding:0 24px 22px;
+}
+
+.administrator-shell .admin-announcement-submit{
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:0 18px;
+  border:0;
+  border-radius:11px;
+  background:linear-gradient(135deg,#087443,#075c36);
+  color:#ffffff;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(8,116,67,.18);
+  transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease;
+}
+
+.administrator-shell .admin-announcement-submit:hover:not(:disabled){
+  transform:translateY(-1px);
+  box-shadow:0 11px 22px rgba(8,116,67,.24);
+}
+
+.administrator-shell .admin-announcement-submit:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.administrator-shell[dir="rtl"] .admin-announcement-form{
+  direction:rtl;
+  text-align:right;
+}
+
+.administrator-shell[dir="rtl"] .admin-announcement-form::before{
+  left:auto;
+  right:0;
+}
+
+.administrator-shell[dir="rtl"] .admin-announcement-form-head,
+.administrator-shell[dir="rtl"] .admin-announcement-form-actions{
+  direction:rtl;
+}
+
+.administrator-shell[dir="rtl"] .admin-announcement-field{
+  direction:rtl;
+  text-align:right;
+}
+
+.administrator-shell[dir="rtl"] .admin-announcement-field input,
+.administrator-shell[dir="rtl"] .admin-announcement-field select,
+.administrator-shell[dir="rtl"] .admin-announcement-field textarea{
+  direction:rtl;
+  text-align:right;
+}
+
+.administrator-shell[dir="ltr"] .admin-announcement-form{
+  direction:ltr;
+  text-align:left;
+}
+
+.administrator-shell[dir="ltr"] .admin-announcement-form-head,
+.administrator-shell[dir="ltr"] .admin-announcement-form-actions{
+  direction:ltr;
+}
+
+.administrator-shell[dir="ltr"] .admin-announcement-field{
+  direction:ltr;
+  text-align:left;
+}
+
+.administrator-shell[dir="ltr"] .admin-announcement-field input,
+.administrator-shell[dir="ltr"] .admin-announcement-field select,
+.administrator-shell[dir="ltr"] .admin-announcement-field textarea{
+  direction:ltr;
+  text-align:left;
+}
+
+.administrator-shell[dir="ltr"] .soft-data-table{
+  direction:ltr;
+}
+
+.administrator-shell[dir="ltr"] .soft-data-table th,
+.administrator-shell[dir="ltr"] .soft-data-table td{
+  text-align:left;
+}
+
+.administrator-shell[dir="rtl"] .soft-data-table{
+  direction:rtl;
+}
+
+.administrator-shell[dir="rtl"] .soft-data-table th,
+.administrator-shell[dir="rtl"] .soft-data-table td{
+  text-align:right;
+}
+
+.administrator-shell .soft-data-table td{
+  vertical-align:middle;
+}
+
+.administrator-shell .soft-data-table td:nth-child(2){
+  font-weight:700;
+  color:#17241d;
+}
+
+.administrator-shell .soft-delete-button{
+  min-height:34px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:0 10px;
+  border:1px solid rgba(194,61,61,.20);
+  border-radius:9px;
+  background:rgba(194,61,61,.06);
+  color:#b23b3b;
+  font-size:10px;
+  font-weight:800;
+}
+
+.administrator-shell .soft-delete-button:hover:not(:disabled){
+  background:rgba(194,61,61,.11);
+}
+
+.administrator-shell .soft-delete-button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+/* Dark mode */
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-form{
+  border-color:#29352f;
+  background:linear-gradient(145deg,#171b19 0%,#101412 100%);
+  box-shadow:0 14px 36px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-form-head{
+  border-bottom-color:#27322d;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-form-copy h2,
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field>span,
+body:not(.aapi-admin-light) .administrator-shell .soft-data-table td:nth-child(2){
+  color:#edf4f0;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-form-copy p{
+  color:#8d9993;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-form-mark{
+  background:rgba(8,116,67,.16);
+  border-color:#315141;
+  color:#8de0b5;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field input,
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field select,
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field textarea{
+  border-color:#304038;
+  background:#101613;
+  color:#edf4f0;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field input::placeholder,
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field textarea::placeholder{
+  color:#69766f;
+}
+
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field input:focus,
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field select:focus,
+body:not(.aapi-admin-light) .administrator-shell .admin-announcement-field textarea:focus{
+  border-color:#4aa879;
+  box-shadow:0 0 0 3px rgba(74,168,121,.12);
+}
+
+@media (max-width:800px){
+  .administrator-shell .admin-announcement-form{
+    margin-inline:16px;
+  }
+
+  .administrator-shell .admin-announcement-form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .administrator-shell .admin-announcement-field-full{
+    grid-column:auto;
+  }
+}
+
+@media (max-width:520px){
+  .administrator-shell .admin-announcement-form{
+    margin-inline:12px;
+    border-radius:16px;
+  }
+
+  .administrator-shell .admin-announcement-form-head{
+    padding:18px 16px 15px;
+  }
+
+  .administrator-shell .admin-announcement-form-grid{
+    padding:18px 16px;
+    gap:14px;
+  }
+
+  .administrator-shell .admin-announcement-form-actions{
+    padding:0 16px 18px;
+  }
+
+  .administrator-shell .admin-announcement-submit{
+    width:100%;
+  }
+}
