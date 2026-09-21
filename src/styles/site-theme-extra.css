@@ -275,3 +275,87 @@ body.aapi-site-dark main .bg-body-tertiary{
 body.aapi-site-dark main [class*="border"]{
   border-color:#294238!important;
 }
+
+
+/* ============================================================
+   AAPI — SHARED DARK MODE POLISH
+   Keeps the same institutional visual language in every public page.
+   ============================================================ */
+
+body.aapi-site-dark {
+  --aapi-border: #294238;
+  --aapi-surface: #181c19;
+  --aapi-surface-soft: #151a17;
+  --aapi-shadow-soft: 0 12px 35px rgba(0,0,0,.22);
+  --aapi-shadow-hover: 0 20px 48px rgba(0,0,0,.30);
+}
+
+body.aapi-site-dark .aapi-service-card,
+body.aapi-site-dark .sector-card,
+body.aapi-site-dark .opportunity-card,
+body.aapi-site-dark .news-card,
+body.aapi-site-dark .event-card,
+body.aapi-site-dark .mission-card,
+body.aapi-site-dark .value-card,
+body.aapi-site-dark .contact-card,
+body.aapi-site-dark .faq-item,
+body.aapi-site-dark .agency-highlight,
+body.aapi-site-dark .visual-card {
+  border-color: #294238 !important;
+  background: #181c19 !important;
+  box-shadow: var(--aapi-shadow-soft) !important;
+}
+
+body.aapi-site-dark .aapi-service-card:hover,
+body.aapi-site-dark .sector-card:hover,
+body.aapi-site-dark .opportunity-card:hover,
+body.aapi-site-dark .news-card:hover,
+body.aapi-site-dark .event-card:hover,
+body.aapi-site-dark .mission-card:hover,
+body.aapi-site-dark .value-card:hover,
+body.aapi-site-dark .contact-card:hover,
+body.aapi-site-dark .faq-item:hover,
+body.aapi-site-dark .agency-highlight:hover,
+body.aapi-site-dark .visual-card:hover {
+  border-color: rgba(141,224,181,.30) !important;
+  box-shadow: var(--aapi-shadow-hover) !important;
+}
+
+body.aapi-site-dark .aapi-secondary-button,
+body.aapi-site-dark .secondary-button,
+body.aapi-site-dark .aapi-header-login,
+body.aapi-site-dark .aapi-hero-secondary-button {
+  background: #123d2a !important;
+  color: #8de0b5 !important;
+  border-color: rgba(8,116,67,.55) !important;
+}
+
+body.aapi-site-dark .aapi-secondary-button:hover,
+body.aapi-site-dark .secondary-button:hover,
+body.aapi-site-dark .aapi-header-login:hover,
+body.aapi-site-dark .aapi-hero-secondary-button:hover {
+  background: #18543a !important;
+  color: #fff !important;
+}
+
+body.aapi-site-dark main input:not([type="checkbox"]):not([type="radio"]),
+body.aapi-site-dark main textarea,
+body.aapi-site-dark main select {
+  border-color: #294238 !important;
+  background: #181c19 !important;
+  color: #edf4f0 !important;
+}
+
+body.aapi-site-dark main input:not([type="checkbox"]):not([type="radio"]):focus,
+body.aapi-site-dark main textarea:focus,
+body.aapi-site-dark main select:focus {
+  border-color: rgba(141,224,181,.55) !important;
+  box-shadow: 0 0 0 4px rgba(8,116,67,.15) !important;
+}
+
+body.aapi-site-dark .aapi-section-header::after,
+body.aapi-site-dark .statistics-header::after,
+body.aapi-site-dark .opportunities-header::after,
+body.aapi-site-dark .events-header::after {
+  background: linear-gradient(90deg, #c9a227, #42a879);
+}
