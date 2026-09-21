@@ -7,7 +7,7 @@ try{
  $stmt=$pdo->prepare("SELECT image FROM news WHERE id=:id LIMIT 1"); $stmt->execute(["id"=>$id]); $row=$stmt->fetch(PDO::FETCH_ASSOC);
  if(!$row||empty($row["image"])){http_response_code(404);exit;}
  $image=(string)$row["image"]; $filename=basename(parse_url($image,PHP_URL_PATH)?:$image);
- $file=__DIR__."/uploads/news/".$filename;
+ $file=__DIR__."/../uploads/news/".$filename;
  if(!is_file($file)||!is_readable($file)){http_response_code(404);exit;}
  $mime=mime_content_type($file)?:"application/octet-stream";
  header("Content-Type: ".$mime); header("Content-Length: ".(string)filesize($file)); header("Cache-Control: public, max-age=86400");
