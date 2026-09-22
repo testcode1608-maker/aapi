@@ -256,3 +256,221 @@ body.aapi-admin-light .admin-opportunities-page .admin-status-badge.status-archi
     padding-right:12px!important;
   }
 }
+
+
+/* Opportunity create/edit modal — aligned with the other Admin Soft UI forms */
+.admin-opportunity-modal-backdrop{
+  background:rgba(0,0,0,.42)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  padding:24px;
+}
+.admin-opportunity-modal.admin-edit-modal{
+  width:min(900px,96vw);
+  max-height:calc(100vh - 48px);
+  overflow:auto;
+  padding:0;
+  border-radius:18px;
+  background:linear-gradient(145deg,#15181c,#101216);
+  border:1px solid rgba(255,255,255,.07);
+  box-shadow:0 24px 70px rgba(0,0,0,.35);
+  color:#edf3ef;
+}
+.admin-opportunity-form-head{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+  padding:22px 24px 18px;
+  border-bottom:1px solid rgba(255,255,255,.055);
+}
+.admin-opportunity-form-copy{
+  min-width:0;
+  padding-right:48px;
+}
+.admin-opportunity-form-copy .admin-announcement-eyebrow{
+  display:block;
+  margin-bottom:6px;
+  color:#70c99a;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+.admin-opportunity-form-copy h2{
+  margin:0;
+  color:#f1f3f2;
+  font-size:18px;
+  line-height:1.35;
+}
+.admin-opportunity-form-copy p{
+  margin:6px 0 0;
+  color:#68727d;
+  font-size:10px;
+  line-height:1.6;
+}
+.admin-opportunity-form-mark{
+  width:44px;
+  height:44px;
+  flex:0 0 44px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:linear-gradient(145deg,#0b8750,#055c35);
+  color:#fff;
+  box-shadow:0 8px 20px rgba(8,116,67,.18);
+}
+.admin-opportunity-modal-close{
+  position:absolute;
+  top:18px;
+  right:20px;
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid #2b3330!important;
+  border-radius:10px!important;
+  background:#111419!important;
+  color:#8d9892!important;
+  cursor:pointer;
+}
+.admin-opportunity-modal-close:hover{
+  color:#dce5e1!important;
+  border-color:rgba(8,116,67,.45)!important;
+  background:rgba(8,116,67,.1)!important;
+}
+.admin-opportunity-modal .admin-announcement-form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+  padding:20px 24px 4px;
+}
+.admin-opportunity-modal .admin-announcement-field{
+  display:grid;
+  gap:7px;
+  min-width:0;
+}
+.admin-opportunity-modal .admin-announcement-field.full,
+.admin-opportunity-modal .admin-announcement-field.admin-announcement-field-full{
+  grid-column:1/-1;
+}
+.admin-opportunity-modal .admin-announcement-field>span{
+  color:#8e9993;
+  font-size:10px;
+  font-weight:700;
+}
+.admin-opportunity-modal .admin-announcement-field input,
+.admin-opportunity-modal .admin-announcement-field select,
+.admin-opportunity-modal .admin-announcement-field textarea{
+  width:100%;
+  min-height:40px;
+  box-sizing:border-box;
+  border:1px solid #29312d;
+  border-radius:10px;
+  background:#0d1012;
+  color:#e7ebe9;
+  padding:9px 11px;
+  outline:0;
+  font:inherit;
+  font-size:11px;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.admin-opportunity-modal .admin-announcement-field input:focus,
+.admin-opportunity-modal .admin-announcement-field select:focus,
+.admin-opportunity-modal .admin-announcement-field textarea:focus{
+  border-color:rgba(8,116,67,.55);
+  box-shadow:0 0 0 3px rgba(8,116,67,.08);
+}
+.admin-opportunity-modal .admin-announcement-field input[type="file"]{
+  min-height:42px;
+  padding:8px;
+  cursor:pointer;
+}
+.admin-opportunity-modal .admin-announcement-field textarea{
+  min-height:112px;
+  resize:vertical;
+}
+.admin-opportunity-form-actions{
+  display:flex!important;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  margin:0!important;
+  padding:18px 24px 22px;
+  border-top:1px solid rgba(255,255,255,.055);
+}
+.admin-opportunity-form-actions button{
+  min-height:38px;
+  padding:9px 15px;
+  border-radius:10px;
+  font:inherit;
+  font-size:10px;
+  font-weight:800;
+}
+.admin-opportunity-form-actions .primary{
+  background:#0d8751!important;
+  border-color:#0d8751!important;
+  color:#fff!important;
+}
+.admin-opportunity-form-actions .primary:hover{
+  background:#0b7848!important;
+  transform:translateY(-1px);
+}
+.admin-opportunity-modal .admin-announcement-field input::placeholder,
+.admin-opportunity-modal .admin-announcement-field textarea::placeholder{
+  color:#56615b;
+}
+body.aapi-admin-light .admin-opportunity-modal.admin-edit-modal{
+  background:#fff;
+  border-color:#dce5df;
+  color:#26352d;
+  box-shadow:0 24px 70px rgba(25,70,48,.14);
+}
+body.aapi-admin-light .admin-opportunity-form-head,
+body.aapi-admin-light .admin-opportunity-form-actions{
+  border-color:#e5ebe7;
+}
+body.aapi-admin-light .admin-opportunity-form-copy h2{
+  color:#20372c;
+}
+body.aapi-admin-light .admin-opportunity-form-copy p{
+  color:#68766f;
+}
+body.aapi-admin-light .admin-opportunity-modal-close{
+  background:#f8faf9!important;
+  border-color:#dce5df!important;
+  color:#68766f!important;
+}
+body.aapi-admin-light .admin-opportunity-modal .admin-announcement-field>span{
+  color:#52615a;
+}
+body.aapi-admin-light .admin-opportunity-modal .admin-announcement-field input,
+body.aapi-admin-light .admin-opportunity-modal .admin-announcement-field select,
+body.aapi-admin-light .admin-opportunity-modal .admin-announcement-field textarea{
+  background:#f8faf9;
+  border-color:#d5e2da;
+  color:#26352d;
+}
+body.aapi-admin-light .admin-opportunity-modal .admin-announcement-field input::placeholder,
+body.aapi-admin-light .admin-opportunity-modal .admin-announcement-field textarea::placeholder{
+  color:#849189;
+}
+@media(max-width:700px){
+  .admin-opportunity-modal-backdrop{padding:14px}
+  .admin-opportunity-modal.admin-edit-modal{
+    width:100%;
+    max-height:calc(100vh - 28px);
+  }
+  .admin-opportunity-form-head{padding:18px 18px 16px}
+  .admin-opportunity-form-copy{padding-right:40px}
+  .admin-opportunity-modal .admin-announcement-form-grid{
+    grid-template-columns:1fr;
+    padding:18px 18px 4px;
+  }
+  .admin-opportunity-modal .admin-announcement-field.full,
+  .admin-opportunity-modal .admin-announcement-field.admin-announcement-field-full{
+    grid-column:auto;
+  }
+  .admin-opportunity-form-actions{padding:16px 18px 18px}
+}
