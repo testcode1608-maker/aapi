@@ -150,8 +150,21 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
   };
 
   return (
-    <main className="admin-opportunities-page" dir={language === "ar" ? "rtl" : "ltr"}>
-      <section className="admin-panel soft-data-panel">
+    <div className="admin-dashboard admin-soft-data-page" dir={language === "ar" ? "rtl" : "ltr"}>
+      <main className="admin-dashboard-main soft-data-main admin-opportunities-page">
+        <header className="admin-opportunities-head">
+          <div>
+            <span>AAPI • {t("admin.data.section.opportunities.title")}</span>
+            <h1>{t("admin.data.section.opportunities.title")}</h1>
+            <p>{t("admin.data.section.opportunities.subtitle")}</p>
+          </div>
+          <button type="button" onClick={() => open()}>
+            <Plus size={17} />
+            {t("admin.data.opportunity.add")}
+          </button>
+        </header>
+
+        <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head admin-opportunities-panel-head">
           <div>
             <span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span>
@@ -160,10 +173,6 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
           </div>
 
           <div className="admin-opportunities-head-actions">
-            <button type="button" className="admin-opportunities-add" onClick={() => open()}>
-              <Plus size={15} />
-              {t("admin.data.opportunity.add")}
-            </button>
             <span className="soft-data-count">
               {filteredRows.length} {language === "ar" ? "عنصر" : language === "fr" ? "éléments" : "items"}
             </span>
@@ -298,9 +307,9 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
             </table>
           </div>
         )}
-      </section>
+        </section>
 
-      {modalOpen && (
+        {modalOpen && (
         <div
           className="admin-opportunity-modal-backdrop"
           onMouseDown={(event) => {
@@ -380,7 +389,8 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
             </footer>
           </form>
         </div>
-      )}
-    </main>
+        )}
+      </main>
+    </div>
   );
 }
