@@ -345,7 +345,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
             <label className="admin-announcement-field admin-announcement-field-full"><span>{language === "ar" ? "الوصف" : language === "en" ? "Description" : "Description"}</span><textarea value={sectorForm.description} onChange={e => setSectorForm(v => ({ ...v, description: e.target.value }))} placeholder={language === "ar" ? "وصف مختصر للقطاع..." : language === "en" ? "Short sector description..." : "Description courte du secteur..."} /></label>
           </div>
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingSector}>{creatingSector ? <><RefreshCw size={15} className="spin" /> {language === "ar" ? "إضافة..." : language === "en" ? "Adding..." : "Ajout..."}</> : <><Database size={15} /> {language === "ar" ? "إضافة القطاع" : language === "en" ? "Add sector" : "Ajouter le secteur"}</>}</button></div>
-        </form>}
+        </form></div>}
 
         {section === "announcements" && <form id="admin-create-form" className="admin-edit-modal admin-create-modal" onSubmit={async (e) => { await createAnnouncement(e); setCreateModalOpen(false); }}>
           <div className="admin-announcement-form-head">
@@ -364,7 +364,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
             <label className="admin-announcement-field"><span>{t("admin.data.announcement.publicationDate")}</span><input type="datetime-local" value={announcementForm.date_publication} onChange={e => setAnnouncementForm(v => ({ ...v, date_publication: e.target.value }))} /></label>
           </div>
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingAnnouncement}>{creatingAnnouncement ? <><RefreshCw size={15} className="spin" /> {t("admin.data.announcement.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.announcement.publish")}</>}</button></div>
-        </form>}
+        </form></div>}
 
         {section === "news" && <form id="admin-create-form" className="admin-edit-modal admin-create-modal" onSubmit={async (e) => { await createNews(e); setCreateModalOpen(false); }}>
           <div className="admin-announcement-form-head">
