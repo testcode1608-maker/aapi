@@ -206,3 +206,53 @@ body.aapi-admin-light .admin-opportunities-page .admin-status-badge.status-archi
     padding-right:12px;
   }
 }
+
+
+/* Final shell alignment — opportunities uses the same admin content geometry */
+.admin-opportunities-page{
+  box-sizing:border-box;
+  width:100%;
+  min-height:100%;
+  padding:0 30px 50px!important;
+}
+.admin-opportunities-page .soft-data-panel{
+  width:100%;
+  max-width:none;
+}
+.admin-opportunities-page .soft-data-panel-head,
+.admin-opportunities-page .soft-data-toolbar,
+.admin-opportunities-page .soft-data-table-wrap{
+  width:100%;
+  box-sizing:border-box;
+}
+.admin-opportunities-page .soft-data-panel-head{
+  min-height:76px;
+}
+.admin-opportunities-page .soft-data-toolbar{
+  min-height:66px;
+}
+.admin-opportunities-page .soft-data-search{
+  flex:1 1 320px;
+  max-width:520px;
+}
+.admin-opportunities-page .soft-data-table-wrap{
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+.admin-opportunities-page .soft-data-table{
+  width:100%;
+  min-width:900px;
+  table-layout:auto;
+}
+@media(max-width:900px){
+  .admin-opportunities-page{
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+}
+@media(max-width:480px){
+  .admin-opportunities-page{
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+}
