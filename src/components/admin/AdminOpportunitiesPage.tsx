@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { Pencil, Plus, RefreshCw, Search, Trash2, X, Database, CheckCircle2, Clock3, AlertCircle } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-opportunities.css";
+import "../../styles/admin-soft-ui.css";
 
 const API = "http://localhost/aapi-api/auth/admin/admin.php";
 type Row = Record<string, any>;
