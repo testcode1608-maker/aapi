@@ -327,9 +327,6 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
                         : "Ajouter un secteur"}
               </button>
             )}
-            <button className="admin-refresh-button soft-data-refresh" onClick={() => void load()} disabled={loading}>
-              <RefreshCw size={15} className={loading ? "spin" : ""} /> {t("admin.data.refresh")}
-            </button>
           </div>
         </div>
       </header>
