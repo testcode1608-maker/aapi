@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { ChevronDown, Pencil, Plus, RefreshCw, Search, Trash2, X } from "lucide-react";
+import { CheckCircle2, ChevronDown, CircleAlert, Clock3, Database, Pencil, Plus, RefreshCw, Search, Trash2, X } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-opportunities.css";
 import "../../styles/admin-soft-ui.css";
@@ -163,6 +163,41 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
             {t("admin.data.opportunity.add")}
           </button>
         </header>
+
+        <section className="soft-data-stat-grid">
+          <article className="soft-data-stat green">
+            <div className="soft-data-stat-icon"><Database size={18} /></div>
+            <div>
+              <span>{language === "ar" ? "إجمالي السجلات" : language === "fr" ? "Total des enregistrements" : "Total records"}</span>
+              <strong>{rows.length}</strong>
+              <small>AAPI • {language === "ar" ? "تحديث مباشر" : language === "fr" ? "Mise à jour en direct" : "Live update"}</small>
+            </div>
+          </article>
+          <article className="soft-data-stat gold">
+            <div className="soft-data-stat-icon"><CheckCircle2 size={18} /></div>
+            <div>
+              <span>{language === "ar" ? "نشطة / مقبولة" : language === "fr" ? "Actives / acceptées" : "Active / accepted"}</span>
+              <strong>{rows.filter(row => row.statut === "publie").length}</strong>
+              <small>AAPI • {language === "ar" ? "تحديث مباشر" : language === "fr" ? "Mise à jour en direct" : "Live update"}</small>
+            </div>
+          </article>
+          <article className="soft-data-stat blue">
+            <div className="soft-data-stat-icon"><Clock3 size={18} /></div>
+            <div>
+              <span>{language === "ar" ? "قيد المتابعة" : language === "fr" ? "En suivi" : "Under review"}</span>
+              <strong>{rows.filter(row => row.statut === "brouillon").length}</strong>
+              <small>AAPI • {language === "ar" ? "تحديث مباشر" : language === "fr" ? "Mise à jour en direct" : "Live update"}</small>
+            </div>
+          </article>
+          <article className="soft-data-stat red">
+            <div className="soft-data-stat-icon"><CircleAlert size={18} /></div>
+            <div>
+              <span>{language === "ar" ? "مرفوضة / متوقفة" : language === "fr" ? "Refusées / arrêtées" : "Rejected / stopped"}</span>
+              <strong>{rows.filter(row => row.statut === "archive").length}</strong>
+              <small>AAPI • {language === "ar" ? "تحديث مباشر" : language === "fr" ? "Mise à jour en direct" : "Live update"}</small>
+            </div>
+          </article>
+        </section>
 
         <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head admin-opportunities-panel-head">
