@@ -145,7 +145,9 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
     }
   };
 
-  const opportunityStats = { total: rows.length, published: rows.filter((row) => row.statut === "publie").length, pending: rows.filter((row) => row.statut === "brouillon").length, archived: rows.filter((row) => row.statut === "archive").length };\n\n  const statusLabel = (status: string) => {
+  const opportunityStats = { total: rows.length, published: rows.filter((row) => row.statut === "publie").length, pending: rows.filter((row) => row.statut === "brouillon").length, archived: rows.filter((row) => row.statut === "archive").length };
+
+  const statusLabel = (status: string) => {
     if (status === "publie") return t("admin.data.announcement.published");
     if (status === "brouillon") return t("admin.data.announcement.draft");
     return t("admin.data.announcement.archived");
