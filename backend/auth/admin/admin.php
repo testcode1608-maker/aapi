@@ -58,6 +58,7 @@ $handlers = [
     'news' => __DIR__.'/news.php',
     'sectors' => __DIR__.'/sectors.php',
     'opportunities' => __DIR__.'/opportunities.php',
+    'opportunity_options' => __DIR__.'/opportunities.php',
     'create_opportunity' => __DIR__.'/opportunities.php',
     'update_opportunity' => __DIR__.'/opportunities.php',
     'create_sector' => __DIR__.'/sectors.php',
