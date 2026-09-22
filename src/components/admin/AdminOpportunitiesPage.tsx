@@ -35,7 +35,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [optionSectors, setOptionSectors] = useState<Array<{ id: number; nom: string }>>([]);
   const [optionProjects, setOptionProjects] = useState<Array<{ id: number; titre: string; wilaya: string }>>([]);
-  const [optionWilayas, setOptionWilayas] = useState<string[]>([]);
+  const [optionWilayas, setOptionWilayas] = useState<Array<{ id: number; code: string; nom_fr: string; nom_ar: string }>>([]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -389,8 +389,11 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
                 <span>{t("admin.data.labels.wilaya")}</span>
                 <select value={form.wilaya} onChange={(event) => setForm((value) => ({ ...value, wilaya: event.target.value }))} required>
                   <option value="">Sélectionner une wilaya</option>
-                  {optionWilayas.map((wilaya) => <option key={wilaya} value={wilaya}>{wilaya}</option>)}
-                  {form.wilaya && !optionWilayas.includes(form.wilaya) && <option value={form.wilaya}>{form.wilaya}</option>}
+                  {optionWilayas.map((wilaya) => {
+                    const label = language === "ar" ? wilaya.nom_ar : wilaya.nom_fr;
+                    return <option key={wilaya.id} value={wilaya.nom_fr}>{label}</option>;
+                  })}
+                  {form.wilaya && !optionWilayas.some((wilaya) => wilaya.nom_fr === form.wilaya || wilaya.nom_ar === form.wilaya) && <option value={form.wilaya}>{form.wilaya}</option>}
                 </select>
               </label>
 
