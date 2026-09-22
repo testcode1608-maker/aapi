@@ -12,9 +12,28 @@ function OpportunitiesPage(){
  const [opportunities,setOpportunities]=useState<Opportunity[]>([]);
  const [activeSector,setActiveSector]=useState("all");
  const [search,setSearch]=useState("");
- const [loading,setLoading]=useState(true);\n const [error,setError]=useState("");
+ const [loading,setLoading]=useState(true);
+ const [error,setError]=useState("");
  const sectors=[["all","all"],["industry","الصناعة"],["agriculture","الفلاحة"],["energy","الطاقة"],["tourism","السياحة"],["technology","التكنولوجيا"],["transport","النقل"]] as const;
- useEffect(()=>{\n  let cancelled=false;\n  setLoading(true);\n  setError("");\n  fetch(API,{cache:"no-store"})\n   .then(async response=>{\n    const data=await response.json().catch(()=>null);\n    if(!response.ok) throw new Error(data?.message||`Erreur API (${response.status})`);\n    if(!data?.success) throw new Error(data?.message||"Impossible de charger les opportunités.");\n    if(!cancelled) setOpportunities(Array.isArray(data.opportunities)?data.opportunities:[]);\n   })\n   .catch(error=>{\n    if(cancelled)return;\n    setOpportunities([]);\n    setError(error instanceof Error?error.message:"Impossible de charger les opportunités.");\n   })\n   .finally(()=>{if(!cancelled)setLoading(false)});\n  return()=>{cancelled=true};\n },[]);
+ useEffect(()=>{
+  let cancelled=false;
+  setLoading(true);
+  setError("");
+  fetch(API,{cache:"no-store"})
+   .then(async response=>{
+    const data=await response.json().catch(()=>null);
+    if(!response.ok) throw new Error(data?.message||`Erreur API (${response.status})`);
+    if(!data?.success) throw new Error(data?.message||"Impossible de charger les opportunités.");
+    if(!cancelled) setOpportunities(Array.isArray(data.opportunities)?data.opportunities:[]);
+   })
+   .catch(error=>{
+    if(cancelled)return;
+    setOpportunities([]);
+    setError(error instanceof Error?error.message:"Impossible de charger les opportunités.");
+   })
+   .finally(()=>{if(!cancelled)setLoading(false)});
+  return()=>{cancelled=true};
+ },[]);
  const filtered=useMemo(()=>{const value=search.trim().toLowerCase();const label=sectors.find(([k])=>k===activeSector)?.[1]??"";return opportunities.filter(o=>(!label||o.secteur===label)&&(!value||[o.titre,o.wilaya,o.secteur,o.description].some(v=>String(v).toLowerCase().includes(value))))},[activeSector,search,opportunities]);
  const reset=()=>{setSearch("");setActiveSector("all")};
  return <>
