@@ -15,15 +15,6 @@ const sectorMeta = [
 
 function SectorsPage() {
   const { t } = useTranslation();
-  const fallbackSectors: Sector[] = sectorMeta.map(([icon, number]) => ({
-    icon,
-    number,
-    title: t(`sectorsPage.s${number.replace(/^0/, "")}`),
-    description: t(`sectorsPage.s${number.replace(/^0/, "")}Text`),
-    opportunities: t(`sectorsPage.s${number.replace(/^0/, "")}Opp`),
-  }));
-  const [dbSectors, setDbSectors] = useState<ApiSector[] | null>(null);
-
   useEffect(() => {
     let cancelled = false;
     fetch("http://localhost/aapi-api/sectors.php")
@@ -34,7 +25,8 @@ function SectorsPage() {
         if (!r.ok || !data.success) throw new Error("Unable to load sectors");
         if (!cancelled) setDbSectors(Array.isArray(data.sectors) ? data.sectors : []);
       })
-      .catch(() => { if (!cancelled) setDbSectors([]); });
+      .catch(() => { if (!cancelled) { setDbSectors([]); setSectorsError("Impossible de charger les secteurs depuis la base de données."); } })
+      .finally(() => { if (!cancelled) setSectorsLoading(false); });
     return () => { cancelled = true; };
   }, []);
 
@@ -51,16 +43,14 @@ function SectorsPage() {
     return "bi-buildings";
   };
 
-  const sectors: Sector[] = dbSectors && dbSectors.length > 0
-    ? dbSectors.map((sector, index) => ({
-        icon: iconForSector(sector.nom),
-        number: String(index + 1).padStart(2, "0"),
-        title: sector.nom,
-        description: sector.description || "",
-        opportunities: t("sectorsPage.explore"),
-        imageUrl: sector.image_url,
-      }))
-    : fallbackSectors;
+  const sectors: Sector[] = dbSectors.map((sector, index) => ({
+    icon: iconForSector(sector.nom),
+    number: String(index + 1).padStart(2, "0"),
+    title: sector.nom,
+    description: sector.description || "",
+    opportunities: t("sectorsPage.explore"),
+    imageUrl: sector.image_url,
+  }));
 
   return (
     <>
@@ -74,14 +64,14 @@ function SectorsPage() {
       </div></div></section>
 
       <section className="sectors-mini-stats"><div className="container"><div className="row g-0">
-        <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>{dbSectors && dbSectors.length > 0 ? `${String(dbSectors.length).padStart(2, "0")}+` : "09+"}</strong><span>{t("sectorsPage.statSectors")}</span></div></div>
+        <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>{String(dbSectors.length).padStart(2, "0")}+</strong><span>{t("sectorsPage.statSectors")}</span></div></div>
         <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>58</strong><span>{t("sectorsPage.statWilayas")}</span></div></div>
         <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>48+</strong><span>{t("sectorsPage.statActivities")}</span></div></div>
         <div className="col-lg-3 col-md-6"><div className="sector-mini-stat"><strong>∞</strong><span>{t("sectorsPage.statPotential")}</span></div></div>
       </div></div></section>
 
       <section className="sectors-page-content"><div className="container"><div className="row g-4">
-        {sectors.map((sector) => <div className="col-xl-4 col-lg-6 col-md-6" key={sector.number}>
+        {sectorsLoading ? <div className="col-12"><div className="sectors-page-state"><i className="bi bi-hourglass-split" aria-hidden="true"></i><h3>Chargement des secteurs...</h3></div></div> : sectorsError ? <div className="col-12"><div className="sectors-page-state is-error"><i className="bi bi-exclamation-triangle" aria-hidden="true"></i><h3>Impossible de charger les secteurs</h3><p>{sectorsError}</p></div></div> : sectors.length === 0 ? <div className="col-12"><div className="sectors-page-state"><i className="bi bi-database-x" aria-hidden="true"></i><h3>Aucun secteur actif</h3><p>Ajoutez des secteurs avec le statut « actif » dans la base de données.</p></div></div> : sectors.map((sector) => <div className="col-xl-4 col-lg-6 col-md-6" key={sector.number}>
           <article className="sector-page-card">
             <div className="sector-page-card-visual">
               {sector.imageUrl ? <img src={sector.imageUrl} alt={sector.title} loading="lazy" /> : <div className="sector-page-card-placeholder"><i className={`bi ${sector.icon}`} aria-hidden="true"></i></div>}
