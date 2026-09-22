@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { Search, RefreshCw, Database, CheckCircle2, Clock3, AlertCircle, ChevronDown, Trash2, MessageSquare, Pencil } from "lucide-react";
+import { Search, RefreshCw, Database, CheckCircle2, Clock3, AlertCircle, ChevronDown, Trash2, MessageSquare, Pencil, Plus } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-status-dropdown.css";
 
@@ -307,16 +307,36 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
             <h1>{c.title}</h1>
             <p>{c.subtitle}</p>
           </div>
-          <button className="admin-refresh-button soft-data-refresh" onClick={() => void load()} disabled={loading}>
-            <RefreshCw size={15} className={loading ? "spin" : ""} /> {t("admin.data.refresh")}
-          </button>
+          <div className="soft-data-header-actions">
+            {(section === "news" || section === "announcements" || section === "sectors") && (
+              <button
+                type="button"
+                className="admin-add-button"
+                onClick={() => document.getElementById("admin-create-form")?.scrollIntoView({ behavior: "smooth", block: "center" })}
+              >
+                <Plus size={17} />
+                {section === "news"
+                  ? t("admin.data.news.new")
+                  : section === "announcements"
+                    ? t("admin.data.announcement.new")
+                    : language === "ar"
+                      ? "إضافة قطاع استثماري"
+                      : language === "en"
+                        ? "Add investment sector"
+                        : "Ajouter un secteur"}
+              </button>
+            )}
+            <button className="admin-refresh-button soft-data-refresh" onClick={() => void load()} disabled={loading}>
+              <RefreshCw size={15} className={loading ? "spin" : ""} /> {t("admin.data.refresh")}
+            </button>
+          </div>
         </div>
       </header>
       <section className="soft-data-stat-grid">{summary.map(item => <article className={`soft-data-stat ${item.tone}`} key={item.label}><div className="soft-data-stat-icon">{item.icon}</div><div><span>{item.label}</span><strong>{item.value}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>)}</section>
       <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head"><div><span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span><h2>{c.title}</h2><p>{c.subtitle}</p></div><span className="soft-data-count">{fmt(total, language)} {t("admin.data.items")}</span></div>
 
-        {section === "sectors" && <form className="admin-announcement-form admin-sector-form" onSubmit={createSector}>
+        {section === "sectors" && <form id="admin-create-form" className="admin-announcement-form admin-sector-form" onSubmit={createSector}>
           <div className="admin-announcement-form-head"><div className="admin-announcement-form-copy"><span className="admin-announcement-eyebrow">{language === "ar" ? "إدارة القطاعات" : language === "en" ? "SECTOR MANAGEMENT" : "GESTION DES SECTEURS"}</span><h2>{language === "ar" ? "إضافة قطاع استثماري" : language === "en" ? "Add investment sector" : "Ajouter un secteur d’investissement"}</h2><p>{language === "ar" ? "أضف قطاعاً جديداً ليظهر في إدارة القطاعات." : language === "en" ? "Add a new sector to the sector management list." : "Ajoutez un nouveau secteur à la liste de gestion."}</p></div><div className="admin-announcement-form-mark" aria-hidden="true"><Database size={22} /></div></div>
           <div className="admin-announcement-form-grid">
             <label className="admin-announcement-field"><span>{language === "ar" ? "اسم القطاع" : language === "en" ? "Sector name" : "Nom du secteur"}</span><input value={sectorForm.nom} onChange={e => setSectorForm(v => ({ ...v, nom: e.target.value }))} placeholder={language === "ar" ? "مثال: الصناعات الدوائية" : language === "en" ? "e.g. Pharmaceutical industry" : "Ex. Industrie pharmaceutique"} required /></label>
@@ -326,7 +346,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingSector}>{creatingSector ? <><RefreshCw size={15} className="spin" /> {language === "ar" ? "إضافة..." : language === "en" ? "Adding..." : "Ajout..."}</> : <><Database size={15} /> {language === "ar" ? "إضافة القطاع" : language === "en" ? "Add sector" : "Ajouter le secteur"}</>}</button></div>
         </form>}
 
-        {section === "announcements" && <form className="admin-announcement-form" onSubmit={createAnnouncement}>
+        {section === "announcements" && <form id="admin-create-form" className="admin-announcement-form" onSubmit={createAnnouncement}>
           <div className="admin-announcement-form-head">
             <div className="admin-announcement-form-copy">
               <span className="admin-announcement-eyebrow">{t("admin.data.announcement.eyebrow")}</span>
@@ -345,7 +365,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingAnnouncement}>{creatingAnnouncement ? <><RefreshCw size={15} className="spin" /> {t("admin.data.announcement.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.announcement.publish")}</>}</button></div>
         </form>}
 
-        {section === "news" && <form className="admin-announcement-form" onSubmit={createNews}>
+        {section === "news" && <form id="admin-create-form" className="admin-announcement-form" onSubmit={createNews}>
           <div className="admin-announcement-form-head">
             <div className="admin-announcement-form-copy">
               <span className="admin-announcement-eyebrow">{t("admin.data.news.eyebrow")}</span>
