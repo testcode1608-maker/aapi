@@ -7,14 +7,11 @@ type Sector = { icon: string; number: string; title: string; description: string
 
 type ApiSector = { id: number; nom: string; description: string; image_url?: string };
 
-const sectorMeta = [
-  ["bi-buildings", "01"], ["bi-tree", "02"], ["bi-sun", "03"],
-  ["bi-water", "04"], ["bi-cpu", "05"], ["bi-truck", "06"],
-  ["bi-droplet", "07"], ["bi-heart-pulse", "08"], ["bi-house", "09"],
-] as const;
-
 function SectorsPage() {
   const { t } = useTranslation();
+  const [dbSectors, setDbSectors] = useState<ApiSector[]>([]);
+  const [sectorsLoading, setSectorsLoading] = useState(true);
+  const [sectorsError, setSectorsError] = useState("");
   useEffect(() => {
     let cancelled = false;
     fetch("http://localhost/aapi-api/sectors.php")
