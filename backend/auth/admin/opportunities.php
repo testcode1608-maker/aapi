@@ -43,8 +43,8 @@ try{
     $sectors=$sectorStmt->fetchAll(PDO::FETCH_ASSOC);
     $projectStmt=$pdo->query("SELECT id, titre, wilaya FROM projects ORDER BY titre ASC");
     $projects=$projectStmt->fetchAll(PDO::FETCH_ASSOC);
-    $wilayaStmt=$pdo->query("SELECT DISTINCT wilaya FROM projects WHERE wilaya IS NOT NULL AND TRIM(wilaya)<>'' ORDER BY wilaya ASC");
-    $wilayas=array_values(array_filter(array_map(static fn($row)=>(string)$row["wilaya"],$wilayaStmt->fetchAll(PDO::FETCH_ASSOC))));
+    $wilayaStmt=$pdo->query("SELECT id, code, nom_fr, nom_ar FROM wilayas WHERE statut = 'actif' ORDER BY CAST(code AS UNSIGNED) ASC");
+    $wilayas=$wilayaStmt->fetchAll(PDO::FETCH_ASSOC);
     opportunityJson(true,"Options chargées depuis la base de données.",["sectors"=>$sectors,"projects"=>$projects,"wilayas"=>$wilayas]);
   }
 
