@@ -76,6 +76,10 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
     }
   }, [userId, t]);
 
+  useEffect(() => {
+    void loadOptions();
+  }, [loadOptions]);
+
   const open = (row?: Row) => {
     setEditing(row ?? null);
     setModalOpen(true);
