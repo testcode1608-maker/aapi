@@ -57,6 +57,9 @@ $handlers = [
     'announcements' => __DIR__.'/announcements.php',
     'news' => __DIR__.'/news.php',
     'sectors' => __DIR__.'/sectors.php',
+    'opportunities' => __DIR__.'/opportunities.php',
+    'create_opportunity' => __DIR__.'/opportunities.php',
+    'update_opportunity' => __DIR__.'/opportunities.php',
     'create_sector' => __DIR__.'/sectors.php',
     'update_sector' => __DIR__.'/sectors.php',
     'create_news' => __DIR__.'/news.php',
@@ -79,6 +82,7 @@ $handlers = [
     'delete_messages' => __DIR__.'/delete.php',
     'delete_documents' => __DIR__.'/delete.php',
     'delete_sectors' => __DIR__.'/delete.php',
+    'delete_opportunities' => __DIR__.'/delete.php',
     'delete_announcements' => __DIR__.'/delete.php',
     'delete_news' => __DIR__.'/delete.php',
 ];
