@@ -20,6 +20,7 @@ export default function AdminNavbar({ onToggle }: { onToggle: () => void }) {
     ["/admin/messages", t("admin.nav.messages"), <MessageSquare size={18} />],
     ["/admin/documents", t("admin.nav.documents"), <FileCheck2 size={18} />],
     ["/admin/sectors", language === "ar" ? "القطاعات" : language === "en" ? "Sectors" : "Secteurs", <Building2 size={18} />],
+    ["/admin/opportunities", language === "ar" ? "فرص الاستثمار" : language === "en" ? "Opportunities" : "Opportunités", <Building2 size={18} />],
     ["/admin/announcements", t("admin.nav.announcements"), <MessageSquare size={18} />],
     ["/admin/news", t("admin.nav.news"), <MessageSquare size={18} />],
   ];
