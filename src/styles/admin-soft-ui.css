@@ -19,3 +19,119 @@ body:not(.aapi-admin-light) .soft-ui-kpi{background:linear-gradient(145deg,#1518
 body.aapi-admin-light .admin-soft-data-page .admin-opportunities-head span{color:#087443}body.aapi-admin-light .admin-soft-data-page .admin-opportunities-head p{color:#68766f}body.aapi-admin-light .admin-soft-data-page .admin-opportunities-head>button{background:rgba(8,116,67,.08);border-color:rgba(8,116,67,.2);color:#087443}
 @media(max-width:700px){.admin-soft-data-page .admin-opportunities-head{display:flex;flex-direction:column;align-items:stretch;gap:14px}.admin-soft-data-page .admin-opportunities-head>button{width:fit-content;align-self:flex-start}}
 @media(max-width:480px){.admin-soft-data-page .admin-opportunities-head>button{width:100%;align-self:stretch}}
+
+
+/* Data tables — same visual system as Opportunities */
+.admin-soft-data-page .soft-data-table-wrap{
+  overflow:auto;
+  background:var(--aapi-surface,#111613);
+  border:1px solid #29312d;
+  border-radius:16px;
+}
+.admin-soft-data-page .soft-data-table{
+  width:100%;
+  min-width:1050px;
+  border-collapse:collapse;
+}
+.admin-soft-data-page .soft-data-table thead th,
+.admin-soft-data-page .soft-data-table tbody td{
+  padding:13px 14px;
+  text-align:right;
+  vertical-align:middle;
+  border-bottom:1px solid #252d29;
+}
+.admin-soft-data-page .soft-data-table thead th{
+  height:auto;
+  background:#101317;
+  color:#8e9b94;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:0;
+  white-space:nowrap;
+}
+.admin-soft-data-page .soft-data-table tbody td{
+  height:auto;
+  min-height:58px;
+  color:#b9c0bd;
+  font-size:13px;
+  line-height:1.55;
+}
+.admin-soft-data-page .soft-data-table tbody tr{
+  transition:background .15s ease;
+}
+.admin-soft-data-page .soft-data-table tbody tr:hover{
+  background:rgba(8,116,67,.045);
+}
+.admin-soft-data-page .soft-data-table tbody tr:last-child td{
+  border-bottom:0;
+}
+.admin-soft-data-page .soft-data-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:7px;
+  flex-wrap:wrap;
+  white-space:nowrap;
+}
+.admin-soft-data-page .soft-data-actions button{
+  border:1px solid rgba(112,201,154,.25);
+  background:rgba(112,201,154,.1);
+  color:#dce5e1;
+  border-radius:10px;
+  padding:10px 14px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+  font:inherit;
+  font-size:12px;
+  line-height:1;
+  transition:.18s ease;
+}
+.admin-soft-data-page .soft-data-actions .soft-edit-button:hover{
+  background:rgba(112,201,154,.17);
+  border-color:rgba(112,201,154,.4);
+  transform:translateY(-1px);
+}
+.admin-soft-data-page .soft-data-actions .soft-delete-button{
+  color:#ffaaa7;
+  background:rgba(255,90,90,.08);
+  border-color:rgba(255,90,90,.2);
+}
+.admin-soft-data-page .soft-data-actions .soft-delete-button:hover{
+  background:rgba(255,90,90,.14);
+  border-color:rgba(255,90,90,.35);
+  transform:translateY(-1px);
+}
+.admin-soft-data-page .soft-data-actions button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  transform:none;
+}
+body.aapi-admin-light .admin-soft-data-page .soft-data-table-wrap{
+  background:#fff;
+  border-color:#dce5df;
+}
+body.aapi-admin-light .admin-soft-data-page .soft-data-table thead th{
+  background:#f7faf8;
+  color:#68766f;
+  border-color:#dce5df;
+}
+body.aapi-admin-light .admin-soft-data-page .soft-data-table tbody td{
+  color:#425149;
+  border-color:#e5ebe7;
+}
+body.aapi-admin-light .admin-soft-data-page .soft-data-actions button{
+  color:#28513e;
+  background:rgba(8,116,67,.08);
+  border-color:rgba(8,116,67,.2);
+}
+body.aapi-admin-light .admin-soft-data-page .soft-data-actions .soft-delete-button{
+  color:#b34a46;
+  background:rgba(255,90,90,.07);
+  border-color:rgba(255,90,90,.18);
+}
+@media(max-width:800px){
+  .admin-soft-data-page .soft-data-table{min-width:850px}
+}
