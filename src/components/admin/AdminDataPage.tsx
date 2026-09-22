@@ -347,7 +347,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingSector}>{creatingSector ? <><RefreshCw size={15} className="spin" /> {language === "ar" ? "إضافة..." : language === "en" ? "Adding..." : "Ajout..."}</> : <><Database size={15} /> {language === "ar" ? "إضافة القطاع" : language === "en" ? "Add sector" : "Ajouter le secteur"}</>}</button></div>
         </form></div>}
 
-        {section === "announcements" && <form id="admin-create-form" className="admin-edit-modal admin-create-modal" onSubmit={async (e) => { await createAnnouncement(e); setCreateModalOpen(false); }}>
+        {createModalOpen && section === "announcements" && <div className="admin-edit-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setCreateModalOpen(false); }}><form id="admin-create-form" className="admin-edit-modal admin-create-modal" onSubmit={async (e) => { await createAnnouncement(e); setCreateModalOpen(false); }}>
           <div className="admin-announcement-form-head">
             <div className="admin-announcement-form-copy">
               <span className="admin-announcement-eyebrow">{t("admin.data.announcement.eyebrow")}</span>
@@ -366,7 +366,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingAnnouncement}>{creatingAnnouncement ? <><RefreshCw size={15} className="spin" /> {t("admin.data.announcement.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.announcement.publish")}</>}</button></div>
         </form></div>}
 
-        {section === "news" && <form id="admin-create-form" className="admin-edit-modal admin-create-modal" onSubmit={async (e) => { await createNews(e); setCreateModalOpen(false); }}>
+        {createModalOpen && section === "news" && <div className="admin-edit-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setCreateModalOpen(false); }}><form id="admin-create-form" className="admin-edit-modal admin-create-modal" onSubmit={async (e) => { await createNews(e); setCreateModalOpen(false); }}>
           <div className="admin-announcement-form-head">
             <div className="admin-announcement-form-copy">
               <span className="admin-announcement-eyebrow">{t("admin.data.news.eyebrow")}</span>
