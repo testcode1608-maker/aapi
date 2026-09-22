@@ -24,8 +24,12 @@ body.aapi-admin-light .soft-ui-health-item b{color:#087443!important}
 .admin-soft-data-page .admin-opportunities-head>button{border:1px solid rgba(112,201,154,.25);background:rgba(112,201,154,.1);color:inherit;border-radius:10px;padding:10px 14px;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;white-space:nowrap;flex:0 0 auto;font:inherit;font-weight:700;transition:.18s ease}
 .admin-soft-data-page .admin-opportunities-head>button:hover{background:rgba(112,201,154,.17);border-color:rgba(112,201,154,.4);transform:translateY(-1px)}
 .admin-soft-data-page .admin-opportunities-head>button:active{transform:translateY(0)}
-.admin-soft-data-page[dir="rtl"] .admin-opportunities-head>button{order:0}
-.admin-soft-data-page[dir="ltr"] .admin-opportunities-head>button{order:0}
+.admin-soft-data-page[dir="ltr"] .admin-opportunities-head{direction:ltr;text-align:left}
+.admin-soft-data-page[dir="ltr"] .admin-opportunities-head>div{order:1}
+.admin-soft-data-page[dir="ltr"] .admin-opportunities-head>button{order:2}
+.admin-soft-data-page[dir="rtl"] .admin-opportunities-head{direction:rtl;text-align:right}
+.admin-soft-data-page[dir="rtl"] .admin-opportunities-head>div{order:2}
+.admin-soft-data-page[dir="rtl"] .admin-opportunities-head>button{order:1}
 body.aapi-admin-light .admin-soft-data-page .admin-opportunities-head span{color:#087443}
 body.aapi-admin-light .admin-soft-data-page .admin-opportunities-head p{color:#68766f}
 body.aapi-admin-light .admin-soft-data-page .admin-opportunities-head>button{background:rgba(8,116,67,.08);border-color:rgba(8,116,67,.2);color:#087443}
