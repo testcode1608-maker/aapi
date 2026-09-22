@@ -32,7 +32,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
   const [photo, setPhoto] = useState<File | null>(null);
   const [editing, setEditing] = useState<Row | null>(null);
   const [form, setForm] = useState(empty);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);\n  const [optionSectors, setOptionSectors] = useState<Array<{ id: number; nom: string }>>([]);\n  const [optionProjects, setOptionProjects] = useState<Array<{ id: number; titre: string; wilaya: string }>>([]);\n  const [optionWilayas, setOptionWilayas] = useState<string[]>([]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -59,6 +59,19 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
   useEffect(() => {
     void load();
   }, [load]);
+
+  const loadOptions = useCallback(async () => {
+    try {
+      const response = await fetch(API + "?action=opportunity_options&user_id=" + encodeURIComponent(String(userId)));
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message);
+      setOptionSectors(data.sectors ?? []);
+      setOptionProjects(data.projects ?? []);
+      setOptionWilayas(data.wilayas ?? []);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("admin.data.loadError"));
+    }
+  }, [userId, t]);
 
   const open = (row?: Row) => {
     setEditing(row ?? null);
@@ -365,21 +378,45 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
             </div>
 
             <div className="admin-announcement-form-grid">
+              <label className="admin-announcement-field">
+                <span>{t("admin.data.labels.wilaya")}</span>
+                <select value={form.wilaya} onChange={(event) => setForm((value) => ({ ...value, wilaya: event.target.value }))} required>
+                  <option value="">Sélectionner une wilaya</option>
+                  {optionWilayas.map((wilaya) => <option key={wilaya} value={wilaya}>{wilaya}</option>)}
+                  {form.wilaya && !optionWilayas.includes(form.wilaya) && <option value={form.wilaya}>{form.wilaya}</option>}
+                </select>
+              </label>
+
+              <label className="admin-announcement-field">
+                <span>{t("admin.data.labels.secteur")}</span>
+                <select value={form.secteur} onChange={(event) => setForm((value) => ({ ...value, secteur: event.target.value }))} required>
+                  <option value="">Sélectionner un secteur</option>
+                  {optionSectors.map((sector) => <option key={sector.id} value={sector.nom}>{sector.nom}</option>)}
+                  {form.secteur && !optionSectors.some((sector) => sector.nom === form.secteur) && <option value={form.secteur}>{form.secteur}</option>}
+                </select>
+              </label>
+
+              <label className="admin-announcement-field">
+                <span>Projet</span>
+                <select value={form.titre} onChange={(event) => {
+                  const titre = event.target.value;
+                  const project = optionProjects.find((item) => item.titre === titre);
+                  setForm((value) => ({ ...value, titre, ...(project?.wilaya ? { wilaya: project.wilaya } : {}) }));
+                }} required>
+                  <option value="">Sélectionner un projet</option>
+                  {optionProjects.map((project) => <option key={project.id} value={project.titre}>{project.titre}</option>)}
+                  {form.titre && !optionProjects.some((project) => project.titre === form.titre) && <option value={form.titre}>{form.titre}</option>}
+                </select>
+              </label>
+
               {([
-                ["secteur", t("admin.data.labels.secteur")],
-                ["titre", t("admin.data.labels.titre")],
-                ["wilaya", t("admin.data.labels.wilaya")],
                 ["investissement", t("admin.data.opportunity.investment")],
                 ["emplois", t("admin.data.opportunity.jobs")],
                 ["icone", t("admin.data.opportunity.icon")],
               ] as const).map(([key, label]) => (
                 <label key={key} className="admin-announcement-field">
                   <span>{label}</span>
-                  <input
-                    value={String(form[key])}
-                    onChange={(event) => setForm((value) => ({ ...value, [key]: event.target.value }))}
-                    required
-                  />
+                  <input value={String(form[key])} onChange={(event) => setForm((value) => ({ ...value, [key]: event.target.value }))} required />
                 </label>
               ))}
 
