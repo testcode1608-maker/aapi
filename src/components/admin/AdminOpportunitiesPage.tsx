@@ -154,7 +154,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
       <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head admin-opportunities-panel-head">
           <div>
-            <span className="soft-ui-card-label">{t("admin.data.management")}</span>
+            <span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span>
             <h2>{t("admin.data.section.opportunities.title")}</h2>
             <p>{t("admin.data.section.opportunities.subtitle")}</p>
           </div>
@@ -290,7 +290,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
                 {!filteredRows.length && (
                   <tr>
                     <td colSpan={9} className="soft-data-empty">
-                      {t("admin.data.noResults")}
+                      {t("admin.data.noData")}
                     </td>
                   </tr>
                 )}
