@@ -297,7 +297,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       ? ["id", "titre", "image", "statut", "date_publication", "auteur_id"]
       : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
 
-  return <div className="admin-dashboard admin-soft-data-page">
+  return <div className="admin-dashboard admin-soft-data-page" dir={language === "ar" ? "rtl" : "ltr"}>
     {error && <div className="admin-dashboard-error"><AlertCircle size={16} /><span>{error}</span></div>}
     <main className="admin-dashboard-main soft-data-main">
       <header className="admin-dashboard-main">
