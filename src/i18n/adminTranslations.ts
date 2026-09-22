@@ -19,7 +19,7 @@ export const adminTranslations = {
         messages: { title: "الرسائل", subtitle: "إدارة رسائل المستثمرين ومتابعة المقروء وغير المقروء" },
         documents: { title: "الوثائق", subtitle: "مراجعة وثائق المستثمرين والتحقق من حالتها" },
         announcements: { title: "الإعلانات", subtitle: "إنشاء ونشر ومتابعة إعلانات الوكالة" },
-        sectors: { title: "القطاعات", subtitle: "إدارة القطاعات الاستثمارية وصورها ووصفها" }, opportunities: { title: "فرص الاستثمار", subtitle: "إدارة فرص الاستثمار وصورها وبياناتها" }, { title: "فرص الاستثمار", subtitle: "إدارة فرص الاستثمار وصورها وبياناتها" },
+        sectors: { title: "القطاعات", subtitle: "إدارة القطاعات الاستثمارية وصورها ووصفها" }, opportunities: { title: "فرص الاستثمار", subtitle: "إدارة فرص الاستثمار وصورها وبياناتها" },
         news: { title: "الأخبار", subtitle: "إنشاء ونشر ومتابعة أخبار الوكالة" }
       },
       labels: {
@@ -51,7 +51,7 @@ export const adminTranslations = {
         messages: { title: "Messages", subtitle: "Gérer les messages des investisseurs et suivre les messages lus et non lus" },
         documents: { title: "Documents", subtitle: "Examiner les documents des investisseurs et vérifier leur statut" },
         announcements: { title: "Annonces", subtitle: "Créer, publier et suivre les annonces de l’agence" },
-        sectors: { title: "Secteurs", subtitle: "Gérer les secteurs d’investissement, leurs images et descriptions" }, opportunities: { title: "Opportunités d’investissement", subtitle: "Gérer les opportunités d’investissement, leurs images et leurs données" }, { title: "Opportunités d’investissement", subtitle: "Gérer les opportunités d’investissement, leurs images et leurs données" },
+        sectors: { title: "Secteurs", subtitle: "Gérer les secteurs d’investissement, leurs images et descriptions" }, opportunities: { title: "Opportunités d’investissement", subtitle: "Gérer les opportunités d’investissement, leurs images et leurs données" },
         news: { title: "Actualités", subtitle: "Créer, publier et suivre les actualités de l’agence" }
       },
       labels: {
@@ -83,7 +83,7 @@ export const adminTranslations = {
         messages: { title: "Messages", subtitle: "Manage investor messages and track read and unread messages" },
         documents: { title: "Documents", subtitle: "Review investor documents and verify their status" },
         announcements: { title: "Announcements", subtitle: "Create, publish and manage agency announcements" },
-        sectors: { title: "Sectors", subtitle: "Manage investment sectors, their images and descriptions" }, opportunities: { title: "Investment Opportunities", subtitle: "Manage investment opportunities, images and data" }, { title: "Investment Opportunities", subtitle: "Manage investment opportunities, images and data" },
+        sectors: { title: "Sectors", subtitle: "Manage investment sectors, their images and descriptions" }, opportunities: { title: "Investment Opportunities", subtitle: "Manage investment opportunities, images and data" },
         news: { title: "News", subtitle: "Create, publish and manage agency news" }
       },
       labels: {
