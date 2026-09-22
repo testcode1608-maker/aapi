@@ -32,7 +32,10 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
   const [photo, setPhoto] = useState<File | null>(null);
   const [editing, setEditing] = useState<Row | null>(null);
   const [form, setForm] = useState(empty);
-  const [modalOpen, setModalOpen] = useState(false);\n  const [optionSectors, setOptionSectors] = useState<Array<{ id: number; nom: string }>>([]);\n  const [optionProjects, setOptionProjects] = useState<Array<{ id: number; titre: string; wilaya: string }>>([]);\n  const [optionWilayas, setOptionWilayas] = useState<string[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [optionSectors, setOptionSectors] = useState<Array<{ id: number; nom: string }>>([]);
+  const [optionProjects, setOptionProjects] = useState<Array<{ id: number; titre: string; wilaya: string }>>([]);
+  const [optionWilayas, setOptionWilayas] = useState<string[]>([]);
 
   const load = useCallback(async () => {
     setLoading(true);
