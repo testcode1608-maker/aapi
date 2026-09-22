@@ -87,6 +87,7 @@ try {
         "delete_messages",
         "delete_documents",
         "delete_sectors",
+        "delete_opportunities",
         "delete_announcements",
         "delete_news",
     ];
@@ -142,6 +143,7 @@ try {
             "delete_messages" => "messages",
             "delete_documents" => "documents",
             "delete_sectors" => "sectors",
+            "delete_opportunities" => "opportunities",
             "delete_announcements" => "announcements",
             "delete_news" => "news",
         ];
@@ -158,6 +160,13 @@ try {
         $stmt = $pdo->prepare("DELETE FROM {$table} WHERE id = ? LIMIT 1");
         $stmt->execute([$recordId]);
 
+        if ($action === "delete_opportunities") {
+            $dir = __DIR__ . "/../../uploads/opportunities";
+            foreach (["jpg", "png", "webp", "gif"] as $ext) {
+                $imageFile = $dir . "/opportunity_" . $recordId . "." . $ext;
+                if (is_file($imageFile)) @unlink($imageFile);
+            }
+        }
         if ($action === "delete_sectors") {
             $dir = __DIR__ . "/../../uploads/sectors";
             foreach (["jpg", "png", "webp", "gif"] as $ext) {
