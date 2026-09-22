@@ -1,10 +1,14 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "../i18n/I18nProvider";
 
 interface CardItem { icon: string; number?: string; title: string; text: string; }
+interface FaqItem { id: number; question: string; answer: string; }
 
 function Investor() {
   const { t } = useTranslation();
+  const [faq, setFaq] = useState<FaqItem[]>([]);
+  const [faqLoading, setFaqLoading] = useState(true);
   const services: CardItem[] = [
     { icon:"bi-person-workspace", number:"01", title:t("investorPage.service1"), text:t("investorPage.service1Text") },
     { icon:"bi-file-earmark-text", number:"02", title:t("investorPage.service2"), text:t("investorPage.service2Text") },
@@ -17,6 +21,21 @@ function Investor() {
     { number:"03", icon:"bi-file-earmark-check", title:t("investorPage.step3"), text:t("investorPage.step3Text") },
     { number:"04", icon:"bi-building-check", title:t("investorPage.step4"), text:t("investorPage.step4Text") },
   ];
+  useEffect(() => {
+    const loadFaq = async () => {
+      try {
+        const response = await fetch("http://localhost/aapi-api/faq.php");
+        const data = await response.json();
+        if (data.success && Array.isArray(data.faq)) setFaq(data.faq);
+      } catch {
+        setFaq([]);
+      } finally {
+        setFaqLoading(false);
+      }
+    };
+    void loadFaq();
+  }, []);
+
   const documents: CardItem[] = [
     { icon:"bi-file-earmark-pdf", title:t("investorPage.doc1"), text:t("investorPage.doc1Text") },
     { icon:"bi-journal-text", title:t("investorPage.doc2"), text:t("investorPage.doc2Text") },
@@ -35,7 +54,12 @@ function Investor() {
 
     <section className="investor-documents"><div className="container"><div className="aapi-section-header"><div><span className="section-overline">{t("investorPage.resourcesOverline")}</span><h2>{t("investorPage.resourcesTitle")}<strong>{t("investorPage.resourcesStrong")}</strong></h2></div><p>{t("investorPage.resourcesText")}</p></div><div className="row g-4">{documents.map((document)=><div className="col-lg-6" key={document.title}><article className="investor-document-card"><div className="investor-document-icon"><i className={`bi ${document.icon}`} aria-hidden="true"/></div><div className="investor-document-content"><h3>{document.title}</h3><p>{document.text}</p><a href="#">{t("investorPage.viewDocument")} <i className="bi bi-arrow-left" aria-hidden="true"/></a></div></article></div>)}</div></div></section>
 
-    <section className="investor-faq" id="investor-faq"><div className="container"><div className="aapi-section-header centered"><span className="section-overline">{t("investorPage.faqOverline")}</span><h2>{t("investorPage.faqTitle")}<strong>{t("investorPage.faqStrong")}</strong></h2><p>{t("investorPage.faqText")}</p></div><div className="row justify-content-center"><div className="col-lg-9"><div className="accordion investor-accordion" id="investorAccordion"><div className="accordion-item"><h2 className="accordion-header"><button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqOne" aria-expanded="true" aria-controls="faqOne">{t("investorPage.faq1")}</button></h2><div id="faqOne" className="accordion-collapse collapse show" data-bs-parent="#investorAccordion"><div className="accordion-body">{t("investorPage.faq1Text")}</div></div></div><div className="accordion-item"><h2 className="accordion-header"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqTwo" aria-expanded="false" aria-controls="faqTwo">{t("investorPage.faq2")}</button></h2><div id="faqTwo" className="accordion-collapse collapse" data-bs-parent="#investorAccordion"><div className="accordion-body">{t("investorPage.faq2Text")}</div></div></div><div className="accordion-item"><h2 className="accordion-header"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqThree" aria-expanded="false" aria-controls="faqThree">{t("investorPage.faq3")}</button></h2><div id="faqThree" className="accordion-collapse collapse" data-bs-parent="#investorAccordion"><div className="accordion-body">{t("investorPage.faq3Text")}</div></div></div><div className="accordion-item"><h2 className="accordion-header"><button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqFour" aria-expanded="false" aria-controls="faqFour">{t("investorPage.faq4")}</button></h2><div id="faqFour" className="accordion-collapse collapse" data-bs-parent="#investorAccordion"><div className="accordion-body">{t("investorPage.faq4Text")}</div></div></div></div></div></div></div></section>
+    <section className="investor-faq" id="investor-faq"><div className="container"><div className="aapi-section-header centered"><span className="section-overline">{t("investorPage.faqOverline")}</span><h2>{t("investorPage.faqTitle")}<strong>{t("investorPage.faqStrong")}</strong></h2><p>{t("investorPage.faqText")}</p></div><div className="row justify-content-center"><div className="col-lg-9"><div className="accordion investor-accordion" id="investorAccordion">
+      {faqLoading ? <div className="accordion-body text-center">...</div> : faq.length === 0 ? null : faq.map((item, index) => {
+        const itemId = `faqItem${item.id}`;
+        return <div className="accordion-item" key={item.id}><h2 className="accordion-header"><button className={`accordion-button${index === 0 ? "" : " collapsed"}`} type="button" data-bs-toggle="collapse" data-bs-target={`#${itemId}`} aria-expanded={index === 0} aria-controls={itemId}>{item.question}</button></h2><div id={itemId} className={`accordion-collapse collapse${index === 0 ? " show" : ""}`} data-bs-parent="#investorAccordion"><div className="accordion-body">{item.answer}</div></div></div>;
+      })}
+    </div></div></div></div></section>
 
     <section className="investor-final-cta"><div className="container"><div className="investor-final-cta-inner"><div><span>{t("investorPage.finalOverline")}</span><h2>{t("investorPage.finalTitle")}</h2><p>{t("investorPage.finalText")}</p></div><div className="investor-final-actions"><Link to="/inscription" className="aapi-white-button">{t("investorPage.register")} <i className="bi bi-person-plus" aria-hidden="true"/></Link><Link to="/opportunities" className="aapi-outline-white-button">{t("investorPage.opportunities")} <i className="bi bi-arrow-left" aria-hidden="true"/></Link><Link to="/contact" className="aapi-outline-white-button">{t("common.contact")} <i className="bi bi-arrow-left" aria-hidden="true"/></Link></div></div></div></section>
   </>;
