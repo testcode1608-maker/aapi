@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { Pencil, Plus, RefreshCw, Search, Trash2, X, Database, CheckCircle2, Clock3, AlertCircle } from "lucide-react";
+import { ChevronDown, Pencil, Plus, RefreshCw, Search, Trash2, X } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-opportunities.css";
 import "../../styles/admin-soft-ui.css";
 
 const API = "http://localhost/aapi-api/auth/admin/admin.php";
 type Row = Record<string, any>;
+
 const empty = {
   secteur: "",
   icone: "bi-buildings",
@@ -23,6 +24,8 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
   const { t, language } = useTranslation();
   const [rows, setRows] = useState<Row[]>([]);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [filterOpen, setFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -87,32 +90,20 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
       const formData = new FormData();
       formData.append("action", editing ? "update_opportunity" : "create_opportunity");
       formData.append("user_id", String(userId));
-
       if (editing) formData.append("id", String(editing.id));
 
-      Object.entries(form).forEach(([key, value]) => {
-        formData.append(key, String(value));
-      });
-
+      Object.entries(form).forEach(([key, value]) => formData.append(key, String(value)));
       if (photo) formData.append("image", photo);
 
-      const response = await fetch(API, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(API, { method: "POST", body: formData });
       const data = await response.json();
-
       if (!data.success) throw new Error(data.message);
 
       setEditing(null);
       setModalOpen(false);
       await load();
     } catch (e) {
-      setError(
-        e instanceof Error
-          ? e.message
-          : t("admin.data.opportunity.saveError"),
-      );
+      setError(e instanceof Error ? e.message : t("admin.data.opportunity.saveError"));
     } finally {
       setSaving(false);
     }
@@ -134,18 +125,11 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
 
       const data = await response.json();
       if (!data.success) throw new Error(data.message);
-
       await load();
     } catch (e) {
-      setError(
-        e instanceof Error
-          ? e.message
-          : t("admin.data.opportunity.deleteError"),
-      );
+      setError(e instanceof Error ? e.message : t("admin.data.opportunity.deleteError"));
     }
   };
-
-  const opportunityStats = { total: rows.length, published: rows.filter((row) => row.statut === "publie").length, pending: rows.filter((row) => row.statut === "brouillon").length, archived: rows.filter((row) => row.statut === "archive").length };
 
   const statusLabel = (status: string) => {
     if (status === "publie") return t("admin.data.announcement.published");
@@ -153,110 +137,168 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
     return t("admin.data.announcement.archived");
   };
 
+  const filteredRows = useMemo(
+    () => statusFilter === "all" ? rows : rows.filter((row) => row.statut === statusFilter),
+    [rows, statusFilter],
+  );
+
+  const reset = () => {
+    setSearch("");
+    setStatusFilter("all");
+    setFilterOpen(false);
+    if (!search) void load();
+  };
+
   return (
-    <main
-      className="admin-opportunities-page"
-      dir={language === "ar" ? "rtl" : "ltr"}
-    >
-      <div className="admin-opportunities-head">
-        <div>
-          <span>AAPI • {t("admin.data.section.opportunities.title")}</span>
-          <h1>{t("admin.data.section.opportunities.title")}</h1>
-          <p>{t("admin.data.section.opportunities.subtitle")}</p>
+    <main className="admin-opportunities-page" dir={language === "ar" ? "rtl" : "ltr"}>
+      <section className="admin-panel soft-data-panel">
+        <div className="admin-panel-header soft-data-panel-head admin-opportunities-panel-head">
+          <div>
+            <span className="soft-ui-card-label">{t("admin.data.management")}</span>
+            <h2>{t("admin.data.section.opportunities.title")}</h2>
+            <p>{t("admin.data.section.opportunities.subtitle")}</p>
+          </div>
+
+          <div className="admin-opportunities-head-actions">
+            <button type="button" className="admin-opportunities-add" onClick={() => open()}>
+              <Plus size={15} />
+              {t("admin.data.opportunity.add")}
+            </button>
+            <span className="soft-data-count">
+              {filteredRows.length} {language === "ar" ? "عنصر" : language === "fr" ? "éléments" : "items"}
+            </span>
+          </div>
         </div>
 
-        <button type="button" onClick={() => open()}>
-          <Plus size={17} />
-          {t("admin.data.opportunity.add")}
-        </button>
-      </div>
+        <div className="admin-toolbar soft-data-toolbar">
+          <label className="soft-data-search">
+            <Search size={16} />
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={language === "ar" ? "ابحث في البيانات..." : t("admin.data.opportunity.search")}
+              aria-label={t("admin.data.searchAria")}
+            />
+          </label>
 
-      <section className="soft-data-stat-grid">        <article className="soft-data-stat green"><div className="soft-data-stat-icon"><Database size={18} /></div><div><span>{t("admin.data.totalRecords")}</span><strong>{opportunityStats.total}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>        <article className="soft-data-stat gold"><div className="soft-data-stat-icon"><CheckCircle2 size={18} /></div><div><span>{t("admin.data.activeAccepted")}</span><strong>{opportunityStats.published}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>        <article className="soft-data-stat blue"><div className="soft-data-stat-icon"><Clock3 size={18} /></div><div><span>{t("admin.data.pending")}</span><strong>{opportunityStats.pending}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>        <article className="soft-data-stat red"><div className="soft-data-stat-icon"><AlertCircle size={18} /></div><div><span>{t("admin.data.rejectedStopped")}</span><strong>{opportunityStats.archived}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>      </section>      <div className="admin-opportunities-toolbar">
-        <label>
-          <Search size={16} />
-          <input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder={t("admin.data.opportunity.search")}
-            aria-label={t("admin.data.searchAria")}
-          />
-        </label>
+          <div className="soft-data-filter">
+            <button
+              type="button"
+              className="soft-data-filter-trigger"
+              aria-haspopup="listbox"
+              aria-expanded={filterOpen}
+              onClick={() => setFilterOpen((value) => !value)}
+            >
+              <span>
+                {statusFilter === "all"
+                  ? language === "ar" ? "كل الحالات" : language === "fr" ? "Tous les statuts" : "All statuses"
+                  : statusLabel(statusFilter)}
+              </span>
+              <ChevronDown size={15} />
+            </button>
 
-        <button
-          type="button"
-          onClick={() => {
-            setSearch("");
-            void load();
-          }}
-        >
-          <RefreshCw size={15} />
-          {t("admin.data.reset")}
-        </button>
-      </div>
+            {filterOpen && (
+              <div className="soft-data-filter-menu" role="listbox">
+                {["all", "publie", "brouillon", "archive"].map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    className={statusFilter === value ? "is-selected" : ""}
+                    onClick={() => {
+                      setStatusFilter(value);
+                      setFilterOpen(false);
+                    }}
+                  >
+                    {value === "all"
+                      ? language === "ar" ? "كل الحالات" : language === "fr" ? "Tous les statuts" : "All statuses"
+                      : statusLabel(value)}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-      {error && <div className="admin-opportunities-error">{error}</div>}
-
-      {loading ? (
-        <div className="admin-opportunities-empty">
-          {t("admin.data.loading")}
+          <button type="button" className="soft-data-filter-button" onClick={reset}>
+            <RefreshCw size={14} />
+            {language === "ar" ? "إعادة ضبط" : t("admin.data.reset")}
+          </button>
         </div>
-      ) : (
-        <div className="admin-opportunities-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>{t("admin.data.labels.image")}</th>
-                <th>{t("admin.data.labels.secteur")}</th>
-                <th>{t("admin.data.labels.titre")}</th>
-                <th>{t("admin.data.labels.wilaya")}</th>
-                <th>{t("admin.data.labels.montant")}</th>
-                <th>{t("admin.data.opportunity.jobs")}</th>
-                <th>{t("admin.data.labels.statut")}</th>
-                <th>{t("admin.data.action")}</th>
-              </tr>
-            </thead>
 
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.id}>
-                  <td>
-                    <img src={row.image_url} alt={row.titre ?? ""} />
-                  </td>
-                  <td>{row.secteur}</td>
-                  <td>{row.titre}</td>
-                  <td>{row.wilaya}</td>
-                  <td>{row.investissement}</td>
-                  <td>{row.emplois}</td>
-                  <td>
-                    <span
-                      className={"admin-opportunity-status " + row.statut}
-                    >
-                      {statusLabel(row.statut)}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="admin-opportunity-actions">
-                      <button type="button" onClick={() => open(row)}>
-                        <Pencil size={15} />
-                        {t("admin.data.opportunity.edit")}
-                      </button>
+        {error && <div className="admin-opportunities-error">{error}</div>}
 
-                      <button
-                        type="button"
-                        className="danger"
-                        onClick={() => void remove(Number(row.id))}
-                      >
-                        <Trash2 size={15} />
-                        {t("admin.data.opportunity.delete")}
-                      </button>
-                    </div>
-                  </td>
+        {loading ? (
+          <div className="admin-opportunities-empty">{t("admin.data.loading")}</div>
+        ) : (
+          <div className="admin-data-table-wrapper soft-data-table-wrap">
+            <table className="admin-data-table soft-data-table">
+              <thead>
+                <tr>
+                  <th>{language === "ar" ? "المعرف" : t("admin.data.labels.id")}</th>
+                  <th>{t("admin.data.labels.secteur")}</th>
+                  <th>{t("admin.data.labels.titre")}</th>
+                  <th>{t("admin.data.labels.image")}</th>
+                  <th>{t("admin.data.labels.wilaya")}</th>
+                  <th>{t("admin.data.labels.montant")}</th>
+                  <th>{t("admin.data.opportunity.jobs")}</th>
+                  <th>{t("admin.data.labels.statut")}</th>
+                  <th>{t("admin.data.action")}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+
+              <tbody>
+                {filteredRows.map((row) => (
+                  <tr key={row.id}>
+                    <td>{row.id}</td>
+                    <td>{row.secteur}</td>
+                    <td>{row.titre}</td>
+                    <td>
+                      <img
+                        src={row.image_url || row.image || ""}
+                        alt={row.titre ?? ""}
+                        className="soft-data-image-preview"
+                        loading="lazy"
+                      />
+                    </td>
+                    <td>{row.wilaya}</td>
+                    <td>{row.investissement}</td>
+                    <td>{row.emplois}</td>
+                    <td>
+                      <span className={"admin-status-badge status-" + row.statut}>
+                        {statusLabel(row.statut)}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="soft-data-actions">
+                        <button type="button" className="soft-edit-button" onClick={() => open(row)} aria-label={t("admin.data.opportunity.edit")} title={t("admin.data.opportunity.edit")}>
+                          <Pencil size={15} />
+                          {t("admin.data.opportunity.edit")}
+                        </button>
+                        <button
+                          type="button"
+                          className="soft-delete-button"
+                          onClick={() => void remove(Number(row.id))}
+                          aria-label={t("admin.data.opportunity.delete")}
+                          title={t("admin.data.opportunity.delete")}
+                        >
+                          <Trash2 size={15} />
+                          {t("admin.data.opportunity.delete")}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {!filteredRows.length && (
+                  <tr>
+                    <td colSpan={9} className="soft-data-empty">
+                      {t("admin.data.noResults")}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
 
       {modalOpen && (
         <div
@@ -268,48 +310,28 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
           <form className="admin-opportunity-modal" onSubmit={save}>
             <header>
               <div>
-                <span>
-                  {editing
-                    ? t("admin.data.opportunity.edit")
-                    : t("admin.data.opportunity.new")}
-                </span>
-                <h2>
-                  {editing
-                    ? t("admin.data.opportunity.editTitle")
-                    : t("admin.data.opportunity.addTitle")}
-                </h2>
+                <span>{editing ? t("admin.data.opportunity.edit") : t("admin.data.opportunity.new")}</span>
+                <h2>{editing ? t("admin.data.opportunity.editTitle") : t("admin.data.opportunity.addTitle")}</h2>
               </div>
-
-              <button
-                type="button"
-                aria-label={t("admin.nav.closeMenu")}
-                onClick={() => setModalOpen(false)}
-              >
+              <button type="button" aria-label={t("admin.nav.closeMenu")} onClick={() => setModalOpen(false)}>
                 <X size={19} />
               </button>
             </header>
 
             <div className="admin-opportunity-form-grid">
-              {(
-                [
-                  ["secteur", t("admin.data.labels.secteur")],
-                  ["titre", t("admin.data.labels.titre")],
-                  ["wilaya", t("admin.data.labels.wilaya")],
-                  ["investissement", t("admin.data.opportunity.investment")],
-                  ["emplois", t("admin.data.opportunity.jobs")],
-                  ["icone", t("admin.data.opportunity.icon")],
-                ] as const
-              ).map(([key, label]) => (
+              {([
+                ["secteur", t("admin.data.labels.secteur")],
+                ["titre", t("admin.data.labels.titre")],
+                ["wilaya", t("admin.data.labels.wilaya")],
+                ["investissement", t("admin.data.opportunity.investment")],
+                ["emplois", t("admin.data.opportunity.jobs")],
+                ["icone", t("admin.data.opportunity.icon")],
+              ] as const).map(([key, label]) => (
                 <label key={key}>
                   <span>{label}</span>
                   <input
                     value={String(form[key])}
-                    onChange={(event) =>
-                      setForm((value) => ({
-                        ...value,
-                        [key]: event.target.value,
-                      }))
-                    }
+                    onChange={(event) => setForm((value) => ({ ...value, [key]: event.target.value }))}
                     required
                   />
                 </label>
@@ -317,71 +339,31 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
 
               <label>
                 <span>{t("admin.data.labels.statut")}</span>
-                <select
-                  value={form.statut}
-                  onChange={(event) =>
-                    setForm((value) => ({
-                      ...value,
-                      statut: event.target.value,
-                    }))
-                  }
-                >
-                  <option value="publie">
-                    {t("admin.data.announcement.published")}
-                  </option>
-                  <option value="brouillon">
-                    {t("admin.data.announcement.draft")}
-                  </option>
-                  <option value="archive">
-                    {t("admin.data.announcement.archived")}
-                  </option>
+                <select value={form.statut} onChange={(event) => setForm((value) => ({ ...value, statut: event.target.value }))}>
+                  <option value="publie">{t("admin.data.announcement.published")}</option>
+                  <option value="brouillon">{t("admin.data.announcement.draft")}</option>
+                  <option value="archive">{t("admin.data.announcement.archived")}</option>
                 </select>
               </label>
 
               <label className="full">
                 <span>{t("admin.data.labels.image")}</span>
-                <input
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp,image/gif"
-                  onChange={(event) =>
-                    setPhoto(event.target.files?.[0] ?? null)
-                  }
-                />
+                <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(event) => setPhoto(event.target.files?.[0] ?? null)} />
               </label>
 
               <label className="full">
                 <span>{t("admin.data.opportunity.imageUrl")}</span>
-                <input
-                  value={form.image}
-                  onChange={(event) =>
-                    setForm((value) => ({
-                      ...value,
-                      image: event.target.value,
-                    }))
-                  }
-                />
+                <input value={form.image} onChange={(event) => setForm((value) => ({ ...value, image: event.target.value }))} />
               </label>
 
               <label className="full">
                 <span>{t("admin.data.labels.description")}</span>
-                <textarea
-                  value={form.description}
-                  onChange={(event) =>
-                    setForm((value) => ({
-                      ...value,
-                      description: event.target.value,
-                    }))
-                  }
-                  required
-                />
+                <textarea value={form.description} onChange={(event) => setForm((value) => ({ ...value, description: event.target.value }))} required />
               </label>
             </div>
 
             <footer>
-              <button type="button" onClick={() => setModalOpen(false)}>
-                {t("admin.data.opportunity.cancel")}
-              </button>
-
+              <button type="button" onClick={() => setModalOpen(false)}>{t("admin.data.opportunity.cancel")}</button>
               <button className="primary" disabled={saving}>
                 {saving ? (
                   <>
