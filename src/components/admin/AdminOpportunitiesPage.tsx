@@ -351,18 +351,20 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
             if (event.target === event.currentTarget) setModalOpen(false);
           }}
         >
-          <form className="admin-opportunity-modal" onSubmit={save}>
-            <header>
-              <div>
-                <span>{editing ? t("admin.data.opportunity.edit") : t("admin.data.opportunity.new")}</span>
+          <form className="admin-opportunity-modal admin-edit-modal admin-create-modal" onSubmit={save}>
+            <div className="admin-opportunity-form-head">
+              <div className="admin-opportunity-form-copy">
+                <span className="admin-announcement-eyebrow">{editing ? t("admin.data.opportunity.edit") : t("admin.data.opportunity.new")}</span>
                 <h2>{editing ? t("admin.data.opportunity.editTitle") : t("admin.data.opportunity.addTitle")}</h2>
+                <p>{language === "ar" ? "أدخل معلومات فرصة الاستثمار ثم احفظ التغييرات." : language === "en" ? "Enter the investment opportunity details, then save the changes." : "Saisissez les informations de l’opportunité d’investissement, puis enregistrez les modifications."}</p>
               </div>
-              <button type="button" aria-label={t("admin.nav.closeMenu")} onClick={() => setModalOpen(false)}>
+              <div className="admin-opportunity-form-mark" aria-hidden="true"><Plus size={22} /></div>
+              <button type="button" className="admin-opportunity-modal-close" aria-label={t("admin.nav.closeMenu")} onClick={() => setModalOpen(false)}>
                 <X size={19} />
               </button>
-            </header>
+            </div>
 
-            <div className="admin-opportunity-form-grid">
+            <div className="admin-opportunity-form-grid admin-announcement-form-grid">
               {([
                 ["secteur", t("admin.data.labels.secteur")],
                 ["titre", t("admin.data.labels.titre")],
@@ -371,7 +373,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
                 ["emplois", t("admin.data.opportunity.jobs")],
                 ["icone", t("admin.data.opportunity.icon")],
               ] as const).map(([key, label]) => (
-                <label key={key}>
+                <label key={key} className="admin-announcement-field">
                   <span>{label}</span>
                   <input
                     value={String(form[key])}
@@ -381,7 +383,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
                 </label>
               ))}
 
-              <label>
+              <label className="admin-announcement-field">
                 <span>{t("admin.data.labels.statut")}</span>
                 <select value={form.statut} onChange={(event) => setForm((value) => ({ ...value, statut: event.target.value }))}>
                   <option value="publie">{t("admin.data.announcement.published")}</option>
@@ -390,7 +392,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
                 </select>
               </label>
 
-              <label className="full">
+              <label className="full admin-announcement-field">
                 <span>{t("admin.data.labels.image")}</span>
                 <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(event) => setPhoto(event.target.files?.[0] ?? null)} />
               </label>
@@ -406,9 +408,9 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
               </label>
             </div>
 
-            <footer>
-              <button type="button" onClick={() => setModalOpen(false)}>{t("admin.data.opportunity.cancel")}</button>
-              <button className="primary" disabled={saving}>
+            <footer className="admin-opportunity-form-actions admin-announcement-form-actions">
+              <button type="button" className="soft-data-filter-button" onClick={() => setModalOpen(false)}>{t("admin.data.opportunity.cancel")}</button>
+              <button className="primary admin-announcement-submit" disabled={saving}>
                 {saving ? (
                   <>
                     <RefreshCw size={15} className="spin" />
