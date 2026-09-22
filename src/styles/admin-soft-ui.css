@@ -27,9 +27,9 @@ body.aapi-admin-light .soft-ui-health-item b{color:#087443!important}
 .admin-soft-data-page[dir="ltr"] .admin-opportunities-head{direction:ltr;text-align:left}
 .admin-soft-data-page[dir="ltr"] .admin-opportunities-head>div{order:1}
 .admin-soft-data-page[dir="ltr"] .admin-opportunities-head>button{order:2}
-.admin-soft-data-page[dir="rtl"] .admin-opportunities-head{direction:rtl;text-align:right}
-.admin-soft-data-page[dir="rtl"] .admin-opportunities-head>div{order:2}
-.admin-soft-data-page[dir="rtl"] .admin-opportunities-head>button{order:1}
+.admin-soft-data-page[dir="rtl"] .admin-opportunities-head{direction:ltr;text-align:right}
+.admin-soft-data-page[dir="rtl"] .admin-opportunities-head>div{order:2;direction:rtl;text-align:right}
+.admin-soft-data-page[dir="rtl"] .admin-opportunities-head>button{order:1;direction:ltr}
 body.aapi-admin-light .admin-soft-data-page .admin-opportunities-head span{color:#087443}
 body.aapi-admin-light .admin-soft-data-page .admin-opportunities-head p{color:#68766f}
 body.aapi-admin-light .admin-soft-data-page .admin-opportunities-head>button{background:rgba(8,116,67,.08);border-color:rgba(8,116,67,.2);color:#087443}
