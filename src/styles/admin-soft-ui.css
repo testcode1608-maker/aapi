@@ -308,3 +308,6 @@ body.aapi-admin-light .admin-soft-data-page .soft-data-image-preview{
     width:100%;
   }
 }
+
+
+.admin-soft-data-page .soft-data-table td .soft-data-image-preview{width:64px;height:46px;object-fit:cover;border-radius:9px;display:block;background:#151a17}
