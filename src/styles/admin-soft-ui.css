@@ -21,3 +21,13 @@ body.aapi-admin-light .soft-ui-health-item b{color:#087443!important}
 .admin-add-button:hover{transform:translateY(-1px);box-shadow:0 7px 16px rgba(25,135,84,.24)}
 .admin-add-button:active{transform:translateY(0)}
 @media(max-width:700px){.soft-data-header-actions{width:100%}.admin-add-button,.soft-data-refresh{flex:1}}
+
+
+/* Centered create modals for News, Announcements and Sectors */
+.admin-create-modal{width:min(760px,94vw);max-height:90vh;overflow:auto;padding:0!important;border-radius:18px!important;background:var(--admin-card-bg,#fff);box-shadow:0 24px 70px rgba(0,0,0,.22)}
+.admin-create-modal .admin-announcement-form-head{display:flex;align-items:center;justify-content:space-between;padding:24px 26px;border-bottom:1px solid rgba(0,0,0,.07)}
+.admin-create-modal .admin-announcement-form-grid{padding:24px 26px}
+.admin-create-modal .admin-announcement-form-actions{padding:18px 26px;border-top:1px solid rgba(0,0,0,.07);display:flex;justify-content:flex-end;gap:10px}
+.admin-create-modal .admin-announcement-form-mark{display:none}
+.admin-create-modal:before{content:"";position:absolute}
+@media(prefers-color-scheme:dark){.admin-create-modal{background:#111827}.admin-create-modal .admin-announcement-form-head,.admin-create-modal .admin-announcement-form-actions{border-color:rgba(255,255,255,.08)}}
