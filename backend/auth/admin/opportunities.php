@@ -37,6 +37,17 @@ function opportunityUpload(PDO $pdo,int $id):?string{
 }
 
 try{
+  if($_SERVER["REQUEST_METHOD"]==="GET" && ($_GET["action"]??"")==="opportunity_options"){
+    $adminId=(int)($_GET["user_id"]??0); opportunityAdmin($pdo,$adminId);
+    $sectorStmt=$pdo->query("SELECT id, nom FROM sectors ORDER BY nom ASC");
+    $sectors=$sectorStmt->fetchAll(PDO::FETCH_ASSOC);
+    $projectStmt=$pdo->query("SELECT id, titre, wilaya FROM projects ORDER BY titre ASC");
+    $projects=$projectStmt->fetchAll(PDO::FETCH_ASSOC);
+    $wilayaStmt=$pdo->query("SELECT DISTINCT wilaya FROM projects WHERE wilaya IS NOT NULL AND TRIM(wilaya)<>'' ORDER BY wilaya ASC");
+    $wilayas=array_values(array_filter(array_map(static fn($row)=>(string)$row["wilaya"],$wilayaStmt->fetchAll(PDO::FETCH_ASSOC))));
+    opportunityJson(true,"Options chargées depuis la base de données.",["sectors"=>$sectors,"projects"=>$projects,"wilayas"=>$wilayas]);
+  }
+
   if($_SERVER["REQUEST_METHOD"]==="GET"){
     $adminId=(int)($_GET["user_id"]??0); opportunityAdmin($pdo,$adminId);
     $search=trim((string)($_GET["search"]??"")); $statut=trim((string)($_GET["statut"]??""));
