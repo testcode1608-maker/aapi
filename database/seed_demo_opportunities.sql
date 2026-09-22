@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS opportunities (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
+  UNIQUE KEY uq_opportunities_titre (titre),
   KEY idx_opportunities_statut (statut),
   KEY idx_opportunities_secteur (secteur)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
