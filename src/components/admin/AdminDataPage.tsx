@@ -6,13 +6,14 @@ import "../../styles/admin-status-dropdown.css";
 
 const API = "http://localhost/aapi-api/auth/admin/admin.php";
 type R = Record<string, any>;
-type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "sectors" | "announcements" | "news";
+type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "sectors" | "announcements" | "news" | "faq";
 
 const projectStatuses = ["brouillon", "soumis", "en_etude", "approuve", "en_cours", "realise", "rejete", "archive"];
 const userStatuses = ["actif", "inactif", "suspendu"];
 const investmentStatuses = ["en_attente", "valide", "en_cours", "termine", "annule"];
 const requestStatuses = ["nouvelle", "en_cours", "en_attente", "acceptee", "refusee", "terminee"];
 const documentStatuses = ["en_attente", "valide", "rejete"];
+const faqStatuses = ["publie", "brouillon", "archive"];
 
 const fmt = (v: any, language: "ar" | "fr" | "en") => Number(v ?? 0).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ");
 const da = (v: any, language: "ar" | "fr" | "en") => `${fmt(v, language)} DA`;
@@ -48,6 +49,8 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const [newsForm, setNewsForm] = useState({ titre: "", resume: "", contenu: "", statut: "publie", date_publication: "" });
   const [newsPhoto, setNewsPhoto] = useState<File | null>(null);
   const [creatingNews, setCreatingNews] = useState(false);
+  const [faqForm, setFaqForm] = useState({ question: "", answer: "", statut: "publie", ordre: "0" });
+  const [creatingFaq, setCreatingFaq] = useState(false);
   const [sectorForm, setSectorForm] = useState({ nom: "", description: "" });
   const [sectorPhoto, setSectorPhoto] = useState<File | null>(null);
   const [creatingSector, setCreatingSector] = useState(false);
@@ -83,7 +86,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : [];
+  const options = section === "users" || section === "investors" ? userStatuses : section === "projects" ? projectStatuses : section === "investments" ? investmentStatuses : section === "requests" ? requestStatuses : section === "documents" ? documentStatuses : section === "faq" ? faqStatuses : [];
   const total = Number(stats.total ?? rows.length);
   const active = Number(stats.actif ?? stats.active ?? stats.approuve ?? stats.valide ?? stats.publie ?? 0);
   const pending = Number(stats.en_attente ?? stats.soumis ?? stats.nouvelle ?? stats.pending ?? stats.brouillon ?? 0);
@@ -135,7 +138,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     const label = String(row.titre ?? row.nom ?? row.sujet ?? row.objet ?? row.id);
     const confirmText = language === "ar" ? "هل أنت متأكد من حذف هذا السجل؟" : language === "en" ? "Are you sure you want to delete this record?" : "Êtes-vous sûr de vouloir supprimer cet enregistrement ?";
     if (!window.confirm(confirmText + "\n\n" + label)) return;
-    const deleteActions: Record<Section, string> = { users: "delete_users", investors: "delete_investors", projects: "delete_projects", investments: "delete_investments", requests: "delete_requests", messages: "delete_messages", documents: "delete_documents", sectors: "delete_sectors", announcements: "delete_announcements", news: "delete_news" };
+    const deleteActions: Record<Section, string> = { users: "delete_users", investors: "delete_investors", projects: "delete_projects", investments: "delete_investments", requests: "delete_requests", messages: "delete_messages", documents: "delete_documents", sectors: "delete_sectors", announcements: "delete_announcements", news: "delete_news", faq: "delete_faqs" };
     const action = deleteActions[section];
     setDeleting(id);
     try {
@@ -198,6 +201,21 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     finally { setCreatingSector(false); }
   };
 
+  const createFaq = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!faqForm.question.trim() || !faqForm.answer.trim() || creatingFaq) return;
+    setCreatingFaq(true);
+    try {
+      const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "create_faq", user_id: userId, question: faqForm.question.trim(), answer: faqForm.answer.trim(), statut: faqForm.statut, ordre: Number(faqForm.ordre) || 0 }) });
+      const j = await r.json();
+      if (!r.ok || !j.success) throw Error(j.message || "Impossible de créer la FAQ.");
+      setFaqForm({ question: "", answer: "", statut: "publie", ordre: "0" });
+      await load();
+      setError("");
+    } catch (e) { setError(e instanceof Error ? e.message : "Impossible de créer la FAQ."); }
+    finally { setCreatingFaq(false); }
+  };
+
   const createNews = async (event: FormEvent) => {
     event.preventDefault();
     if (!newsForm.titre.trim() || !newsForm.contenu.trim() || creatingNews) return;
@@ -246,13 +264,18 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     setSavingEdit(true);
     try {
       const formData = new FormData();
-      const action = section === "sectors" ? "update_sector" : section === "announcements" ? "update_announcement" : "update_news";
+      const action = section === "sectors" ? "update_sector" : section === "announcements" ? "update_announcement" : section === "news" ? "update_news" : "update_faq";
       formData.append("action", action);
       formData.append("user_id", String(userId));
       formData.append("id", String(id));
       if (section === "sectors") {
         formData.append("nom", editForm.nom.trim());
         formData.append("description", editForm.description.trim());
+      } else if (section === "faq") {
+        formData.append("question", editForm.titre.trim());
+        formData.append("answer", editForm.contenu.trim());
+        formData.append("statut", editForm.statut);
+        formData.append("ordre", editForm.date_publication || "0");
       } else {
         formData.append("titre", editForm.titre.trim());
         formData.append("contenu", editForm.contenu.trim());
@@ -296,7 +319,9 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       ? ["id", "image_url", "nom", "description"]
       : section === "announcements" || section === "news"
       ? ["id", "titre", "image", "statut", "date_publication", "auteur_id"]
-      : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
+      : section === "faq"
+        ? ["id", "question", "answer", "statut", "ordre"]
+        : (rows[0] ? Object.keys(rows[0]).filter(k => !["created_at", "updated_at"].includes(k)).slice(0, 6) : []);
 
   return <div className="admin-dashboard admin-soft-data-page" dir={language === "ar" ? "rtl" : "ltr"}>
     {error && <div className="admin-dashboard-error"><AlertCircle size={16} /><span>{error}</span></div>}
@@ -308,18 +333,16 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           <p>{c.subtitle}</p>
         </div>
 
-        {(section === "news" || section === "announcements" || section === "sectors") && (
+        {(section === "news" || section === "announcements" || section === "sectors" || section === "faq") && (
           <button type="button" onClick={() => setCreateModalOpen(true)}>
             <Plus size={17} />
             {section === "news"
               ? t("admin.data.news.new")
               : section === "announcements"
                 ? t("admin.data.announcement.new")
-                : language === "ar"
-                  ? "إضافة قطاع استثماري"
-                  : language === "en"
-                    ? "Add investment sector"
-                    : "Ajouter un secteur"}
+                : section === "sectors"
+                  ? (language === "ar" ? "إضافة قطاع استثماري" : language === "en" ? "Add investment sector" : "Ajouter un secteur")
+                  : t("admin.data.faq.new")}
           </button>
         )}
       </header>
@@ -376,10 +399,20 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingNews}>{creatingNews ? <><RefreshCw size={15} className="spin" /> {t("admin.data.news.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.news.publish")}</>}</button></div>
         </form></div>}
 
-        {editingRow && (section === "sectors" || section === "announcements" || section === "news") && <div className="admin-edit-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditingRow(null); }}>
+        {createModalOpen && section === "faq" && <div className="admin-edit-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setCreateModalOpen(false); }}><form id="admin-create-form" className="admin-edit-modal admin-create-modal" onSubmit={async (e) => { await createFaq(e); setCreateModalOpen(false); }}>
+          <div className="admin-announcement-form-head"><div className="admin-announcement-form-copy"><span className="admin-announcement-eyebrow">{t("admin.data.faq.eyebrow")}</span><h2>{t("admin.data.faq.new")}</h2><p>{t("admin.data.faq.description")}</p></div><div className="admin-announcement-form-mark" aria-hidden="true"><MessageSquare size={22} /></div></div>
+          <div className="admin-announcement-form-grid">
+            <label className="admin-announcement-field admin-announcement-field-full"><span>{t("admin.data.faq.question")}</span><input value={faqForm.question} onChange={e => setFaqForm(v => ({...v, question:e.target.value}))} placeholder={t("admin.data.faq.questionPlaceholder")} required /></label>
+            <label className="admin-announcement-field admin-announcement-field-full"><span>{t("admin.data.faq.answer")}</span><textarea value={faqForm.answer} onChange={e => setFaqForm(v => ({...v, answer:e.target.value}))} placeholder={t("admin.data.faq.answerPlaceholder")} required /></label>
+            <label className="admin-announcement-field"><span>{t("admin.data.faq.status")}</span><select value={faqForm.statut} onChange={e => setFaqForm(v => ({...v, statut:e.target.value}))}><option value="publie">{t("admin.data.news.published")}</option><option value="brouillon">{t("admin.data.news.draft")}</option><option value="archive">{t("admin.data.news.archived")}</option></select></label>
+            <label className="admin-announcement-field"><span>{t("admin.data.faq.order")}</span><input type="number" min="0" value={faqForm.ordre} onChange={e => setFaqForm(v => ({...v, ordre:e.target.value}))} /></label>
+          </div>
+          <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingFaq}>{creatingFaq ? <><RefreshCw size={15} className="spin" /> {t("admin.data.faq.saving")}</> : <><MessageSquare size={15} /> {t("admin.data.faq.add")}</>}</button></div>
+        </form></div>}
+        {editingRow && (section === "sectors" || section === "announcements" || section === "news" || section === "faq") && <div className="admin-edit-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditingRow(null); }}>
           <form className="admin-edit-modal" onSubmit={saveEdit}>
             <div className="admin-edit-modal-head">
-              <div><span className="admin-announcement-eyebrow">{language === "ar" ? "تعديل" : language === "en" ? "EDIT" : "MODIFICATION"}</span><h2>{section === "sectors" ? (language === "ar" ? "تعديل القطاع" : language === "en" ? "Edit sector" : "Modifier le secteur") : section === "announcements" ? (language === "ar" ? "تعديل الإعلان" : language === "en" ? "Edit announcement" : "Modifier l’annonce") : (language === "ar" ? "تعديل الخبر" : language === "en" ? "Edit news" : "Modifier l’actualité")}</h2></div>
+              <div><span className="admin-announcement-eyebrow">{language === "ar" ? "تعديل" : language === "en" ? "EDIT" : "MODIFICATION"}</span><h2>{section === "sectors" ? (language === "ar" ? "تعديل القطاع" : language === "en" ? "Edit sector" : "Modifier le secteur") : section === "announcements" ? (language === "ar" ? "تعديل الإعلان" : language === "en" ? "Edit announcement" : "Modifier l’annonce") : section === "news" ? (language === "ar" ? "تعديل الخبر" : language === "en" ? "Edit news" : "Modifier l’actualité") : t("admin.data.faq.edit")}</h2></div>
               <button type="button" className="admin-edit-modal-close" onClick={() => setEditingRow(null)} aria-label={language === "ar" ? "إغلاق" : "Fermer"}>×</button>
             </div>
             <div className="admin-announcement-form-grid">
@@ -387,6 +420,11 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
                 <label className="admin-announcement-field"><span>{language === "ar" ? "اسم القطاع" : language === "en" ? "Sector name" : "Nom du secteur"}</span><input value={editForm.nom} onChange={e => setEditForm(v => ({...v, nom:e.target.value}))} required /></label>
                 <div className="admin-announcement-field"><span>{language === "ar" ? "الصورة" : language === "en" ? "Photo" : "Photo"}</span><label className="admin-announcement-upload"><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e => setEditPhoto(e.target.files?.[0] ?? null)} /><span>📷 {editPhoto ? editPhoto.name : (language === "ar" ? "تغيير الصورة" : language === "en" ? "Change photo" : "Changer la photo")}</span></label></div>
                 <label className="admin-announcement-field admin-announcement-field-full"><span>{language === "ar" ? "الوصف" : "Description"}</span><textarea value={editForm.description} onChange={e => setEditForm(v => ({...v, description:e.target.value}))} /></label>
+              </> : section === "faq" ? <>
+                <label className="admin-announcement-field admin-announcement-field-full"><span>{t("admin.data.faq.question")}</span><input value={editForm.titre} onChange={e => setEditForm(v => ({...v, titre:e.target.value}))} required /></label>
+                <label className="admin-announcement-field admin-announcement-field-full"><span>{t("admin.data.faq.answer")}</span><textarea value={editForm.contenu} onChange={e => setEditForm(v => ({...v, contenu:e.target.value}))} required /></label>
+                <label className="admin-announcement-field"><span>{t("admin.data.faq.status")}</span><select value={editForm.statut} onChange={e => setEditForm(v => ({...v, statut:e.target.value}))}><option value="publie">{t("admin.data.news.published")}</option><option value="brouillon">{t("admin.data.news.draft")}</option><option value="archive">{t("admin.data.news.archived")}</option></select></label>
+                <label className="admin-announcement-field"><span>{t("admin.data.faq.order")}</span><input type="number" min="0" value={editForm.date_publication} onChange={e => setEditForm(v => ({...v, date_publication:e.target.value}))} /></label>
               </> : <>
                 <label className="admin-announcement-field"><span>{language === "ar" ? "العنوان" : language === "en" ? "Title" : "Titre"}</span><input value={editForm.titre} onChange={e => setEditForm(v => ({...v, titre:e.target.value}))} required /></label>
                 <label className="admin-announcement-field"><span>{language === "ar" ? "الحالة" : language === "en" ? "Status" : "Statut"}</span><select value={editForm.statut} onChange={e => setEditForm(v => ({...v, statut:e.target.value}))}><option value="publie">{language === "ar" ? "منشور" : language === "en" ? "Published" : "Publié"}</option><option value="brouillon">{language === "ar" ? "مسودة" : language === "en" ? "Draft" : "Brouillon"}</option><option value="archive">{language === "ar" ? "مؤرشف" : language === "en" ? "Archived" : "Archivé"}</option></select></label>
@@ -409,10 +447,10 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
           <button className="soft-data-filter-button" onClick={() => { setSearch(""); setFilter("all"); setFilterOpen(false); }}><RefreshCw size={14} /> {t("admin.data.reset")}</button>
         </div>
 
-        {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages" || section === "sectors" || section === "announcements" || section === "news") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
+        {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages" || section === "sectors" || section === "announcements" || section === "news" || section === "faq") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
   {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : (k === "image" && (section === "news" || section === "announcements")) ? <img src={imageUrl(r[k], Number(r.id), section)} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = imageUrl("", Number(r.id), section); }} /> : k === "image_url" && section === "sectors" ? <img src={String(r[k] || ("http://localhost/aapi-api/sector-image.php?id=" + Number(r.id)))} alt={String(r.nom ?? "")} className="soft-data-image-preview" loading="lazy" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "http://localhost/aapi-api/sector-image.php?id=" + Number(r.id); }} /> : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
   {(options.length > 0 || section === "messages" || section === "sectors" || section === "announcements" || section === "news") && <td><div className="soft-data-actions">
-      {(section === "sectors" || section === "announcements" || section === "news") && <button type="button" className="soft-edit-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => openEdit(r)} aria-label={language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"} title={language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"}><Pencil size={15} />{language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"}</button>}
+      {(section === "sectors" || section === "announcements" || section === "news" || section === "faq") && <button type="button" className="soft-edit-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => openEdit(r)} aria-label={language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"} title={language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"}><Pencil size={15} />{language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"}</button>}
       {options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}><option value="">—</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select>}
       {section === "messages" && <button className={`admin-read-toggle soft-read-toggle ${isRead(r) ? "is-read" : "is-unread"}`} disabled={saving === Number(r.id) || deleting === Number(r.id)} onClick={() => void toggleMessage(r)}>{isRead(r) ? t("admin.data.markUnread") : t("admin.data.markRead")}</button>}
       <button type="button" className="soft-delete-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => void remove(r)} aria-label={(language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer") + " " + text(r.titre ?? r.nom ?? r.sujet ?? r.objet ?? r.id)} title={language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}><Trash2 size={15} />{language === "ar" ? "حذف" : language === "en" ? "Delete" : "Supprimer"}</button>
