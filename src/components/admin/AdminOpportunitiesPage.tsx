@@ -392,10 +392,13 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
                 </select>
               </label>
 
-              <label className="full admin-announcement-field">
+              <div className="admin-announcement-field">
                 <span>{t("admin.data.labels.image")}</span>
-                <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(event) => setPhoto(event.target.files?.[0] ?? null)} /><span>📷 https://...</span></label>
-              </label>
+                <label className="admin-announcement-upload">
+                  <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(event) => setPhoto(event.target.files?.[0] ?? null)} />
+                  <span>📷 https://...</span>
+                </label>
+              </div>
 
               <label className="admin-announcement-field">
                 <span>{t("admin.data.opportunity.imageUrl")}</span>
