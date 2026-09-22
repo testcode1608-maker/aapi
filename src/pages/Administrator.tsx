@@ -18,7 +18,7 @@ import AdminDataPage from "../components/admin/AdminDataPage";
 import AdminOpportunitiesPage from "../components/admin/AdminOpportunitiesPage";
 
 type R = Record<string, any>;
-type Section = "dashboard" | "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "sectors" | "opportunities" | "announcements" | "news";
+type Section = "dashboard" | "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "sectors" | "opportunities" | "announcements" | "news" | "faq";
 
 const getUser = (): R | null => {
   try { const x = localStorage.getItem("aapi_user"); const u = x ? JSON.parse(x) : null; return u && typeof u === "object" ? u : null; }
@@ -33,10 +33,10 @@ export default function Administrator() {
   const userId = Number(user?.id ?? 0);
   const direction = language === "ar" ? "rtl" : "ltr";
   const name = loc.pathname.split("/")[2] as Section | undefined;
-  const section: Section = name && ["users", "investors", "projects", "investments", "requests", "messages", "documents", "sectors", "opportunities", "announcements", "news"].includes(name) ? name : "dashboard";
+  const section: Section = name && ["users", "investors", "projects", "investments", "requests", "messages", "documents", "sectors", "opportunities", "announcements", "news", "faq"].includes(name) ? name : "dashboard";
   const names: Record<string, string> = {
     dashboard: t("admin.nav.dashboard"), users: t("admin.nav.users"), investors: t("admin.nav.investors"), projects: t("admin.nav.projects"),
-    investments: t("admin.nav.investments"), requests: t("admin.nav.requests"), messages: t("admin.nav.messages"), documents: t("admin.nav.documents"), sectors: language === "ar" ? "القطاعات" : language === "en" ? "Sectors" : "Secteurs", opportunities: language === "ar" ? "فرص الاستثمار" : language === "en" ? "Opportunities" : "Opportunités", announcements: t("admin.nav.announcements"), news: t("admin.nav.news"), settings: t("admin.nav.settings")
+    investments: t("admin.nav.investments"), requests: t("admin.nav.requests"), messages: t("admin.nav.messages"), documents: t("admin.nav.documents"), sectors: language === "ar" ? "القطاعات" : language === "en" ? "Sectors" : "Secteurs", opportunities: language === "ar" ? "فرص الاستثمار" : language === "en" ? "Opportunities" : "Opportunités", announcements: t("admin.nav.announcements"), news: t("admin.nav.news"), faq: t("admin.nav.faq"), settings: t("admin.nav.settings")
   };
   const current = names[name ?? "dashboard"] ?? t("admin.nav.dashboard");
 
