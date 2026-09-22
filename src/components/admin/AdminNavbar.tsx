@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Building2, ClipboardList, FileCheck2, FolderKanban, LayoutDashboard, LogOut, Menu, MessageSquare, Settings, UserCheck, Users, Wallet, X } from "lucide-react";
+import { Building2, ClipboardList, FileCheck2, FolderKanban, LayoutDashboard, LogOut, Menu, MessageSquare, Settings, UserCheck, Users, Wallet, X, CircleHelp } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 
 type R = Record<string, any>;
@@ -23,6 +23,7 @@ export default function AdminNavbar({ onToggle }: { onToggle: () => void }) {
     ["/admin/opportunities", language === "ar" ? "فرص الاستثمار" : language === "en" ? "Opportunities" : "Opportunités", <Building2 size={18} />],
     ["/admin/announcements", t("admin.nav.announcements"), <MessageSquare size={18} />],
     ["/admin/news", t("admin.nav.news"), <MessageSquare size={18} />],
+    ["/admin/faq", t("admin.nav.faq"), <CircleHelp size={18} />],
   ];
   const logout = () => { localStorage.removeItem("aapi_user"); nav("/login", { replace: true }); };
   const close = () => onToggle();
