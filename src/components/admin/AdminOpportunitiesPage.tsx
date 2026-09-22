@@ -175,7 +175,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={t("admin.data.opportunity.search")}
-            aria-label={t("admin.data.topSearch")}
+            aria-label={t("admin.data.searchAria")}
           />
         </label>
 
