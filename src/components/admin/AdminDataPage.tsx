@@ -247,11 +247,11 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
     const rawDate = row.date_publication ? String(row.date_publication).replace(" ", "T").slice(0,16) : "";
     setEditForm({
       nom: String(row.nom ?? ""),
-      titre: String(row.titre ?? ""),
+      titre: section === "faq" ? String(row.question ?? "") : String(row.titre ?? ""),
       resume: String(row.resume ?? ""),
-      contenu: String(row.contenu ?? ""),
+      contenu: section === "faq" ? String(row.answer ?? "") : String(row.contenu ?? ""),
       statut: String(row.statut ?? "publie"),
-      date_publication: rawDate,
+      date_publication: section === "faq" ? String(row.ordre ?? 0) : rawDate,
       description: String(row.description ?? "")
     });
   };
