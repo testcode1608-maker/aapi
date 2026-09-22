@@ -90,6 +90,7 @@ try {
         "delete_opportunities",
         "delete_announcements",
         "delete_news",
+        "delete_faqs",
     ];
 
     if (!in_array($action, $allowedActions, true)) {
@@ -146,6 +147,7 @@ try {
             "delete_opportunities" => "opportunities",
             "delete_announcements" => "announcements",
             "delete_news" => "news",
+            "delete_faqs" => "investor_faq",
         ];
 
         $table = $tables[$action];
