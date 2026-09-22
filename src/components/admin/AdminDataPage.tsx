@@ -52,6 +52,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
   const [sectorPhoto, setSectorPhoto] = useState<File | null>(null);
   const [creatingSector, setCreatingSector] = useState(false);
   const [editingRow, setEditingRow] = useState<R | null>(null);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({ nom: "", titre: "", resume: "", contenu: "", statut: "publie", date_publication: "", description: "" });
   const [editPhoto, setEditPhoto] = useState<File | null>(null);
   const [savingEdit, setSavingEdit] = useState(false);
@@ -312,7 +313,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
               <button
                 type="button"
                 className="admin-add-button"
-                onClick={() => document.getElementById("admin-create-form")?.scrollIntoView({ behavior: "smooth", block: "center" })}
+                onClick={() => setCreateModalOpen(true)}
               >
                 <Plus size={17} />
                 {section === "news"
@@ -336,7 +337,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
       <section className="admin-panel soft-data-panel">
         <div className="admin-panel-header soft-data-panel-head"><div><span className="soft-ui-card-label">{t("admin.data.dataManagement")}</span><h2>{c.title}</h2><p>{c.subtitle}</p></div><span className="soft-data-count">{fmt(total, language)} {t("admin.data.items")}</span></div>
 
-        {section === "sectors" && <form id="admin-create-form" className="admin-announcement-form admin-sector-form" onSubmit={createSector}>
+        {createModalOpen && section === "sectors" && <div className="admin-edit-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setCreateModalOpen(false); }}><form id="admin-create-form" className="admin-edit-modal admin-create-modal" onSubmit={async (e) => { await createSector(e); setCreateModalOpen(false); }}>
           <div className="admin-announcement-form-head"><div className="admin-announcement-form-copy"><span className="admin-announcement-eyebrow">{language === "ar" ? "إدارة القطاعات" : language === "en" ? "SECTOR MANAGEMENT" : "GESTION DES SECTEURS"}</span><h2>{language === "ar" ? "إضافة قطاع استثماري" : language === "en" ? "Add investment sector" : "Ajouter un secteur d’investissement"}</h2><p>{language === "ar" ? "أضف قطاعاً جديداً ليظهر في إدارة القطاعات." : language === "en" ? "Add a new sector to the sector management list." : "Ajoutez un nouveau secteur à la liste de gestion."}</p></div><div className="admin-announcement-form-mark" aria-hidden="true"><Database size={22} /></div></div>
           <div className="admin-announcement-form-grid">
             <label className="admin-announcement-field"><span>{language === "ar" ? "اسم القطاع" : language === "en" ? "Sector name" : "Nom du secteur"}</span><input value={sectorForm.nom} onChange={e => setSectorForm(v => ({ ...v, nom: e.target.value }))} placeholder={language === "ar" ? "مثال: الصناعات الدوائية" : language === "en" ? "e.g. Pharmaceutical industry" : "Ex. Industrie pharmaceutique"} required /></label>
@@ -383,7 +384,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
             <label className="admin-announcement-field"><span>{t("admin.data.news.publicationDate")}</span><input type="datetime-local" value={newsForm.date_publication} onChange={e => setNewsForm(v => ({ ...v, date_publication: e.target.value }))} /></label>
           </div>
           <div className="admin-announcement-form-actions"><button type="submit" className="admin-announcement-submit" disabled={creatingNews}>{creatingNews ? <><RefreshCw size={15} className="spin" /> {t("admin.data.news.publishing")}</> : <><MessageSquare size={15} /> {t("admin.data.news.publish")}</>}</button></div>
-        </form>}
+        </form></div>}
 
         {editingRow && (section === "sectors" || section === "announcements" || section === "news") && <div className="admin-edit-modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditingRow(null); }}>
           <form className="admin-edit-modal" onSubmit={saveEdit}>
