@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { Pencil, Plus, RefreshCw, Search, Trash2, X } from "lucide-react";
+import { Pencil, Plus, RefreshCw, Search, Trash2, X, Database, CheckCircle2, Clock3, AlertCircle } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-opportunities.css";
 
@@ -144,7 +144,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
     }
   };
 
-  const statusLabel = (status: string) => {
+  const opportunityStats = { total: rows.length, published: rows.filter((row) => row.statut === "publie").length, pending: rows.filter((row) => row.statut === "brouillon").length, archived: rows.filter((row) => row.statut === "archive").length };\n\n  const statusLabel = (status: string) => {
     if (status === "publie") return t("admin.data.announcement.published");
     if (status === "brouillon") return t("admin.data.announcement.draft");
     return t("admin.data.announcement.archived");
@@ -168,7 +168,7 @@ export default function AdminOpportunitiesPage({ userId }: { userId: number }) {
         </button>
       </div>
 
-      <div className="admin-opportunities-toolbar">
+      <section className="soft-data-stat-grid admin-opportunity-stat-grid">\n        <article className="soft-data-stat green"><div className="soft-data-stat-icon"><Database size={18} /></div><div><span>{t("admin.data.totalRecords")}</span><strong>{opportunityStats.total}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>\n        <article className="soft-data-stat gold"><div className="soft-data-stat-icon"><CheckCircle2 size={18} /></div><div><span>{t("admin.data.activeAccepted")}</span><strong>{opportunityStats.published}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>\n        <article className="soft-data-stat blue"><div className="soft-data-stat-icon"><Clock3 size={18} /></div><div><span>{t("admin.data.pending")}</span><strong>{opportunityStats.pending}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>\n        <article className="soft-data-stat red"><div className="soft-data-stat-icon"><AlertCircle size={18} /></div><div><span>{t("admin.data.rejectedStopped")}</span><strong>{opportunityStats.archived}</strong><small>{t("admin.data.liveUpdate")}</small></div></article>\n      </section>\n\n      <div className="admin-opportunities-toolbar">
         <label>
           <Search size={16} />
           <input
