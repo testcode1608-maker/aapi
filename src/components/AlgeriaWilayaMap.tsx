@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { algeriaWilayas58 } from "../data/algeriaWilayas58";
+import { useTranslation } from "../i18n/I18nProvider";
 import "../styles/algeria-wilaya-map.css";
 
 declare global {
@@ -45,6 +46,15 @@ function loadLeaflet() {
 }
 
 export default function AlgeriaWilayaMap() {
+  const { language } = useTranslation();
+  const copy = {
+    ar: { country: "الجزائر", title: "خريطة الولايات الجزائرية", subtitle: "استكشف الولايات الـ 58 وحدد الولاية لعرض معلوماتها.", selected: "الولاية المختارة", count: "ولاية", search: "البحث عن ولاية...", close: "إغلاق", error: "تعذر تحميل الخريطة. تحقق من الاتصال بالإنترنت.", map: "الخريطة", list: "قائمة الولايات" },
+    fr: { country: "Algérie", title: "Carte des wilayas d’Algérie", subtitle: "Explorez les 58 wilayas et sélectionnez une wilaya pour afficher ses informations.", selected: "Wilaya sélectionnée", count: "wilayas", search: "Rechercher une wilaya...", close: "Fermer", error: "Impossible de charger la carte. Vérifiez votre connexion Internet.", map: "Carte", list: "Liste des wilayas" },
+    en: { country: "Algeria", title: "Algeria Wilayas Map", subtitle: "Explore the 58 wilayas and select one to view its information.", selected: "Selected wilaya", count: "wilayas", search: "Search for a wilaya...", close: "Close", error: "Unable to load the map. Please check your internet connection.", map: "Map", list: "Wilaya list" },
+  }[language];
+  const [search, setSearch] = useState("");
+  const displayName = (wilaya: typeof algeriaWilayas58[number]) => language === "ar" ? wilaya.ar : wilaya.name;
+  const filteredWilayas = algeriaWilayas58.filter((wilaya) => displayName(wilaya).toLocaleLowerCase().includes(search.toLocaleLowerCase()) || wilaya.code.includes(search));
   const mapRef = useRef<HTMLDivElement | null>(null);
   const leafletMapRef = useRef<any>(null);
   const [open, setOpen] = useState(false);
@@ -97,7 +107,7 @@ export default function AlgeriaWilayaMap() {
         }).addTo(map);
 
         marker.bindTooltip(
-          `<strong>${wilaya.code}</strong> · ${wilaya.ar}<br><small>${wilaya.name}</small>`,
+          `<strong>${wilaya.code}</strong> · ${displayName(wilaya)}`,
           { direction: "top", offset: [0, -7] }
         );
 
@@ -124,37 +134,38 @@ export default function AlgeriaWilayaMap() {
   if (!open) return null;
 
   return (
-    <div className="aapi-wilaya-map-overlay" role="dialog" aria-modal="true" aria-label="خريطة الجزائر">
+    <div className="aapi-wilaya-map-overlay" role="dialog" aria-modal="true" aria-label={copy.title}>
       <div className="aapi-wilaya-map-modal" dir="rtl">
-        <button type="button" className="aapi-wilaya-map-close" onClick={close} aria-label="إغلاق">
+        <button type="button" className="aapi-wilaya-map-close" onClick={close} aria-label={copy.close}>
           <i className="bi bi-x-lg" aria-hidden="true" />
         </button>
 
         <div className="aapi-wilaya-map-heading">
-          <span>الجزائر</span>
-          <h2>خريطة الولايات الجزائرية</h2>
-          <p>استكشف الولايات الـ 58 واضغط على أي نقطة لعرض اسم الولاية.</p>
+          <span>{copy.country}</span>
+          <h2>{copy.title}</h2>
+          <p>{copy.subtitle}</p>
         </div>
 
         <div className="aapi-wilaya-map-body">
           <div className="aapi-wilaya-map-canvas" ref={mapRef}>
-            {mapError && <div className="aapi-wilaya-map-error">تعذر تحميل الخريطة. تحقق من الاتصال بالإنترنت.</div>}
+            {mapError && <div className="aapi-wilaya-map-error">{copy.error}</div>}
           </div>
 
           <aside className="aapi-wilaya-map-sidebar">
             <div className="aapi-wilaya-selected">
-              <span>الولاية المختارة</span>
-              <strong>{selected?.ar ?? "الجزائر"}</strong>
-              <small>{selected?.name ?? "Algeria"} · {selected?.code ?? "016"}</small>
+              <span>{copy.selected}</span>
+              <strong>{selected ? displayName(selected) : copy.country}</strong>
+              <small>{selected?.code ?? "016"}</small>
             </div>
 
             <div className="aapi-wilaya-count">
               <strong>58</strong>
-              <span>ولاية</span>
+              <span>{copy.count}</span>
             </div>
 
+            <div className="aapi-wilaya-tools"><i className="bi bi-search" aria-hidden="true" /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={copy.search} aria-label={copy.search} /></div>
             <div className="aapi-wilaya-list">
-              {algeriaWilayas58.map((wilaya) => (
+              {filteredWilayas.map((wilaya) => (
                 <button
                   type="button"
                   key={wilaya.code}
@@ -167,7 +178,7 @@ export default function AlgeriaWilayaMap() {
                   }}
                 >
                   <span>{wilaya.code}</span>
-                  <b>{wilaya.ar}</b>
+                  <b>{displayName(wilaya)}</b>
                 </button>
               ))}
             </div>
