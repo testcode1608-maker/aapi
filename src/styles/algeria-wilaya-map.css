@@ -1,0 +1,26 @@
+.why-algeria-circle{cursor:pointer}
+.aapi-wilaya-map-overlay{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(15,23,42,.38)}
+.aapi-wilaya-map-modal{width:min(1180px,96vw);height:min(820px,92vh);background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 30px 90px rgba(15,23,42,.28);position:relative;display:flex;flex-direction:column}
+.aapi-wilaya-map-close{position:absolute;top:18px;left:18px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#172b4d;z-index:1002;box-shadow:0 5px 18px rgba(0,0,0,.14);cursor:pointer}
+.aapi-wilaya-map-close:hover{background:#198754;color:#fff}
+.aapi-wilaya-map-heading{text-align:center;padding:25px 70px 16px}
+.aapi-wilaya-map-heading span{color:#198754;font-size:13px;font-weight:800}
+.aapi-wilaya-map-heading h2{margin:4px 0;font-size:28px;color:#172b4d}
+.aapi-wilaya-map-heading p{margin:0;color:#67748e;font-size:14px}
+.aapi-wilaya-map-body{display:grid;grid-template-columns:minmax(0,1fr) 300px;direction:ltr;flex:1;min-height:0;border-top:1px solid #eef0f3}
+.aapi-wilaya-map-canvas{min-width:0;min-height:0;position:relative}
+.aapi-wilaya-map-canvas .leaflet-container{width:100%;height:100%;min-height:500px}
+.aapi-wilaya-map-sidebar{direction:rtl;border-left:1px solid #eef0f3;background:#f8fafc;display:flex;flex-direction:column;min-height:0}
+.aapi-wilaya-selected{padding:20px;border-bottom:1px solid #e8edf2;background:#fff}
+.aapi-wilaya-selected span{display:block;color:#67748e;font-size:12px;margin-bottom:5px}
+.aapi-wilaya-selected strong{display:block;color:#172b4d;font-size:22px}
+.aapi-wilaya-selected small{color:#67748e}
+.aapi-wilaya-count{padding:14px 20px;border-bottom:1px solid #e8edf2;display:flex;align-items:baseline;gap:8px}
+.aapi-wilaya-count strong{font-size:27px;color:#198754}.aapi-wilaya-count span{color:#67748e}
+.aapi-wilaya-list{overflow:auto;padding:10px}
+.aapi-wilaya-list button{width:100%;border:0;background:transparent;padding:8px 10px;border-radius:9px;display:flex;align-items:center;gap:10px;text-align:right;cursor:pointer;color:#344767}
+.aapi-wilaya-list button span{width:28px;font-size:11px;color:#67748e}
+.aapi-wilaya-list button b{font-size:13px;font-weight:600}
+.aapi-wilaya-list button:hover,.aapi-wilaya-list button.is-selected{background:#e7f5ed;color:#198754}
+.aapi-wilaya-map-error{position:absolute;inset:20px;z-index:1000;display:grid;place-items:center;background:#fff;border-radius:14px;color:#b42318;font-weight:600}
+@media(max-width:900px){.aapi-wilaya-map-body{grid-template-columns:1fr}.aapi-wilaya-map-sidebar{display:none}.aapi-wilaya-map-canvas .leaflet-container{min-height:500px}.aapi-wilaya-map-modal{height:94vh}.aapi-wilaya-map-heading h2{font-size:22px}}
