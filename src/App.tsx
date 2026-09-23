@@ -22,6 +22,7 @@ import SiteThemeToggle from "./components/SiteThemeToggle";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import { I18nProvider } from "./i18n/I18nProvider";
 import "./styles/home/index.css";
+import AlgeriaWilayaMap from "./components/AlgeriaWilayaMap";
 
 interface CurrentUser {
   id: number;
@@ -88,6 +89,7 @@ function AppContent() {
       {!hideGlobalLayout && <><Header /><LanguageSwitcher /></>}
       {hideGlobalLayout && <LanguageSwitcher />}
       <SiteThemeToggle />
+      <AlgeriaWilayaMap />
       <main style={{ minHeight: hideGlobalLayout ? "100vh" : "calc(100vh - 200px)" }}>
         <Routes>
           <Route path="/" element={<Home />} />
