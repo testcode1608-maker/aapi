@@ -1,21 +1,19 @@
 <?php
-
 /**
- * ============================================================
- * AAPI API — CONNEXION MYSQL
- * ============================================================
+ * AAPI API — CONNEXION POSTGRESQL
  */
 
 header("Content-Type: application/json; charset=UTF-8");
 
-$host = "localhost";
-$dbname = "aapi_db";
-$username = "root";
-$password = "";
+$host = getenv("DB_HOST") ?: "db";
+$port = getenv("DB_PORT") ?: "5432";
+$dbname = getenv("DB_NAME") ?: "aapi_db";
+$username = getenv("DB_USER") ?: "aapi";
+$password = getenv("DB_PASSWORD") ?: "";
 
 try {
     $pdo = new PDO(
-        "mysql:host={$host};dbname={$dbname};charset=utf8mb4",
+        "pgsql:host={$host};port={$port};dbname={$dbname}",
         $username,
         $password,
         [
@@ -24,16 +22,12 @@ try {
             PDO::ATTR_EMULATE_PREPARES => false,
         ]
     );
-
 } catch (PDOException $e) {
-
     http_response_code(500);
-
     echo json_encode([
         "success" => false,
         "message" => "Erreur de connexion à la base de données.",
         "error" => $e->getMessage()
     ], JSON_UNESCAPED_UNICODE);
-
     exit;
 }
