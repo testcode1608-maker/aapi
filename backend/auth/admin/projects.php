@@ -142,11 +142,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             u.prenom,
             u.email,
 
-            GROUP_CONCAT(
+            STRING_AGG(
                 DISTINCT s.nom
                 ORDER BY s.nom
                 SEPARATOR ', '
-            ) AS secteurs
+            , ', ') AS secteurs
 
         FROM projects p
 
