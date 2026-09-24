@@ -21,7 +21,7 @@ function Login() {
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost/aapi-api/auth/login.php", {
+      const response = await fetch("/api/auth/login.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim(), password }),
