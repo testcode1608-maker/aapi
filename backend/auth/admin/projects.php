@@ -142,11 +142,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             u.prenom,
             u.email,
 
-            STRING_AGG(
-                DISTINCT s.nom
-                ORDER BY s.nom
-                SEPARATOR ', '
-            , ', ') AS secteurs
+            STRING_AGG(DISTINCT s.nom, ', ' ORDER BY s.nom) AS secteurs
 
         FROM projects p
 
