@@ -24,7 +24,7 @@ type ApiAnnouncement = {
   created_at: string;
 };
 
-const API_URL = "http://localhost/aapi-api/announcements.php";
+const API_URL = "/api/announcements.php";
 const API_ORIGIN = "http://localhost";
 
 function resolveAnnouncementImage(image: string | null | undefined, id: number) {
@@ -32,7 +32,7 @@ function resolveAnnouncementImage(image: string | null | undefined, id: number) 
   const value = String(image).trim();
   if (!value) return null;
   if (/^https?:\/\//i.test(value)) return value;
-  return `http://localhost/aapi-api/announcement-image.php?id=${id}`;
+  return `/api/announcement-image.php?id=${id}`;
 }
 
 function AnnouncementsPage() {
