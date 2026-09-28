@@ -372,7 +372,7 @@ CREATE TABLE documents (
 
     extension VARCHAR(20) DEFAULT NULL,
 
-    taille BIGINTEGER DEFAULT NULL,
+    taille BIGINT DEFAULT NULL,
 
     statut TEXT NOT NULL DEFAULT 'en_attente',
 
@@ -919,7 +919,7 @@ VALUES
 -- FIN
 -- ============================================================
 
-SET FOREIGN_KEY_CHECKS = 1;
+
 -- PostgreSQL indexes and identity sequence synchronization
 
 CREATE INDEX idx_wilayas_statut ON wilayas (statut);
