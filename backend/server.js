@@ -17,10 +17,10 @@ const uploadDir = path.join(__dirname, "uploads");
 fs.mkdirSync(uploadDir, { recursive: true });
 
 const pool = new Pool({
-  host: process.env.DB_HOST || "localhost",
-  port: Number(process.env.DB_PORT || process.env.POSTGRES_PORT || 5432),
-  database: process.env.DB_NAME || process.env.POSTGRES_DB || "aapi_db",
-  user: process.env.DB_USER || process.env.POSTGRES_USER || "aapi",
+  host: process.env.POSTGRES_HOST || process.env.DB_HOST || "localhost",
+  port: Number(process.env.POSTGRES_PORT || process.env.DB_PORT || 5432),
+  database: process.env.POSTGRES_DB || process.env.DB_NAME || "aapi_db",
+  user: process.env.POSTGRES_USER || process.env.DB_USER || "aapi",
   password: process.env.POSTGRES_PASSWORD || process.env.DB_PASSWORD || ""
 });
 
