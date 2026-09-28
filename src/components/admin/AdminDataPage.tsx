@@ -4,7 +4,7 @@ import { Search, RefreshCw, Database, CheckCircle2, Clock3, AlertCircle, Chevron
 import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-status-dropdown.css";
 
-const API = "http://localhost/aapi-api/auth/admin/admin.php";
+const API = "/api/auth/admin/admin.php";
 type R = Record<string, any>;
 type Section = "users" | "investors" | "projects" | "investments" | "requests" | "messages" | "documents" | "sectors" | "announcements" | "news" | "faq";
 
@@ -20,8 +20,8 @@ const da = (v: any, language: "ar" | "fr" | "en") => `${fmt(v, language)} DA`;
 const imageUrl = (value: any, id: number, section: Section) => {
   const v = String(value ?? "").trim();
   const fallback = section === "announcements"
-    ? `http://localhost/aapi-api/announcement-image.php?id=${id}`
-    : `http://localhost/aapi-api/news-image.php?id=${id}`;
+    ? `/api/announcement-image.php?id=${id}`
+    : `/api/news-image.php?id=${id}`;
   if (!v) return fallback;
   if (/^https?:\/\//i.test(v)) return v;
   if (v.startsWith("/")) return `http://localhost${v}`;
@@ -448,7 +448,7 @@ export default function AdminDataPage({ section, userId }: { section: Section; u
         </div>
 
         {loading ? <div className="admin-empty-state soft-data-empty">{t("admin.data.loading")}</div> : rows.length === 0 ? <div className="admin-empty-state soft-data-empty">{t("admin.data.noData")}</div> : <div className="admin-data-table-wrapper soft-data-table-wrap"><table className="admin-data-table soft-data-table"><thead><tr>{keys.map(k => <th key={k}>{text(k)}</th>)}{(options.length > 0 || section === "messages" || section === "sectors" || section === "announcements" || section === "news" || section === "faq") && <th>{language === "ar" ? "الإجراء" : "Action"}</th>}</tr></thead><tbody>{rows.map((r, i) => <tr key={r.id ?? i}>
-  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : (k === "image" && (section === "news" || section === "announcements")) ? <img src={imageUrl(r[k], Number(r.id), section)} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = imageUrl("", Number(r.id), section); }} /> : k === "image_url" && section === "sectors" ? <img src={String(r[k] || ("http://localhost/aapi-api/sector-image.php?id=" + Number(r.id)))} alt={String(r.nom ?? "")} className="soft-data-image-preview" loading="lazy" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "http://localhost/aapi-api/sector-image.php?id=" + Number(r.id); }} /> : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
+  {keys.map(k => <td key={k}>{k === "user_id" ? userIdOf(r) : (k === "image" && (section === "news" || section === "announcements")) ? <img src={imageUrl(r[k], Number(r.id), section)} alt="" className="soft-data-image-preview" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = imageUrl("", Number(r.id), section); }} /> : k === "image_url" && section === "sectors" ? <img src={String(r[k] || ("/api/sector-image.php?id=" + Number(r.id)))} alt={String(r.nom ?? "")} className="soft-data-image-preview" loading="lazy" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "/api/sector-image.php?id=" + Number(r.id); }} /> : k === "statut" ? <span className={`admin-status-badge status-${r[k]}`}>{text(r[k])}</span> : k === "lu" ? (isRead(r) ? t("admin.data.read") : t("admin.data.unread")) : k === "date_publication" ? (r[k] ? new Date(String(r[k]).replace(" ", "T")).toLocaleString(language === "ar" ? "ar-DZ" : language === "fr" ? "fr-DZ" : "en-DZ", { dateStyle: "medium", timeStyle: "short" }) : "—") : k.includes("montant") || k.includes("investissement") ? da(r[k], language) : String(r[k] ?? "—")}</td>)}
   {(options.length > 0 || section === "messages" || section === "sectors" || section === "announcements" || section === "news") && <td><div className="soft-data-actions">
       {(section === "sectors" || section === "announcements" || section === "news" || section === "faq") && <button type="button" className="soft-edit-button" disabled={deleting === Number(r.id) || saving === Number(r.id)} onClick={() => openEdit(r)} aria-label={language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"} title={language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"}><Pencil size={15} />{language === "ar" ? "تعديل" : language === "en" ? "Edit" : "Modifier"}</button>}
       {options.length > 0 && <select className="status-select soft-status-select" value={String(r.statut ?? "")} disabled={saving === Number(r.id) || deleting === Number(r.id)} onChange={e => void update(r, e.target.value)} aria-label={t("admin.data.updateStatus") + " " + text(r.titre ?? r.nom ?? r.id)}><option value="">—</option>{options.map(o => <option key={o} value={o}>{text(o)}</option>)}</select>}
