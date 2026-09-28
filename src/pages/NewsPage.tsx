@@ -4,14 +4,14 @@ import { useTranslation } from "../i18n/I18nProvider";
 
 type NewsItem = { id:number; title:string; excerpt:string; date:string|null; image:string|null; category:string; featured?:boolean };
 type ApiNews = { id:number; titre:string; resume:string|null; contenu:string; image:string|null; date_publication:string|null; created_at:string };
-const API_URL="/api/news.php";
+const API_URL="/api/news";
 
 function resolveNewsImage(image:string|null|undefined,id:number){
   if(!image)return null;
   const value=String(image).trim();
   if(!value)return null;
   if(/^https?:\/\//i.test(value))return value;
-  return `/api/news-image.php?id=${id}`;
+  return `/api/news-image?id=${id}`;
 }
 
 const copy={
