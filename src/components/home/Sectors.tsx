@@ -12,7 +12,7 @@ type Sector = {
   statut: string;
 };
 
-const API = "/api/sectors.php";
+const API = "/api/sectors";
 
 function Sectors() {
   const { t } = useTranslation();
