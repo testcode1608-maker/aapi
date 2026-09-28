@@ -1,6 +1,6 @@
 export const API_BASE_URL = "/api";
-export const API_URL = `${API_BASE_URL}/auth/investor/dashboard.php`;
-export const CREATE_PROJECT_API_URL = `${API_BASE_URL}/auth/investor/create-project.php`;
+export const API_URL = `${API_BASE_URL}/auth/investor/dashboard`;
+export const CREATE_PROJECT_API_URL = `${API_BASE_URL}/auth/investor/create-project`;
 export const LOGIN_ROUTE = "/login";
 
 export type DashboardLanguage = "ar" | "fr" | "en";
