@@ -9,7 +9,7 @@ interface StatisticsData {
   jobs: number;
 }
 
-const STATISTICS_API = "http://localhost/aapi-api/statistics.php";
+const STATISTICS_API = "/api/statistics.php";
 
 const labels = {
   ar: {
