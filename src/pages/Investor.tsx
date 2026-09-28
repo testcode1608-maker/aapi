@@ -24,7 +24,7 @@ function Investor() {
   useEffect(() => {
     const loadFaq = async () => {
       try {
-        const response = await fetch("http://localhost/aapi-api/faq.php");
+        const response = await fetch("/api/faq.php");
         const data = await response.json();
         if (data.success && Array.isArray(data.faq)) setFaq(data.faq);
       } catch {
