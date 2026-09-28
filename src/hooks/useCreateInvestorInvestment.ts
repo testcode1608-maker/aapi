@@ -4,7 +4,7 @@ import type { CreateInvestmentForm, DashboardInvestment, DashboardProject } from
 import { API_BASE_URL } from "../utils/investorDashboard";
 import { useTranslation } from "../i18n/I18nProvider";
 
-const API_URL = `${API_BASE_URL}/auth/investor/create-investment.php`;
+const API_URL = `${API_BASE_URL}/auth/investor/create-investment`;
 
 export const EMPTY_INVESTMENT_FORM: CreateInvestmentForm = {
   project_id: "",
