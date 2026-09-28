@@ -3,7 +3,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { Bell, BarChart3, BriefcaseBusiness, CheckCircle2, Clock3, FolderKanban, RefreshCw, Search, TrendingUp, Users, Wallet } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 
-const API = "http://localhost/aapi-api/auth/admin/admin.php";
+const API = "/api/auth/admin/admin.php";
 type R = Record<string, any>;
 
 function Stat({ icon, title, value, trend }: { icon: ReactNode; title: string; value: any; trend?: string }) {
