@@ -1,16 +1,14 @@
-FROM php:8.3-apache
+FROM node:22-alpine
 
-RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.list.d/debian.sources \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends libpq-dev \
-    && docker-php-ext-install pdo_pgsql \
-    && a2enmod headers rewrite \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-WORKDIR /var/www/html
-COPY . /var/www/html/
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-RUN chown -R www-data:www-data /var/www/html
+COPY . .
 
-EXPOSE 80
-CMD ["apache2-foreground"]
+RUN mkdir -p /app/uploads
+
+EXPOSE 3001
+
+CMD ["npm", "start"]
