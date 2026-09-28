@@ -5,7 +5,7 @@ import "../styles/opportunities-cards.css";
 
 type Opportunity={id:number;secteur:string;icone:string;titre:string;wilaya:string;description:string;investissement:string;emplois:string;image_url:string;statut:string};
 
-const API="http://localhost/aapi-api/opportunities.php";
+const API="/api/opportunities.php";
 
 function OpportunitiesPage(){
  const {t}=useTranslation();
@@ -21,7 +21,7 @@ function OpportunitiesPage(){
   setError("");
   Promise.all([
    fetch(API,{cache:"no-store"}),
-   fetch("http://localhost/aapi-api/sectors.php",{cache:"no-store"})
+   fetch("/api/sectors.php",{cache:"no-store"})
   ])
    .then(async([opportunitiesResponse,sectorsResponse])=>{
     const opportunitiesData=await opportunitiesResponse.json().catch(()=>null);
