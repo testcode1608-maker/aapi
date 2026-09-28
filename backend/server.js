@@ -50,7 +50,7 @@ function imageUrl(value, id, type) {
   const v = String(value || "").trim();
   if (!v) return null;
   if (/^https?:\/\//i.test(v) || v.startsWith("/uploads/")) return v;
-  return "/api/" + type + "-image.php?id=" + id;
+  return "/api/" + type + "-image?id=" + id;
 }
 async function admin(id) {
   const u = await one("SELECT id,role,statut FROM users WHERE id=$1", [Number(id)]);
@@ -65,18 +65,18 @@ async function investor(id) {
 
 app.get("/health", asyncRoute(async (_req,res) => ok(res,{service:"AAPI Node.js API",database:"PostgreSQL"})));
 
-app.get("/sectors.php", asyncRoute(async (_req,res) => {
+app.get("/sectors", asyncRoute(async (_req,res) => {
   const rows = await q("SELECT id,nom,slug,description,icone,statut FROM sectors WHERE statut='actif' ORDER BY id");
   rows.forEach(r => r.image_url = imageUrl(r.image,r.id,"sector"));
   ok(res,{sectors:rows,total:rows.length});
 }));
 
-app.get("/wilayas.php", asyncRoute(async (_req,res) => {
+app.get("/wilayas", asyncRoute(async (_req,res) => {
   const rows = await q("SELECT id,code,nom_fr,nom_ar,statut FROM wilayas WHERE statut='actif' ORDER BY id");
   ok(res,{wilayas:rows,total:rows.length});
 }));
 
-app.get("/statistics.php", asyncRoute(async (_req,res) => {
+app.get("/statistics", asyncRoute(async (_req,res) => {
   const p=await one("SELECT COUNT(*)::int total,COALESCE(SUM(montant_investissement),0) value,COALESCE(SUM(nombre_emplois),0)::int jobs FROM projects");
   const i=await one("SELECT COUNT(*)::int total,COALESCE(SUM(montant),0) value FROM investments");
   const s=await one("SELECT COUNT(*)::int total FROM sectors WHERE statut='actif'");
@@ -84,27 +84,27 @@ app.get("/statistics.php", asyncRoute(async (_req,res) => {
   ok(res,{statistics:{projects_total:p.total,projects_value:Number(p.value),total_jobs:p.jobs,investments_total:i.total,total_investment:Number(i.value),sectors_total:s.total,investors_total:u.total}});
 }));
 
-app.get("/announcements.php", asyncRoute(async (req,res) => {
+app.get("/announcements", asyncRoute(async (req,res) => {
   const base="SELECT a.id,a.titre,a.slug,a.contenu,a.image,a.auteur_id,a.statut,a.date_publication,a.created_at,a.updated_at,CONCAT(COALESCE(u.prenom,''),' ',COALESCE(u.nom,'')) auteur FROM announcements a LEFT JOIN users u ON u.id=a.auteur_id WHERE a.statut='publie' AND (a.date_publication IS NULL OR a.date_publication<=NOW())";
   const id=Number(req.query.id||0);
   if(id){const row=await one(base+" AND a.id=$1 LIMIT 1",[id]);if(!row)return fail(res,404,"Annonce introuvable.");row.image=imageUrl(row.image,row.id,"announcement");return ok(res,{announcement:row});}
   const rows=await q(base+" ORDER BY COALESCE(a.date_publication,a.created_at) DESC,a.id DESC");rows.forEach(r=>r.image=imageUrl(r.image,r.id,"announcement"));ok(res,{announcements:rows,total:rows.length});
 }));
 
-app.get("/news.php", asyncRoute(async (req,res) => {
+app.get("/news", asyncRoute(async (req,res) => {
   const base="SELECT n.id,n.titre,n.slug,n.resume,n.contenu,n.image,n.auteur_id,n.statut,n.date_publication,n.created_at,n.updated_at,CONCAT(COALESCE(u.prenom,''),' ',COALESCE(u.nom,'')) auteur FROM news n LEFT JOIN users u ON u.id=n.auteur_id WHERE n.statut='publie' AND (n.date_publication IS NULL OR n.date_publication<=NOW())";
   const id=Number(req.query.id||0);
   if(id){const row=await one(base+" AND n.id=$1 LIMIT 1",[id]);if(!row)return fail(res,404,"Actualité introuvable.");row.image=imageUrl(row.image,row.id,"news");return ok(res,{news:row,article:row});}
   const rows=await q(base+" ORDER BY COALESCE(n.date_publication,n.created_at) DESC,n.id DESC");rows.forEach(r=>r.image=imageUrl(r.image,r.id,"news"));ok(res,{news:rows,total:rows.length});
 }));
 
-app.get("/opportunities.php", asyncRoute(async (_req,res) => {
+app.get("/opportunities", asyncRoute(async (_req,res) => {
   const rows=await q("SELECT p.id,p.titre,p.description,p.wilaya,p.commune,p.montant_investissement investissement,p.nombre_emplois emplois,p.image,p.statut,COALESCE(STRING_AGG(DISTINCT s.nom,', ' ORDER BY s.nom),'') secteur FROM projects p LEFT JOIN project_sectors ps ON ps.project_id=p.id LEFT JOIN sectors s ON s.id=ps.sector_id WHERE p.statut IN ('soumis','en_etude','approuve','en_cours') GROUP BY p.id ORDER BY p.created_at DESC");
   rows.forEach(r=>{r.image_url=imageUrl(r.image,r.id,"opportunity");r.investissement=Number(r.investissement||0);r.emplois=Number(r.emplois||0);});
   ok(res,{opportunities:rows,total:rows.length});
 }));
 
-app.get("/faq.php", asyncRoute(async (_req,res) => {
+app.get("/faq", asyncRoute(async (_req,res) => {
   const rows=await q("SELECT id,question,answer,statut,ordre,created_at,updated_at FROM investor_faq WHERE statut='publie' ORDER BY ordre,id");
   ok(res,{faq:rows,faqs:rows,total:rows.length});
 }));
@@ -120,12 +120,12 @@ function imageRoute(table){
     res.status(404).end();
   });
 }
-app.get("/sector-image.php",imageRoute("sectors"));
-app.get("/announcement-image.php",imageRoute("announcements"));
-app.get("/news-image.php",imageRoute("news"));
-app.get("/opportunity-image.php",imageRoute("projects"));
+app.get("/sector-image",imageRoute("sectors"));
+app.get("/announcement-image",imageRoute("announcements"));
+app.get("/news-image",imageRoute("news"));
+app.get("/opportunity-image",imageRoute("projects"));
 
-app.post("/auth/login.php",asyncRoute(async(req,res)=>{
+app.post("/auth/login",asyncRoute(async(req,res)=>{
   const email=String(req.body?.email||"").trim().toLowerCase(),password=String(req.body?.password||"");
   if(!email||!password)return fail(res,400,"يرجى إدخال البريد الإلكتروني وكلمة المرور.");
   const u=await one("SELECT id,nom,prenom,email,password,telephone,role,statut,photo FROM users WHERE LOWER(email)=LOWER($1) LIMIT 1",[email]);
@@ -133,7 +133,7 @@ app.post("/auth/login.php",asyncRoute(async(req,res)=>{
   await q("UPDATE users SET last_login=NOW(),updated_at=NOW() WHERE id=$1",[u.id]);delete u.password;ok(res,{message:"تم تسجيل الدخول بنجاح.",user:u});
 }));
 
-app.post("/auth/register.php",asyncRoute(async(req,res)=>{
+app.post("/auth/register",asyncRoute(async(req,res)=>{
   const b=req.body||{},email=String(b.email||"").trim().toLowerCase();
   if(!b.nom||!b.prenom||!email||!b.password)return fail(res,400,"يرجى إدخال جميع المعلومات المطلوبة.");
   if(await one("SELECT id FROM users WHERE LOWER(email)=LOWER($1)",[email]))return fail(res,409,"البريد الإلكتروني مستخدم بالفعل.");
@@ -142,7 +142,7 @@ app.post("/auth/register.php",asyncRoute(async(req,res)=>{
   await q("INSERT INTO investor_profiles(user_id) VALUES($1) ON CONFLICT(user_id) DO NOTHING",[u.id]);ok(res,{message:"تم إنشاء الحساب بنجاح.",user:u});
 }));
 
-app.post("/auth/investor/dashboard.php",asyncRoute(async(req,res)=>{
+app.post("/auth/investor/dashboard",asyncRoute(async(req,res)=>{
   const uid=Number(req.body?.user_id||0);await investor(uid);
   const user=await one("SELECT id,nom,prenom,email,telephone,role,statut,photo,last_login,created_at,updated_at FROM users WHERE id=$1",[uid]);
   const profile=await one("SELECT * FROM investor_profiles WHERE user_id=$1",[uid]);
@@ -163,7 +163,7 @@ app.post("/auth/investor/dashboard.php",asyncRoute(async(req,res)=>{
   ok(res,{message:"تم تحميل بيانات فضاء المستثمر بنجاح.",user,profile,stats,last:{project:projects[0]||null,investment:investments[0]||null,request:requests[0]||null,message:messages[0]||null,notification:notifications[0]||null},projects,investments,requests,documents,messages,notifications,activities:[]});
 }));
 
-app.post("/auth/investor/create-project.php",upload.single("image"),asyncRoute(async(req,res)=>{
+app.post("/auth/investor/create-project",upload.single("image"),asyncRoute(async(req,res)=>{
   const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
   const title=String(b.titre||"").trim();if(!title)return fail(res,400,"عنوان المشروع مطلوب.");
   const p=await one("INSERT INTO projects(user_id,titre,slug,description,wilaya,commune,adresse,montant_investissement,nombre_emplois,superficie,unite_superficie,statut,image,date_debut,date_fin) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'brouillon',$13,$14,$15) RETURNING *",[uid,title,slug(title)+"-"+Date.now(),b.description||null,b.wilaya||null,b.commune||null,b.adresse||null,Number(b.montant_investissement||0),Number(b.nombre_emplois||0),b.superficie?Number(b.superficie):null,b.unite_superficie||"m²",req.file?"/uploads/"+req.file.filename:(b.image||null),b.date_debut||null,b.date_fin||null]);
@@ -171,24 +171,24 @@ app.post("/auth/investor/create-project.php",upload.single("image"),asyncRoute(a
   ok(res,{message:"تم إنشاء المشروع بنجاح.",project:p});
 }));
 
-app.post("/auth/investor/create-investment.php",asyncRoute(async(req,res)=>{
+app.post("/auth/investor/create-investment",asyncRoute(async(req,res)=>{
   const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
   const row=await one("INSERT INTO investments(user_id,project_id,montant,date_investissement,statut,reference,notes) VALUES($1,$2,$3,$4,'en_attente',$5,$6) RETURNING *",[uid,Number(b.project_id),Number(b.montant||0),b.date_investissement||null,"INV-"+Date.now(),b.notes||null]);
   ok(res,{message:"تم تسجيل الاستثمار بنجاح.",investment:row});
 }));
 
-app.post("/auth/investor/submit-request.php",asyncRoute(async(req,res)=>{
+app.post("/auth/investor/submit-request",asyncRoute(async(req,res)=>{
   const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
   const row=await one("INSERT INTO investment_requests(user_id,projet_id,type_demande,objet,description,montant_demande,wilaya,statut,priorite) VALUES($1,$2,$3,$4,$5,$6,$7,'nouvelle',$8) RETURNING *",[uid,b.projet_id||null,b.type_demande||"information",b.objet||"",b.description||"",b.montant_demande?Number(b.montant_demande):null,b.wilaya||null,b.priorite||"normale"]);
   ok(res,{message:"تم إرسال الطلب بنجاح.",request:row});
 }));
 
-app.post("/auth/investor/send-message.php",asyncRoute(async(req,res)=>{
+app.post("/auth/investor/send-message",asyncRoute(async(req,res)=>{
   const b=req.body||{},uid=Number(b.user_id||b.sender_id||0);await investor(uid);
   const row=await one("INSERT INTO messages(sender_id,receiver_id,sujet,contenu,lu) VALUES($1,$2,$3,$4,0) RETURNING *",[uid,Number(b.receiver_id||1),b.sujet||"",b.contenu||""]);ok(res,{message:"تم إرسال الرسالة بنجاح.",data:row});
 }));
 
-app.post("/auth/investor/update-profile.php",upload.single("photo"),asyncRoute(async(req,res)=>{
+app.post("/auth/investor/update-profile",upload.single("photo"),asyncRoute(async(req,res)=>{
   const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
   const photo=req.file?"/uploads/"+req.file.filename:null;
   await q("UPDATE users SET nom=COALESCE($1,nom),prenom=COALESCE($2,prenom),telephone=COALESCE($3,telephone),photo=COALESCE($4,photo),updated_at=NOW() WHERE id=$5",[b.nom||null,b.prenom||null,b.telephone||null,photo,uid]);
@@ -210,7 +210,7 @@ const adminQueries={
   faq:"SELECT * FROM investor_faq ORDER BY ordre,id"
 };
 
-app.all("/auth/admin/admin.php",upload.any(),asyncRoute(async(req,res)=>{
+app.all("/auth/admin/admin",upload.any(),asyncRoute(async(req,res)=>{
   const b={...req.query,...(req.body||{})},action=String(b.action||""),uid=Number(b.user_id||0);if(!action)return fail(res,400,"Action administration inconnue.");await admin(uid);
   const sectionMap={update_user_status:"users",update_investor_status:"investors",update_project_status:"projects",update_investment_status:"investments",update_request_status:"requests",update_document_status:"documents",mark_message_read:"messages",mark_message_unread:"messages",create_sector:"sectors",update_sector:"sectors",create_news:"news",update_news:"news",create_faq:"faq",update_faq:"faq",create_announcement:"announcements",update_announcement:"announcements",opportunities:"opportunities",opportunity_options:"opportunities",create_opportunity:"opportunities",update_opportunity:"opportunities"};
   if(action==="dashboard"){const stats={};for(const t of ["users","projects","investments","investment_requests","messages","documents","sectors","announcements","news"])stats[t]=Number((await one("SELECT COUNT(*) n FROM "+t)).n);return ok(res,{stats});}
