@@ -4,8 +4,8 @@ import { useTranslation } from "../i18n/I18nProvider";
 import { newsDetailsTranslations } from "../i18n/newsDetailsTranslations";
 
 type ApiNews={id:number;titre:string;resume:string|null;contenu:string;image:string|null;auteur:string|null;date_publication:string|null;created_at:string};
-const API_URL="/api/news.php";
-function resolveNewsImage(image:string|null,id:number){if(!image)return null;const value=String(image).trim();if(!value)return null;if(/^https?:\/\//i.test(value))return value;return `/api/news-image.php?id=${id}`;}
+const API_URL="/api/news";
+function resolveNewsImage(image:string|null,id:number){if(!image)return null;const value=String(image).trim();if(!value)return null;if(/^https?:\/\//i.test(value))return value;return `/api/news-image?id=${id}`;}
 
 function NewsDetails(){
  const {id}=useParams<{id:string}>();const {language}=useTranslation();const page=newsDetailsTranslations[language].page;
