@@ -14,7 +14,7 @@ function SectorsPage() {
   const [sectorsError, setSectorsError] = useState("");
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/sectors.php")
+    fetch("/api/sectors")
       .then(async r => {
         const raw = await r.text();
         let data: { success?: boolean; sectors?: ApiSector[] };
