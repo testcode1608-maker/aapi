@@ -5,7 +5,7 @@
 
 header("Content-Type: application/json; charset=UTF-8");
 
-$host = getenv("DB_HOST") ?: "db";
+$host = getenv("DB_HOST") ?: "localhost";
 $port = getenv("DB_PORT") ?: "5432";
 $dbname = getenv("DB_NAME") ?: "aapi_db";
 $username = getenv("DB_USER") ?: "aapi";
