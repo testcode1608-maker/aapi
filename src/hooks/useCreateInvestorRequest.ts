@@ -4,7 +4,7 @@ import { API_BASE_URL } from "../utils/investorDashboard";
 import type { CreateRequestForm, DashboardProject } from "../types/investorDashboard";
 import { useTranslation } from "../i18n/I18nProvider";
 
-const API_URL = `${API_BASE_URL}/auth/investor/submit-request.php`;
+const API_URL = `${API_BASE_URL}/auth/investor/submit-request`;
 
 export const EMPTY_REQUEST_FORM: CreateRequestForm = {
   projet_id: "", type_demande: "autorisation", objet: "", description: "", montant_demande: "", wilaya: "", priorite: "normale", documents: [],
