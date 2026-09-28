@@ -213,7 +213,30 @@ const adminQueries={
 app.all("/auth/admin/admin",upload.any(),asyncRoute(async(req,res)=>{
   const b={...req.query,...(req.body||{})},action=String(b.action||""),uid=Number(b.user_id||0);if(!action)return fail(res,400,"Action administration inconnue.");await admin(uid);
   const sectionMap={update_user_status:"users",update_investor_status:"investors",update_project_status:"projects",update_investment_status:"investments",update_request_status:"requests",update_document_status:"documents",mark_message_read:"messages",mark_message_unread:"messages",create_sector:"sectors",update_sector:"sectors",create_news:"news",update_news:"news",create_faq:"faq",update_faq:"faq",create_announcement:"announcements",update_announcement:"announcements",opportunities:"opportunities",opportunity_options:"opportunities",create_opportunity:"opportunities",update_opportunity:"opportunities"};
-  if(action==="dashboard"){const stats={};for(const t of ["users","projects","investments","investment_requests","messages","documents","sectors","announcements","news"])stats[t]=Number((await one("SELECT COUNT(*) n FROM "+t)).n);return ok(res,{stats});}
+  if(action==="dashboard"){
+    const stats={
+      users_total:Number((await one("SELECT COUNT(*) n FROM users")).n),
+      investors_total:Number((await one("SELECT COUNT(*) n FROM users WHERE role IN ('investisseur','investor') AND statut='actif'")).n),
+      projects_total:Number((await one("SELECT COUNT(*) n FROM projects")).n),
+      projects_approved:Number((await one("SELECT COUNT(*) n FROM projects WHERE LOWER(statut) IN ('approuve','approuvé','valide','validé','approved')")).n),
+      projects_active:Number((await one("SELECT COUNT(*) n FROM projects WHERE LOWER(statut) IN ('en_cours','en cours','actif','active','approved','approuve','approuvé')")).n),
+      investments_total:Number((await one("SELECT COUNT(*) n FROM investments")).n),
+      investments_pending:Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('en_attente','en attente','pending')")).n),
+      investments_validated:Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('valide','validé','validee','validée','approved','approuve','approuvé')")).n),
+      investments_active:Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('en_cours','en cours','actif','active')")).n),
+      investments_completed:Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('termine','terminé','complete','completed')")).n),
+      investments_cancelled:Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('annule','annulé','cancelled')")).n),
+      total_investment:Number((await one("SELECT COALESCE(SUM(montant),0) n FROM investments")).n),
+      jobs_total:Number((await one("SELECT COALESCE(SUM(nombre_emplois),0) n FROM projects")).n),
+      documents_total:Number((await one("SELECT COUNT(*) n FROM documents")).n),
+      documents_valid:Number((await one("SELECT COUNT(*) n FROM documents WHERE LOWER(statut) IN ('valide','validé','validee','validée','approved','approuve','approuvé')")).n)
+    };
+    stats.projects_approved_percent=stats.projects_total?stats.projects_approved/stats.projects_total*100:0;
+    stats.projects_active_percent=stats.projects_total?stats.projects_active/stats.projects_total*100:0;
+    stats.documents_valid_percent=stats.documents_total?stats.documents_valid/stats.documents_total*100:0;
+    const projects=await q("SELECT p.id,p.user_id,p.titre,p.wilaya,p.commune,p.montant_investissement,p.nombre_emplois,p.statut,p.created_at,CONCAT(COALESCE(u.prenom,''),' ',COALESCE(u.nom,'')) investor_name FROM projects p LEFT JOIN users u ON u.id=p.user_id ORDER BY p.created_at DESC NULLS LAST,p.id DESC LIMIT 8");
+    return ok(res,{stats,projects});
+  }
   if(action==="opportunities"||action==="opportunity_options"){const rows=await q("SELECT p.id,p.titre,p.description,p.wilaya,p.montant_investissement investissement,p.nombre_emplois emplois,p.image,p.statut,COALESCE(STRING_AGG(DISTINCT s.nom,', ' ORDER BY s.nom),'') secteur FROM projects p LEFT JOIN project_sectors ps ON ps.project_id=p.id LEFT JOIN sectors s ON s.id=ps.sector_id GROUP BY p.id ORDER BY p.id DESC");rows.forEach(r=>r.image_url=imageUrl(r.image,r.id,"opportunity"));return ok(res,{opportunities:rows,sectors:await q("SELECT id,nom FROM sectors WHERE statut='actif' ORDER BY nom"),wilayas:await q("SELECT id,nom_fr,nom_ar FROM wilayas ORDER BY id"),projects:await q("SELECT id,titre,wilaya FROM projects ORDER BY id DESC")});}
   if(action.startsWith("delete_")){const section=action.slice(7),table={users:"users",investors:"users",projects:"projects",investments:"investments",requests:"investment_requests",messages:"messages",documents:"documents",sectors:"sectors",announcements:"announcements",news:"news",opportunities:"projects"}[section];const id=Number(b.record_id||b.id);if(section==="users"&&id===uid)return fail(res,400,"لا يمكنك حذف حساب المسؤول الذي تستخدمه حالياً.");if(table)await q("DELETE FROM "+table+" WHERE id=$1",[id]);return ok(res,{message:"تم حذف السجل بنجاح."});}
   if(sectionMap[action]&&action.startsWith("update_")&&["users","investors","projects","investments","requests","documents"].includes(sectionMap[action])){const section=sectionMap[action],id=Number(b.target_user_id||b.project_id||b.investment_id||b.request_id||b.document_id||b.id),table={users:"users",investors:"users",projects:"projects",investments:"investments",requests:"investment_requests",documents:"documents"}[section];if(section==="investors")await q("UPDATE users SET statut=$1,updated_at=NOW() WHERE id=$2 AND role IN ('investisseur','investor')",[b.statut,id]);else await q("UPDATE "+table+" SET statut=$1,updated_at=NOW() WHERE id=$2",[b.statut,id]);return ok(res,{message:"Statut mis à jour."});}
