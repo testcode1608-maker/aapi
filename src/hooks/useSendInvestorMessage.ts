@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { API_BASE_URL } from "../utils/investorDashboard";
 
-const API_URL = `${API_BASE_URL}/auth/investor/send-message.php`;
+const API_URL = `${API_BASE_URL}/auth/investor/send-message`;
 
 export function useSendInvestorMessage(reload: () => Promise<void>) {
   const [sujet, setSujet] = useState("");
