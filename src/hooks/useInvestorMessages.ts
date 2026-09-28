@@ -4,8 +4,8 @@ import { API_BASE_URL } from "../utils/investorDashboard";
 import type { DashboardMessage } from "../types/investorDashboard";
 import { useTranslation } from "../i18n/I18nProvider";
 
-const READ_URL = `${API_BASE_URL}/auth/investor/messages.php`;
-const SEND_URL = `${API_BASE_URL}/auth/investor/send-message.php`;
+const READ_URL = `${API_BASE_URL}/auth/investor/messages`;
+const SEND_URL = `${API_BASE_URL}/auth/investor/send-message`;
 const POLL_INTERVAL = 15000;
 
 export function useInvestorMessages() {
