@@ -1,4 +1,4 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import bcrypt from "bcryptjs";
@@ -10,6 +10,7 @@ import { Pool } from "pg";
 import slugify from "slugify";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const app = express();
 const PORT = Number(process.env.PORT || 3001);
 const uploadDir = path.join(__dirname, "uploads");
