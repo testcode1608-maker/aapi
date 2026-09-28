@@ -33,7 +33,7 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`${API_BASE_URL}/wilayas.php`)
+    fetch(`${API_BASE_URL}/wilayas`)
       .then((response) => {
         if (!response.ok) throw new Error("Wilayas API error");
         return response.json();
@@ -90,7 +90,7 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
     setMessage("");
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/investor/update-profile.php`, {
+      const response = await fetch(`${API_BASE_URL}/auth/investor/update-profile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: id, email, telephone, wilaya, photo: photoData }),
