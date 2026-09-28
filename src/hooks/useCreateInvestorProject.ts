@@ -73,12 +73,12 @@ export function useCreateInvestorProject(onCreated?: () => void | Promise<void>)
       const response = await fetch(CREATE_PROJECT_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ user_id: userId, titre, description, wilaya, commune: commune || null, adresse: adresse || null, montant_investissement: montant, nombre_emplois: emplois, superficie: superficie !== null && Number.isFinite(superficie) ? superficie : null, unite_superficie: form.unite_superficie || "m²", sector_id: sectorId, date_debut: form.date_debut || null, date_fin: form.date_fin || null }),
+        body: JSON.stringify({ user_id: userId, titre, description, wilaya, commune: commune || null, adresse: adresse || null, montant_investissement: montant, nombre_emplois: emplois, superficie: superficie !== null && Number.isFinite(superficie) ? superficie : null, unite_superficie: form.unite_superficie || "m²", sector_id: sectorId, sector_ids: sectorId !== null ? String(sectorId) : "", date_debut: form.date_debut || null, date_fin: form.date_fin || null }),
       });
       const contentType = response.headers.get("content-type") || "";
       if (!contentType.toLowerCase().includes("application/json")) throw new Error(messages.invalidResponse);
       const data = await response.json();
-      if (!response.ok || !data?.success) throw new Error(messages.generic);
+      if (!response.ok || !data?.success) throw new Error(String(data?.message || data?.error || messages.generic));
       setForm({ ...EMPTY_FORM });
       setSuccess(messages.success);
       await onCreated?.();
