@@ -23,7 +23,7 @@ export default function InvestorProjectCreateForm({ form, setForm, creating, err
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`${API_BASE_URL}/wilayas.php`)
+    fetch(`${API_BASE_URL}/wilayas`)
       .then((response) => {
         if (!response.ok) throw new Error("Wilayas API error");
         return response.json();
