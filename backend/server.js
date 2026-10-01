@@ -210,6 +210,46 @@ const adminQueries={
   faq:"SELECT * FROM investor_faq ORDER BY ordre,id"
 };
 
+
+// Compatibility endpoint for the admin dashboard.
+// The frontend historically requested /api/admin/dashboard-stats directly.
+// Keep this endpoint aligned with the dashboard statistics returned by the
+// existing /auth/admin/admin?action=dashboard endpoint.
+const dashboardStats = async () => {
+  const stats = {
+    users_total: Number((await one("SELECT COUNT(*) n FROM users")).n),
+    investors_total: Number((await one("SELECT COUNT(*) n FROM users WHERE role IN ('investisseur','investor') AND statut='actif'")).n),
+    projects_total: Number((await one("SELECT COUNT(*) n FROM projects")).n),
+    projects_approved: Number((await one("SELECT COUNT(*) n FROM projects WHERE LOWER(statut) IN ('approuve','approuvé','valide','validé','approved')")).n),
+    projects_active: Number((await one("SELECT COUNT(*) n FROM projects WHERE LOWER(statut) IN ('en_cours','en cours','actif','active','approved','approuve','approuvé')")).n),
+    investments_total: Number((await one("SELECT COUNT(*) n FROM investments")).n),
+    investments_pending: Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('en_attente','en attente','pending')")).n),
+    investments_validated: Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('valide','validé','validee','validée','approved','approuve','approuvé')")).n),
+    investments_active: Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('en_cours','en cours','actif','active')")).n),
+    investments_completed: Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('termine','terminé','complete','completed')")).n),
+    investments_cancelled: Number((await one("SELECT COUNT(*) n FROM investments WHERE LOWER(statut) IN ('annule','annulé','cancelled')")).n),
+    total_investment: Number((await one("SELECT COALESCE(SUM(montant),0) n FROM investments")).n),
+    jobs_total: Number((await one("SELECT COALESCE(SUM(nombre_emplois),0) n FROM projects")).n),
+    documents_total: Number((await one("SELECT COUNT(*) n FROM documents")).n),
+    documents_valid: Number((await one("SELECT COUNT(*) n FROM documents WHERE LOWER(statut) IN ('valide','validé','validee','validée','approved','approuve','approuvé')")).n)
+  };
+  stats.projects_approved_percent = stats.projects_total ? stats.projects_approved / stats.projects_total * 100 : 0;
+  stats.projects_active_percent = stats.projects_total ? stats.projects_active / stats.projects_total * 100 : 0;
+  stats.documents_valid_percent = stats.documents_total ? stats.documents_valid / stats.documents_total * 100 : 0;
+  const projects = await q("SELECT p.id,p.user_id,p.titre,p.wilaya,p.commune,p.montant_investissement,p.nombre_emplois,p.statut,p.created_at,CONCAT(COALESCE(u.prenom,''),' ',COALESCE(u.nom,'')) investor_name FROM projects p LEFT JOIN users u ON u.id=p.user_id ORDER BY p.created_at DESC NULLS LAST,p.id DESC LIMIT 8");
+  return { stats, projects };
+};
+
+app.get("/admin/dashboard-stats", asyncRoute(async (_req, res) => {
+  const data = await dashboardStats();
+  return ok(res, data);
+}));
+
+app.get("/api/admin/dashboard-stats", asyncRoute(async (_req, res) => {
+  const data = await dashboardStats();
+  return ok(res, data);
+}));
+
 app.all("/auth/admin/admin",upload.any(),asyncRoute(async(req,res)=>{
   const b={...req.query,...(req.body||{})},action=String(b.action||""),uid=Number(b.user_id||0);if(!action)return fail(res,400,"Action administration inconnue.");await admin(uid);
   const sectionMap={update_user_status:"users",update_investor_status:"investors",update_project_status:"projects",update_investment_status:"investments",update_request_status:"requests",update_document_status:"documents",mark_message_read:"messages",mark_message_unread:"messages",create_sector:"sectors",update_sector:"sectors",create_news:"news",update_news:"news",create_faq:"faq",update_faq:"faq",create_announcement:"announcements",update_announcement:"announcements",opportunities:"opportunities",opportunity_options:"opportunities",create_opportunity:"opportunities",update_opportunity:"opportunities"};
