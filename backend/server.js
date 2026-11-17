@@ -30,7 +30,14 @@ const upload = multer({
     destination: uploadDir,
     filename: (_req, file, cb) => cb(null, Date.now() + "-" + Math.random().toString(36).slice(2, 10) + path.extname(file.originalname).toLowerCase())
   }),
-  limits: { fileSize: 8 * 1024 * 1024 }
+  limits: { fileSize: 8 * 1024 * 1024, files: 1 },
+  fileFilter: (_req, file, cb) => {
+    const extension = path.extname(file.originalname).toLowerCase();
+    const allowed = { "image/jpeg": [".jpg", ".jpeg"], "image/png": [".png"], "image/webp": [".webp"] };
+    const extensions = allowed[file.mimetype];
+    if (extensions && extensions.includes(extension)) return cb(null, true);
+    cb(Object.assign(new Error("نوع الملف غير مسموح. استخدم JPG أو PNG أو WEBP."), { status: 400 }), false);
+  }
 });
 
 app.use(cors({ origin: true, credentials: true }));
@@ -391,5 +398,5 @@ app.all("/auth/admin/admin",requireRole("admin"),upload.any(),asyncRoute(async(r
   return fail(res,400,"Action administration inconnue.");
 }));
 
-app.use((err,_req,res,_next)=>{console.error(err);fail(res,Number(err.status||500),Number(err.status||500)===500?"حدث خطأ في الخادم.":err.message);});
+app.use((err,_req,res,_next)=>{console.error(err);const status=err.code==="LIMIT_FILE_SIZE"?413:Number(err.status||500);fail(res,status,status===500?"حدث خطأ في الخادم.":status===413?"حجم الملف يتجاوز الحد المسموح.":err.message);});
 app.listen(PORT,"0.0.0.0",async()=>{try{await pool.query("SELECT 1");console.log("AAPI Node.js API running on port "+PORT);}catch(e){console.error("PostgreSQL connection failed:",e.message);}});
