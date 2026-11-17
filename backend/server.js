@@ -55,7 +55,8 @@ function readSession(req) {
   const cookieHeader = String(req.headers.cookie || "");
   const raw = cookieHeader.split(";").map(x => x.trim()).find(x => x.startsWith(sessionCookie + "="));
   if (!raw) return null;
-  const token = decodeURIComponent(raw.slice(sessionCookie.length + 1));
+  let token;
+  try { token = decodeURIComponent(raw.slice(sessionCookie.length + 1)); } catch { return null; }
   const [payload, signature] = token.split(".");
   if (!payload || !signature) return null;
   const expected = crypto.createHmac("sha256", SESSION_SECRET).update(payload).digest();
