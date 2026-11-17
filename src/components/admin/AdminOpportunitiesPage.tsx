@@ -5,7 +5,7 @@ import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/admin-opportunities.css";
 import "../../styles/admin-soft-ui.css";
 
-const API = "/api/auth/admin/admin.php";
+const API = "/api/auth/admin/admin";
 type Row = Record<string, any>;
 
 const empty = {
