@@ -8,6 +8,7 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { Pool } from "pg";
 import slugify from "slugify";
+import crypto from "node:crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
@@ -41,6 +42,50 @@ const q = async (sql, params = []) => (await pool.query(sql, params)).rows;
 const one = async (sql, params = []) => (await pool.query(sql, params)).rows[0] || null;
 const ok = (res, data = {}) => res.json({ success: true, ...data });
 const fail = (res, status, message) => res.status(status).json({ success: false, message });
+const SESSION_SECRET = process.env.SESSION_SECRET || process.env.POSTGRES_PASSWORD || process.env.DB_PASSWORD;
+if (!SESSION_SECRET) throw new Error("Set SESSION_SECRET (or a strong database password) before starting the API.");
+const SESSION_TTL_SECONDS = 60 * 60 * 12;
+const sessionCookie = "aapi_session";
+function signSession(userId) {
+  const payload = Buffer.from(JSON.stringify({ id: Number(userId), exp: Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS })).toString("base64url");
+  const signature = crypto.createHmac("sha256", SESSION_SECRET).update(payload).digest("base64url");
+  return payload + "." + signature;
+}
+function readSession(req) {
+  const cookieHeader = String(req.headers.cookie || "");
+  const raw = cookieHeader.split(";").map(x => x.trim()).find(x => x.startsWith(sessionCookie + "="));
+  if (!raw) return null;
+  const token = decodeURIComponent(raw.slice(sessionCookie.length + 1));
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature) return null;
+  const expected = crypto.createHmac("sha256", SESSION_SECRET).update(payload).digest();
+  let supplied;
+  try { supplied = Buffer.from(signature, "base64url"); } catch { return null; }
+  if (supplied.length !== expected.length || !crypto.timingSafeEqual(supplied, expected)) return null;
+  try {
+    const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+    if (!Number.isInteger(data.id) || data.id <= 0 || !Number.isFinite(data.exp) || data.exp <= Math.floor(Date.now() / 1000)) return null;
+    return data.id;
+  } catch { return null; }
+}
+function setSessionCookie(req, res, value, maxAge = SESSION_TTL_SECONDS) {
+  const secure = String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim() === "https";
+  res.setHeader("Set-Cookie", sessionCookie + "=" + encodeURIComponent(value) + "; HttpOnly; SameSite=Strict; Path=/api; Max-Age=" + maxAge + (secure ? "; Secure" : ""));
+}
+function requireRole(role) {
+  return asyncRoute(async (req, res, next) => {
+    const userId = readSession(req);
+    if (!userId) return fail(res, 401, "انتهت الجلسة. يرجى تسجيل الدخول من جديد.");
+    const user = await one("SELECT id,nom,prenom,email,telephone,role,statut,photo FROM users WHERE id=$1", [userId]);
+    if (!user || user.statut !== "actif") return fail(res, 401, "الحساب غير نشط أو الجلسة غير صالحة.");
+    const actualRole = String(user.role || "").toLowerCase();
+    if (role === "admin" && actualRole !== "admin") return fail(res, 403, "ليس لديك صلاحية الوصول إلى هذه الصفحة.");
+    if (role === "investor" && !["investisseur", "investor"].includes(actualRole)) return fail(res, 403, "هذه الخدمة متاحة للمستثمرين فقط.");
+    req.user = user;
+    next();
+  });
+}
+
 const asyncRoute = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 function slug(value) {
@@ -130,8 +175,12 @@ app.post("/auth/login",asyncRoute(async(req,res)=>{
   if(!email||!password)return fail(res,400,"يرجى إدخال البريد الإلكتروني وكلمة المرور.");
   const u=await one("SELECT id,nom,prenom,email,password,telephone,role,statut,photo FROM users WHERE LOWER(email)=LOWER($1) LIMIT 1",[email]);
   if(!u||u.statut!=="actif"||!(await bcrypt.compare(password,u.password)))return fail(res,401,"البريد الإلكتروني أو كلمة المرور غير صحيحة.");
-  await q("UPDATE users SET last_login=NOW(),updated_at=NOW() WHERE id=$1",[u.id]);delete u.password;ok(res,{message:"تم تسجيل الدخول بنجاح.",user:u});
+  await q("UPDATE users SET last_login=NOW(),updated_at=NOW() WHERE id=$1",[u.id]);delete u.password;
+  setSessionCookie(req,res,signSession(u.id));
+  ok(res,{message:"تم تسجيل الدخول بنجاح.",user:u});
 }));
+app.post("/auth/logout",(req,res)=>{setSessionCookie(req,res,"",0);ok(res,{message:"تم تسجيل الخروج بنجاح."});});
+app.get("/auth/me",requireRole("any"),asyncRoute(async(req,res)=>ok(res,{user:req.user})));
 
 app.post("/auth/register",asyncRoute(async(req,res)=>{
   const b=req.body||{},email=String(b.email||"").trim().toLowerCase();
@@ -142,8 +191,8 @@ app.post("/auth/register",asyncRoute(async(req,res)=>{
   await q("INSERT INTO investor_profiles(user_id) VALUES($1) ON CONFLICT(user_id) DO NOTHING",[u.id]);ok(res,{message:"تم إنشاء الحساب بنجاح.",user:u});
 }));
 
-app.post("/auth/investor/dashboard",asyncRoute(async(req,res)=>{
-  const uid=Number(req.body?.user_id||0);await investor(uid);
+app.post("/auth/investor/dashboard",requireRole("investor"),asyncRoute(async(req,res)=>{
+  const uid=req.user.id;
   const user=await one("SELECT id,nom,prenom,email,telephone,role,statut,photo,last_login,created_at,updated_at FROM users WHERE id=$1",[uid]);
   const profile=await one("SELECT * FROM investor_profiles WHERE user_id=$1",[uid]);
   const projects=await q("SELECT p.*,COALESCE(STRING_AGG(DISTINCT s.nom,', ' ORDER BY s.nom),'') secteurs FROM projects p LEFT JOIN project_sectors ps ON ps.project_id=p.id LEFT JOIN sectors s ON s.id=ps.sector_id WHERE p.user_id=$1 GROUP BY p.id ORDER BY p.created_at DESC",[uid]);
@@ -163,33 +212,33 @@ app.post("/auth/investor/dashboard",asyncRoute(async(req,res)=>{
   ok(res,{message:"تم تحميل بيانات فضاء المستثمر بنجاح.",user,profile,stats,last:{project:projects[0]||null,investment:investments[0]||null,request:requests[0]||null,message:messages[0]||null,notification:notifications[0]||null},projects,investments,requests,documents,messages,notifications,activities:[]});
 }));
 
-app.post("/auth/investor/create-project",upload.single("image"),asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
+app.post("/auth/investor/create-project",requireRole("investor"),upload.single("image"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id;
   const title=String(b.titre||"").trim();if(!title)return fail(res,400,"عنوان المشروع مطلوب.");
   const p=await one("INSERT INTO projects(user_id,titre,slug,description,wilaya,commune,adresse,montant_investissement,nombre_emplois,superficie,unite_superficie,statut,image,date_debut,date_fin) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *",[uid,title,slug(title)+"-"+Date.now(),b.description||null,b.wilaya||null,b.commune||null,b.adresse||null,Number(b.montant_investissement||0),Number(b.nombre_emplois||0),b.superficie?Number(b.superficie):null,b.unite_superficie||"m²","soumis",req.file?"/uploads/"+req.file.filename:(b.image||null),b.date_debut||null,b.date_fin||null]);
   const ids=String(b.sector_ids||"").split(",").map(Number).filter(Boolean);for(const id of ids)await q("INSERT INTO project_sectors(project_id,sector_id) VALUES($1,$2) ON CONFLICT DO NOTHING",[p.id,id]);
   ok(res,{message:"تم إنشاء المشروع بنجاح.",project:p});
 }));
 
-app.post("/auth/investor/create-investment",asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
+app.post("/auth/investor/create-investment",requireRole("investor"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id;
   const row=await one("INSERT INTO investments(user_id,project_id,montant,date_investissement,statut,reference,notes) VALUES($1,$2,$3,$4,'en_attente',$5,$6) RETURNING *",[uid,Number(b.project_id),Number(b.montant||0),b.date_investissement||null,"INV-"+Date.now(),b.notes||null]);
   ok(res,{message:"تم تسجيل الاستثمار بنجاح.",investment:row});
 }));
 
-app.post("/auth/investor/submit-request",asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
+app.post("/auth/investor/submit-request",requireRole("investor"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id;
   const row=await one("INSERT INTO investment_requests(user_id,projet_id,type_demande,objet,description,montant_demande,wilaya,statut,priorite) VALUES($1,$2,$3,$4,$5,$6,$7,'nouvelle',$8) RETURNING *",[uid,b.projet_id||null,b.type_demande||"information",b.objet||"",b.description||"",b.montant_demande?Number(b.montant_demande):null,b.wilaya||null,b.priorite||"normale"]);
   ok(res,{message:"تم إرسال الطلب بنجاح.",request:row});
 }));
 
-app.post("/auth/investor/send-message",asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||b.sender_id||0);await investor(uid);
+app.post("/auth/investor/send-message",requireRole("investor"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id;
   const row=await one("INSERT INTO messages(sender_id,receiver_id,sujet,contenu,lu) VALUES($1,$2,$3,$4,0) RETURNING *",[uid,Number(b.receiver_id||1),b.sujet||"",b.contenu||""]);ok(res,{message:"تم إرسال الرسالة بنجاح.",data:row});
 }));
 
-app.post("/auth/investor/update-profile",upload.single("photo"),asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
+app.post("/auth/investor/update-profile",requireRole("investor"),upload.single("photo"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id;
   const photo=req.file?"/uploads/"+req.file.filename:null;
   const email=String(b.email||"").trim().toLowerCase();
   if(email && await one("SELECT id FROM users WHERE LOWER(email)=LOWER($1) AND id<>$2",[email,uid]))return fail(res,409,"البريد الإلكتروني مستخدم من حساب آخر.");
@@ -242,18 +291,18 @@ const dashboardStats = async () => {
   return { stats, projects };
 };
 
-app.get("/admin/dashboard-stats", asyncRoute(async (_req, res) => {
+app.get("/admin/dashboard-stats", requireRole("admin"), asyncRoute(async (_req, res) => {
   const data = await dashboardStats();
   return ok(res, data);
 }));
 
-app.get("/api/admin/dashboard-stats", asyncRoute(async (_req, res) => {
+app.get("/api/admin/dashboard-stats", requireRole("admin"), asyncRoute(async (_req, res) => {
   const data = await dashboardStats();
   return ok(res, data);
 }));
 
-app.all("/auth/admin/admin",upload.any(),asyncRoute(async(req,res)=>{
-  const b={...req.query,...(req.body||{})},action=String(b.action||""),uid=Number(b.user_id||0);if(!action)return fail(res,400,"Action administration inconnue.");await admin(uid);
+app.all("/auth/admin/admin",requireRole("admin"),upload.any(),asyncRoute(async(req,res)=>{
+  const b={...req.query,...(req.body||{})},action=String(b.action||""),uid=req.user.id;if(!action)return fail(res,400,"Action administration inconnue.");
   const sectionMap={update_user_status:"users",update_investor_status:"investors",update_project_status:"projects",update_investment_status:"investments",update_request_status:"requests",update_document_status:"documents",mark_message_read:"messages",mark_message_unread:"messages",create_sector:"sectors",update_sector:"sectors",create_news:"news",update_news:"news",create_faq:"faq",update_faq:"faq",create_announcement:"announcements",update_announcement:"announcements",opportunities:"opportunities",opportunity_options:"opportunities",create_opportunity:"opportunities",update_opportunity:"opportunities"};
   if(action==="dashboard"){
     const stats={
