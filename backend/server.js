@@ -8,6 +8,7 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { Pool } from "pg";
 import slugify from "slugify";
+import crypto from "node:crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
@@ -29,7 +30,14 @@ const upload = multer({
     destination: uploadDir,
     filename: (_req, file, cb) => cb(null, Date.now() + "-" + Math.random().toString(36).slice(2, 10) + path.extname(file.originalname).toLowerCase())
   }),
-  limits: { fileSize: 8 * 1024 * 1024 }
+  limits: { fileSize: 8 * 1024 * 1024, files: 1 },
+  fileFilter: (_req, file, cb) => {
+    const extension = path.extname(file.originalname).toLowerCase();
+    const allowed = { "image/jpeg": [".jpg", ".jpeg"], "image/png": [".png"], "image/webp": [".webp"] };
+    const extensions = allowed[file.mimetype];
+    if (extensions && extensions.includes(extension)) return cb(null, true);
+    cb(Object.assign(new Error("نوع الملف غير مسموح. استخدم JPG أو PNG أو WEBP."), { status: 400 }), false);
+  }
 });
 
 app.use(cors({ origin: true, credentials: true }));
@@ -41,6 +49,51 @@ const q = async (sql, params = []) => (await pool.query(sql, params)).rows;
 const one = async (sql, params = []) => (await pool.query(sql, params)).rows[0] || null;
 const ok = (res, data = {}) => res.json({ success: true, ...data });
 const fail = (res, status, message) => res.status(status).json({ success: false, message });
+const SESSION_SECRET = process.env.SESSION_SECRET || process.env.POSTGRES_PASSWORD || process.env.DB_PASSWORD;
+if (!SESSION_SECRET) throw new Error("Set SESSION_SECRET (or a strong database password) before starting the API.");
+const SESSION_TTL_SECONDS = 60 * 60 * 12;
+const sessionCookie = "aapi_session";
+function signSession(userId) {
+  const payload = Buffer.from(JSON.stringify({ id: Number(userId), exp: Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS })).toString("base64url");
+  const signature = crypto.createHmac("sha256", SESSION_SECRET).update(payload).digest("base64url");
+  return payload + "." + signature;
+}
+function readSession(req) {
+  const cookieHeader = String(req.headers.cookie || "");
+  const raw = cookieHeader.split(";").map(x => x.trim()).find(x => x.startsWith(sessionCookie + "="));
+  if (!raw) return null;
+  let token;
+  try { token = decodeURIComponent(raw.slice(sessionCookie.length + 1)); } catch { return null; }
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature) return null;
+  const expected = crypto.createHmac("sha256", SESSION_SECRET).update(payload).digest();
+  let supplied;
+  try { supplied = Buffer.from(signature, "base64url"); } catch { return null; }
+  if (supplied.length !== expected.length || !crypto.timingSafeEqual(supplied, expected)) return null;
+  try {
+    const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+    if (!Number.isInteger(data.id) || data.id <= 0 || !Number.isFinite(data.exp) || data.exp <= Math.floor(Date.now() / 1000)) return null;
+    return data.id;
+  } catch { return null; }
+}
+function setSessionCookie(req, res, value, maxAge = SESSION_TTL_SECONDS) {
+  const secure = String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim() === "https";
+  res.setHeader("Set-Cookie", sessionCookie + "=" + encodeURIComponent(value) + "; HttpOnly; SameSite=Strict; Path=/api; Max-Age=" + maxAge + (secure ? "; Secure" : ""));
+}
+function requireRole(role) {
+  return asyncRoute(async (req, res, next) => {
+    const userId = readSession(req);
+    if (!userId) return fail(res, 401, "انتهت الجلسة. يرجى تسجيل الدخول من جديد.");
+    const user = await one("SELECT id,nom,prenom,email,telephone,role,statut,photo FROM users WHERE id=$1", [userId]);
+    if (!user || user.statut !== "actif") return fail(res, 401, "الحساب غير نشط أو الجلسة غير صالحة.");
+    const actualRole = String(user.role || "").toLowerCase();
+    if (role === "admin" && actualRole !== "admin") return fail(res, 403, "ليس لديك صلاحية الوصول إلى هذه الصفحة.");
+    if (role === "investor" && !["investisseur", "investor"].includes(actualRole)) return fail(res, 403, "هذه الخدمة متاحة للمستثمرين فقط.");
+    req.user = user;
+    next();
+  });
+}
+
 const asyncRoute = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 function slug(value) {
@@ -130,8 +183,12 @@ app.post("/auth/login",asyncRoute(async(req,res)=>{
   if(!email||!password)return fail(res,400,"يرجى إدخال البريد الإلكتروني وكلمة المرور.");
   const u=await one("SELECT id,nom,prenom,email,password,telephone,role,statut,photo FROM users WHERE LOWER(email)=LOWER($1) LIMIT 1",[email]);
   if(!u||u.statut!=="actif"||!(await bcrypt.compare(password,u.password)))return fail(res,401,"البريد الإلكتروني أو كلمة المرور غير صحيحة.");
-  await q("UPDATE users SET last_login=NOW(),updated_at=NOW() WHERE id=$1",[u.id]);delete u.password;ok(res,{message:"تم تسجيل الدخول بنجاح.",user:u});
+  await q("UPDATE users SET last_login=NOW(),updated_at=NOW() WHERE id=$1",[u.id]);delete u.password;
+  setSessionCookie(req,res,signSession(u.id));
+  ok(res,{message:"تم تسجيل الدخول بنجاح.",user:u});
 }));
+app.post("/auth/logout",(req,res)=>{setSessionCookie(req,res,"",0);ok(res,{message:"تم تسجيل الخروج بنجاح."});});
+app.get("/auth/me",requireRole("any"),asyncRoute(async(req,res)=>ok(res,{user:req.user})));
 
 app.post("/auth/register",asyncRoute(async(req,res)=>{
   const b=req.body||{},email=String(b.email||"").trim().toLowerCase();
@@ -142,8 +199,8 @@ app.post("/auth/register",asyncRoute(async(req,res)=>{
   await q("INSERT INTO investor_profiles(user_id) VALUES($1) ON CONFLICT(user_id) DO NOTHING",[u.id]);ok(res,{message:"تم إنشاء الحساب بنجاح.",user:u});
 }));
 
-app.post("/auth/investor/dashboard",asyncRoute(async(req,res)=>{
-  const uid=Number(req.body?.user_id||0);await investor(uid);
+app.post("/auth/investor/dashboard",requireRole("investor"),asyncRoute(async(req,res)=>{
+  const uid=req.user.id;
   const user=await one("SELECT id,nom,prenom,email,telephone,role,statut,photo,last_login,created_at,updated_at FROM users WHERE id=$1",[uid]);
   const profile=await one("SELECT * FROM investor_profiles WHERE user_id=$1",[uid]);
   const projects=await q("SELECT p.*,COALESCE(STRING_AGG(DISTINCT s.nom,', ' ORDER BY s.nom),'') secteurs FROM projects p LEFT JOIN project_sectors ps ON ps.project_id=p.id LEFT JOIN sectors s ON s.id=ps.sector_id WHERE p.user_id=$1 GROUP BY p.id ORDER BY p.created_at DESC",[uid]);
@@ -163,37 +220,49 @@ app.post("/auth/investor/dashboard",asyncRoute(async(req,res)=>{
   ok(res,{message:"تم تحميل بيانات فضاء المستثمر بنجاح.",user,profile,stats,last:{project:projects[0]||null,investment:investments[0]||null,request:requests[0]||null,message:messages[0]||null,notification:notifications[0]||null},projects,investments,requests,documents,messages,notifications,activities:[]});
 }));
 
-app.post("/auth/investor/create-project",upload.single("image"),asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
+app.post("/auth/investor/create-project",requireRole("investor"),upload.single("image"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id;
   const title=String(b.titre||"").trim();if(!title)return fail(res,400,"عنوان المشروع مطلوب.");
   const p=await one("INSERT INTO projects(user_id,titre,slug,description,wilaya,commune,adresse,montant_investissement,nombre_emplois,superficie,unite_superficie,statut,image,date_debut,date_fin) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *",[uid,title,slug(title)+"-"+Date.now(),b.description||null,b.wilaya||null,b.commune||null,b.adresse||null,Number(b.montant_investissement||0),Number(b.nombre_emplois||0),b.superficie?Number(b.superficie):null,b.unite_superficie||"m²","soumis",req.file?"/uploads/"+req.file.filename:(b.image||null),b.date_debut||null,b.date_fin||null]);
   const ids=String(b.sector_ids||"").split(",").map(Number).filter(Boolean);for(const id of ids)await q("INSERT INTO project_sectors(project_id,sector_id) VALUES($1,$2) ON CONFLICT DO NOTHING",[p.id,id]);
   ok(res,{message:"تم إنشاء المشروع بنجاح.",project:p});
 }));
 
-app.post("/auth/investor/create-investment",asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
-  const row=await one("INSERT INTO investments(user_id,project_id,montant,date_investissement,statut,reference,notes) VALUES($1,$2,$3,$4,'en_attente',$5,$6) RETURNING *",[uid,Number(b.project_id),Number(b.montant||0),b.date_investissement||null,"INV-"+Date.now(),b.notes||null]);
+app.post("/auth/investor/create-investment",requireRole("investor"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id,projectId=Number(b.project_id),amount=Number(b.montant);
+  if(!Number.isInteger(projectId)||projectId<=0||!Number.isFinite(amount)||amount<=0)return fail(res,400,"يرجى اختيار مشروع وإدخال مبلغ استثمار صحيح.");
+  const project=await one("SELECT id FROM projects WHERE id=$1 AND user_id=$2 AND statut IN ('approuve','en_cours')",[projectId,uid]);
+  if(!project)return fail(res,404,"المشروع غير موجود أو غير مؤهل للاستثمار.");
+  const row=await one("INSERT INTO investments(user_id,project_id,montant,date_investissement,statut,reference,notes) VALUES($1,$2,$3,$4,'en_attente',$5,$6) RETURNING *",[uid,projectId,amount,b.date_investissement||null,"INV-"+Date.now(),b.notes||null]);
   ok(res,{message:"تم تسجيل الاستثمار بنجاح.",investment:row});
 }));
 
-app.post("/auth/investor/submit-request",asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
-  const row=await one("INSERT INTO investment_requests(user_id,projet_id,type_demande,objet,description,montant_demande,wilaya,statut,priorite) VALUES($1,$2,$3,$4,$5,$6,$7,'nouvelle',$8) RETURNING *",[uid,b.projet_id||null,b.type_demande||"information",b.objet||"",b.description||"",b.montant_demande?Number(b.montant_demande):null,b.wilaya||null,b.priorite||"normale"]);
+app.post("/auth/investor/submit-request",requireRole("investor"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id,projectId=b.projet_id?Number(b.projet_id):null;
+  if(projectId!==null&&(!Number.isInteger(projectId)||projectId<=0||!await one("SELECT id FROM projects WHERE id=$1 AND user_id=$2",[projectId,uid])))return fail(res,404,"المشروع المحدد غير موجود ضمن مشاريعك.");
+  const amount=b.montant_demande==null||b.montant_demande===""?null:Number(b.montant_demande);
+  if(amount!==null&&(!Number.isFinite(amount)||amount<0))return fail(res,400,"مبلغ الطلب غير صالح.");
+  if(!String(b.objet||"").trim()||!String(b.description||"").trim())return fail(res,400,"موضوع الطلب ووصفه مطلوبان.");
+  const row=await one("INSERT INTO investment_requests(user_id,projet_id,type_demande,objet,description,montant_demande,wilaya,statut,priorite) VALUES($1,$2,$3,$4,$5,$6,$7,'nouvelle',$8) RETURNING *",[uid,projectId,b.type_demande||"information",String(b.objet).trim(),String(b.description).trim(),amount,b.wilaya||null,b.priorite||"normale"]);
   ok(res,{message:"تم إرسال الطلب بنجاح.",request:row});
 }));
 
-app.post("/auth/investor/send-message",asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||b.sender_id||0);await investor(uid);
-  const row=await one("INSERT INTO messages(sender_id,receiver_id,sujet,contenu,lu) VALUES($1,$2,$3,$4,0) RETURNING *",[uid,Number(b.receiver_id||1),b.sujet||"",b.contenu||""]);ok(res,{message:"تم إرسال الرسالة بنجاح.",data:row});
+app.post("/auth/investor/send-message",requireRole("investor"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id,content=String(b.contenu||"").trim();
+  if(!content)return fail(res,400,"محتوى الرسالة مطلوب.");
+  const receiver=b.receiver_id?await one("SELECT id FROM users WHERE id=$1 AND role='admin' AND statut='actif'",[Number(b.receiver_id)]):await one("SELECT id FROM users WHERE role='admin' AND statut='actif' ORDER BY id LIMIT 1");
+  if(!receiver)return fail(res,404,"لا يوجد مسؤول متاح لاستقبال الرسالة.");
+  const row=await one("INSERT INTO messages(sender_id,receiver_id,sujet,contenu,lu) VALUES($1,$2,$3,$4,0) RETURNING *",[uid,receiver.id,String(b.sujet||"").trim(),content]);ok(res,{message:"تم إرسال الرسالة بنجاح.",data:row});
 }));
 
-app.post("/auth/investor/update-profile",upload.single("photo"),asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=Number(b.user_id||0);await investor(uid);
+app.post("/auth/investor/update-profile",requireRole("investor"),upload.single("photo"),asyncRoute(async(req,res)=>{
+  const b=req.body||{},uid=req.user.id;
   const photo=req.file?"/uploads/"+req.file.filename:null;
-  await q("UPDATE users SET nom=COALESCE($1,nom),prenom=COALESCE($2,prenom),telephone=COALESCE($3,telephone),photo=COALESCE($4,photo),updated_at=NOW() WHERE id=$5",[b.nom||null,b.prenom||null,b.telephone||null,photo,uid]);
-  await q("INSERT INTO investor_profiles(user_id,type_investisseur,nom_entreprise,registre_commerce,nif,nis,wilaya,commune,adresse,site_web,secteur_activite,description) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) ON CONFLICT(user_id) DO UPDATE SET type_investisseur=EXCLUDED.type_investisseur,nom_entreprise=EXCLUDED.nom_entreprise,registre_commerce=EXCLUDED.registre_commerce,nif=EXCLUDED.nif,nis=EXCLUDED.nis,wilaya=EXCLUDED.wilaya,commune=EXCLUDED.commune,adresse=EXCLUDED.adresse,site_web=EXCLUDED.site_web,secteur_activite=EXCLUDED.secteur_activite,description=EXCLUDED.description,updated_at=NOW()",[uid,b.type_investisseur||"personne_physique",b.nom_entreprise||null,b.registre_commerce||null,b.nif||null,b.nis||null,b.wilaya||null,b.commune||null,b.adresse||null,b.site_web||null,b.secteur_activite||null,b.description||null]);
-  ok(res,{message:"تم تحديث الملف الشخصي بنجاح."});
+  const email=String(b.email||"").trim().toLowerCase();
+  if(email && await one("SELECT id FROM users WHERE LOWER(email)=LOWER($1) AND id<>$2",[email,uid]))return fail(res,409,"البريد الإلكتروني مستخدم من حساب آخر.");
+  const updatedUser=await one("UPDATE users SET nom=COALESCE($1,nom),prenom=COALESCE($2,prenom),telephone=COALESCE($3,telephone),email=COALESCE($4,email),photo=COALESCE($5,photo),updated_at=NOW() WHERE id=$6 RETURNING id,nom,prenom,email,telephone,role,statut,photo",[b.nom||null,b.prenom||null,b.telephone||null,email||null,photo,uid]);
+  await q("INSERT INTO investor_profiles(user_id,type_investisseur,nom_entreprise,registre_commerce,nif,nis,wilaya,commune,adresse,site_web,secteur_activite,description) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) ON CONFLICT(user_id) DO UPDATE SET type_investisseur=COALESCE(EXCLUDED.type_investisseur,investor_profiles.type_investisseur),nom_entreprise=COALESCE(EXCLUDED.nom_entreprise,investor_profiles.nom_entreprise),registre_commerce=COALESCE(EXCLUDED.registre_commerce,investor_profiles.registre_commerce),nif=COALESCE(EXCLUDED.nif,investor_profiles.nif),nis=COALESCE(EXCLUDED.nis,investor_profiles.nis),wilaya=COALESCE(EXCLUDED.wilaya,investor_profiles.wilaya),commune=COALESCE(EXCLUDED.commune,investor_profiles.commune),adresse=COALESCE(EXCLUDED.adresse,investor_profiles.adresse),site_web=COALESCE(EXCLUDED.site_web,investor_profiles.site_web),secteur_activite=COALESCE(EXCLUDED.secteur_activite,investor_profiles.secteur_activite),description=COALESCE(EXCLUDED.description,investor_profiles.description),updated_at=NOW()",[uid,b.type_investisseur||null,b.nom_entreprise||null,b.registre_commerce||null,b.nif||null,b.nis||null,b.wilaya||null,b.commune||null,b.adresse||null,b.site_web||null,b.secteur_activite||null,b.description||null]);
+  ok(res,{message:"تم تحديث الملف الشخصي بنجاح.",user:updatedUser});
 }));
 
 const adminQueries={
@@ -240,18 +309,18 @@ const dashboardStats = async () => {
   return { stats, projects };
 };
 
-app.get("/admin/dashboard-stats", asyncRoute(async (_req, res) => {
+app.get("/admin/dashboard-stats", requireRole("admin"), asyncRoute(async (_req, res) => {
   const data = await dashboardStats();
   return ok(res, data);
 }));
 
-app.get("/api/admin/dashboard-stats", asyncRoute(async (_req, res) => {
+app.get("/api/admin/dashboard-stats", requireRole("admin"), asyncRoute(async (_req, res) => {
   const data = await dashboardStats();
   return ok(res, data);
 }));
 
-app.all("/auth/admin/admin",upload.any(),asyncRoute(async(req,res)=>{
-  const b={...req.query,...(req.body||{})},action=String(b.action||""),uid=Number(b.user_id||0);if(!action)return fail(res,400,"Action administration inconnue.");await admin(uid);
+app.all("/auth/admin/admin",requireRole("admin"),upload.any(),asyncRoute(async(req,res)=>{
+  const b={...req.query,...(req.body||{})},action=String(b.action||""),uid=req.user.id;if(!action)return fail(res,400,"Action administration inconnue.");
   const sectionMap={update_user_status:"users",update_investor_status:"investors",update_project_status:"projects",update_investment_status:"investments",update_request_status:"requests",update_document_status:"documents",mark_message_read:"messages",mark_message_unread:"messages",create_sector:"sectors",update_sector:"sectors",create_news:"news",update_news:"news",create_faq:"faq",update_faq:"faq",create_announcement:"announcements",update_announcement:"announcements",opportunities:"opportunities",opportunity_options:"opportunities",create_opportunity:"opportunities",update_opportunity:"opportunities"};
   if(action==="dashboard"){
     const stats={
@@ -277,6 +346,41 @@ app.all("/auth/admin/admin",upload.any(),asyncRoute(async(req,res)=>{
     const projects=await q("SELECT p.id,p.user_id,p.titre,p.wilaya,p.commune,p.montant_investissement,p.nombre_emplois,p.statut,p.created_at,CONCAT(COALESCE(u.prenom,''),' ',COALESCE(u.nom,'')) investor_name FROM projects p LEFT JOIN users u ON u.id=p.user_id ORDER BY p.created_at DESC NULLS LAST,p.id DESC LIMIT 8");
     return ok(res,{stats,projects});
   }
+  if(action==="create_opportunity"||action==="update_opportunity"){
+    const title=String(b.titre||"").trim();
+    if(!title)return fail(res,400,"عنوان الفرصة مطلوب.");
+    const amount=Number(b.investissement||0),jobs=Number(b.emplois||0);
+    if(!Number.isFinite(amount)||amount<0||!Number.isFinite(jobs)||jobs<0)return fail(res,400,"قيمة الاستثمار وعدد مناصب العمل غير صالحين.");
+    const rawStatus=String(b.statut||"publie").toLowerCase();
+    const status=rawStatus==="publie"?"approuve":rawStatus==="brouillon"?"brouillon":"archive";
+    const sectorName=String(b.secteur||"").trim();
+    const file=(req.files||[]).find(x=>x.fieldname==="image");
+    const image=file?"/uploads/"+file.filename:(String(b.image||"").trim()||null);
+    const client=await pool.connect();
+    try{
+      await client.query("BEGIN");
+      let project;
+      if(action==="create_opportunity"){
+        const projectSlug=slug(title)+"-"+Date.now();
+        const result=await client.query("INSERT INTO projects(user_id,titre,slug,description,wilaya,montant_investissement,nombre_emplois,statut,image) VALUES(NULL,$1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",[title,projectSlug,b.description||null,b.wilaya||null,amount,Math.trunc(jobs),status,image]);
+        project=result.rows[0];
+      }else{
+        const id=Number(b.id||b.project_id||0);
+        if(!Number.isInteger(id)||id<=0){await client.query("ROLLBACK");return fail(res,400,"معرّف الفرصة غير صالح.");}
+        const result=await client.query("UPDATE projects SET titre=$1,description=$2,wilaya=$3,montant_investissement=$4,nombre_emplois=$5,statut=$6,image=COALESCE($7,image),updated_at=NOW() WHERE id=$8 RETURNING *",[title,b.description||null,b.wilaya||null,amount,Math.trunc(jobs),status,image,id]);
+        if(!result.rowCount){await client.query("ROLLBACK");return fail(res,404,"الفرصة غير موجودة.");}
+        project=result.rows[0];
+        await client.query("DELETE FROM project_sectors WHERE project_id=$1",[id]);
+      }
+      if(sectorName){
+        const sector=await client.query("SELECT id FROM sectors WHERE nom=$1 LIMIT 1",[sectorName]);
+        if(sector.rows[0])await client.query("INSERT INTO project_sectors(project_id,sector_id) VALUES($1,$2) ON CONFLICT DO NOTHING",[project.id,sector.rows[0].id]);
+      }
+      await client.query("COMMIT");
+      return ok(res,{message:action==="create_opportunity"?"تم إنشاء الفرصة بنجاح.":"تم تحديث الفرصة بنجاح.",opportunity:project});
+    }catch(error){await client.query("ROLLBACK");throw error;}
+    finally{client.release();}
+  }
   if(action==="opportunities"||action==="opportunity_options"){const rows=await q("SELECT p.id,p.titre,p.description,p.wilaya,p.montant_investissement investissement,p.nombre_emplois emplois,p.image,p.statut,COALESCE(STRING_AGG(DISTINCT s.nom,', ' ORDER BY s.nom),'') secteur FROM projects p LEFT JOIN project_sectors ps ON ps.project_id=p.id LEFT JOIN sectors s ON s.id=ps.sector_id GROUP BY p.id ORDER BY p.id DESC");rows.forEach(r=>r.image_url=imageUrl(r.image,r.id,"opportunity"));return ok(res,{opportunities:rows,sectors:await q("SELECT id,nom FROM sectors WHERE statut='actif' ORDER BY nom"),wilayas:await q("SELECT id,nom_fr,nom_ar FROM wilayas ORDER BY id"),projects:await q("SELECT id,titre,wilaya FROM projects ORDER BY id DESC")});}
   if(action.startsWith("delete_")){const section=action.slice(7),table={users:"users",investors:"users",projects:"projects",investments:"investments",requests:"investment_requests",messages:"messages",documents:"documents",sectors:"sectors",announcements:"announcements",news:"news",opportunities:"projects"}[section];const id=Number(b.record_id||b.id);if(section==="users"&&id===uid)return fail(res,400,"لا يمكنك حذف حساب المسؤول الذي تستخدمه حالياً.");if(table)await q("DELETE FROM "+table+" WHERE id=$1",[id]);return ok(res,{message:"تم حذف السجل بنجاح."});}
   if(sectionMap[action]&&action.startsWith("update_")&&["users","investors","projects","investments","requests","documents"].includes(sectionMap[action])){const section=sectionMap[action],id=Number(b.target_user_id||b.project_id||b.investment_id||b.request_id||b.document_id||b.id),table={users:"users",investors:"users",projects:"projects",investments:"investments",requests:"investment_requests",documents:"documents"}[section];if(section==="investors")await q("UPDATE users SET statut=$1,updated_at=NOW() WHERE id=$2 AND role IN ('investisseur','investor')",[b.statut,id]);else await q("UPDATE "+table+" SET statut=$1,updated_at=NOW() WHERE id=$2",[b.statut,id]);return ok(res,{message:"Statut mis à jour."});}
@@ -294,5 +398,5 @@ app.all("/auth/admin/admin",upload.any(),asyncRoute(async(req,res)=>{
   return fail(res,400,"Action administration inconnue.");
 }));
 
-app.use((err,_req,res,_next)=>{console.error(err);fail(res,Number(err.status||500),Number(err.status||500)===500?"حدث خطأ في الخادم.":err.message);});
+app.use((err,_req,res,_next)=>{console.error(err);const status=err.code==="LIMIT_FILE_SIZE"?413:Number(err.status||500);fail(res,status,status===500?"حدث خطأ في الخادم.":status===413?"حجم الملف يتجاوز الحد المسموح.":err.message);});
 app.listen(PORT,"0.0.0.0",async()=>{try{await pool.query("SELECT 1");console.log("AAPI Node.js API running on port "+PORT);}catch(e){console.error("PostgreSQL connection failed:",e.message);}});

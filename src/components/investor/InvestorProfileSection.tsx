@@ -19,7 +19,7 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
   const [wilaya, setWilaya] = useState(profile?.wilaya || "");
   const [wilayas, setWilayas] = useState<Array<{ id: number; code: string; nom_fr: string; nom_ar: string }>>([]);
   const [photo, setPhoto] = useState(userPhotoUrl);
-  const [photoData, setPhotoData] = useState("");
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -65,14 +65,9 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const nextPhoto = String(reader.result || "");
-      setPhoto(nextPhoto);
-      setPhotoData(nextPhoto);
-      setError("");
-    };
-    reader.readAsDataURL(file);
+    setPhoto(URL.createObjectURL(file));
+    setPhotoFile(file);
+    setError("");
   };
 
   const save = async (event: FormEvent) => {
@@ -90,10 +85,16 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
     setMessage("");
 
     try {
+      const formData = new FormData();
+      formData.append("user_id", String(id));
+      formData.append("email", email.trim());
+      formData.append("telephone", telephone);
+      formData.append("wilaya", wilaya);
+      if (photoFile) formData.append("photo", photoFile);
+
       const response = await fetch(`${API_BASE_URL}/auth/investor/update-profile`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: id, email, telephone, wilaya, photo: photoData }),
+        body: formData,
       });
 
       const data = await response.json();
@@ -108,7 +109,7 @@ export default function InvestorProfileSection({ user, profile, fullName, userPh
       }
 
       setMessage(data.message || t("investorDashboard.profile.updated"));
-      setPhotoData("");
+      setPhotoFile(null);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : t("investorDashboard.profile.updateFailed"));
     } finally {
