@@ -25,9 +25,9 @@ export default function InvestorAdminNavbar({ onToggle }: { onToggle: () => void
   const userPhotoUrl = getUserPhotoUrl(user);
   const userInitials = getUserInitials(user?.prenom, user?.nom);
   const close = () => onToggle();
-  const logout = () => {
-    localStorage.removeItem("aapi_user");
-    navigate("/login", { replace: true });
+  const logout = async () => {
+    try { await fetch("/api/auth/logout", { method: "POST" }); }
+    finally { localStorage.removeItem("aapi_user"); navigate("/login", { replace: true }); }
   };
 
   const items: Array<[string, string, ReactNode]> = [
