@@ -277,6 +277,41 @@ app.all("/auth/admin/admin",upload.any(),asyncRoute(async(req,res)=>{
     const projects=await q("SELECT p.id,p.user_id,p.titre,p.wilaya,p.commune,p.montant_investissement,p.nombre_emplois,p.statut,p.created_at,CONCAT(COALESCE(u.prenom,''),' ',COALESCE(u.nom,'')) investor_name FROM projects p LEFT JOIN users u ON u.id=p.user_id ORDER BY p.created_at DESC NULLS LAST,p.id DESC LIMIT 8");
     return ok(res,{stats,projects});
   }
+  if(action==="create_opportunity"||action==="update_opportunity"){
+    const title=String(b.titre||"").trim();
+    if(!title)return fail(res,400,"عنوان الفرصة مطلوب.");
+    const amount=Number(b.investissement||0),jobs=Number(b.emplois||0);
+    if(!Number.isFinite(amount)||amount<0||!Number.isFinite(jobs)||jobs<0)return fail(res,400,"قيمة الاستثمار وعدد مناصب العمل غير صالحين.");
+    const rawStatus=String(b.statut||"publie").toLowerCase();
+    const status=rawStatus==="publie"?"approuve":rawStatus==="brouillon"?"brouillon":"archive";
+    const sectorName=String(b.secteur||"").trim();
+    const file=(req.files||[]).find(x=>x.fieldname==="image");
+    const image=file?"/uploads/"+file.filename:(String(b.image||"").trim()||null);
+    const client=await pool.connect();
+    try{
+      await client.query("BEGIN");
+      let project;
+      if(action==="create_opportunity"){
+        const projectSlug=slug(title)+"-"+Date.now();
+        const result=await client.query("INSERT INTO projects(user_id,titre,slug,description,wilaya,montant_investissement,nombre_emplois,statut,image) VALUES(NULL,$1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",[title,projectSlug,b.description||null,b.wilaya||null,amount,Math.trunc(jobs),status,image]);
+        project=result.rows[0];
+      }else{
+        const id=Number(b.id||b.project_id||0);
+        if(!Number.isInteger(id)||id<=0){await client.query("ROLLBACK");return fail(res,400,"معرّف الفرصة غير صالح.");}
+        const result=await client.query("UPDATE projects SET titre=$1,description=$2,wilaya=$3,montant_investissement=$4,nombre_emplois=$5,statut=$6,image=COALESCE($7,image),updated_at=NOW() WHERE id=$8 RETURNING *",[title,b.description||null,b.wilaya||null,amount,Math.trunc(jobs),status,image,id]);
+        if(!result.rowCount){await client.query("ROLLBACK");return fail(res,404,"الفرصة غير موجودة.");}
+        project=result.rows[0];
+        await client.query("DELETE FROM project_sectors WHERE project_id=$1",[id]);
+      }
+      if(sectorName){
+        const sector=await client.query("SELECT id FROM sectors WHERE nom=$1 LIMIT 1",[sectorName]);
+        if(sector.rows[0])await client.query("INSERT INTO project_sectors(project_id,sector_id) VALUES($1,$2) ON CONFLICT DO NOTHING",[project.id,sector.rows[0].id]);
+      }
+      await client.query("COMMIT");
+      return ok(res,{message:action==="create_opportunity"?"تم إنشاء الفرصة بنجاح.":"تم تحديث الفرصة بنجاح.",opportunity:project});
+    }catch(error){await client.query("ROLLBACK");throw error;}
+    finally{client.release();}
+  }
   if(action==="opportunities"||action==="opportunity_options"){const rows=await q("SELECT p.id,p.titre,p.description,p.wilaya,p.montant_investissement investissement,p.nombre_emplois emplois,p.image,p.statut,COALESCE(STRING_AGG(DISTINCT s.nom,', ' ORDER BY s.nom),'') secteur FROM projects p LEFT JOIN project_sectors ps ON ps.project_id=p.id LEFT JOIN sectors s ON s.id=ps.sector_id GROUP BY p.id ORDER BY p.id DESC");rows.forEach(r=>r.image_url=imageUrl(r.image,r.id,"opportunity"));return ok(res,{opportunities:rows,sectors:await q("SELECT id,nom FROM sectors WHERE statut='actif' ORDER BY nom"),wilayas:await q("SELECT id,nom_fr,nom_ar FROM wilayas ORDER BY id"),projects:await q("SELECT id,titre,wilaya FROM projects ORDER BY id DESC")});}
   if(action.startsWith("delete_")){const section=action.slice(7),table={users:"users",investors:"users",projects:"projects",investments:"investments",requests:"investment_requests",messages:"messages",documents:"documents",sectors:"sectors",announcements:"announcements",news:"news",opportunities:"projects"}[section];const id=Number(b.record_id||b.id);if(section==="users"&&id===uid)return fail(res,400,"لا يمكنك حذف حساب المسؤول الذي تستخدمه حالياً.");if(table)await q("DELETE FROM "+table+" WHERE id=$1",[id]);return ok(res,{message:"تم حذف السجل بنجاح."});}
   if(sectionMap[action]&&action.startsWith("update_")&&["users","investors","projects","investments","requests","documents"].includes(sectionMap[action])){const section=sectionMap[action],id=Number(b.target_user_id||b.project_id||b.investment_id||b.request_id||b.document_id||b.id),table={users:"users",investors:"users",projects:"projects",investments:"investments",requests:"investment_requests",documents:"documents"}[section];if(section==="investors")await q("UPDATE users SET statut=$1,updated_at=NOW() WHERE id=$2 AND role IN ('investisseur','investor')",[b.statut,id]);else await q("UPDATE "+table+" SET statut=$1,updated_at=NOW() WHERE id=$2",[b.statut,id]);return ok(res,{message:"Statut mis à jour."});}
