@@ -222,20 +222,30 @@ app.post("/auth/investor/create-project",requireRole("investor"),upload.single("
 }));
 
 app.post("/auth/investor/create-investment",requireRole("investor"),asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=req.user.id;
-  const row=await one("INSERT INTO investments(user_id,project_id,montant,date_investissement,statut,reference,notes) VALUES($1,$2,$3,$4,'en_attente',$5,$6) RETURNING *",[uid,Number(b.project_id),Number(b.montant||0),b.date_investissement||null,"INV-"+Date.now(),b.notes||null]);
+  const b=req.body||{},uid=req.user.id,projectId=Number(b.project_id),amount=Number(b.montant);
+  if(!Number.isInteger(projectId)||projectId<=0||!Number.isFinite(amount)||amount<=0)return fail(res,400,"يرجى اختيار مشروع وإدخال مبلغ استثمار صحيح.");
+  const project=await one("SELECT id FROM projects WHERE id=$1 AND user_id=$2 AND statut IN ('approuve','en_cours')",[projectId,uid]);
+  if(!project)return fail(res,404,"المشروع غير موجود أو غير مؤهل للاستثمار.");
+  const row=await one("INSERT INTO investments(user_id,project_id,montant,date_investissement,statut,reference,notes) VALUES($1,$2,$3,$4,'en_attente',$5,$6) RETURNING *",[uid,projectId,amount,b.date_investissement||null,"INV-"+Date.now(),b.notes||null]);
   ok(res,{message:"تم تسجيل الاستثمار بنجاح.",investment:row});
 }));
 
 app.post("/auth/investor/submit-request",requireRole("investor"),asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=req.user.id;
-  const row=await one("INSERT INTO investment_requests(user_id,projet_id,type_demande,objet,description,montant_demande,wilaya,statut,priorite) VALUES($1,$2,$3,$4,$5,$6,$7,'nouvelle',$8) RETURNING *",[uid,b.projet_id||null,b.type_demande||"information",b.objet||"",b.description||"",b.montant_demande?Number(b.montant_demande):null,b.wilaya||null,b.priorite||"normale"]);
+  const b=req.body||{},uid=req.user.id,projectId=b.projet_id?Number(b.projet_id):null;
+  if(projectId!==null&&(!Number.isInteger(projectId)||projectId<=0||!await one("SELECT id FROM projects WHERE id=$1 AND user_id=$2",[projectId,uid])))return fail(res,404,"المشروع المحدد غير موجود ضمن مشاريعك.");
+  const amount=b.montant_demande==null||b.montant_demande===""?null:Number(b.montant_demande);
+  if(amount!==null&&(!Number.isFinite(amount)||amount<0))return fail(res,400,"مبلغ الطلب غير صالح.");
+  if(!String(b.objet||"").trim()||!String(b.description||"").trim())return fail(res,400,"موضوع الطلب ووصفه مطلوبان.");
+  const row=await one("INSERT INTO investment_requests(user_id,projet_id,type_demande,objet,description,montant_demande,wilaya,statut,priorite) VALUES($1,$2,$3,$4,$5,$6,$7,'nouvelle',$8) RETURNING *",[uid,projectId,b.type_demande||"information",String(b.objet).trim(),String(b.description).trim(),amount,b.wilaya||null,b.priorite||"normale"]);
   ok(res,{message:"تم إرسال الطلب بنجاح.",request:row});
 }));
 
 app.post("/auth/investor/send-message",requireRole("investor"),asyncRoute(async(req,res)=>{
-  const b=req.body||{},uid=req.user.id;
-  const row=await one("INSERT INTO messages(sender_id,receiver_id,sujet,contenu,lu) VALUES($1,$2,$3,$4,0) RETURNING *",[uid,Number(b.receiver_id||1),b.sujet||"",b.contenu||""]);ok(res,{message:"تم إرسال الرسالة بنجاح.",data:row});
+  const b=req.body||{},uid=req.user.id,content=String(b.contenu||"").trim();
+  if(!content)return fail(res,400,"محتوى الرسالة مطلوب.");
+  const receiver=b.receiver_id?await one("SELECT id FROM users WHERE id=$1 AND role='admin' AND statut='actif'",[Number(b.receiver_id)]):await one("SELECT id FROM users WHERE role='admin' AND statut='actif' ORDER BY id LIMIT 1");
+  if(!receiver)return fail(res,404,"لا يوجد مسؤول متاح لاستقبال الرسالة.");
+  const row=await one("INSERT INTO messages(sender_id,receiver_id,sujet,contenu,lu) VALUES($1,$2,$3,$4,0) RETURNING *",[uid,receiver.id,String(b.sujet||"").trim(),content]);ok(res,{message:"تم إرسال الرسالة بنجاح.",data:row});
 }));
 
 app.post("/auth/investor/update-profile",requireRole("investor"),upload.single("photo"),asyncRoute(async(req,res)=>{
