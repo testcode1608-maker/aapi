@@ -25,7 +25,7 @@ export default function AdminNavbar({ onToggle }: { onToggle: () => void }) {
     ["/admin/news", t("admin.nav.news"), <MessageSquare size={18} />],
     ["/admin/faq", t("admin.nav.faq"), <CircleHelp size={18} />],
   ];
-  const logout = () => { localStorage.removeItem("aapi_user"); nav("/login", { replace: true }); };
+  const logout = async () => { try { await fetch("/api/auth/logout", { method: "POST" }); } finally { localStorage.removeItem("aapi_user"); nav("/login", { replace: true }); } };
   const close = () => onToggle();
   return <>
     <div className="admin-mobile-header"><button className="admin-mobile-menu-button" onClick={onToggle} aria-label={t("admin.nav.openMenu")}><Menu size={20} /></button><strong>AAPI</strong></div>
